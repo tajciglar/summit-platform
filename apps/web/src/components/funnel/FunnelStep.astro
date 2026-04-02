@@ -1,0 +1,175 @@
+---
+/**
+ * FunnelStep.astro — Section renderer and funnel step orchestrator.
+ *
+ * Responsibilities:
+ * 1. Iterates step.sections and renders the matching section component
+ * 2. Mounts the appropriate React island based on step.type
+ * 3. Fires the `funnel_step_view` analytics event via an inline <script>
+ * 4. Renders an optional CountdownTimer for landing steps with hero sections
+ */
+
+import type { FunnelStep, Funnel, SummitSite, Speaker, Section } from '@summit/types'
+
+// Section components
+import HeroSection from '~/components/sections/HeroSection.astro'
+import FeaturesSection from '~/components/sections/FeaturesSection.astro'
+import TestimonialsSection from '~/components/sections/TestimonialsSection.astro'
+import VideoSection from '~/components/sections/VideoSection.astro'
+import CTASection from '~/components/sections/CTASection.astro'
+import SpeakersSection from '~/components/sections/SpeakersSection.astro'
+import CustomSection from '~/components/sections/CustomSection.astro'
+
+// Funnel interactive islands (React, mounted with client:load)
+import CheckoutForm from '~/components/funnel/CheckoutForm'
+import UpsellModal from '~/components/funnel/UpsellModal'
+import OptinForm from '~/components/funnel/OptinForm'
+import CountdownTimer from '~/components/ui/CountdownTimer'
+
+interface Props {
+  step: FunnelStep
+  funnel: Funnel
+  summit: SummitSite
+  /** URL of the next step in the funnel. Null if this is the last step. */
+  nextStepUrl: string | null
+  /** Pre-fetched speakers list (used when a SpeakersSection has displayAll=true). */
+  allSpeakers?: Speaker[]
+}
+
+const { step, funnel, summit, nextStepUrl, allSpeakers = [] } = Astro.props
+
+// ── Resolve next/decline step URLs for upsell/downsell ────────────────────────
+
+const currentIndex = funnel.steps.findIndex((s) => s.id === step.id)
+
+/**
+ * Find the URL of the step immediately after `fromIndex`, or null.
+ */
+function getStepUrl(fromIndex: number): string | null {
+  const next = funnel.steps[fromIndex + 1]
+  return next ? `/${funnel.slug}/${next.slug}` : null
+}
+
+// For upsell decline: route to the downsell step if one exists, else skip to next
+const downsellStep = funnel.steps.find((s) => s.type === 'downsell')
+const upsellDeclineUrl =
+  step.type === 'upsell' && downsellStep
+    ? `/${funnel.slug}/${downsellStep.slug}`
+    : (nextStepUrl ?? '/')
+
+// For downsell decline: skip to the step after the downsell (or next overall)
+const downsellDeclineUrl = nextStepUrl ?? '/'
+
+// ── Checkout: first product is main offer, rest ignored for bump (handled by CMS) ──
+const mainProducts = step.products ?? []
+
+// ── Landing steps: show CountdownTimer if there's a hero section ──────────────
+const heroSection = step.sections.find((s): s is Extract<Section, { type: 'hero' }> => s.type === 'hero')
+const showCountdown = step.type === 'landing' && heroSection != null
+---
+
+{/* ── Section renderer ───────────────────────────────────────────────── */}
+{step.sections.map((section) => {
+  switch (section.type) {
+    case 'hero':
+      return <HeroSection {...section} />
+    case 'features':
+      return <FeaturesSection {...section} />
+    case 'testimonials':
+      return <TestimonialsSection {...section} />
+    case 'video':
+      return <VideoSection {...section} />
+    case 'cta':
+      return <CTASection {...section} />
+    case 'speakers':
+      return <SpeakersSection {...section} allSpeakers={allSpeakers} />
+    case 'custom':
+      return <CustomSection {...section} />
+    default:
+      return null
+  }
+})}
+
+{/* ── Optional CountdownTimer for landing pages ───────────────────────── */}
+{showCountdown && (
+  <div class="funnel-countdown">
+    <CountdownTimer
+      client:visible
+      durationSeconds={3600}
+      label="This offer expires in:"
+    />
+  </div>
+)}
+
+{/* ── Step-type-specific React islands ───────────────────────────────── */}
+
+{step.type === 'checkout' && (
+  <CheckoutForm
+    client:load
+    products={mainProducts}
+    bumpProduct={null}
+    summitId={summit.id}
+    nextStepUrl={nextStepUrl ?? '/'}
+    currency={mainProducts[0]?.currency ?? 'eur'}
+  />
+)}
+
+{step.type === 'upsell' && mainProducts.length > 0 && (
+  <UpsellModal
+    client:load
+    product={mainProducts[0]!}
+    stepType="upsell"
+    acceptUrl={nextStepUrl ?? '/'}
+    declineUrl={upsellDeclineUrl}
+    summitId={summit.id}
+  />
+)}
+
+{step.type === 'downsell' && mainProducts.length > 0 && (
+  <UpsellModal
+    client:load
+    product={mainProducts[0]!}
+    stepType="downsell"
+    acceptUrl={nextStepUrl ?? '/'}
+    declineUrl={downsellDeclineUrl}
+    summitId={summit.id}
+  />
+)}
+
+{step.type === 'optin' && (
+  <OptinForm
+    client:load
+    summitId={summit.id}
+    nextStepUrl={nextStepUrl ?? '/'}
+    acTag={mainProducts[0]?.acTag ?? null}
+  />
+)}
+
+{/* ── Analytics: fire funnel_step_view on page load ──────────────────── */}
+<script
+  define:vars={{
+    stepType: step.type,
+    stepSlug: step.slug,
+    funnelSlug: funnel.slug,
+    summitId: summit.id,
+  }}
+>
+  try {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: 'funnel_step_view',
+      step_type: stepType,
+      step_slug: stepSlug,
+      funnel_slug: funnelSlug,
+      summit_id: summitId,
+    })
+  } catch (_) {}
+</script>
+
+<style>
+  .funnel-countdown {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--space-8, 2rem);
+  }
+</style>

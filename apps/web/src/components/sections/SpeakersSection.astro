@@ -1,0 +1,217 @@
+---
+import { Image } from 'astro:assets'
+import type { SpeakersSection, Speaker } from '@summit/types'
+
+type Props = SpeakersSection & { allSpeakers?: Speaker[]; class?: string }
+
+const {
+  heading,
+  subheading,
+  displayAll,
+  speakers: explicitSpeakers,
+  allSpeakers,
+  class: className,
+} = Astro.props
+
+// Determine which speaker list to render
+const speakersToRender: Speaker[] =
+  displayAll && allSpeakers?.length
+    ? [...allSpeakers].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+    : (explicitSpeakers ?? [])
+---
+
+<section
+  data-section="speakers"
+  class:list={['speakers-section', 'section', className]}
+>
+  <div class="speakers-section__container container">
+    {(heading || subheading) && (
+      <header class="speakers-section__header">
+        {heading && (
+          <h2 class="speakers-section__heading">{heading}</h2>
+        )}
+        {subheading && (
+          <p class="speakers-section__subheading">{subheading}</p>
+        )}
+      </header>
+    )}
+
+    {speakersToRender.length > 0 ? (
+      <div class="speakers-section__grid">
+        {speakersToRender.map((speaker) => (
+          <article class="speakers-section__card">
+            {speaker.photo && (
+              <div class="speakers-section__photo-wrap">
+                <Image
+                  src={speaker.photo.url}
+                  alt={speaker.photo.alternativeText ?? speaker.name}
+                  width={300}
+                  height={300}
+                  loading="lazy"
+                  class="speakers-section__photo"
+                  inferSize={false}
+                />
+              </div>
+            )}
+
+            <div class="speakers-section__info">
+              <h3 class="speakers-section__name">{speaker.name}</h3>
+
+              {speaker.title && (
+                <p class="speakers-section__title">{speaker.title}</p>
+              )}
+
+              {speaker.bio && (
+                <p
+                  class="speakers-section__bio"
+                  set:html={speaker.bio}
+                />
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <!-- No speakers to render -->
+      <></>
+    )}
+  </div>
+</section>
+
+<style>
+  .speakers-section {
+    width: 100%;
+  }
+
+  .speakers-section__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12, 3rem);
+    align-items: center;
+  }
+
+  /* ── Header ──────────────────────────────────────── */
+  .speakers-section__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+    align-items: center;
+    text-align: center;
+    max-width: 44rem;
+  }
+
+  .speakers-section__heading {
+    font-family: var(--font-heading, inherit);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    color: inherit;
+  }
+
+  .speakers-section__subheading {
+    font-family: var(--font-body, inherit);
+    font-size: clamp(0.9375rem, 1.5vw, 1.125rem);
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.75;
+    color: inherit;
+  }
+
+  /* ── Responsive grid ─────────────────────────────── */
+  .speakers-section__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6, 1.5rem);
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .speakers-section__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .speakers-section__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* ── Speaker card ────────────────────────────────── */
+  .speakers-section__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+  }
+
+  .speakers-section__card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* ── Photo ───────────────────────────────────────── */
+  .speakers-section__photo-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-primary, #7c3aed) 8%, #f0f0f5);
+  }
+
+  .speakers-section__photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* ── Info ────────────────────────────────────────── */
+  .speakers-section__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-4, 1rem);
+    padding-top: 0;
+  }
+
+  .speakers-section__name {
+    font-family: var(--font-heading, inherit);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+    color: inherit;
+  }
+
+  .speakers-section__title {
+    font-family: var(--font-body, inherit);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+    opacity: 0.6;
+    color: inherit;
+  }
+
+  .speakers-section__bio {
+    font-family: var(--font-body, inherit);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin: 0;
+    opacity: 0.8;
+    color: inherit;
+
+    /* Truncate to 3 lines */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+</style>

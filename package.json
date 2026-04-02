@@ -1,0 +1,31 @@
+{
+  "name": "summit-platform",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.1.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,astro,json,md}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,astro,json,md}\" --ignore-path .gitignore",
+    "strapi:dev": "pnpm --filter @summit/strapi dev",
+    "strapi:build": "pnpm --filter @summit/strapi build",
+    "strapi:start": "pnpm --filter @summit/strapi start",
+    "payload:dev": "pnpm --filter @summit/payload dev",
+    "payload:build": "pnpm --filter @summit/payload build",
+    "web:dev": "pnpm --filter @summit/web dev",
+    "web:build": "pnpm --filter @summit/web build"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-astro": "^0.14.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.5"
+  }
+}

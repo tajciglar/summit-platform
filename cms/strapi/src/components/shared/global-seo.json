@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_shared_global_seos",
+  "info": {
+    "displayName": "Global SEO",
+    "description": "Global SEO defaults for a summit site"
+  },
+  "options": {},
+  "attributes": {
+    "defaultTitle": {
+      "type": "string"
+    },
+    "defaultDescription": {
+      "type": "text"
+    },
+    "globalNoindex": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

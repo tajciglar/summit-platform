@@ -1,0 +1,120 @@
+---
+import type { CustomSection } from '@summit/types'
+import { sanitizeHtml } from '~/lib/sanitize'
+
+type Props = CustomSection & { class?: string }
+
+const { html, identifier, class: className } = Astro.props
+
+const safeHtml = html ? sanitizeHtml(html) : null
+---
+
+{safeHtml ? (
+  <div
+    data-section="custom"
+    data-custom-html="true"
+    class:list={['custom-section', className]}
+    set:html={safeHtml}
+  />
+) : identifier ? (
+  <!-- Custom section: {identifier} -->
+) : null}
+
+<style>
+  .custom-section {
+    width: 100%;
+  }
+
+  /* Pass-through styles so CMS HTML has sane defaults */
+  .custom-section :global(p) {
+    margin-block: 0.75em;
+    line-height: 1.65;
+    font-family: var(--font-body, inherit);
+  }
+
+  .custom-section :global(h1),
+  .custom-section :global(h2),
+  .custom-section :global(h3),
+  .custom-section :global(h4),
+  .custom-section :global(h5),
+  .custom-section :global(h6) {
+    font-family: var(--font-heading, inherit);
+    line-height: 1.2;
+    font-weight: 700;
+    margin-block: 0.5em 0.25em;
+  }
+
+  .custom-section :global(a) {
+    color: var(--color-primary, #7c3aed);
+    text-decoration: underline;
+  }
+
+  .custom-section :global(a:hover) {
+    opacity: 0.8;
+  }
+
+  .custom-section :global(ul),
+  .custom-section :global(ol) {
+    padding-inline-start: 1.5em;
+    margin-block: 0.75em;
+  }
+
+  .custom-section :global(li) {
+    margin-block: 0.25em;
+    line-height: 1.6;
+  }
+
+  .custom-section :global(blockquote) {
+    border-inline-start: 4px solid var(--color-primary, #7c3aed);
+    padding-inline-start: 1rem;
+    margin-inline: 0;
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  .custom-section :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+  }
+
+  .custom-section :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .custom-section :global(th),
+  .custom-section :global(td) {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+
+  .custom-section :global(th) {
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .custom-section :global(pre) {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+  }
+
+  .custom-section :global(code) {
+    font-size: 0.875em;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+  }
+
+  .custom-section :global(pre code) {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+  }
+</style>

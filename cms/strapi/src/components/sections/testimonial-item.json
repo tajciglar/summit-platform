@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_sections_testimonial_items",
+  "info": {
+    "displayName": "Testimonial Item",
+    "description": "A single testimonial within a testimonials section"
+  },
+  "options": {},
+  "attributes": {
+    "quote": {
+      "type": "text",
+      "required": true
+    },
+    "author": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "rating": {
+      "type": "integer",
+      "min": 1,
+      "max": 5
+    }
+  }
+}

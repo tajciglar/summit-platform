@@ -1,0 +1,9 @@
+/*
+ * Summit A — structural theme overrides.
+ *
+ * CSS custom properties (colours, fonts) are injected by BaseLayout.astro
+ * from the SummitSite CMS record. Add structural/layout overrides here only.
+ *
+ * Import this file in src/layouts/summits/summit-a/Layout.astro:
+ *   import '~/styles/themes/summit-a.css'
+ */

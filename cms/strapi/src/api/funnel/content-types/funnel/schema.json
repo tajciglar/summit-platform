@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "funnels",
+  "info": {
+    "singularName": "funnel",
+    "pluralName": "funnels",
+    "displayName": "Funnel",
+    "description": "A marketing funnel consisting of ordered steps"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "summitSite": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::summit-site.summit-site"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["draft", "active", "archived"],
+      "default": "draft"
+    },
+    "steps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::funnel-step.funnel-step",
+      "mappedBy": "funnel"
+    }
+  }
+}

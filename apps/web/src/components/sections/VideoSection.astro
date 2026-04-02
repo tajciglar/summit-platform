@@ -1,0 +1,136 @@
+---
+import type { VideoSection } from '@summit/types'
+import { isBunnyCdnUrl, isYouTubeUrl, getYouTubeEmbedUrl } from '~/lib/bunny'
+
+type Props = VideoSection & { class?: string }
+
+const { heading, videoUrl, poster, caption, class: className } = Astro.props
+
+const isYT = isYouTubeUrl(videoUrl)
+const isBunny = isBunnyCdnUrl(videoUrl)
+const ytEmbedUrl = isYT ? getYouTubeEmbedUrl(videoUrl) : null
+---
+
+<section
+  data-section="video"
+  class:list={['video-section', 'section', className]}
+>
+  <div class="video-section__container container">
+    {heading && (
+      <h2 class="video-section__heading">{heading}</h2>
+    )}
+
+    <div class="video-section__player-wrap">
+      {isYT && ytEmbedUrl ? (
+        <div class="video-section__aspect-box">
+          <iframe
+            src={ytEmbedUrl}
+            title={heading ?? 'Video'}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            class="video-section__iframe"
+          ></iframe>
+        </div>
+      ) : isBunny ? (
+        <video
+          src={videoUrl}
+          controls
+          preload="none"
+          poster={poster?.url}
+          class="video-section__video"
+          aria-label={heading ?? 'Video'}
+        >
+          <p>Your browser does not support the video element. <a href={videoUrl}>Download the video</a>.</p>
+        </video>
+      ) : (
+        <video
+          src={videoUrl}
+          controls
+          preload="metadata"
+          poster={poster?.url}
+          class="video-section__video"
+          aria-label={heading ?? 'Video'}
+        >
+          <p>Your browser does not support the video element. <a href={videoUrl}>Download the video</a>.</p>
+        </video>
+      )}
+    </div>
+
+    {caption && (
+      <p class="video-section__caption">{caption}</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .video-section {
+    width: 100%;
+  }
+
+  .video-section__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6, 1.5rem);
+    align-items: center;
+  }
+
+  /* ── Heading ─────────────────────────────────────── */
+  .video-section__heading {
+    font-family: var(--font-heading, inherit);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    margin: 0;
+    color: inherit;
+  }
+
+  /* ── Player wrapper ──────────────────────────────── */
+  .video-section__player-wrap {
+    width: 100%;
+    max-width: 56rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ── 16:9 aspect ratio box (YouTube iframe) ──────── */
+  .video-section__aspect-box {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .video-section__iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  /* ── Native video element ────────────────────────── */
+  .video-section__video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #000;
+  }
+
+  /* ── Caption ─────────────────────────────────────── */
+  .video-section__caption {
+    font-family: var(--font-body, inherit);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    margin: 0;
+    opacity: 0.65;
+    color: inherit;
+    max-width: 44rem;
+  }
+</style>

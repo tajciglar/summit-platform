@@ -1,0 +1,158 @@
+---
+/**
+ * BaseLayout.astro
+ *
+ * Root layout used by all pages. Injects:
+ * - Per-summit CSS custom properties (brand colours & fonts)
+ * - Google Fonts preconnect + stylesheet
+ * - GTM snippet (head + noscript body)
+ * - UTM first-touch capture script
+ * - Global stylesheet
+ * - SEO meta tags
+ */
+
+import '~/styles/global.css'
+import type { SummitSite } from '@summit/types'
+
+export interface Props {
+  summit: SummitSite
+  seo?: {
+    title?: string | null
+    description?: string | null
+    noindex?: boolean
+  }
+  /** Rendered step type — informational, can be used by sub-layouts. */
+  stepType?: string
+}
+
+const { summit, seo, stepType: _stepType } = Astro.props
+
+// ── Title resolution ─────────────────────────────────────────────────────────
+const pageTitle =
+  seo?.title ??
+  summit.globalSEO?.defaultTitle ??
+  summit.name
+
+// ── Description resolution ───────────────────────────────────────────────────
+const pageDescription =
+  seo?.description ??
+  summit.globalSEO?.defaultDescription ??
+  null
+
+// ── Robots ───────────────────────────────────────────────────────────────────
+const shouldNoindex = seo?.noindex === true || summit.globalSEO?.globalNoindex === true
+
+// ── Favicon ──────────────────────────────────────────────────────────────────
+const faviconUrl = summit.favicon?.url ?? '/favicon.ico'
+
+// ── Google Fonts ─────────────────────────────────────────────────────────────
+// Build a single Google Fonts URL for heading + body fonts (deduplicated).
+const headingFont = summit.brand.fontHeading ?? 'Inter'
+const bodyFont = summit.brand.fontBody ?? 'Inter'
+const uniqueFonts = [...new Set([headingFont, bodyFont])]
+  .map((f) => f.replace(/ /g, '+'))
+  .map((f) => `family=${f}:ital,wght@0,400;0,600;0,700;1,400`)
+  .join('&')
+const googleFontsHref = `https://fonts.googleapis.com/css2?${uniqueFonts}&display=swap`
+
+// ── GTM ──────────────────────────────────────────────────────────────────────
+const gtmId = import.meta.env.PUBLIC_GTM_CONTAINER_ID ?? ''
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Title -->
+    <title>{pageTitle}</title>
+
+    <!-- Description -->
+    {pageDescription && <meta name="description" content={pageDescription} />}
+
+    <!-- Robots -->
+    {shouldNoindex && <meta name="robots" content="noindex" />}
+
+    <!-- Favicon -->
+    <link rel="icon" href={faviconUrl} />
+
+    <!-- Per-summit brand tokens -->
+    <style
+      set:html={`:root {
+  --color-primary: ${summit.brand.primaryColor};
+  --color-secondary: ${summit.brand.secondaryColor};
+  --font-heading: '${summit.brand.fontHeading}', system-ui, sans-serif;
+  --font-body: '${summit.brand.fontBody}', system-ui, sans-serif;
+}`}
+    ></style>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={googleFontsHref} />
+
+    <!-- GTM head snippet -->
+    {gtmId && (
+      <script
+        is:inline
+        define:vars={{ gtmId }}
+      >
+        window.dataLayer = window.dataLayer || [];
+        (function(w,d,s,l,i){
+          w[l]=w[l]||[];
+          w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+          var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),
+              dl=l!='dataLayer'?'&l='+l:'';
+          j.async=true;
+          j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+          f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',gtmId);
+      </script>
+    )}
+  </head>
+
+  <body>
+    <!-- GTM noscript fallback -->
+    {gtmId && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+          title="GTM"
+        ></iframe>
+      </noscript>
+    )}
+
+    <!-- Accessibility: skip to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <!-- UTM first-touch attribution capture (inline, runs synchronously) -->
+    <script is:inline>
+      (function() {
+        var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        try {
+          var stored = JSON.parse(sessionStorage.getItem('summit_utms') || '{}');
+          if (!stored.utm_source) {
+            var params = new URLSearchParams(window.location.search);
+            var utms = {};
+            UTM_KEYS.forEach(function(k) {
+              var v = params.get(k);
+              if (v) utms[k] = v;
+            });
+            if (Object.keys(utms).length > 0) {
+              sessionStorage.setItem('summit_utms', JSON.stringify(utms));
+            }
+          }
+        } catch(e) {}
+      })();
+    </script>
+  </body>
+</html>

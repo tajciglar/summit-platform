@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_sections_ctas",
+  "info": {
+    "displayName": "CTA",
+    "description": "A call-to-action section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "subheading": {
+      "type": "text"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonUrl": {
+      "type": "string"
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["centered", "left", "right"],
+      "default": "centered"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+---
+/**
+ * [...funnel].astro — Core multi-domain, multi-step funnel routing page.
+ *
+ * URL patterns:
+ *   /                          → default funnel, first step
+ *   /main-launch               → funnel slug, redirect to first step
+ *   /main-launch/register      → funnel slug + step slug
+ *   /main-launch/checkout      → funnel slug + step slug
+ *
+ * Domain resolution:
+ *   Reads the HTTP Host header to identify which SummitSite to load.
+ *   Falls back to 'test.localhost' in development when no match is found.
+ *
+ * This page runs SSR — never statically generated. Domain-based routing
+ * requires reading the Host header at request time.
+ */
+
+import { getSummitByDomain, getFunnelBySlug, getDefaultFunnel, getSpeakers } from '~/lib/cms'
+import FunnelLayout from '~/layouts/FunnelLayout.astro'
+import FunnelStep from '~/components/funnel/FunnelStep.astro'
+import type { Funnel, FunnelStep as FunnelStepType, Section } from '@summit/types'
+
+// ── 1. Resolve summit from Host header ────────────────────────────────────────
+
+const host = Astro.request.headers.get('host') ?? 'localhost:4321'
+// Strip port number for local development (e.g. "localhost:4321" → "localhost")
+const domain = host.replace(/:\d+$/, '')
+
+let summit = await getSummitByDomain(domain)
+
+// Development fallback: match the seeded test summit
+if (!summit && (domain === 'localhost' || domain === '127.0.0.1')) {
+  summit = await getSummitByDomain('test.localhost')
+}
+
+if (!summit) {
+  return Astro.redirect('/404')
+}
+
+// ── 2. Resolve funnel and step from URL segments ──────────────────────────────
+
+// Astro's spread param captures everything after the leading /
+// e.g. /main-launch/checkout → "main-launch/checkout"
+// e.g. /                     → undefined
+const rawParam = Astro.params.funnel
+const segments = rawParam ? rawParam.split('/').filter(Boolean) : []
+const funnelSlug = segments[0]
+const stepSlug = segments[1]
+
+let funnel: Funnel | null = null
+let currentStep: FunnelStepType | null = null
+
+if (!funnelSlug) {
+  // Root URL — load the first active funnel and its first step
+  funnel = await getDefaultFunnel(summit.id)
+  currentStep = funnel?.steps[0] ?? null
+} else {
+  funnel = await getFunnelBySlug(summit.id, funnelSlug)
+
+  if (!funnel) {
+    return Astro.redirect('/404')
+  }
+
+  if (!stepSlug) {
+    // Funnel slug with no step — redirect to first step
+    const firstStep = funnel.steps[0]
+    if (firstStep) {
+      return Astro.redirect(`/${funnelSlug}/${firstStep.slug}`, 302)
+    }
+    return Astro.redirect('/404')
+  }
+
+  currentStep = funnel.steps.find((s) => s.slug === stepSlug) ?? null
+}
+
+if (!funnel || !currentStep) {
+  return Astro.redirect('/404')
+}
+
+// ── 3. Compute next step URL ──────────────────────────────────────────────────
+
+const currentIndex = funnel.steps.findIndex((s) => s.id === currentStep!.id)
+const nextStep = funnel.steps[currentIndex + 1] ?? null
+const nextStepUrl = nextStep ? `/${funnel.slug}/${nextStep.slug}` : null
+
+// ── 4. Pre-fetch speakers if any section on this step needs them ──────────────
+
+const needsSpeakers = currentStep.sections.some(
+  (s: Section) => s.type === 'speakers'
+)
+const allSpeakers = needsSpeakers ? await getSpeakers(summit.id) : []
+
+// ── 5. Resolve SEO — step overrides summit global defaults ───────────────────
+
+const seo = {
+  title:
+    currentStep.seo?.title ??
+    summit.globalSEO?.defaultTitle ??
+    `${currentStep.title} — ${summit.name}`,
+  description:
+    currentStep.seo?.description ??
+    summit.globalSEO?.defaultDescription ??
+    null,
+  noindex: currentStep.seo?.noindex ?? summit.globalSEO?.globalNoindex ?? false,
+}
+---
+
+<FunnelLayout
+  summit={summit}
+  seo={seo}
+  stepType={currentStep.type}
+  showProgress={funnel.steps.length > 1}
+  currentStep={currentIndex + 1}
+  totalSteps={funnel.steps.length}
+>
+  <FunnelStep
+    step={currentStep}
+    funnel={funnel}
+    summit={summit}
+    nextStepUrl={nextStepUrl}
+    allSpeakers={allSpeakers}
+  />
+</FunnelLayout>

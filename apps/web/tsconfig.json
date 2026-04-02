@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "paths": {
+      "@summit/types": ["../../packages/types/src/index.ts"],
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", ".astro/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", ".astro"]
+}

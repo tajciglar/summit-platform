@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": "A customer purchase order"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderNumber": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "summitSite": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::summit-site.summit-site"
+    },
+    "customerName": {
+      "type": "string",
+      "required": true
+    },
+    "customerEmail": {
+      "type": "email",
+      "required": true
+    },
+    "items": {
+      "type": "json"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "paid", "refunded", "failed"],
+      "default": "pending"
+    },
+    "amountTotal": {
+      "type": "integer",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "default": "eur"
+    },
+    "stripePaymentIntentId": {
+      "type": "string"
+    },
+    "stripeSessionId": {
+      "type": "string"
+    },
+    "bumpAccepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "upsellAccepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "utmSource": {
+      "type": "string"
+    },
+    "utmMedium": {
+      "type": "string"
+    },
+    "utmCampaign": {
+      "type": "string"
+    },
+    "utmContent": {
+      "type": "string"
+    },
+    "utmTerm": {
+      "type": "string"
+    }
+  }
+}

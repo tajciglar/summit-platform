@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_sections_videos",
+  "info": {
+    "displayName": "Video",
+    "description": "A video embed section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "videoUrl": {
+      "type": "string",
+      "required": true
+    },
+    "poster": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "caption": {
+      "type": "text"
+    }
+  }
+}

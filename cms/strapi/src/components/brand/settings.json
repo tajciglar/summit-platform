@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_brand_settings",
+  "info": {
+    "displayName": "Brand Settings",
+    "description": "Brand colors and typography configuration"
+  },
+  "options": {},
+  "attributes": {
+    "primaryColor": {
+      "type": "string",
+      "required": true,
+      "default": "#3B82F6"
+    },
+    "secondaryColor": {
+      "type": "string",
+      "required": true,
+      "default": "#1E40AF"
+    },
+    "fontHeading": {
+      "type": "string",
+      "required": true,
+      "default": "Inter"
+    },
+    "fontBody": {
+      "type": "string",
+      "required": true,
+      "default": "Inter"
+    }
+  }
+}

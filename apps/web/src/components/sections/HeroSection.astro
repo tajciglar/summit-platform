@@ -1,0 +1,180 @@
+---
+import { Image } from 'astro:assets'
+import type { HeroSection } from '@summit/types'
+
+type Props = HeroSection & { class?: string }
+
+const {
+  heading,
+  subheading,
+  image,
+  ctaText,
+  ctaUrl,
+  layout = 'centered',
+  class: className,
+} = Astro.props
+---
+
+<section
+  data-section="hero"
+  data-layout={layout}
+  class:list={['hero-section', `hero-section--${layout}`, className]}
+>
+  <div class="hero-section__container container">
+    <div class="hero-section__content">
+      <h1 class="hero-section__heading">{heading}</h1>
+
+      {subheading && (
+        <p class="hero-section__subheading">{subheading}</p>
+      )}
+
+      {ctaText && ctaUrl && (
+        <a href={ctaUrl} class="hero-section__cta">
+          {ctaText}
+        </a>
+      )}
+    </div>
+
+    {image && (
+      <div class="hero-section__image-wrap">
+        <Image
+          src={image.url}
+          alt={image.alternativeText ?? heading}
+          width={1200}
+          height={630}
+          loading="eager"
+          fetchpriority="high"
+          class="hero-section__image"
+          inferSize={false}
+        />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    width: 100%;
+    padding-block: var(--space-16, 4rem);
+    overflow: hidden;
+  }
+
+  .hero-section__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8, 2rem);
+    align-items: center;
+  }
+
+  /* ── Centered layout ─────────────────────────────── */
+  .hero-section--centered .hero-section__container {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-section--centered .hero-section__content {
+    max-width: 42rem;
+  }
+
+  .hero-section--centered .hero-section__image-wrap {
+    width: 100%;
+    max-width: 56rem;
+  }
+
+  /* ── Split layout shared ─────────────────────────── */
+  @media (min-width: 768px) {
+    .hero-section--split-left .hero-section__container,
+    .hero-section--split-right .hero-section__container {
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+    }
+
+    .hero-section--split-left .hero-section__content,
+    .hero-section--split-right .hero-section__content {
+      flex: 1 1 0;
+    }
+
+    .hero-section--split-left .hero-section__image-wrap,
+    .hero-section--split-right .hero-section__image-wrap {
+      flex: 1 1 0;
+    }
+
+    /* split-left: text left, image right (default column order) */
+    .hero-section--split-left .hero-section__content {
+      order: 1;
+    }
+    .hero-section--split-left .hero-section__image-wrap {
+      order: 2;
+    }
+
+    /* split-right: image left, text right */
+    .hero-section--split-right .hero-section__content {
+      order: 2;
+    }
+    .hero-section--split-right .hero-section__image-wrap {
+      order: 1;
+    }
+  }
+
+  /* ── Typography ──────────────────────────────────── */
+  .hero-section__heading {
+    font-family: var(--font-heading, inherit);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-4, 1rem);
+    color: inherit;
+  }
+
+  .hero-section__subheading {
+    font-family: var(--font-body, inherit);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    margin: 0 0 var(--space-8, 2rem);
+    opacity: 0.8;
+    color: inherit;
+  }
+
+  /* ── CTA button ──────────────────────────────────── */
+  .hero-section__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary, #7c3aed);
+    color: #ffffff;
+    font-family: var(--font-body, inherit);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.875rem 2rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+
+  .hero-section__cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .hero-section__cta:active {
+    transform: translateY(0);
+  }
+
+  /* ── Image ───────────────────────────────────────── */
+  .hero-section__image-wrap {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  }
+
+  .hero-section__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_sections_customs",
+  "info": {
+    "displayName": "Custom",
+    "description": "A custom HTML section"
+  },
+  "options": {},
+  "attributes": {
+    "html": {
+      "type": "text"
+    },
+    "identifier": {
+      "type": "string"
+    }
+  }
+}

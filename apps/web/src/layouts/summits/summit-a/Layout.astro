@@ -1,0 +1,21 @@
+---
+/**
+ * Summit A per-summit layout wrapper.
+ *
+ * Extends FunnelLayout with any summit-A-specific structural overrides.
+ * CSS custom properties (brand colours/fonts) are already injected by
+ * BaseLayout from the SummitSite CMS record — this file is for any
+ * additional summit-A CSS that goes beyond custom properties.
+ */
+import FunnelLayout from '../../FunnelLayout.astro'
+import type { Props as FunnelLayoutProps } from '../../FunnelLayout.astro'
+
+// Summit-A structural style overrides (uncomment import when needed):
+// import '~/styles/themes/summit-a.css'
+
+export type Props = FunnelLayoutProps
+---
+
+<FunnelLayout {...Astro.props}>
+  <slot />
+</FunnelLayout>

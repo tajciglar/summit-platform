@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "speakers",
+  "info": {
+    "singularName": "speaker",
+    "pluralName": "speakers",
+    "displayName": "Speaker",
+    "description": "A speaker featured at a summit"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "bio": {
+      "type": "richtext"
+    },
+    "title": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "summitSite": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::summit-site.summit-site"
+    },
+    "order": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+    }
+  }
+}

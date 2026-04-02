@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "funnel_steps",
+  "info": {
+    "singularName": "funnel-step",
+    "pluralName": "funnel-steps",
+    "displayName": "Funnel Step",
+    "description": "A single step within a marketing funnel"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["landing", "checkout", "bump", "upsell", "downsell", "thankyou", "optin"],
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+    },
+    "template": {
+      "type": "string"
+    },
+    "funnel": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::funnel.funnel",
+      "inversedBy": "steps"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.hero",
+        "sections.features",
+        "sections.testimonials",
+        "sections.video",
+        "sections.cta",
+        "sections.speakers-list",
+        "sections.custom"
+      ]
+    }
+  }
+}
