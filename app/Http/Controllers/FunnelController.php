@@ -44,8 +44,31 @@ class FunnelController extends Controller
             'checkout'  => $this->renderCheckout($funnelData, $stepData, $step),
             'upsell'    => $this->renderUpsell($request, $funnelData, $stepData, $step),
             'thank_you' => Inertia::render('Funnel/ThankYou', ['funnel' => $funnelData, 'step' => $stepData]),
-            default     => Inertia::render('Funnel/Optin', ['funnel' => $funnelData, 'step' => $stepData]),
+            default     => $this->renderOptin($funnelData, $stepData, $step),
         };
+    }
+
+    private function renderOptin(array $funnelData, array $stepData, FunnelStep $step): Response
+    {
+        $funnel = $step->funnel;
+        $funnel->loadMissing('speakers');
+
+        $speakers = $funnel->speakers
+            ->filter(fn ($s) => $s->is_active)
+            ->map(fn ($s) => [
+                'name'      => $s->name,
+                'title'     => $s->title,
+                'bio'       => $s->bio,
+                'photo_url' => $s->getFirstMediaUrl('photo'),
+            ])
+            ->values()
+            ->all();
+
+        return Inertia::render('Funnel/Optin', [
+            'funnel'   => $funnelData,
+            'step'     => $stepData,
+            'speakers' => $speakers,
+        ]);
     }
 
     private function renderCheckout(array $funnelData, array $stepData, FunnelStep $step): Response

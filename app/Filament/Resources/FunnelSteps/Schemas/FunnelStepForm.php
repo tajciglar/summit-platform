@@ -24,9 +24,9 @@ class FunnelStepForm
                     ->required(),
                 Select::make('type')
                     ->options([
-                        'optin'     => 'Opt-in',
-                        'checkout'  => 'Checkout',
-                        'upsell'    => 'Upsell',
+                        'optin' => 'Opt-in',
+                        'checkout' => 'Checkout',
+                        'upsell' => 'Upsell',
                         'thank_you' => 'Thank You',
                     ])
                     ->required(),
@@ -34,6 +34,8 @@ class FunnelStepForm
                     ->numeric()
                     ->default(0),
                 Toggle::make('is_active'),
+                Toggle::make('is_published'),
+                TextInput::make('headline'),
             ]);
     }
 }

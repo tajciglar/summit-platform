@@ -12,6 +12,7 @@
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
+        "spatie/laravel-medialibrary": "*",
         "stripe/stripe-php": "^20.0",
         "tightenco/ziggy": "^2.6"
     },

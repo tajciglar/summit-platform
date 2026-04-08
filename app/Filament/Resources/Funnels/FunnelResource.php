@@ -18,6 +18,8 @@ class FunnelResource extends Resource
 {
     protected static ?string $model = Funnel::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
@@ -33,7 +35,7 @@ class FunnelResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\FunnelStepsRelationManager::class,
         ];
     }
 

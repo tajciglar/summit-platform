@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class FunnelStepsTable
@@ -28,6 +29,7 @@ class FunnelStepsTable
                     ->sortable(),
                 IconColumn::make('is_active')
                     ->boolean(),
+                ToggleColumn::make('is_published'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
