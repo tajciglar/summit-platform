@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\FunnelPreview;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\ResolveFunnelDomain;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'funnel.domain' => ResolveFunnelDomain::class,
+            'funnel.preview' => FunnelPreview::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

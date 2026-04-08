@@ -25,5 +25,7 @@ Route::post('/optin', [OptinController::class, 'store']);
 // Funnel routes — summit-based URL pattern
 // /{summitSlug}/{funnelSlug}             → first step
 // /{summitSlug}/{funnelSlug}/{stepSlug}  → specific step
-Route::get('/{summitSlug}/{funnelSlug}', [FunnelController::class, 'show']);
-Route::get('/{summitSlug}/{funnelSlug}/{stepSlug}', [FunnelController::class, 'show']);
+Route::middleware('funnel.preview')->group(function () {
+    Route::get('/{summitSlug}/{funnelSlug}', [FunnelController::class, 'show']);
+    Route::get('/{summitSlug}/{funnelSlug}/{stepSlug}', [FunnelController::class, 'show']);
+});
