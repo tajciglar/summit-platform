@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FunnelStep extends Model
 {
-    protected $fillable = ['funnel_id', 'title', 'slug', 'type', 'sort_order', 'is_active'];
+    protected $fillable = ['funnel_id', 'product_id', 'title', 'slug', 'type', 'sort_order', 'is_active', 'headline'];
 
     protected $casts = ['is_active' => 'boolean'];
 
     public function funnel(): BelongsTo
     {
         return $this->belongsTo(Funnel::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

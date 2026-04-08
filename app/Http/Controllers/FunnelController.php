@@ -29,17 +29,34 @@ class FunnelController extends Controller
             abort(404);
         }
 
+        $funnelData = ['name' => $funnel->name, 'slug' => $funnel->slug];
+        $stepData   = [
+            'id'         => $step->id,
+            'title'      => $step->title,
+            'slug'       => $step->slug,
+            'type'       => $step->type,
+            'sort_order' => $step->sort_order,
+            'headline'   => $step->headline,
+        ];
+
+        if ($step->type === 'checkout') {
+            $step->loadMissing('product');
+
+            return Inertia::render('Funnel/Checkout', [
+                'funnel'    => $funnelData,
+                'step'      => $stepData,
+                'product'   => $step->product ? [
+                    'name'             => $step->product->name,
+                    'price_in_dollars' => $step->product->price_in_dollars,
+                    'currency'         => $step->product->currency,
+                ] : null,
+                'stripeKey' => config('services.stripe.key'),
+            ]);
+        }
+
         return Inertia::render('Funnel/Optin', [
-            'funnel' => [
-                'name' => $funnel->name,
-                'slug' => $funnel->slug,
-            ],
-            'step' => [
-                'title'      => $step->title,
-                'slug'       => $step->slug,
-                'type'       => $step->type,
-                'sort_order' => $step->sort_order,
-            ],
+            'funnel' => $funnelData,
+            'step'   => $stepData,
         ]);
     }
 }
