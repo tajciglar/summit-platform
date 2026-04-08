@@ -10,6 +10,8 @@ class SummitPhaseSchedule extends Model
 {
     use HasUuid;
 
+    public $timestamps = false;
+
     protected $fillable = ['summit_id', 'phase', 'starts_at', 'ends_at'];
 
     protected $casts = [
