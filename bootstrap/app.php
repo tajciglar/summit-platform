@@ -4,6 +4,7 @@ use App\Http\Middleware\FunnelPreview;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\ResolveFunnelDomain;
 use App\Http\Middleware\TrackAffiliateReferral;
+use App\Http\Middleware\TrackSessionId;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             HandleInertiaRequests::class,
+            TrackSessionId::class,
             TrackAffiliateReferral::class,
         ]);
 

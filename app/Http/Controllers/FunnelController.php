@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FunnelStep;
 use App\Models\Summit;
+use App\Services\AnalyticsService;
 use App\Services\FunnelResolver;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +12,10 @@ use Inertia\Response;
 
 class FunnelController extends Controller
 {
-    public function __construct(private readonly FunnelResolver $resolver) {}
+    public function __construct(
+        private readonly FunnelResolver $resolver,
+        private readonly AnalyticsService $analytics,
+    ) {}
 
     public function show(Request $request, string $summitSlug, string $funnelSlug, ?string $stepSlug = null): Response
     {
@@ -29,6 +33,16 @@ class FunnelController extends Controller
         $step = $this->resolver->resolveStep($funnel, $stepSlug, $isPreview);
         if (! $step) {
             abort(404);
+        }
+
+        // Record page view (skip for previews)
+        if (! $isPreview) {
+            $this->analytics->recordPageView($request, [
+                'page_type' => 'funnel_step',
+                'summit_id' => $summit->id,
+                'funnel_id' => $funnel->id,
+                'funnel_step_id' => $step->id,
+            ]);
         }
 
         $summitData = ['id' => $summit->id, 'title' => $summit->title, 'slug' => $summit->slug, 'current_phase' => $summit->current_phase];
