@@ -65,6 +65,12 @@ class StripeWebhookController extends Controller
             $order->user->update(['stripe_customer_id' => $intent->customer]);
         }
 
+        // Increment coupon usage
+        if ($order->coupon_id) {
+            $order->loadMissing('coupon');
+            $order->coupon?->increment('times_used');
+        }
+
         // Grant content access if product grants VIP
         $order->loadMissing('items.product', 'user');
         foreach ($order->items as $item) {

@@ -7,6 +7,7 @@ use App\Models\FunnelStepBump;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Services\CouponService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,7 +15,10 @@ use Stripe\StripeClient;
 
 class CheckoutController extends Controller
 {
-    public function __construct(private readonly StripeClient $stripe) {}
+    public function __construct(
+        private readonly StripeClient $stripe,
+        private readonly CouponService $couponService,
+    ) {}
 
     /**
      * Create a Stripe PaymentIntent and a pending Order with order items.
@@ -27,6 +31,7 @@ class CheckoutController extends Controller
             'customer_name' => ['nullable', 'string', 'max:255'],
             'selected_bump_ids' => ['nullable', 'array'],
             'selected_bump_ids.*' => ['string', 'exists:funnel_step_bumps,id'],
+            'coupon_code' => ['nullable', 'string', 'max:100'],
         ]);
 
         $step = FunnelStep::with('product.prices', 'funnel.summit')->findOrFail($validated['funnel_step_id']);
@@ -52,7 +57,20 @@ class CheckoutController extends Controller
             ->get() : collect();
 
         $bumpTotal = $bumps->sum(fn ($bump) => $bump->product->priceForPhase($summit->current_phase)?->amount_cents ?? 0);
-        $totalCents = $price->amount_cents + $bumpTotal;
+        $subtotalCents = $price->amount_cents + $bumpTotal;
+
+        // Apply coupon if provided
+        $coupon = null;
+        $discountCents = 0;
+        if ($validated['coupon_code'] ?? null) {
+            $coupon = $this->couponService->validate($validated['coupon_code'], $summit->id, $product->id);
+            if (! $coupon) {
+                return response()->json(['error' => 'Invalid or expired coupon code.'], 422);
+            }
+            $discountCents = $this->couponService->calculateDiscount($coupon, $subtotalCents);
+        }
+
+        $totalCents = max(0, $subtotalCents - $discountCents);
 
         // Idempotency key
         $idempotencyKey = 'pi_'.hash('sha256', $step->id.'|'.$validated['customer_email'].'|'.now()->format('Y-m-d'));
@@ -89,8 +107,10 @@ class CheckoutController extends Controller
             'funnel_step_id' => $step->id,
             'summit_phase_at_purchase' => $summit->current_phase,
             'status' => 'pending',
-            'subtotal_cents' => $totalCents,
+            'subtotal_cents' => $subtotalCents,
+            'discount_cents' => $discountCents,
             'total_cents' => $totalCents,
+            'coupon_id' => $coupon?->id,
             'currency' => 'USD',
             'affiliate_id' => $request->cookie('affiliate_ref'),
             'ip_address' => $request->ip(),
