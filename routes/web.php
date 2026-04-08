@@ -5,6 +5,7 @@ use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\OptinController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\UpsellController;
+use App\Http\Controllers\VideoAccessController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,11 @@ Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);
 Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent']);
 Route::post('/checkout/upsell', [UpsellController::class, 'charge']);
 Route::post('/optin', [OptinController::class, 'store']);
+
+// Video access API
+Route::post('/video/check-access', [VideoAccessController::class, 'check']);
+Route::post('/video/start-watching', [VideoAccessController::class, 'startWatching']);
+Route::post('/video/heartbeat', [VideoAccessController::class, 'heartbeat']);
 
 // Funnel routes — summit-based URL pattern
 // /{summitSlug}/{funnelSlug}             → first step
