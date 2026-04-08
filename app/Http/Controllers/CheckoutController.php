@@ -92,6 +92,14 @@ class CheckoutController extends Controller
             'subtotal_cents' => $totalCents,
             'total_cents' => $totalCents,
             'currency' => 'USD',
+            'affiliate_id' => $request->cookie('affiliate_ref'),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'utm_source' => $request->input('utm_source'),
+            'utm_medium' => $request->input('utm_medium'),
+            'utm_campaign' => $request->input('utm_campaign'),
+            'utm_content' => $request->input('utm_content'),
+            'utm_term' => $request->input('utm_term'),
             'stripe_payment_intent_id' => $intent->id,
         ]);
 

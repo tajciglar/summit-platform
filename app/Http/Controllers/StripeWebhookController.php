@@ -7,6 +7,7 @@ use App\Jobs\SyncToActiveCampaign;
 use App\Models\Order;
 use App\Models\Refund;
 use App\Models\Subscription;
+use App\Services\AffiliateService;
 use App\Services\ContentAccessService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,7 +17,10 @@ use Stripe\Webhook;
 
 class StripeWebhookController extends Controller
 {
-    public function __construct(private readonly ContentAccessService $contentAccess) {}
+    public function __construct(
+        private readonly ContentAccessService $contentAccess,
+        private readonly AffiliateService $affiliateService,
+    ) {}
 
     public function handle(Request $request): Response
     {
@@ -73,6 +77,9 @@ class StripeWebhookController extends Controller
                 );
             }
         }
+
+        // Create affiliate commissions if order has affiliate
+        $this->affiliateService->createCommissions($order);
 
         SendOrderConfirmationEmail::dispatch($order);
         dispatch(SyncToActiveCampaign::fromOrder($order));
