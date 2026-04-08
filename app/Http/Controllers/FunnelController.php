@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Domain;
+use App\Models\FunnelStep;
 use App\Services\FunnelResolver;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -39,29 +40,58 @@ class FunnelController extends Controller
             'headline'   => $step->headline,
         ];
 
-        if ($step->type === 'checkout') {
-            $step->loadMissing('product');
-
-            return Inertia::render('Funnel/Checkout', [
-                'funnel'    => $funnelData,
-                'step'      => $stepData,
-                'product'   => $step->product ? [
-                    'name'             => $step->product->name,
-                    'price_in_dollars' => $step->product->price_in_dollars,
-                    'currency'         => $step->product->currency,
-                ] : null,
-                'stripeKey' => config('services.stripe.key'),
-            ]);
-        }
-
-        $component = match ($step->type) {
-            'thank_you' => 'Funnel/ThankYou',
-            default     => 'Funnel/Optin',
+        return match ($step->type) {
+            'checkout'  => $this->renderCheckout($funnelData, $stepData, $step),
+            'upsell'    => $this->renderUpsell($request, $funnelData, $stepData, $step),
+            'thank_you' => Inertia::render('Funnel/ThankYou', ['funnel' => $funnelData, 'step' => $stepData]),
+            default     => Inertia::render('Funnel/Optin', ['funnel' => $funnelData, 'step' => $stepData]),
         };
+    }
 
-        return Inertia::render($component, [
-            'funnel' => $funnelData,
-            'step'   => $stepData,
+    private function renderCheckout(array $funnelData, array $stepData, FunnelStep $step): Response
+    {
+        $step->loadMissing('product');
+
+        $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
+            ->where('sort_order', '>', $step->sort_order)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->first();
+
+        return Inertia::render('Funnel/Checkout', [
+            'funnel'       => $funnelData,
+            'step'         => $stepData,
+            'product'      => $step->product ? [
+                'name'             => $step->product->name,
+                'price_in_dollars' => $step->product->price_in_dollars,
+                'currency'         => $step->product->currency,
+            ] : null,
+            'stripeKey'    => config('services.stripe.key'),
+            'nextStepSlug' => $nextStep?->slug,
+        ]);
+    }
+
+    private function renderUpsell(Request $request, array $funnelData, array $stepData, FunnelStep $step): Response
+    {
+        $step->loadMissing('product');
+
+        // Find the next step after this upsell (for skip/decline navigation)
+        $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
+            ->where('sort_order', '>', $step->sort_order)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->first();
+
+        return Inertia::render('Funnel/Upsell', [
+            'funnel'          => $funnelData,
+            'step'            => $stepData,
+            'product'         => $step->product ? [
+                'name'             => $step->product->name,
+                'price_in_dollars' => $step->product->price_in_dollars,
+                'currency'         => $step->product->currency,
+            ] : null,
+            'nextStepSlug'    => $nextStep?->slug,
+            'paymentIntentId' => $request->query('payment_intent'),
         ]);
     }
 }

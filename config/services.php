@@ -28,6 +28,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'brevo' => [
+        'api_key'    => env('BREVO_API_KEY'),
+        'from_email' => env('BREVO_FROM_EMAIL', 'noreply@example.com'),
+        'from_name'  => env('BREVO_FROM_NAME', env('APP_NAME', 'Summit Platform')),
+    ],
+
     'stripe' => [
         'key'            => env('STRIPE_KEY'),
         'secret'         => env('STRIPE_SECRET'),

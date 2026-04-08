@@ -24,6 +24,7 @@ interface Props {
     currency: string
   }
   stripeKey: string
+  nextStepSlug: string | null
 }
 
 function getCsrfToken(): string {
@@ -31,7 +32,7 @@ function getCsrfToken(): string {
 }
 
 /** Outer component: creates PaymentIntent, then mounts Elements */
-export default function Checkout({ funnel, step, product, stripeKey }: Props) {
+export default function Checkout({ funnel, step, product, stripeKey, nextStepSlug }: Props) {
   const [stripePromise] = useState(() => loadStripe(stripeKey))
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
@@ -141,6 +142,7 @@ export default function Checkout({ funnel, step, product, stripeKey }: Props) {
               paymentIntentId={paymentIntentId}
               priceLabel={`$${product.price_in_dollars}`}
               funnelSlug={funnel.slug}
+              nextStepSlug={nextStepSlug}
             />
           </Elements>
         )}
@@ -156,19 +158,23 @@ function CheckoutForm({
   paymentIntentId,
   priceLabel,
   funnelSlug,
+  nextStepSlug,
 }: {
   email: string
   name: string
   paymentIntentId: string | null
   priceLabel: string
   funnelSlug: string
+  nextStepSlug: string | null
 }) {
   const stripe = useStripe()
   const elements = useElements()
   const [error, setError] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
 
-  const returnUrl = `${window.location.origin}/${funnelSlug}/thank-you?email=${encodeURIComponent(email)}`
+  // After checkout, go to next step (upsell) or thank-you, passing payment_intent for upsell charging
+  const nextPath = nextStepSlug ? `/${funnelSlug}/${nextStepSlug}` : `/${funnelSlug}/thank-you`
+  const returnUrl = `${window.location.origin}${nextPath}?payment_intent=${paymentIntentId ?? ''}&email=${encodeURIComponent(email)}`
 
   async function syncMetadata() {
     if (!paymentIntentId) return

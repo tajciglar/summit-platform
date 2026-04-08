@@ -65,6 +65,7 @@ class CheckoutController extends Controller
             'currency'                  => $product->currency,
             'receipt_email'             => $validated['customer_email'],
             'automatic_payment_methods' => ['enabled' => true],
+            'setup_future_usage'        => 'off_session', // saves payment method for upsells
             'metadata'                  => [
                 'funnel_step_id' => $step->id,
                 'product_id'     => $product->id,

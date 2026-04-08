@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\UpsellController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +17,7 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])
 // Checkout API — called from React via fetch
 Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);
 Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent']);
+Route::post('/checkout/upsell', [UpsellController::class, 'charge']);
 
 // Funnel routes — domain resolved by middleware
 Route::middleware('funnel.domain')->group(function () {
