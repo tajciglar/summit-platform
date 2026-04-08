@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendOrderConfirmationEmail;
+use App\Jobs\SyncToActiveCampaign;
 use App\Models\Order;
-use App\Services\BrevoMailer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Stripe\Exception\SignatureVerificationException;
@@ -11,8 +12,6 @@ use Stripe\Webhook;
 
 class StripeWebhookController extends Controller
 {
-    public function __construct(private readonly BrevoMailer $mailer) {}
-
     public function handle(Request $request): Response
     {
         $payload = $request->getContent();
@@ -43,12 +42,13 @@ class StripeWebhookController extends Controller
         }
 
         $order->update([
-            'status'              => 'paid',
-            'stripe_customer_id'  => $intent->customer ?? null,
+            'status'             => 'paid',
+            'stripe_customer_id' => $intent->customer ?? null,
         ]);
 
-        // Send confirmation email — non-blocking
-        $this->mailer->sendOrderConfirmation($order);
+        // Dispatch async jobs — non-blocking, retryable
+        SendOrderConfirmationEmail::dispatch($order);
+        dispatch(SyncToActiveCampaign::fromOrder($order));
     }
 
     private function handlePaymentFailed(object $intent): void
