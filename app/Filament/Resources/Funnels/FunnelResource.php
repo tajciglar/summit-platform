@@ -18,7 +18,9 @@ class FunnelResource extends Resource
 {
     protected static ?string $model = Funnel::class;
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static \UnitEnum|string|null $navigationGroup = 'Funnels';
+
+    protected static ?int $navigationSort = 0;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

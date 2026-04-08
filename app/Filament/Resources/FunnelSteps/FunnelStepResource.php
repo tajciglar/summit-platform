@@ -18,9 +18,13 @@ class FunnelStepResource extends Resource
 {
     protected static ?string $model = FunnelStep::class;
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static \UnitEnum|string|null $navigationGroup = 'Funnels';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Funnel Steps';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentDuplicate;
 
     public static function form(Schema $schema): Schema
     {
