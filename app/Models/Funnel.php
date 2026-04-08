@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Funnel extends Model
 {
-    protected $fillable = ['domain_id', 'name', 'slug', 'is_active'];
+    protected $fillable = ['domain_id', 'name', 'slug', 'is_active', 'theme'];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = [
+        'is_active' => 'boolean',
+        'theme' => 'array',
+    ];
 
     public function domain(): BelongsTo
     {
