@@ -8,13 +8,21 @@ use App\Filament\Resources\Speakers\Pages\ListSpeakers;
 use App\Filament\Resources\Speakers\Schemas\SpeakerForm;
 use App\Filament\Resources\Speakers\Tables\SpeakersTable;
 use App\Models\Speaker;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class SpeakerResource extends Resource
 {
     protected static ?string $model = Speaker::class;
+
+    protected static \UnitEnum|string|null $navigationGroup = 'Content';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     public static function form(Schema $schema): Schema
     {

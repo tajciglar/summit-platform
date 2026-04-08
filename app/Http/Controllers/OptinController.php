@@ -12,7 +12,7 @@ class OptinController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'email'],
-            'name'  => ['nullable', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
         ]);
 
         SyncOptinToActiveCampaign::dispatch(

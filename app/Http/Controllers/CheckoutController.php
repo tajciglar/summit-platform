@@ -21,7 +21,7 @@ class CheckoutController extends Controller
         $validated = $request->validate([
             'funnel_step_id' => ['required', 'integer', 'exists:funnel_steps,id'],
             'customer_email' => ['required', 'email'],
-            'customer_name'  => ['nullable', 'string', 'max:255'],
+            'customer_name' => ['nullable', 'string', 'max:255'],
         ]);
 
         $step = FunnelStep::with('product')->findOrFail($validated['funnel_step_id']);
@@ -43,8 +43,8 @@ class CheckoutController extends Controller
             $this->stripe->paymentIntents->update($existingOrder->stripe_payment_intent_id, [
                 'metadata' => [
                     'funnel_step_id' => $step->id,
-                    'product_id'     => $product->id,
-                    'email'          => $validated['customer_email'],
+                    'product_id' => $product->id,
+                    'email' => $validated['customer_email'],
                 ],
             ]);
 
@@ -52,25 +52,25 @@ class CheckoutController extends Controller
             session(['payment_intent_id' => $intent->id]);
 
             return response()->json([
-                'clientSecret'    => $intent->client_secret,
+                'clientSecret' => $intent->client_secret,
                 'paymentIntentId' => $intent->id,
             ]);
         }
 
         // Idempotency key: based on step + email to prevent duplicate intents
-        $idempotencyKey = 'pi_' . hash('sha256', $step->id . '|' . $validated['customer_email'] . '|' . now()->format('Y-m-d'));
+        $idempotencyKey = 'pi_'.hash('sha256', $step->id.'|'.$validated['customer_email'].'|'.now()->format('Y-m-d'));
 
         // Create PaymentIntent — price always from DB, never from client
         $intent = $this->stripe->paymentIntents->create([
-            'amount'                    => $product->price,
-            'currency'                  => $product->currency,
-            'receipt_email'             => $validated['customer_email'],
+            'amount' => $product->price,
+            'currency' => $product->currency,
+            'receipt_email' => $validated['customer_email'],
             'automatic_payment_methods' => ['enabled' => true],
-            'setup_future_usage'        => 'off_session', // saves payment method for upsells
-            'metadata'                  => [
+            'setup_future_usage' => 'off_session', // saves payment method for upsells
+            'metadata' => [
                 'funnel_step_id' => $step->id,
-                'product_id'     => $product->id,
-                'email'          => $validated['customer_email'],
+                'product_id' => $product->id,
+                'email' => $validated['customer_email'],
             ],
         ], ['idempotency_key' => $idempotencyKey]);
 
@@ -79,18 +79,18 @@ class CheckoutController extends Controller
 
         // Create pending order — updated to paid by the webhook
         Order::create([
-            'product_id'               => $product->id,
-            'funnel_step_id'           => $step->id,
-            'customer_email'           => $validated['customer_email'],
-            'customer_name'            => $validated['customer_name'],
-            'amount'                   => $product->price,
-            'currency'                 => $product->currency,
-            'status'                   => 'pending',
+            'product_id' => $product->id,
+            'funnel_step_id' => $step->id,
+            'customer_email' => $validated['customer_email'],
+            'customer_name' => $validated['customer_name'],
+            'amount' => $product->price,
+            'currency' => $product->currency,
+            'status' => 'pending',
             'stripe_payment_intent_id' => $intent->id,
         ]);
 
         return response()->json([
-            'clientSecret'    => $intent->client_secret,
+            'clientSecret' => $intent->client_secret,
             'paymentIntentId' => $intent->id,
         ]);
     }
@@ -102,8 +102,8 @@ class CheckoutController extends Controller
     {
         $validated = $request->validate([
             'payment_intent_id' => ['required', 'string'],
-            'customer_email'    => ['nullable', 'email'],
-            'customer_name'     => ['nullable', 'string', 'max:255'],
+            'customer_email' => ['nullable', 'email'],
+            'customer_name' => ['nullable', 'string', 'max:255'],
         ]);
 
         $existing = $this->stripe->paymentIntents->retrieve($validated['payment_intent_id']);
@@ -113,7 +113,7 @@ class CheckoutController extends Controller
                 (array) $existing->metadata,
                 array_filter([
                     'email' => $validated['customer_email'],
-                    'name'  => $validated['customer_name'],
+                    'name' => $validated['customer_name'],
                 ]),
             ),
             ...($validated['customer_email'] ? ['receipt_email' => $validated['customer_email']] : []),
@@ -123,7 +123,7 @@ class CheckoutController extends Controller
         Order::where('stripe_payment_intent_id', $validated['payment_intent_id'])
             ->update(array_filter([
                 'customer_email' => $validated['customer_email'],
-                'customer_name'  => $validated['customer_name'],
+                'customer_name' => $validated['customer_name'],
             ]));
 
         return response()->json(['ok' => true]);

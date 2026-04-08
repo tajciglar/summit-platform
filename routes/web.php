@@ -5,6 +5,7 @@ use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\OptinController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\UpsellController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,7 +14,7 @@ Route::get('/', function () {
 
 // Stripe webhook — must be outside CSRF middleware, raw body needed
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // Checkout API — called from React via fetch
 Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);

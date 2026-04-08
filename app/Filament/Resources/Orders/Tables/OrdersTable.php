@@ -14,44 +14,31 @@ class OrdersTable
     {
         return $table
             ->columns([
-                TextColumn::make('product.name')
-                    ->searchable(),
-                TextColumn::make('funnelStep.title')
-                    ->searchable(),
-                TextColumn::make('customer_email')
-                    ->searchable(),
-                TextColumn::make('customer_name')
-                    ->searchable(),
-                TextColumn::make('amount')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('currency')
-                    ->searchable(),
+                TextColumn::make('order_number')->searchable()->sortable(),
+                TextColumn::make('user.email')->label('Customer')->searchable(),
+                TextColumn::make('summit.title')->label('Summit'),
                 TextColumn::make('status')
-                    ->searchable(),
-                TextColumn::make('stripe_payment_intent_id')
-                    ->searchable(),
-                TextColumn::make('stripe_customer_id')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'completed' => 'success',
+                        'refunded' => 'danger',
+                        'partially_refunded' => 'danger',
+                        'failed' => 'gray',
+                        default => 'gray',
+                    }),
+                TextColumn::make('total_cents')
+                    ->money('usd', divideBy: 100)
+                    ->label('Total')
+                    ->sortable(),
+                TextColumn::make('items_count')->counts('items')->label('Items'),
+                TextColumn::make('completed_at')->dateTime()->sortable(),
+                TextColumn::make('created_at')->dateTime()->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

@@ -15,40 +15,24 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
-                TextColumn::make('currency')
-                    ->searchable(),
-                TextColumn::make('type')
-                    ->searchable(),
-                TextColumn::make('stripe_price_id')
-                    ->searchable(),
-                IconColumn::make('is_active')
-                    ->boolean(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('slug')->searchable(),
+                TextColumn::make('summit.title')->label('Summit')->sortable(),
+                TextColumn::make('product_type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'one_time' => 'info',
+                        'subscription' => 'warning',
+                        default => 'gray',
+                    }),
+                TextColumn::make('tier')->badge(),
+                IconColumn::make('grants_vip_access')->boolean()->label('VIP'),
+                IconColumn::make('is_active')->boolean(),
+                TextColumn::make('prices_count')->counts('prices')->label('Prices'),
             ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

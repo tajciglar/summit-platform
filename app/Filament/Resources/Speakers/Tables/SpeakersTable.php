@@ -5,8 +5,7 @@ namespace App\Filament\Resources\Speakers\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,23 +15,20 @@ class SpeakersTable
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('photo')
-                    ->collection('photo')
+                ImageColumn::make('photo_url')
+                    ->label('Photo')
                     ->circular(),
-                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('first_name')->searchable()->sortable(),
+                TextColumn::make('last_name')->searchable()->sortable(),
                 TextColumn::make('title')->searchable(),
-                IconColumn::make('is_active')->boolean(),
-                TextColumn::make('funnels_count')
-                    ->counts('funnels')
-                    ->label('Funnels'),
+                TextColumn::make('email')->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('summit_speakers_count')
+                    ->counts('summitSpeakers')
+                    ->label('Summits'),
             ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

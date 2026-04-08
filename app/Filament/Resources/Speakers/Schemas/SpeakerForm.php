@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\Speakers\Schemas;
 
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class SpeakerForm
@@ -14,19 +13,22 @@ class SpeakerForm
     {
         return $schema
             ->components([
-                TextInput::make('name')->required(),
+                TextInput::make('first_name')->required()->maxLength(255),
+                TextInput::make('last_name')->required()->maxLength(255),
+                TextInput::make('slug')->required()->maxLength(255)->unique(ignoreRecord: true),
+                TextInput::make('email')->email(),
+                TextInput::make('photo_url')->label('Photo URL')->url(),
                 TextInput::make('title')
                     ->label('Role / Title')
-                    ->placeholder('CTO at Acme'),
-                Textarea::make('bio')->rows(3),
-                SpatieMediaLibraryFileUpload::make('photo')
-                    ->collection('photo')
-                    ->image()
-                    ->imageEditor(),
-                TextInput::make('website_url')
-                    ->label('Website')
-                    ->url(),
-                Toggle::make('is_active')->default(true),
+                    ->placeholder('CEO at Acme')
+                    ->maxLength(500),
+                Textarea::make('short_description')->label('Short Description')->rows(2),
+                Textarea::make('long_description')->label('Full Bio')->rows(4),
+                TextInput::make('website_url')->label('Website')->url(),
+                KeyValue::make('social_links')
+                    ->label('Social Links')
+                    ->keyLabel('Platform')
+                    ->valueLabel('URL'),
             ]);
     }
 }

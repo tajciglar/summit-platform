@@ -6,6 +6,7 @@ use App\Models\FunnelStep;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Stripe\Exception\CardException;
 use Stripe\StripeClient;
 
 class UpsellController extends Controller
@@ -19,7 +20,7 @@ class UpsellController extends Controller
     public function charge(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'funnel_step_id'           => ['required', 'integer', 'exists:funnel_steps,id'],
+            'funnel_step_id' => ['required', 'integer', 'exists:funnel_steps,id'],
             'original_payment_intent_id' => ['required', 'string'],
         ]);
 
@@ -39,7 +40,7 @@ class UpsellController extends Controller
 
         // Retrieve the original PaymentIntent to get customer + payment method
         $originalIntent = $this->stripe->paymentIntents->retrieve($validated['original_payment_intent_id']);
-        $customerId     = $originalIntent->customer;
+        $customerId = $originalIntent->customer;
         $paymentMethodId = $originalIntent->payment_method;
 
         if (! $customerId || ! $paymentMethodId) {
@@ -49,37 +50,37 @@ class UpsellController extends Controller
         try {
             // Charge off-session with the saved payment method — no user interaction needed
             $upsellIntent = $this->stripe->paymentIntents->create([
-                'amount'         => $product->price,
-                'currency'       => $product->currency,
-                'customer'       => $customerId,
+                'amount' => $product->price,
+                'currency' => $product->currency,
+                'customer' => $customerId,
                 'payment_method' => $paymentMethodId,
-                'off_session'    => true,
-                'confirm'        => true,
-                'metadata'       => [
+                'off_session' => true,
+                'confirm' => true,
+                'metadata' => [
                     'funnel_step_id' => $step->id,
-                    'product_id'     => $product->id,
-                    'email'          => $originalOrder->customer_email,
-                    'upsell'         => 'true',
+                    'product_id' => $product->id,
+                    'email' => $originalOrder->customer_email,
+                    'upsell' => 'true',
                 ],
             ]);
 
             // Create the upsell order
             Order::create([
-                'product_id'               => $product->id,
-                'funnel_step_id'           => $step->id,
-                'customer_email'           => $originalOrder->customer_email,
-                'customer_name'            => $originalOrder->customer_name,
-                'amount'                   => $product->price,
-                'currency'                 => $product->currency,
-                'status'                   => $upsellIntent->status === 'succeeded' ? 'paid' : 'pending',
+                'product_id' => $product->id,
+                'funnel_step_id' => $step->id,
+                'customer_email' => $originalOrder->customer_email,
+                'customer_name' => $originalOrder->customer_name,
+                'amount' => $product->price,
+                'currency' => $product->currency,
+                'status' => $upsellIntent->status === 'succeeded' ? 'paid' : 'pending',
                 'stripe_payment_intent_id' => $upsellIntent->id,
-                'stripe_customer_id'       => $customerId,
+                'stripe_customer_id' => $customerId,
             ]);
 
             return response()->json(['success' => true]);
-        } catch (\Stripe\Exception\CardException $e) {
+        } catch (CardException $e) {
             // Card declined — 3DS required or insufficient funds
-            return response()->json(['error' => 'Payment failed: ' . $e->getMessage()], 402);
+            return response()->json(['error' => 'Payment failed: '.$e->getMessage()], 402);
         }
     }
 }

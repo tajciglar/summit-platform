@@ -15,8 +15,8 @@ class StripeWebhookController extends Controller
     public function handle(Request $request): Response
     {
         $payload = $request->getContent();
-        $sig     = $request->header('Stripe-Signature');
-        $secret  = config('services.stripe.webhook_secret');
+        $sig = $request->header('Stripe-Signature');
+        $secret = config('services.stripe.webhook_secret');
 
         try {
             $event = Webhook::constructEvent($payload, $sig, $secret);
@@ -25,9 +25,9 @@ class StripeWebhookController extends Controller
         }
 
         match ($event->type) {
-            'payment_intent.succeeded'      => $this->handlePaymentSucceeded($event->data->object),
+            'payment_intent.succeeded' => $this->handlePaymentSucceeded($event->data->object),
             'payment_intent.payment_failed' => $this->handlePaymentFailed($event->data->object),
-            default                         => null,
+            default => null,
         };
 
         return response('OK', 200);
@@ -42,7 +42,7 @@ class StripeWebhookController extends Controller
         }
 
         $order->update([
-            'status'             => 'paid',
+            'status' => 'paid',
             'stripe_customer_id' => $intent->customer ?? null,
         ]);
 

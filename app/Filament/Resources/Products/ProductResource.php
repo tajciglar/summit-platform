@@ -20,7 +20,7 @@ class ProductResource extends Resource
 
     protected static \UnitEnum|string|null $navigationGroup = 'Content';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
 
@@ -37,7 +37,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ProductPricesRelationManager::class,
         ];
     }
 

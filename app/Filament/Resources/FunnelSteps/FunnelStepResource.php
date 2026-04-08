@@ -35,7 +35,7 @@ class FunnelStepResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\BumpsRelationManager::class,
         ];
     }
 

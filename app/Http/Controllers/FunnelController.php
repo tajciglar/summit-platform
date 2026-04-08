@@ -31,20 +31,20 @@ class FunnelController extends Controller
         }
 
         $funnelData = ['name' => $funnel->name, 'slug' => $funnel->slug];
-        $stepData   = [
-            'id'         => $step->id,
-            'title'      => $step->title,
-            'slug'       => $step->slug,
-            'type'       => $step->type,
+        $stepData = [
+            'id' => $step->id,
+            'title' => $step->title,
+            'slug' => $step->slug,
+            'type' => $step->type,
             'sort_order' => $step->sort_order,
-            'headline'   => $step->headline,
+            'headline' => $step->headline,
         ];
 
         return match ($step->type) {
-            'checkout'  => $this->renderCheckout($funnelData, $stepData, $step),
-            'upsell'    => $this->renderUpsell($request, $funnelData, $stepData, $step),
+            'checkout' => $this->renderCheckout($funnelData, $stepData, $step),
+            'upsell' => $this->renderUpsell($request, $funnelData, $stepData, $step),
             'thank_you' => Inertia::render('Funnel/ThankYou', ['funnel' => $funnelData, 'step' => $stepData]),
-            default     => $this->renderOptin($funnelData, $stepData, $step),
+            default => $this->renderOptin($funnelData, $stepData, $step),
         };
     }
 
@@ -56,17 +56,17 @@ class FunnelController extends Controller
         $speakers = $funnel->speakers
             ->filter(fn ($s) => $s->is_active)
             ->map(fn ($s) => [
-                'name'      => $s->name,
-                'title'     => $s->title,
-                'bio'       => $s->bio,
+                'name' => $s->name,
+                'title' => $s->title,
+                'bio' => $s->bio,
                 'photo_url' => $s->getFirstMediaUrl('photo'),
             ])
             ->values()
             ->all();
 
         return Inertia::render('Funnel/Optin', [
-            'funnel'   => $funnelData,
-            'step'     => $stepData,
+            'funnel' => $funnelData,
+            'step' => $stepData,
             'speakers' => $speakers,
         ]);
     }
@@ -82,14 +82,14 @@ class FunnelController extends Controller
             ->first();
 
         return Inertia::render('Funnel/Checkout', [
-            'funnel'       => $funnelData,
-            'step'         => $stepData,
-            'product'      => $step->product ? [
-                'name'             => $step->product->name,
+            'funnel' => $funnelData,
+            'step' => $stepData,
+            'product' => $step->product ? [
+                'name' => $step->product->name,
                 'price_in_dollars' => $step->product->price_in_dollars,
-                'currency'         => $step->product->currency,
+                'currency' => $step->product->currency,
             ] : null,
-            'stripeKey'    => config('services.stripe.key'),
+            'stripeKey' => config('services.stripe.key'),
             'nextStepSlug' => $nextStep?->slug,
         ]);
     }
@@ -106,14 +106,14 @@ class FunnelController extends Controller
             ->first();
 
         return Inertia::render('Funnel/Upsell', [
-            'funnel'          => $funnelData,
-            'step'            => $stepData,
-            'product'         => $step->product ? [
-                'name'             => $step->product->name,
+            'funnel' => $funnelData,
+            'step' => $stepData,
+            'product' => $step->product ? [
+                'name' => $step->product->name,
                 'price_in_dollars' => $step->product->price_in_dollars,
-                'currency'         => $step->product->currency,
+                'currency' => $step->product->currency,
             ] : null,
-            'nextStepSlug'    => $nextStep?->slug,
+            'nextStepSlug' => $nextStep?->slug,
             'paymentIntentId' => session('payment_intent_id'),
         ]);
     }

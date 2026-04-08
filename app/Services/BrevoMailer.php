@@ -17,6 +17,7 @@ class BrevoMailer
 
         if (! $apiKey) {
             Log::warning('Brevo API key not configured — skipping order confirmation email.');
+
             return;
         }
 
@@ -24,15 +25,15 @@ class BrevoMailer
 
         try {
             Http::withHeaders([
-                'api-key'      => $apiKey,
+                'api-key' => $apiKey,
                 'Content-Type' => 'application/json',
             ])->post('https://api.brevo.com/v3/smtp/email', [
-                'sender'  => [
-                    'name'  => config('services.brevo.from_name', config('app.name')),
+                'sender' => [
+                    'name' => config('services.brevo.from_name', config('app.name')),
                     'email' => config('services.brevo.from_email', 'noreply@example.com'),
                 ],
-                'to'      => [['email' => $order->customer_email, 'name' => $order->customer_name ?? '']],
-                'subject' => 'Order Confirmation — ' . ($order->product->name ?? 'Your Purchase'),
+                'to' => [['email' => $order->customer_email, 'name' => $order->customer_name ?? '']],
+                'subject' => 'Order Confirmation — '.($order->product->name ?? 'Your Purchase'),
                 'htmlContent' => $this->buildHtml($order),
             ]);
 
@@ -41,7 +42,7 @@ class BrevoMailer
             // Non-blocking: email failure must not break the webhook
             Log::error('Failed to send order confirmation email', [
                 'order_id' => $order->id,
-                'error'    => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -49,9 +50,9 @@ class BrevoMailer
     private function buildHtml(Order $order): string
     {
         $productName = $order->product->name ?? 'Your purchase';
-        $amount      = number_format($order->amount / 100, 2);
-        $currency    = strtoupper($order->currency);
-        $name        = $order->customer_name ?? 'there';
+        $amount = number_format($order->amount / 100, 2);
+        $currency = strtoupper($order->currency);
+        $name = $order->customer_name ?? 'there';
 
         return <<<HTML
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">

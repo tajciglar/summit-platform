@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 class ActiveCampaignService
 {
     private string $baseUrl;
+
     private string $apiKey;
 
     public function __construct()
@@ -23,6 +24,7 @@ class ActiveCampaignService
     {
         if (! $this->baseUrl || ! $this->apiKey) {
             Log::warning('ActiveCampaign not configured — skipping sync.');
+
             return;
         }
 
@@ -47,9 +49,9 @@ class ActiveCampaignService
 
         $response = $this->request('POST', '/api/3/contact/sync', [
             'contact' => [
-                'email'     => $email,
+                'email' => $email,
                 'firstName' => $firstName,
-                'lastName'  => $lastName,
+                'lastName' => $lastName,
             ],
         ]);
 
@@ -61,7 +63,7 @@ class ActiveCampaignService
         $this->request('POST', '/api/3/contactTags', [
             'contactTag' => [
                 'contact' => $contactId,
-                'tag'     => $tagId,
+                'tag' => $tagId,
             ],
         ]);
     }
@@ -69,7 +71,7 @@ class ActiveCampaignService
     private function request(string $method, string $path, array $data = []): array
     {
         $response = Http::withHeaders(['Api-Token' => $this->apiKey])
-            ->$method($this->baseUrl . $path, $data);
+            ->$method($this->baseUrl.$path, $data);
 
         $response->throw();
 

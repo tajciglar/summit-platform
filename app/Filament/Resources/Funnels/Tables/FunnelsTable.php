@@ -15,34 +15,21 @@ class FunnelsTable
     {
         return $table
             ->columns([
-                TextColumn::make('domain.host')
-                    ->label('Domain')
+                TextColumn::make('summit.title')
+                    ->label('Summit')
                     ->searchable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                IconColumn::make('is_active')
-                    ->boolean(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('slug')->searchable(),
+                TextColumn::make('target_phase')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state): string => $state ? str_replace('_', ' ', ucfirst($state)) : 'All')
+                    ->placeholder('All'),
+                IconColumn::make('is_active')->boolean(),
+                TextColumn::make('steps_count')->counts('steps')->label('Steps'),
             ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }
