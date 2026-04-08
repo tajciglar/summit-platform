@@ -1,4 +1,12 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { loadStripe } from '@stripe/stripe-js'
+import {
+  Elements,
+  PaymentElement,
+  ExpressCheckoutElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js'
 
 interface Props {
   funnel: { name: string; slug: string }
@@ -18,43 +26,48 @@ interface Props {
   stripeKey: string
 }
 
+function getCsrfToken(): string {
+  return (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? ''
+}
+
+/** Outer component: creates PaymentIntent, then mounts Elements */
 export default function Checkout({ funnel, step, product, stripeKey }: Props) {
+  const [stripePromise] = useState(() => loadStripe(stripeKey))
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [initError, setInitError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  const initPaymentIntent = useCallback(async () => {
+    if (clientSecret) return // already created
+    if (!email) return
+
     setLoading(true)
-    setError(null)
+    setInitError(null)
 
     const res = await fetch('/checkout/intent', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? '',
-      },
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken() },
       body: JSON.stringify({ funnel_step_id: step.id, customer_email: email, customer_name: name }),
     })
 
-    const data = await res.json() as { clientSecret?: string; error?: string }
+    const data = (await res.json()) as { clientSecret?: string; paymentIntentId?: string; error?: string }
 
     if (!res.ok || data.error) {
-      setError(data.error ?? 'Something went wrong.')
+      setInitError(data.error ?? 'Could not initialise payment.')
       setLoading(false)
       return
     }
 
-    // clientSecret is ready — in the next phase we hand this to Stripe.js
-    // For now, log it so we can confirm the PaymentIntent was created
-    console.log('PaymentIntent clientSecret:', data.clientSecret)
-    alert('PaymentIntent created! Open the console to see the clientSecret. Stripe.js integration comes next.')
+    setClientSecret(data.clientSecret ?? null)
+    setPaymentIntentId(data.paymentIntentId ?? null)
     setLoading(false)
-  }
+  }, [clientSecret, email, name, step.id])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8">
         {step.headline && (
           <p className="text-sm font-medium text-indigo-600 uppercase tracking-widest mb-2">
@@ -69,7 +82,8 @@ export default function Checkout({ funnel, step, product, stripeKey }: Props) {
           </span>
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Contact fields — always visible */}
+        <div className="space-y-4 mb-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
             <input
@@ -91,18 +105,173 @@ export default function Checkout({ funnel, step, product, stripeKey }: Props) {
               placeholder="jane@example.com"
             />
           </div>
+        </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+        {initError && <p className="text-sm text-red-600 mb-4">{initError}</p>}
 
+        {/* Before intent is created — show continue button */}
+        {!clientSecret && (
           <button
-            type="submit"
-            disabled={loading}
+            onClick={initPaymentIntent}
+            disabled={!email || loading}
             className="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
           >
-            {loading ? 'Processing…' : `Pay $${product.price_in_dollars}`}
+            {loading ? 'Loading…' : 'Continue to Payment'}
           </button>
-        </form>
+        )}
+
+        {/* After intent is created — mount Stripe Elements */}
+        {clientSecret && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              clientSecret,
+              appearance: {
+                theme: 'stripe',
+                variables: {
+                  colorPrimary: '#4f46e5',
+                  borderRadius: '8px',
+                },
+              },
+            }}
+          >
+            <CheckoutForm
+              email={email}
+              name={name}
+              paymentIntentId={paymentIntentId}
+              priceLabel={`$${product.price_in_dollars}`}
+              funnelSlug={funnel.slug}
+            />
+          </Elements>
+        )}
       </div>
     </div>
+  )
+}
+
+/** Inner component: renders PaymentElement + Express Checkout, handles confirmation */
+function CheckoutForm({
+  email,
+  name,
+  paymentIntentId,
+  priceLabel,
+  funnelSlug,
+}: {
+  email: string
+  name: string
+  paymentIntentId: string | null
+  priceLabel: string
+  funnelSlug: string
+}) {
+  const stripe = useStripe()
+  const elements = useElements()
+  const [error, setError] = useState<string | null>(null)
+  const [processing, setProcessing] = useState(false)
+
+  const returnUrl = `${window.location.origin}/${funnelSlug}/thank-you?email=${encodeURIComponent(email)}`
+
+  async function syncMetadata() {
+    if (!paymentIntentId) return
+    await fetch('/checkout/update-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken() },
+      body: JSON.stringify({ payment_intent_id: paymentIntentId, customer_email: email, customer_name: name }),
+    }).catch(() => {}) // non-blocking
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!stripe || !elements) return
+
+    setProcessing(true)
+    setError(null)
+
+    await syncMetadata()
+
+    const result = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: returnUrl,
+        payment_method_data: {
+          billing_details: {
+            name: name || undefined,
+            email: email || undefined,
+          },
+        },
+      },
+      redirect: 'if_required',
+    })
+
+    if (result.error) {
+      setError(result.error.message ?? 'Payment failed.')
+      setProcessing(false)
+    } else {
+      // Payment succeeded without redirect (no 3DS needed)
+      window.location.href = returnUrl
+    }
+  }
+
+  async function handleExpressConfirm() {
+    if (!stripe || !elements) return
+    await syncMetadata()
+
+    const result = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: returnUrl,
+      },
+      redirect: 'if_required',
+    })
+
+    if (result.error) {
+      setError(result.error.message ?? 'Payment failed.')
+    } else {
+      window.location.href = returnUrl
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Express Checkout (Apple Pay / Google Pay) */}
+      <ExpressCheckoutElement
+        onConfirm={handleExpressConfirm}
+        options={{
+          buttonType: { applePay: 'buy', googlePay: 'buy' },
+          buttonHeight: 48,
+        }}
+      />
+
+      <div className="relative my-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-200" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="bg-white px-3 text-gray-400">or pay with card</span>
+        </div>
+      </div>
+
+      {/* Payment Element (card input + other methods) */}
+      <PaymentElement
+        options={{
+          layout: 'tabs',
+          fields: {
+            billingDetails: {
+              name: 'never',
+              email: 'never',
+            },
+          },
+        }}
+      />
+
+      {error && <p className="text-sm text-red-600">{error}</p>}
+
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        className="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+      >
+        {processing ? 'Processing…' : `Pay ${priceLabel}`}
+      </button>
+    </form>
   )
 }

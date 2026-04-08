@@ -54,7 +54,12 @@ class FunnelController extends Controller
             ]);
         }
 
-        return Inertia::render('Funnel/Optin', [
+        $component = match ($step->type) {
+            'thank_you' => 'Funnel/ThankYou',
+            default     => 'Funnel/Optin',
+        };
+
+        return Inertia::render($component, [
             'funnel' => $funnelData,
             'step'   => $stepData,
         ]);

@@ -14,8 +14,8 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 // Checkout API — called from React via fetch
-Route::post('/checkout/intent', [CheckoutController::class, 'createIntent'])
-    ->middleware('web');
+Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);
+Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent']);
 
 // Funnel routes — domain resolved by middleware
 Route::middleware('funnel.domain')->group(function () {
