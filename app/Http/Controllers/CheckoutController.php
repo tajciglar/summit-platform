@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\FunnelStep;
+use App\Models\FunnelStepBump;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Stripe\StripeClient;
 
 class CheckoutController extends Controller
@@ -13,81 +17,112 @@ class CheckoutController extends Controller
     public function __construct(private readonly StripeClient $stripe) {}
 
     /**
-     * Create a Stripe PaymentIntent and a pending Order.
-     * Reuses an existing PaymentIntent if one already exists for this session + step.
+     * Create a Stripe PaymentIntent and a pending Order with order items.
      */
     public function createIntent(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'funnel_step_id' => ['required', 'integer', 'exists:funnel_steps,id'],
+            'funnel_step_id' => ['required', 'string', 'exists:funnel_steps,id'],
             'customer_email' => ['required', 'email'],
             'customer_name' => ['nullable', 'string', 'max:255'],
+            'selected_bump_ids' => ['nullable', 'array'],
+            'selected_bump_ids.*' => ['string', 'exists:funnel_step_bumps,id'],
         ]);
 
-        $step = FunnelStep::with('product')->findOrFail($validated['funnel_step_id']);
+        $step = FunnelStep::with('product.prices', 'funnel.summit')->findOrFail($validated['funnel_step_id']);
 
         if (! $step->product) {
             return response()->json(['error' => 'No product attached to this step.'], 422);
         }
 
+        $summit = $step->funnel->summit;
         $product = $step->product;
+        $price = $product->priceForPhase($summit->current_phase);
 
-        // Reuse existing pending order for this session + step
-        $existingOrder = Order::where('funnel_step_id', $step->id)
-            ->where('customer_email', $validated['customer_email'])
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existingOrder && $existingOrder->stripe_payment_intent_id) {
-            // Update metadata on the existing intent
-            $this->stripe->paymentIntents->update($existingOrder->stripe_payment_intent_id, [
-                'metadata' => [
-                    'funnel_step_id' => $step->id,
-                    'product_id' => $product->id,
-                    'email' => $validated['customer_email'],
-                ],
-            ]);
-
-            $intent = $this->stripe->paymentIntents->retrieve($existingOrder->stripe_payment_intent_id);
-            session(['payment_intent_id' => $intent->id]);
-
-            return response()->json([
-                'clientSecret' => $intent->client_secret,
-                'paymentIntentId' => $intent->id,
-            ]);
+        if (! $price) {
+            return response()->json(['error' => 'No price configured for current phase.'], 422);
         }
 
-        // Idempotency key: based on step + email to prevent duplicate intents
+        // Calculate bump totals server-side
+        $bumpIds = $validated['selected_bump_ids'] ?? [];
+        $bumps = $bumpIds ? FunnelStepBump::with('product.prices')
+            ->whereIn('id', $bumpIds)
+            ->where('funnel_step_id', $step->id)
+            ->where('is_active', true)
+            ->get() : collect();
+
+        $bumpTotal = $bumps->sum(fn ($bump) => $bump->product->priceForPhase($summit->current_phase)?->amount_cents ?? 0);
+        $totalCents = $price->amount_cents + $bumpTotal;
+
+        // Idempotency key
         $idempotencyKey = 'pi_'.hash('sha256', $step->id.'|'.$validated['customer_email'].'|'.now()->format('Y-m-d'));
 
-        // Create PaymentIntent — price always from DB, never from client
         $intent = $this->stripe->paymentIntents->create([
-            'amount' => $product->price,
-            'currency' => $product->currency,
+            'amount' => $totalCents,
+            'currency' => 'usd',
             'receipt_email' => $validated['customer_email'],
             'automatic_payment_methods' => ['enabled' => true],
-            'setup_future_usage' => 'off_session', // saves payment method for upsells
+            'setup_future_usage' => 'off_session',
             'metadata' => [
                 'funnel_step_id' => $step->id,
                 'product_id' => $product->id,
                 'email' => $validated['customer_email'],
+                'selected_bumps' => implode(',', $bumpIds),
             ],
         ], ['idempotency_key' => $idempotencyKey]);
 
-        // Store in session so upsell pages can charge without exposing PI in URL
         session(['payment_intent_id' => $intent->id]);
 
-        // Create pending order — updated to paid by the webhook
-        Order::create([
-            'product_id' => $product->id,
+        // Find or create user
+        $user = User::firstOrCreate(
+            ['email' => $validated['customer_email']],
+            ['name' => $validated['customer_name'] ?? '', 'password' => bcrypt(Str::random(32))]
+        );
+
+        $orderNumber = 'SM-'.now()->format('Y').'-'.strtoupper(Str::random(6));
+
+        $order = Order::create([
+            'order_number' => $orderNumber,
+            'user_id' => $user->id,
+            'summit_id' => $summit->id,
+            'funnel_id' => $step->funnel_id,
             'funnel_step_id' => $step->id,
-            'customer_email' => $validated['customer_email'],
-            'customer_name' => $validated['customer_name'],
-            'amount' => $product->price,
-            'currency' => $product->currency,
+            'summit_phase_at_purchase' => $summit->current_phase,
             'status' => 'pending',
+            'subtotal_cents' => $totalCents,
+            'total_cents' => $totalCents,
+            'currency' => 'USD',
             'stripe_payment_intent_id' => $intent->id,
         ]);
+
+        // Primary order item
+        OrderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'item_type' => 'primary',
+            'product_name' => $product->name,
+            'quantity' => 1,
+            'unit_price_cents' => $price->amount_cents,
+            'total_cents' => $price->amount_cents,
+            'stripe_price_id' => $price->stripe_price_id,
+        ]);
+
+        // Bump order items
+        foreach ($bumps as $bump) {
+            $bumpPrice = $bump->product->priceForPhase($summit->current_phase);
+            if ($bumpPrice) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $bump->product_id,
+                    'item_type' => 'bump',
+                    'product_name' => $bump->product->name,
+                    'quantity' => 1,
+                    'unit_price_cents' => $bumpPrice->amount_cents,
+                    'total_cents' => $bumpPrice->amount_cents,
+                    'stripe_price_id' => $bumpPrice->stripe_price_id,
+                ]);
+            }
+        }
 
         return response()->json([
             'clientSecret' => $intent->client_secret,
@@ -96,7 +131,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Update metadata on an existing PaymentIntent (e.g. email/name before confirmation).
+     * Update metadata on an existing PaymentIntent.
      */
     public function updateIntent(Request $request): JsonResponse
     {
@@ -118,13 +153,6 @@ class CheckoutController extends Controller
             ),
             ...($validated['customer_email'] ? ['receipt_email' => $validated['customer_email']] : []),
         ]);
-
-        // Also update the local order
-        Order::where('stripe_payment_intent_id', $validated['payment_intent_id'])
-            ->update(array_filter([
-                'customer_email' => $validated['customer_email'],
-                'customer_name' => $validated['customer_name'],
-            ]));
 
         return response()->json(['ok' => true]);
     }

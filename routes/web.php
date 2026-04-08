@@ -22,10 +22,8 @@ Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent
 Route::post('/checkout/upsell', [UpsellController::class, 'charge']);
 Route::post('/optin', [OptinController::class, 'store']);
 
-// Funnel routes — domain resolved by middleware
-Route::middleware('funnel.domain')->group(function () {
-    // /{funnel-slug}           → first step (optin)
-    // /{funnel-slug}/{step-slug} → specific step
-    Route::get('/{funnelSlug}', [FunnelController::class, 'show']);
-    Route::get('/{funnelSlug}/{stepSlug}', [FunnelController::class, 'show']);
-});
+// Funnel routes — summit-based URL pattern
+// /{summitSlug}/{funnelSlug}             → first step
+// /{summitSlug}/{funnelSlug}/{stepSlug}  → specific step
+Route::get('/{summitSlug}/{funnelSlug}', [FunnelController::class, 'show']);
+Route::get('/{summitSlug}/{funnelSlug}/{stepSlug}', [FunnelController::class, 'show']);

@@ -2,28 +2,26 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Domain;
+use App\Models\Summit;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResolveFunnelDomain
 {
+    /**
+     * Resolve the summit context for funnel routes.
+     *
+     * For now, summits are resolved via the URL slug pattern:
+     *   /{summitSlug}/{funnelSlug}/{stepSlug?}
+     *
+     * In production with custom domains, this middleware can be
+     * extended to map the request host to a summit.
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        $host = $request->getHost();
-
-        $domain = Domain::where('host', $host)
-            ->where('is_active', true)
-            ->first();
-
-        if (! $domain) {
-            abort(404);
-        }
-
-        // Make the resolved domain available to downstream controllers/services
-        $request->attributes->set('domain', $domain);
-
+        // Summit is resolved in the controller via route params for now.
+        // This middleware is kept for future custom-domain mapping.
         return $next($request);
     }
 }

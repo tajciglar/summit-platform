@@ -37,16 +37,20 @@ class StripeWebhookController extends Controller
     {
         $order = Order::where('stripe_payment_intent_id', $intent->id)->first();
 
-        if (! $order || $order->status === 'paid') {
-            return; // already processed or not found
+        if (! $order || $order->status === 'completed') {
+            return;
         }
 
         $order->update([
-            'status' => 'paid',
-            'stripe_customer_id' => $intent->customer ?? null,
+            'status' => 'completed',
+            'completed_at' => now(),
         ]);
 
-        // Dispatch async jobs — non-blocking, retryable
+        // Update user's stripe_customer_id
+        if ($intent->customer && $order->user) {
+            $order->user->update(['stripe_customer_id' => $intent->customer]);
+        }
+
         SendOrderConfirmationEmail::dispatch($order);
         dispatch(SyncToActiveCampaign::fromOrder($order));
     }

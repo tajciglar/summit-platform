@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Domain;
 use App\Models\FunnelStep;
+use App\Models\Summit;
 use App\Services\FunnelResolver;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,108 +13,143 @@ class FunnelController extends Controller
 {
     public function __construct(private readonly FunnelResolver $resolver) {}
 
-    public function show(Request $request, string $funnelSlug, ?string $stepSlug = null): Response
+    public function show(Request $request, string $summitSlug, string $funnelSlug, ?string $stepSlug = null): Response
     {
-        /** @var Domain $domain */
-        $domain = $request->attributes->get('domain');
+        $summit = $this->resolver->resolveSummit($summitSlug);
+        if (! $summit) {
+            abort(404);
+        }
 
-        $funnel = $this->resolver->resolveFunnel($domain, $funnelSlug);
-
+        $funnel = $this->resolver->resolveFunnel($summit, $funnelSlug);
         if (! $funnel) {
             abort(404);
         }
 
-        $step = $this->resolver->resolveStep($funnel, $stepSlug);
-
+        $isPreview = $request->attributes->get('funnel_preview', false);
+        $step = $this->resolver->resolveStep($funnel, $stepSlug, $isPreview);
         if (! $step) {
             abort(404);
         }
 
-        $funnelData = ['name' => $funnel->name, 'slug' => $funnel->slug];
+        $summitData = ['id' => $summit->id, 'title' => $summit->title, 'slug' => $summit->slug, 'current_phase' => $summit->current_phase];
+        $funnelData = ['id' => $funnel->id, 'name' => $funnel->name, 'slug' => $funnel->slug];
         $stepData = [
             'id' => $step->id,
-            'title' => $step->title,
+            'name' => $step->name,
             'slug' => $step->slug,
-            'type' => $step->type,
+            'step_type' => $step->step_type,
             'sort_order' => $step->sort_order,
-            'headline' => $step->headline,
         ];
 
-        return match ($step->type) {
-            'checkout' => $this->renderCheckout($funnelData, $stepData, $step),
-            'upsell' => $this->renderUpsell($request, $funnelData, $stepData, $step),
-            'thank_you' => Inertia::render('Funnel/ThankYou', ['funnel' => $funnelData, 'step' => $stepData]),
-            default => $this->renderOptin($funnelData, $stepData, $step),
+        $theme = $funnel->theme ?? [];
+        $content = $step->content ?? [];
+        $template = $step->template;
+
+        $sharedProps = [
+            'summit' => $summitData,
+            'funnel' => $funnelData,
+            'step' => $stepData,
+            'template' => $template,
+            'content' => $content,
+            'theme' => $theme,
+            'isPreview' => $isPreview,
+        ];
+
+        return match ($step->step_type) {
+            'checkout' => $this->renderCheckout($sharedProps, $step, $summit),
+            'upsell', 'downsell' => $this->renderUpsell($request, $sharedProps, $step, $summit),
+            'thank_you' => Inertia::render('Funnel/ThankYou', $sharedProps),
+            default => $this->renderOptin($sharedProps, $step, $summit),
         };
     }
 
-    private function renderOptin(array $funnelData, array $stepData, FunnelStep $step): Response
+    private function renderOptin(array $props, FunnelStep $step, Summit $summit): Response
     {
-        $funnel = $step->funnel;
-        $funnel->loadMissing('speakers');
+        $summit->loadMissing('summitSpeakers.speaker');
 
-        $speakers = $funnel->speakers
-            ->filter(fn ($s) => $s->is_active)
-            ->map(fn ($s) => [
-                'name' => $s->name,
-                'title' => $s->title,
-                'bio' => $s->bio,
-                'photo_url' => $s->getFirstMediaUrl('photo'),
+        $speakers = $summit->summitSpeakers
+            ->map(fn ($ss) => [
+                'name' => $ss->speaker->full_name,
+                'title' => $ss->speaker->title,
+                'bio' => $ss->speaker->short_description,
+                'photo_url' => $ss->speaker->photo_url,
+                'masterclass_title' => $ss->masterclass_title,
+                'is_featured' => $ss->is_featured,
             ])
             ->values()
             ->all();
 
-        return Inertia::render('Funnel/Optin', [
-            'funnel' => $funnelData,
-            'step' => $stepData,
+        return Inertia::render('Funnel/Optin', array_merge($props, [
             'speakers' => $speakers,
-        ]);
+        ]));
     }
 
-    private function renderCheckout(array $funnelData, array $stepData, FunnelStep $step): Response
+    private function renderCheckout(array $props, FunnelStep $step, Summit $summit): Response
     {
-        $step->loadMissing('product');
+        $step->loadMissing('product.prices');
+
+        $product = $step->product;
+        $price = $product?->priceForPhase($summit->current_phase);
 
         $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
             ->where('sort_order', '>', $step->sort_order)
-            ->where('is_active', true)
+            ->where('is_published', true)
             ->orderBy('sort_order')
             ->first();
 
-        return Inertia::render('Funnel/Checkout', [
-            'funnel' => $funnelData,
-            'step' => $stepData,
-            'product' => $step->product ? [
-                'name' => $step->product->name,
-                'price_in_dollars' => $step->product->price_in_dollars,
-                'currency' => $step->product->currency,
+        // Load order bumps with phase pricing
+        $bumps = $step->bumps()->where('is_active', true)->with('product.prices')->get()
+            ->map(fn ($bump) => [
+                'id' => $bump->id,
+                'product_id' => $bump->product_id,
+                'headline' => $bump->headline,
+                'description' => $bump->description,
+                'bullets' => $bump->bullets,
+                'checkbox_label' => $bump->checkbox_label,
+                'image_url' => $bump->image_url,
+                'price_cents' => $bump->product->priceForPhase($summit->current_phase)?->amount_cents ?? 0,
+                'compare_at_cents' => $bump->product->priceForPhase($summit->current_phase)?->compare_at_cents,
+            ])
+            ->values()
+            ->all();
+
+        return Inertia::render('Funnel/Checkout', array_merge($props, [
+            'product' => $product ? [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price_cents' => $price?->amount_cents ?? 0,
+                'compare_at_cents' => $price?->compare_at_cents,
+                'currency' => 'USD',
             ] : null,
             'stripeKey' => config('services.stripe.key'),
             'nextStepSlug' => $nextStep?->slug,
-        ]);
+            'orderBumps' => $bumps,
+        ]));
     }
 
-    private function renderUpsell(Request $request, array $funnelData, array $stepData, FunnelStep $step): Response
+    private function renderUpsell(Request $request, array $props, FunnelStep $step, Summit $summit): Response
     {
-        $step->loadMissing('product');
+        $step->loadMissing('product.prices');
 
-        // Find the next step after this upsell (for skip/decline navigation)
+        $product = $step->product;
+        $price = $product?->priceForPhase($summit->current_phase);
+
         $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
             ->where('sort_order', '>', $step->sort_order)
-            ->where('is_active', true)
+            ->where('is_published', true)
             ->orderBy('sort_order')
             ->first();
 
-        return Inertia::render('Funnel/Upsell', [
-            'funnel' => $funnelData,
-            'step' => $stepData,
-            'product' => $step->product ? [
-                'name' => $step->product->name,
-                'price_in_dollars' => $step->product->price_in_dollars,
-                'currency' => $step->product->currency,
+        return Inertia::render('Funnel/Upsell', array_merge($props, [
+            'product' => $product ? [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price_cents' => $price?->amount_cents ?? 0,
+                'compare_at_cents' => $price?->compare_at_cents,
+                'currency' => 'USD',
             ] : null,
             'nextStepSlug' => $nextStep?->slug,
             'paymentIntentId' => session('payment_intent_id'),
-        ]);
+        ]));
     }
 }
