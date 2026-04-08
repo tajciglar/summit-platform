@@ -2,21 +2,24 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FunnelStep extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
-        'funnel_id', 'product_id', 'title', 'slug', 'type', 'template',
-        'sort_order', 'is_active', 'is_published', 'headline', 'content',
+        'funnel_id', 'step_type', 'template', 'slug', 'name',
+        'content', 'sort_order', 'product_id', 'is_published',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'is_published' => 'boolean',
         'content' => 'array',
+        'is_published' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
     public function funnel(): BelongsTo
@@ -29,8 +32,8 @@ class FunnelStep extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function orderBumps(): HasMany
+    public function bumps(): HasMany
     {
-        return $this->hasMany(OrderBump::class)->orderBy('sort_order');
+        return $this->hasMany(FunnelStepBump::class)->orderBy('sort_order');
     }
 }

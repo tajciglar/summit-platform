@@ -2,25 +2,44 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
-        'product_id', 'funnel_step_id', 'customer_email', 'customer_name',
-        'amount', 'bumps_total', 'currency', 'status', 'stripe_payment_intent_id', 'stripe_customer_id',
+        'order_number', 'user_id', 'summit_id', 'funnel_id', 'funnel_step_id',
+        'summit_phase_at_purchase', 'status', 'subtotal_cents', 'discount_cents',
+        'total_cents', 'currency', 'coupon_id', 'stripe_payment_intent_id',
+        'stripe_checkout_session_id', 'affiliate_id', 'ip_address', 'user_agent',
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+        'completed_at',
     ];
 
     protected $casts = [
-        'amount' => 'integer',
-        'bumps_total' => 'integer',
+        'subtotal_cents' => 'integer',
+        'discount_cents' => 'integer',
+        'total_cents' => 'integer',
+        'completed_at' => 'datetime',
     ];
 
-    public function product(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function summit(): BelongsTo
+    {
+        return $this->belongsTo(Summit::class);
+    }
+
+    public function funnel(): BelongsTo
+    {
+        return $this->belongsTo(Funnel::class);
     }
 
     public function funnelStep(): BelongsTo
@@ -28,10 +47,23 @@ class Order extends Model
         return $this->belongsTo(FunnelStep::class);
     }
 
-    public function orderBumps(): BelongsToMany
+    public function coupon(): BelongsTo
     {
-        return $this->belongsToMany(OrderBump::class, 'order_bump_order')
-            ->withPivot('amount')
-            ->withTimestamps();
+        return $this->belongsTo(Coupon::class);
+    }
+
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
     }
 }

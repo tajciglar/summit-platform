@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class OrderBump extends Model
+class FunnelStepBump extends Model
 {
+    use HasUuid;
+
+    public $timestamps = false;
+
     protected $fillable = [
         'funnel_step_id', 'product_id', 'headline', 'description',
         'bullets', 'checkbox_label', 'image_url', 'sort_order', 'is_active',
@@ -27,12 +31,5 @@ class OrderBump extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function orders(): BelongsToMany
-    {
-        return $this->belongsToMany(Order::class, 'order_bump_order')
-            ->withPivot('amount')
-            ->withTimestamps();
     }
 }

@@ -2,26 +2,31 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Speaker extends Model implements HasMedia
+class Speaker extends Model
 {
-    use InteractsWithMedia;
+    use HasUuid;
 
-    protected $fillable = ['name', 'title', 'bio', 'website_url', 'is_active'];
+    protected $fillable = [
+        'slug', 'first_name', 'last_name', 'email', 'photo_url',
+        'title', 'short_description', 'long_description',
+        'website_url', 'social_links',
+    ];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = [
+        'social_links' => 'array',
+    ];
 
-    public function funnels(): BelongsToMany
+    public function summitSpeakers(): HasMany
     {
-        return $this->belongsToMany(Funnel::class)->withPivot('sort_order')->orderByPivot('sort_order');
+        return $this->hasMany(SummitSpeaker::class);
     }
 
-    public function registerMediaCollections(): void
+    public function getFullNameAttribute(): string
     {
-        $this->addMediaCollection('photo')->singleFile();
+        return "{$this->first_name} {$this->last_name}";
     }
 }

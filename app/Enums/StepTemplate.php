@@ -42,10 +42,10 @@ enum StepTemplate: string
     public function allowedTypes(): array
     {
         return match ($this) {
-            self::HeroSpeakers, self::VideoForm => ['optin'],
-            self::Minimal => ['optin', 'thank_you'],
+            self::HeroSpeakers, self::VideoForm => ['optin', 'sales_page'],
+            self::Minimal => ['optin', 'sales_page', 'thank_you'],
             self::StandardCheckout, self::SplitCheckout => ['checkout'],
-            self::UrgencyUpsell, self::SimpleUpsell => ['upsell'],
+            self::UrgencyUpsell, self::SimpleUpsell => ['upsell', 'downsell'],
             self::ConfirmationCard => ['thank_you'],
         };
     }
