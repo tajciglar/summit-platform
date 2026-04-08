@@ -91,7 +91,7 @@ class FunnelController extends Controller
                 'currency'         => $step->product->currency,
             ] : null,
             'nextStepSlug'    => $nextStep?->slug,
-            'paymentIntentId' => $request->query('payment_intent'),
+            'paymentIntentId' => session('payment_intent_id'),
         ]);
     }
 }

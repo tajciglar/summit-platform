@@ -172,9 +172,10 @@ function CheckoutForm({
   const [error, setError] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
 
-  // After checkout, go to next step (upsell) or thank-you, passing payment_intent for upsell charging
+  // After checkout, go to next step (upsell) or thank-you
+  // payment_intent_id is stored in server session, not the URL
   const nextPath = nextStepSlug ? `/${funnelSlug}/${nextStepSlug}` : `/${funnelSlug}/thank-you`
-  const returnUrl = `${window.location.origin}${nextPath}?payment_intent=${paymentIntentId ?? ''}&email=${encodeURIComponent(email)}`
+  const returnUrl = `${window.location.origin}${nextPath}`
 
   async function syncMetadata() {
     if (!paymentIntentId) return

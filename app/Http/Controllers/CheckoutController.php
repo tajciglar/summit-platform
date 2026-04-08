@@ -49,6 +49,7 @@ class CheckoutController extends Controller
             ]);
 
             $intent = $this->stripe->paymentIntents->retrieve($existingOrder->stripe_payment_intent_id);
+            session(['payment_intent_id' => $intent->id]);
 
             return response()->json([
                 'clientSecret'    => $intent->client_secret,
@@ -72,6 +73,9 @@ class CheckoutController extends Controller
                 'email'          => $validated['customer_email'],
             ],
         ], ['idempotency_key' => $idempotencyKey]);
+
+        // Store in session so upsell pages can charge without exposing PI in URL
+        session(['payment_intent_id' => $intent->id]);
 
         // Create pending order — updated to paid by the webhook
         Order::create([
