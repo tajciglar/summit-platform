@@ -21,7 +21,16 @@ class BrevoMailer
             return;
         }
 
-        $order->loadMissing('product');
+        $order->loadMissing('user', 'items.product');
+
+        if (! $order->user?->email) {
+            Log::warning('Order has no associated user email — skipping confirmation.', ['order_id' => $order->id]);
+
+            return;
+        }
+
+        $email = $order->user->email;
+        $name = $order->user->name ?? '';
 
         try {
             Http::withHeaders([
@@ -32,12 +41,12 @@ class BrevoMailer
                     'name' => config('services.brevo.from_name', config('app.name')),
                     'email' => config('services.brevo.from_email', 'noreply@example.com'),
                 ],
-                'to' => [['email' => $order->customer_email, 'name' => $order->customer_name ?? '']],
-                'subject' => 'Order Confirmation — '.($order->product->name ?? 'Your Purchase'),
+                'to' => [['email' => $email, 'name' => $name]],
+                'subject' => 'Order Confirmation — '.$this->productSummary($order),
                 'htmlContent' => $this->buildHtml($order),
             ]);
 
-            Log::info('Order confirmation email sent', ['order_id' => $order->id, 'email' => $order->customer_email]);
+            Log::info('Order confirmation email sent', ['order_id' => $order->id, 'email' => $email]);
         } catch (\Throwable $e) {
             // Non-blocking: email failure must not break the webhook
             Log::error('Failed to send order confirmation email', [
@@ -47,20 +56,39 @@ class BrevoMailer
         }
     }
 
+    private function productSummary(Order $order): string
+    {
+        $names = $order->items->map(fn ($item) => $item->product?->name)->filter()->values();
+
+        return $names->isNotEmpty() ? $names->implode(', ') : 'Your Purchase';
+    }
+
     private function buildHtml(Order $order): string
     {
-        $productName = $order->product->name ?? 'Your purchase';
-        $amount = number_format($order->amount / 100, 2);
+        $productName = $this->productSummary($order);
+        $amount = number_format($order->total_cents / 100, 2);
         $currency = strtoupper($order->currency);
-        $name = $order->customer_name ?? 'there';
+        $name = $order->user->name ?? 'there';
+
+        $itemsHtml = '';
+        foreach ($order->items as $item) {
+            $itemName = $item->product?->name ?? $item->item_type;
+            $itemAmount = number_format($item->unit_price_cents / 100, 2);
+            $itemsHtml .= "<p style=\"margin: 4px 0;\"><span style=\"font-weight: 600;\">{$itemName}</span> — \${$itemAmount} {$currency}</p>";
+        }
+
+        if (! $itemsHtml) {
+            $itemsHtml = "<p style=\"margin: 0; font-weight: 600;\">{$productName}</p>";
+        }
 
         return <<<HTML
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
             <h1 style="font-size: 24px; color: #111;">Thank you, {$name}!</h1>
             <p style="color: #555; line-height: 1.6;">Your order has been confirmed.</p>
             <div style="background: #f9fafb; border-radius: 8px; padding: 16px; margin: 24px 0;">
-                <p style="margin: 0; font-weight: 600;">{$productName}</p>
-                <p style="margin: 4px 0 0; color: #6b7280;">\${$amount} {$currency}</p>
+                {$itemsHtml}
+                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 12px 0;">
+                <p style="margin: 0; font-weight: 600;">Total: \${$amount} {$currency}</p>
             </div>
             <p style="color: #9ca3af; font-size: 13px;">If you have any questions, reply to this email.</p>
         </div>

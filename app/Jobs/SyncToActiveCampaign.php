@@ -34,20 +34,26 @@ class SyncToActiveCampaign implements ShouldQueue
      */
     public static function fromOrder(Order $order): self
     {
-        $order->loadMissing('product');
+        $order->loadMissing('user', 'items.product');
 
         $tagIds = [];
 
-        // Add the product-specific tag if configured
-        $productTagId = config('services.activecampaign.product_tag_id');
-        if ($productTagId) {
-            $tagIds[] = $productTagId;
+        // Add the purchaser tag if configured
+        $purchaserTagId = config('services.activecampaign.purchaser_tag_id');
+        if ($purchaserTagId) {
+            $tagIds[] = $purchaserTagId;
         }
 
-        return new self(
-            $order->customer_email,
-            $order->customer_name ?? $order->customer_email,
-            $tagIds,
-        );
+        // Add per-product tags from product metadata
+        foreach ($order->items as $item) {
+            if ($item->product?->activecampaign_tag_id) {
+                $tagIds[] = $item->product->activecampaign_tag_id;
+            }
+        }
+
+        $email = $order->user->email;
+        $name = $order->user->name ?? $email;
+
+        return new self($email, $name, $tagIds);
     }
 }

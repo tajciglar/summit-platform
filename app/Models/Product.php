@@ -15,7 +15,7 @@ class Product extends Model
         'summit_id', 'category_id', 'slug', 'name', 'description',
         'product_type', 'billing_interval', 'billing_interval_count',
         'tier', 'grants_vip_access', 'is_active', 'stripe_product_id',
-        'intro_price_cents', 'intro_period_months',
+        'intro_price_cents', 'intro_period_months', 'activecampaign_tag_id',
     ];
 
     protected $casts = [

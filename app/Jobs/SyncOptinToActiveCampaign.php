@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Optin;
 use App\Services\ActiveCampaignService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,15 +18,18 @@ class SyncOptinToActiveCampaign implements ShouldQueue
 
     public array $backoff = [10, 60, 300];
 
-    public function __construct(
-        private readonly string $email,
-        private readonly string $name,
-    ) {}
+    public function __construct(private readonly Optin $optin) {}
 
     public function handle(ActiveCampaignService $ac): void
     {
         $tagId = config('services.activecampaign.optin_tag_id');
 
-        $ac->syncContactWithTags($this->email, $this->name, $tagId ? [$tagId] : []);
+        $ac->syncContactWithTags(
+            $this->optin->email,
+            $this->optin->first_name ?? $this->optin->email,
+            $tagId ? [$tagId] : [],
+        );
+
+        $this->optin->update(['activecampaign_synced' => true]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SyncOptinToActiveCampaign;
 use App\Models\Optin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class OptinController extends Controller
             'funnel_step_id' => ['nullable', 'string', 'exists:funnel_steps,id'],
         ]);
 
-        Optin::create([
+        $optin = Optin::create([
             'email' => $validated['email'],
             'first_name' => $validated['first_name'] ?? null,
             'summit_id' => $validated['summit_id'] ?? null,
@@ -33,6 +34,8 @@ class OptinController extends Controller
             'utm_content' => $request->input('utm_content'),
             'utm_term' => $request->input('utm_term'),
         ]);
+
+        SyncOptinToActiveCampaign::dispatch($optin);
 
         return response()->json(['success' => true]);
     }
