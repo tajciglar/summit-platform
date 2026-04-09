@@ -19,6 +19,13 @@ class SummitForm
                 TextInput::make('slug')->required()->maxLength(255)->unique(ignoreRecord: true),
                 Textarea::make('description')->rows(3),
                 TextInput::make('topic')->maxLength(255),
+                Select::make('summit_type')
+                    ->options([
+                        'new' => 'New',
+                        'replay' => 'Replay',
+                    ])
+                    ->default('new')
+                    ->required(),
                 FileUpload::make('hero_image_url')
                     ->label('Hero Image')
                     ->image()

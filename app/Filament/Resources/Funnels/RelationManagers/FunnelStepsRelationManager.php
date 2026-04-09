@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources\Funnels\RelationManagers;
 
-use App\Enums\StepTemplate;
+use App\Enums\BlockType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -45,12 +46,7 @@ class FunnelStepsRelationManager extends RelationManager
                         'downsell' => 'Downsell',
                         'thank_you' => 'Thank You',
                     ])
-                    ->required()
-                    ->reactive(),
-                Select::make('template')
-                    ->options(fn (Get $get) => StepTemplate::optionsForType($get('step_type')))
-                    ->default('default')
-                    ->reactive(),
+                    ->required(),
                 Select::make('product_id')
                     ->relationship('product', 'name')
                     ->searchable()
@@ -59,10 +55,44 @@ class FunnelStepsRelationManager extends RelationManager
                 TextInput::make('sort_order')->numeric()->default(0),
                 Toggle::make('is_published')->default(true),
 
-                Section::make('Page Content')
-                    ->schema(fn (Get $get) => StepTemplate::filamentFields($get('template')))
-                    ->collapsible(),
+                Section::make('Page Blocks')
+                    ->description('Compose your page from blocks')
+                    ->schema([
+                        Repeater::make('content.blocks')
+                            ->label('')
+                            ->schema([
+                                Select::make('type')
+                                    ->options(BlockType::options())
+                                    ->required()
+                                    ->reactive()
+                                    ->columnSpanFull(),
+                                ...self::blockDataFields(),
+                            ])
+                            ->itemLabel(fn (array $state): ?string => isset($state['type']) ? BlockType::tryFrom($state['type'])?->label() : 'New Block')
+                            ->addActionLabel('Add Block')
+                            ->reorderable()
+                            ->collapsible()
+                            ->cloneable()
+                            ->defaultItems(0),
+                    ]),
             ]);
+    }
+
+    /** Generate conditionally visible block fields. */
+    private static function blockDataFields(): array
+    {
+        $allFields = [];
+
+        foreach (BlockType::cases() as $blockType) {
+            foreach ($blockType->filamentFields() as $field) {
+                $fieldName = $field->getName();
+                $field = $field->statePath("data.{$fieldName}");
+                $field = $field->visible(fn (Get $get): bool => $get('type') === $blockType->value);
+                $allFields[$blockType->value.'.'.$fieldName] = $field;
+            }
+        }
+
+        return array_values($allFields);
     }
 
     public function table(Table $table): Table
@@ -85,7 +115,6 @@ class FunnelStepsRelationManager extends RelationManager
                         'thank_you' => 'gray',
                         default => 'gray',
                     }),
-                TextColumn::make('template')->badge()->color('gray'),
                 TextColumn::make('sort_order')->numeric()->sortable(),
                 ToggleColumn::make('is_published'),
             ])

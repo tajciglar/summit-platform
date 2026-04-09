@@ -21,6 +21,7 @@ export interface StepContent {
   hero_image?: string
   video_url?: string
   countdown_minutes?: number
+  blocks?: Array<{ type: string; data: Record<string, unknown> }>
 }
 
 export interface Speaker {

@@ -1,20 +1,19 @@
 import FunnelLayout from '@/layouts/FunnelLayout'
+import BlockRenderer from '@/components/blocks/BlockRenderer'
 import StandardCheckout from './templates/checkout/StandardCheckout'
-import SplitCheckout from './templates/checkout/SplitCheckout'
 import type { CheckoutPageProps } from '@/types/funnel'
-import type { ComponentType } from 'react'
-
-const templates: Record<string, ComponentType<CheckoutPageProps>> = {
-  standard_checkout: StandardCheckout,
-  split_checkout: SplitCheckout,
-}
 
 export default function Checkout(props: CheckoutPageProps) {
-  const Template = templates[props.template] ?? StandardCheckout
+  const blocks = props.content?.blocks ?? []
 
+  // Checkout always renders the checkout form — blocks go above it
   return (
     <FunnelLayout theme={props.theme} isPreview={props.isPreview} title={props.step.name}>
-      <Template {...props} />
+      {blocks.length > 0 ? (
+        <BlockRenderer blocks={blocks} context={{ product: props.product, summit: props.summit }} />
+      ) : (
+        <StandardCheckout {...props} />
+      )}
     </FunnelLayout>
   )
 }

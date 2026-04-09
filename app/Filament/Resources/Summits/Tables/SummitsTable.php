@@ -16,6 +16,14 @@ class SummitsTable
             ->columns([
                 TextColumn::make('title')->searchable()->sortable(),
                 TextColumn::make('slug')->searchable(),
+                TextColumn::make('summit_type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'new' => 'success',
+                        'replay' => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state)),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {

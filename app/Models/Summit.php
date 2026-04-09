@@ -13,6 +13,7 @@ class Summit extends Model
     protected $fillable = [
         'slug', 'title', 'description', 'topic', 'hero_image_url',
         'status', 'current_phase', 'timezone', 'starts_at', 'ends_at',
+        'summit_type',
     ];
 
     protected $casts = [
@@ -53,5 +54,20 @@ class Summit extends Model
     public function optins(): HasMany
     {
         return $this->hasMany(Optin::class);
+    }
+
+    public function campaignActivities(): HasMany
+    {
+        return $this->hasMany(SummitCampaignActivity::class)->orderBy('starts_at');
+    }
+
+    public function dailyReports(): HasMany
+    {
+        return $this->hasMany(SummitDailyReport::class)->orderBy('report_date');
+    }
+
+    public function checklistItems(): HasMany
+    {
+        return $this->hasMany(SummitChecklistItem::class)->orderBy('sort_order');
     }
 }

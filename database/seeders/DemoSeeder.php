@@ -158,19 +158,48 @@ class DemoSeeder extends Seeder
             ],
         ]);
 
-        // Funnel Steps
+        // Funnel Steps — using block-based content
         $optinStep = FunnelStep::create([
             'funnel_id' => $preSummitFunnel->id,
             'step_type' => 'optin',
-            'template' => 'hero_speakers',
             'slug' => 'register',
             'name' => 'Free Registration',
-            'content' => [
-                'headline' => 'Althea Wellness Summit 2025',
-                'subheadline' => 'Free Online Event • 30+ Expert Speakers',
-                'body' => '<p>Join thousands of health-conscious individuals for 5 days of transformative wellness content from world-leading experts.</p>',
-                'cta_text' => 'Register Free Now',
-            ],
+            'content' => ['blocks' => [
+                ['type' => 'hero', 'data' => [
+                    'headline' => 'Althea Wellness Summit 2025',
+                    'subheadline' => 'Free Online Event • 30+ Expert Speakers',
+                    'body' => '<p>Join thousands of health-conscious individuals for 5 days of transformative wellness content from world-leading experts.</p>',
+                    'cta_text' => 'Register Free Now',
+                    'style' => 'gradient',
+                ]],
+                ['type' => 'speaker_grid', 'data' => [
+                    'heading' => 'Meet Your Speakers',
+                    'subheading' => 'Learn from world-class wellness experts',
+                    'columns' => '3',
+                ]],
+                ['type' => 'testimonials', 'data' => [
+                    'heading' => 'What Past Attendees Say',
+                    'items' => [
+                        ['quote' => 'This summit completely changed my approach to wellness. The speakers were incredible.', 'name' => 'Maria L.', 'title' => 'Health Coach'],
+                        ['quote' => 'I learned more in 5 days than in years of reading. Highly recommend!', 'name' => 'Tom K.', 'title' => 'Fitness Enthusiast'],
+                        ['quote' => 'The VIP pass was worth every penny. I still rewatch the recordings.', 'name' => 'Sarah P.', 'title' => 'Nutritionist'],
+                    ],
+                ]],
+                ['type' => 'faq', 'data' => [
+                    'heading' => 'Frequently Asked Questions',
+                    'items' => [
+                        ['question' => 'Is the summit really free?', 'answer' => 'Yes! Registration is completely free. You get 24-hour access to each speaker video during the live event.'],
+                        ['question' => 'What if I miss a session?', 'answer' => 'Each video is available for 24 hours after it airs. VIP pass holders get permanent access to all recordings.'],
+                        ['question' => 'How do I watch the presentations?', 'answer' => 'After registering, you\'ll receive an email with your access link. Simply click to watch from any device.'],
+                    ],
+                ]],
+                ['type' => 'cta', 'data' => [
+                    'heading' => 'Ready to Transform Your Wellness?',
+                    'subheading' => 'Join 10,000+ attendees at the Althea Wellness Summit',
+                    'button_text' => 'Register Free Now',
+                    'style' => 'dark',
+                ]],
+            ]],
             'sort_order' => 0,
             'is_published' => true,
         ]);
@@ -178,15 +207,40 @@ class DemoSeeder extends Seeder
         $salesStep = FunnelStep::create([
             'funnel_id' => $preSummitFunnel->id,
             'step_type' => 'sales_page',
-            'template' => 'hero_speakers',
             'slug' => 'vip-offer',
             'name' => 'VIP Pass Offer',
-            'content' => [
-                'headline' => 'Upgrade to VIP All-Access',
-                'subheadline' => 'Limited Time Pre-Summit Price',
-                'body' => '<p>Get lifetime access to all 30+ masterclass recordings, exclusive Q&A sessions, downloadable resources, and bonus content.</p>',
-                'cta_text' => 'Get VIP Access — $47',
-            ],
+            'content' => ['blocks' => [
+                ['type' => 'hero', 'data' => [
+                    'headline' => 'Upgrade to VIP All-Access',
+                    'subheadline' => 'Limited Time Pre-Summit Price',
+                    'body' => '<p>Get lifetime access to all 30+ masterclass recordings, exclusive Q&A sessions, downloadable resources, and bonus content.</p>',
+                    'cta_text' => 'Get VIP Access — $47',
+                    'style' => 'gradient',
+                ]],
+                ['type' => 'pricing_card', 'data' => [
+                    'heading' => 'VIP All-Access Pass',
+                    'subheading' => 'Lifetime access to everything',
+                    'features' => [
+                        ['text' => 'All 30+ masterclass recordings', 'included' => true],
+                        ['text' => 'Exclusive Q&A sessions with speakers', 'included' => true],
+                        ['text' => 'Downloadable resources & worksheets', 'included' => true],
+                        ['text' => 'Bonus content & behind-the-scenes', 'included' => true],
+                        ['text' => 'Community access', 'included' => true],
+                    ],
+                    'cta_text' => 'Get VIP Access Now',
+                ]],
+                ['type' => 'speaker_grid', 'data' => [
+                    'heading' => 'Your VIP Speakers',
+                    'columns' => '4',
+                    'show_featured_only' => true,
+                ]],
+                ['type' => 'cta', 'data' => [
+                    'heading' => 'Don\'t Miss This Price',
+                    'subheading' => 'Price increases when the summit starts',
+                    'button_text' => 'Get VIP Access — $47',
+                    'style' => 'accent',
+                ]],
+            ]],
             'sort_order' => 1,
             'product_id' => $vipPass->id,
             'is_published' => true,
@@ -195,14 +249,16 @@ class DemoSeeder extends Seeder
         $checkoutStep = FunnelStep::create([
             'funnel_id' => $preSummitFunnel->id,
             'step_type' => 'checkout',
-            'template' => 'standard_checkout',
             'slug' => 'checkout',
             'name' => 'Secure Checkout',
-            'content' => [
-                'headline' => 'Complete Your Order',
-                'subheadline' => 'VIP All-Access Pass',
-                'cta_text' => 'Complete Purchase',
-            ],
+            'content' => ['blocks' => [
+                ['type' => 'checkout_form', 'data' => [
+                    'heading' => 'Complete Your Order',
+                    'subheading' => 'VIP All-Access Pass',
+                    'button_text' => 'Complete Purchase',
+                    'show_express_checkout' => true,
+                ]],
+            ]],
             'sort_order' => 2,
             'product_id' => $vipPass->id,
             'is_published' => true,
@@ -227,14 +283,22 @@ class DemoSeeder extends Seeder
         $upsellStep = FunnelStep::create([
             'funnel_id' => $preSummitFunnel->id,
             'step_type' => 'upsell',
-            'template' => 'simple_upsell',
             'slug' => 'recordings-offer',
             'name' => 'Add Recordings Bundle',
-            'content' => [
-                'headline' => 'One More Thing…',
-                'subheadline' => 'Special One-Time Offer',
-                'cta_text' => 'Yes — Add Recordings Bundle',
-            ],
+            'content' => ['blocks' => [
+                ['type' => 'countdown', 'data' => [
+                    'heading' => 'This offer expires in...',
+                    'minutes' => 15,
+                    'expired_text' => 'This offer has expired.',
+                ]],
+                ['type' => 'upsell_offer', 'data' => [
+                    'heading' => 'One More Thing…',
+                    'subheading' => 'Special One-Time Offer',
+                    'body' => '<p>Get all speaker recordings to watch at your own pace, forever.</p>',
+                    'accept_text' => 'Yes — Add Recordings Bundle',
+                    'decline_text' => 'No thanks, skip this offer',
+                ]],
+            ]],
             'sort_order' => 3,
             'product_id' => $recordingsBundle->id,
             'is_published' => true,
@@ -243,14 +307,20 @@ class DemoSeeder extends Seeder
         $thankYouStep = FunnelStep::create([
             'funnel_id' => $preSummitFunnel->id,
             'step_type' => 'thank_you',
-            'template' => 'confirmation_card',
             'slug' => 'thank-you',
             'name' => 'Thank You!',
-            'content' => [
-                'headline' => 'You\'re All Set!',
-                'subheadline' => 'Welcome to the Althea Wellness Summit 2025',
-                'body' => '<p>Check your email for your access details and summit schedule. We can\'t wait to see you there!</p>',
-            ],
+            'content' => ['blocks' => [
+                ['type' => 'hero', 'data' => [
+                    'headline' => 'You\'re All Set!',
+                    'subheadline' => 'Welcome to the Althea Wellness Summit 2025',
+                    'body' => '<p>Check your email for your access details and summit schedule. We can\'t wait to see you there!</p>',
+                    'style' => 'gradient',
+                ]],
+                ['type' => 'text', 'data' => [
+                    'body' => '<h2>What Happens Next?</h2><ol><li>Check your email for your confirmation and access link</li><li>Mark your calendar for the summit dates</li><li>Join our community group for pre-summit discussions</li></ol>',
+                    'width' => 'medium',
+                ]],
+            ]],
             'sort_order' => 4,
             'is_published' => true,
         ]);

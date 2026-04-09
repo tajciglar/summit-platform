@@ -40,6 +40,9 @@ class SummitResource extends Resource
             RelationManagers\FunnelsRelationManager::class,
             RelationManagers\SummitSpeakersRelationManager::class,
             RelationManagers\PhaseSchedulesRelationManager::class,
+            RelationManagers\CampaignActivitiesRelationManager::class,
+            RelationManagers\DailyReportsRelationManager::class,
+            RelationManagers\ChecklistItemsRelationManager::class,
         ];
     }
 
