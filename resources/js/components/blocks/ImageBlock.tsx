@@ -8,8 +8,13 @@ export default function ImageBlock({ data }: { data: ImageBlockData }) {
   return (
     <section className="py-8 px-6">
       <div className={`${width} mx-auto`}>
-        <img src={data.image_url} alt={data.alt_text ?? ''} className="w-full rounded-xl shadow-md" />
-        {data.caption && <p className="text-center text-gray-500 mt-3 text-sm">{data.caption}</p>}
+        <img
+          src={data.image_url}
+          alt={data.alt_text ?? ''}
+          className="w-full rounded-xl shadow-md"
+          loading="lazy"
+        />
+        {data.caption && <p className="text-center mt-3 text-sm" style={{ color: 'var(--theme-muted)' }}>{data.caption}</p>}
       </div>
     </section>
   )

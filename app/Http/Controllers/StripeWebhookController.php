@@ -12,6 +12,7 @@ use App\Services\ContentAccessService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 
@@ -42,7 +43,7 @@ class StripeWebhookController extends Controller
             'customer.subscription.deleted' => $this->handleSubscriptionDeleted($event->data->object),
             'invoice.payment_failed' => $this->handleInvoiceFailed($event->data->object),
             'charge.refunded' => $this->handleChargeRefunded($event->data->object),
-            default => null,
+            default => Log::debug('Unhandled Stripe event type', ['type' => $event->type]),
         };
 
         return response('OK', 200);

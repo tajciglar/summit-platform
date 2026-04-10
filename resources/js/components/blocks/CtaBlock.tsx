@@ -18,9 +18,9 @@ export default function CtaBlock({ data }: { data: CtaBlockData }) {
         )}
         {data.subheading && <p className="text-lg mb-6" style={{ color: colors.text, opacity: 0.8 }}>{data.subheading}</p>}
         <a
-          href={data.button_url ?? '#'}
-          className="inline-flex items-center px-10 py-4 rounded-full text-lg font-bold shadow-xl hover:scale-105 active:scale-100 transition-transform bg-white"
-          style={{ color: colors.bg }}
+          href={data.button_url ?? '#register'}
+          className="inline-flex items-center px-10 py-4 rounded-lg text-lg font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          style={{ backgroundColor: 'var(--theme-surface)', color: colors.bg }}
         >
           {data.button_text}
         </a>

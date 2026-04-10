@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SyncToActiveCampaign implements ShouldQueue
 {
@@ -55,5 +56,13 @@ class SyncToActiveCampaign implements ShouldQueue
         $name = $order->user->name ?? $email;
 
         return new self($email, $name, $tagIds);
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::critical('SyncToActiveCampaign failed permanently', [
+            'email' => $this->email,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

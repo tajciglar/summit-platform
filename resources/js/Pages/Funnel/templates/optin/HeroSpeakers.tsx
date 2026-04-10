@@ -1,10 +1,10 @@
+import { sanitizeHtml } from '@/lib/sanitize'
 import SpeakerGrid from '@/components/funnel/SpeakerGrid'
 import type { OptinPageProps } from '@/types/funnel'
 
 export default function HeroSpeakers({ step, content, speakers, summit }: OptinPageProps) {
   return (
     <>
-      {/* Hero section with gradient background */}
       <section
         className="relative overflow-hidden"
         style={{
@@ -34,34 +34,33 @@ export default function HeroSpeakers({ step, content, speakers, summit }: OptinP
           {content.body && (
             <div
               className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8 prose prose-invert"
-              dangerouslySetInnerHTML={{ __html: content.body }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(content.body) }}
             />
           )}
           {content.cta_text && (
-            <button
-              className="inline-flex items-center px-10 py-4 rounded-full text-lg font-bold shadow-xl hover:scale-105 active:scale-100 transition-transform"
+            <a
+              href="#register"
+              className="inline-flex items-center px-10 py-4 rounded-lg text-lg font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
               style={{
                 backgroundColor: 'var(--theme-accent)',
                 color: 'var(--theme-secondary)',
               }}
             >
               {content.cta_text}
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </button>
+            </a>
           )}
         </div>
       </section>
 
-      {/* Speakers section */}
       {speakers.length > 0 && (
         <section className="py-16 md:py-24" style={{ backgroundColor: 'var(--theme-bg)' }}>
           <SpeakerGrid speakers={speakers} />
         </section>
       )}
 
-      {/* Bottom CTA */}
       {content.cta_text && (
         <section
           className="py-16 text-center"
@@ -74,15 +73,16 @@ export default function HeroSpeakers({ step, content, speakers, summit }: OptinP
             >
               Ready to join {summit.title}?
             </h2>
-            <button
-              className="inline-flex items-center px-10 py-4 rounded-full text-lg font-bold shadow-xl hover:scale-105 active:scale-100 transition-transform"
+            <a
+              href="#register"
+              className="inline-flex items-center px-10 py-4 rounded-lg text-lg font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
               style={{
                 backgroundColor: 'var(--theme-accent)',
                 color: 'var(--theme-secondary)',
               }}
             >
               {content.cta_text}
-            </button>
+            </a>
           </div>
         </section>
       )}

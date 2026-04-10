@@ -46,9 +46,23 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function steps(): HasMany
+    {
+        return $this->hasMany(FunnelStep::class);
+    }
+
+    public function stepBumps(): HasMany
+    {
+        return $this->hasMany(FunnelStepBump::class);
+    }
+
     /** Get price for a specific summit phase. */
     public function priceForPhase(string $phase): ?ProductPrice
     {
+        if ($this->relationLoaded('prices')) {
+            return $this->prices->firstWhere('summit_phase', $phase);
+        }
+
         return $this->prices()->where('summit_phase', $phase)->first();
     }
 }

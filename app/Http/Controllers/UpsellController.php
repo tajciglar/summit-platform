@@ -35,6 +35,11 @@ class UpsellController extends Controller
             return response()->json(['error' => 'No price for current phase.'], 422);
         }
 
+        // Verify ownership — the PI must match the session
+        if (session('payment_intent_id') !== $validated['original_payment_intent_id']) {
+            return response()->json(['error' => 'Invalid payment reference.'], 403);
+        }
+
         // Find original order to get payment method
         $originalOrder = Order::where('stripe_payment_intent_id', $validated['original_payment_intent_id'])
             ->where('status', 'completed')
@@ -66,7 +71,9 @@ class UpsellController extends Controller
             return response()->json(['error' => $e->getMessage()], 422);
         }
 
-        $orderNumber = 'SM-'.now()->format('Y').'-'.strtoupper(Str::random(6));
+        do {
+            $orderNumber = 'SM-'.now()->format('Y').'-'.strtoupper(Str::random(8));
+        } while (Order::where('order_number', $orderNumber)->exists());
 
         $order = Order::create([
             'order_number' => $orderNumber,

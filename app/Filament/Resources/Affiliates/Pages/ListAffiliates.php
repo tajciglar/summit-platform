@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Affiliates\Pages;
 
+use App\Filament\Exports\AffiliateExporter;
 use App\Filament\Resources\Affiliates\AffiliateResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAffiliates extends ListRecords
@@ -12,6 +14,9 @@ class ListAffiliates extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [CreateAction::make()];
+        return [
+            ExportAction::make()->exporter(AffiliateExporter::class)->label('Export CSV'),
+            CreateAction::make(),
+        ];
     }
 }

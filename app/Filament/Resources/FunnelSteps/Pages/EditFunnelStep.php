@@ -15,6 +15,12 @@ class EditFunnelStep extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('openBuilder')
+                ->label('Open Builder')
+                ->icon('heroicon-o-paint-brush')
+                ->color('info')
+                ->url(fn () => url("/admin/builder/{$this->getRecord()->id}"))
+                ->openUrlInNewTab(),
             Action::make('preview')
                 ->label('Preview')
                 ->icon('heroicon-o-eye')

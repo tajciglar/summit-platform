@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SyncOptinToActiveCampaign implements ShouldQueue
 {
@@ -31,5 +32,14 @@ class SyncOptinToActiveCampaign implements ShouldQueue
         );
 
         $this->optin->update(['activecampaign_synced' => true]);
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::critical('SyncOptinToActiveCampaign failed permanently', [
+            'optin_id' => $this->optin->id,
+            'email' => $this->optin->email,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

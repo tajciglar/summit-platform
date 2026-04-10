@@ -24,6 +24,18 @@ class SpeakerResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
+    protected static ?string $recordTitleAttribute = 'first_name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['first_name', 'last_name', 'email'];
+    }
+
+    public static function getGlobalSearchResultTitle(\Illuminate\Database\Eloquent\Model $record): string
+    {
+        return "{$record->first_name} {$record->last_name}";
+    }
+
     public static function form(Schema $schema): Schema
     {
         return SpeakerForm::configure($schema);

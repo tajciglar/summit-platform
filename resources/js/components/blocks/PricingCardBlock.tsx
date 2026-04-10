@@ -5,7 +5,14 @@ export default function PricingCardBlock({ data, product }: { data: PricingCardB
 
   return (
     <section className="py-12 px-6">
-      <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div
+        className="max-w-md mx-auto rounded-2xl shadow-lg overflow-hidden"
+        style={{
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor: 'var(--theme-border)',
+        }}
+      >
         <div className="p-8 text-center" style={{ backgroundColor: 'var(--theme-primary)' }}>
           {data.heading && <h3 className="text-xl font-bold text-white mb-1">{data.heading}</h3>}
           {data.subheading && <p className="text-white/80 text-sm">{data.subheading}</p>}
@@ -19,19 +26,25 @@ export default function PricingCardBlock({ data, product }: { data: PricingCardB
           )}
         </div>
         {features.length > 0 && (
-          <div className="p-8">
+          <div className="p-8" style={{ backgroundColor: 'var(--theme-surface)' }}>
             <ul className="space-y-3">
               {features.map((f, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className={f.included ? 'text-green-500' : 'text-gray-300'}>{f.included ? '✓' : '✕'}</span>
-                  <span className={f.included ? 'text-gray-700' : 'text-gray-400'}>{f.text}</span>
+                  <span className={f.included ? 'text-green-500' : ''} style={f.included ? undefined : { color: 'var(--theme-border)' }} aria-hidden="true">
+                    {f.included ? '✓' : '✕'}
+                  </span>
+                  <span style={{ color: f.included ? 'var(--theme-text)' : 'var(--theme-muted)' }}>{f.text}</span>
                 </li>
               ))}
             </ul>
             {data.cta_text && (
               <button
-                className="w-full mt-6 py-3 rounded-xl text-white font-bold text-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: 'var(--theme-primary)' }}
+                type="button"
+                className="w-full mt-6 py-3 rounded-xl text-white font-bold text-lg hover:opacity-90 transition-opacity focus-visible:ring-2 focus-visible:ring-offset-2"
+                style={{
+                  backgroundColor: 'var(--theme-primary)',
+                  '--tw-ring-color': 'var(--theme-primary)',
+                } as React.CSSProperties}
               >
                 {data.cta_text}
               </button>

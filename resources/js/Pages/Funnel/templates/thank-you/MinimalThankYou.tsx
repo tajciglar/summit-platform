@@ -10,7 +10,7 @@ export default function MinimalThankYou({ step, content }: FunnelPageProps) {
         >
           {content.headline ?? step.name}
         </h1>
-        {content.subheadline && <p className="text-lg text-gray-500">{content.subheadline}</p>}
+        {content.subheadline && <p className="text-lg" style={{ color: 'var(--theme-muted)' }}>{content.subheadline}</p>}
       </div>
     </div>
   )

@@ -16,12 +16,12 @@
     --color-theme-accent: var(--theme-accent, #f59e0b);
 }
 
-/* Order bump arrow animation */
+/* Order bump arrow — subtle pulse instead of aggressive bounce */
 @keyframes bounce-x {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
+    0%, 100% { transform: translateX(0); opacity: 0.7; }
+    50% { transform: translateX(3px); opacity: 1; }
 }
 
 .animate-bounce-x {
-    animation: bounce-x 0.7s ease-in-out infinite;
+    animation: bounce-x 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }

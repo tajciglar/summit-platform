@@ -27,10 +27,13 @@ class TimelineCalendar extends Page
 
     protected string $view = 'filament.pages.timeline-calendar';
 
+    #[\Livewire\Attributes\Url]
     public int $year;
 
+    #[\Livewire\Attributes\Url]
     public string $typeFilter = '';
 
+    #[\Livewire\Attributes\Url]
     public string $search = '';
 
     public function mount(): void

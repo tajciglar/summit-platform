@@ -13,6 +13,10 @@ const defaults = {
   accent: '#f59e0b',
   background: '#ffffff',
   text: '#111827',
+  surface: '#ffffff',
+  surface_alt: '#f9fafb',
+  muted: '#6b7280',
+  border: '#e5e7eb',
 }
 
 export function ThemeProvider({ theme, children }: { theme: FunnelTheme; children: ReactNode }) {
@@ -25,6 +29,10 @@ export function ThemeProvider({ theme, children }: { theme: FunnelTheme; childre
     '--theme-accent': colors.accent ?? defaults.accent,
     '--theme-bg': colors.background ?? defaults.background,
     '--theme-text': colors.text ?? defaults.text,
+    '--theme-surface': colors.surface ?? defaults.surface,
+    '--theme-surface-alt': colors.surface_alt ?? defaults.surface_alt,
+    '--theme-muted': colors.muted ?? defaults.muted,
+    '--theme-border': colors.border ?? defaults.border,
     '--font-heading': fonts.heading ?? 'Inter',
     '--font-body': fonts.body ?? 'Inter',
   } as React.CSSProperties

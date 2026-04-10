@@ -54,4 +54,9 @@ return [
         ],
     ],
 
+    'funnelforge' => [
+        'url' => env('FUNNELFORGE_URL', 'http://localhost:3333'),
+        'timeout' => (int) env('FUNNELFORGE_TIMEOUT', 120),
+    ],
+
 ];

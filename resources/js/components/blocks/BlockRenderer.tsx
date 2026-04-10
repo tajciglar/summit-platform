@@ -28,7 +28,7 @@ const blockRegistry: Record<string, ComponentType<any>> = {
 }
 
 interface Props {
-  blocks: BlockData[]
+  blocks: (BlockData & { id?: string })[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraBlocks?: Record<string, ComponentType<any>>
   context?: Record<string, unknown>
@@ -42,7 +42,7 @@ export default function BlockRenderer({ blocks, extraBlocks = {}, context = {} }
       {blocks.map((block, index) => {
         const Component = registry[block.type]
         if (!Component) return null
-        return <Component key={`${block.type}-${index}`} data={block.data ?? {}} {...context} />
+        return <Component key={block.id ?? `${block.type}-${index}`} data={block.data ?? {}} {...context} />
       })}
     </>
   )

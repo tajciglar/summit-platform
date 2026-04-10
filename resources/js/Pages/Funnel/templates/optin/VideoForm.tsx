@@ -4,7 +4,6 @@ export default function VideoForm({ step, content }: OptinPageProps) {
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Video side */}
         <div>
           {content.video_url ? (
             <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
@@ -13,16 +12,17 @@ export default function VideoForm({ step, content }: OptinPageProps) {
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                title={content.headline ?? step.name}
+                loading="lazy"
               />
             </div>
           ) : (
-            <div className="aspect-video rounded-xl bg-gray-100 flex items-center justify-center">
-              <span className="text-gray-400">Video placeholder</span>
+            <div className="aspect-video rounded-xl flex items-center justify-center" style={{ backgroundColor: 'var(--theme-surface-alt)' }}>
+              <span style={{ color: 'var(--theme-muted)' }}>Video placeholder</span>
             </div>
           )}
         </div>
 
-        {/* Form side */}
         <div>
           {content.subheadline && (
             <p className="text-sm font-medium uppercase tracking-widest mb-3" style={{ color: 'var(--theme-primary)' }}>
@@ -36,12 +36,16 @@ export default function VideoForm({ step, content }: OptinPageProps) {
             {content.headline ?? step.name}
           </h1>
           {content.cta_text && (
-            <button
-              className="mt-6 w-full px-8 py-3 rounded-lg text-white font-semibold text-lg shadow-lg hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: 'var(--theme-primary)' }}
+            <a
+              href="#register"
+              className="mt-6 inline-block w-full px-8 py-3 rounded-lg text-white font-semibold text-lg text-center shadow-lg hover:opacity-90 transition-opacity focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{
+                backgroundColor: 'var(--theme-primary)',
+                '--tw-ring-color': 'var(--theme-primary)',
+              } as React.CSSProperties}
             >
               {content.cta_text}
-            </button>
+            </a>
           )}
         </div>
       </div>

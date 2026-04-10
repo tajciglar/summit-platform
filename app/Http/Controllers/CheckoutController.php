@@ -73,7 +73,8 @@ class CheckoutController extends Controller
         $totalCents = max(0, $subtotalCents - $discountCents);
 
         // Idempotency key
-        $idempotencyKey = 'pi_'.hash('sha256', $step->id.'|'.$validated['customer_email'].'|'.now()->format('Y-m-d'));
+        $bumpKey = implode(',', collect($bumpIds)->sort()->values()->all());
+        $idempotencyKey = 'pi_'.hash('sha256', $step->id.'|'.$validated['customer_email'].'|'.$bumpKey.'|'.($coupon?->id ?? '').'|'.now()->format('Y-m-d'));
 
         $intent = $this->stripe->paymentIntents->create([
             'amount' => $totalCents,
@@ -97,7 +98,9 @@ class CheckoutController extends Controller
             ['name' => $validated['customer_name'] ?? '', 'password' => bcrypt(Str::random(32))]
         );
 
-        $orderNumber = 'SM-'.now()->format('Y').'-'.strtoupper(Str::random(6));
+        do {
+            $orderNumber = 'SM-'.now()->format('Y').'-'.strtoupper(Str::random(8));
+        } while (Order::where('order_number', $orderNumber)->exists());
 
         $order = Order::create([
             'order_number' => $orderNumber,
@@ -168,6 +171,19 @@ class CheckoutController extends Controller
             'customer_email' => ['nullable', 'email'],
             'customer_name' => ['nullable', 'string', 'max:255'],
         ]);
+
+        // Verify ownership — the PI must match the session and a pending order
+        if (session('payment_intent_id') !== $validated['payment_intent_id']) {
+            return response()->json(['error' => 'Invalid payment reference.'], 403);
+        }
+
+        $order = Order::where('stripe_payment_intent_id', $validated['payment_intent_id'])
+            ->where('status', 'pending')
+            ->first();
+
+        if (! $order) {
+            return response()->json(['error' => 'Order not found.'], 404);
+        }
 
         $existing = $this->stripe->paymentIntents->retrieve($validated['payment_intent_id']);
 

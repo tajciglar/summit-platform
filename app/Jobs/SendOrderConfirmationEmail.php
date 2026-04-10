@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SendOrderConfirmationEmail implements ShouldQueue
 {
@@ -23,5 +24,14 @@ class SendOrderConfirmationEmail implements ShouldQueue
     public function handle(BrevoMailer $mailer): void
     {
         $mailer->sendOrderConfirmation($this->order);
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::critical('SendOrderConfirmationEmail failed permanently', [
+            'order_id' => $this->order->id,
+            'order_number' => $this->order->order_number,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

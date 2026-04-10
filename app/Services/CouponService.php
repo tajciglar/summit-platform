@@ -11,7 +11,7 @@ class CouponService
      */
     public function validate(string $code, ?string $summitId = null, ?string $productId = null): ?Coupon
     {
-        $coupon = Coupon::where('code', $code)->first();
+        $coupon = Coupon::whereRaw('LOWER(code) = ?', [strtolower($code)])->first();
 
         if (! $coupon || ! $coupon->isValid()) {
             return null;

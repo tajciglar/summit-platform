@@ -17,19 +17,34 @@ export default function SpeakerGridBlock({ data, speakers = [] }: { data: Speake
             {data.heading}
           </h2>
         )}
-        {data.subheading && <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{data.subheading}</p>}
+        {data.subheading && <p className="text-center mb-12 max-w-xl mx-auto" style={{ color: 'var(--theme-muted)' }}>{data.subheading}</p>}
         <div className={`grid grid-cols-1 ${gridCols} gap-6`}>
           {filtered.map((speaker) => (
-            <div key={speaker.name} className="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow p-6 text-center border border-gray-100">
+            <div
+              key={speaker.name}
+              className="group rounded-2xl shadow-sm hover:shadow-md transition-shadow p-6 text-center"
+              style={{
+                backgroundColor: 'var(--theme-surface)',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'var(--theme-border)',
+              }}
+            >
               {speaker.photo_url ? (
-                <img src={speaker.photo_url} alt={speaker.name} className="w-28 h-28 rounded-full mx-auto mb-4 object-cover ring-4 ring-gray-50 transition-all" />
+                <img
+                  src={speaker.photo_url}
+                  alt={`Photo of ${speaker.name}`}
+                  className="w-28 h-28 rounded-full mx-auto mb-4 object-cover ring-4 transition-all"
+                  style={{ '--tw-ring-color': 'var(--theme-surface-alt)' } as React.CSSProperties}
+                  loading="lazy"
+                />
               ) : (
                 <div className="w-28 h-28 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-bold text-white" style={{ backgroundColor: 'var(--theme-primary)' }}>
                   {speaker.name.charAt(0)}
                 </div>
               )}
               <h3 className="font-bold text-lg mb-1" style={{ color: 'var(--theme-secondary)' }}>{speaker.name}</h3>
-              {speaker.title && <p className="text-sm text-gray-500 mb-2">{speaker.title}</p>}
+              {speaker.title && <p className="text-sm mb-2" style={{ color: 'var(--theme-muted)' }}>{speaker.title}</p>}
               {speaker.masterclass_title && (
                 <p className="text-xs font-semibold uppercase tracking-wide mt-2 px-3 py-1 rounded-full inline-block text-white" style={{ backgroundColor: 'var(--theme-primary)', opacity: 0.9 }}>
                   {speaker.masterclass_title}

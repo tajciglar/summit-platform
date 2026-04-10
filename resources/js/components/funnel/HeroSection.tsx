@@ -1,3 +1,4 @@
+import { sanitizeHtml } from '@/lib/sanitize'
 import type { StepContent } from '@/types/funnel'
 
 interface Props {
@@ -25,17 +26,22 @@ export default function HeroSection({ content, stepName }: Props) {
         </h1>
         {content.body && (
           <div
-            className="text-lg text-gray-600 mt-4 prose prose-lg mx-auto"
-            dangerouslySetInnerHTML={{ __html: content.body }}
+            className="text-lg mt-4 prose prose-lg mx-auto"
+            style={{ color: 'var(--theme-muted)' }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(content.body) }}
           />
         )}
         {content.cta_text && (
-          <button
-            className="mt-8 px-10 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:scale-105 active:scale-100 transition-transform"
-            style={{ backgroundColor: 'var(--theme-primary)' }}
+          <a
+            href="#register"
+            className="mt-8 inline-block px-10 py-4 rounded-lg text-white font-bold text-lg shadow-lg hover:opacity-90 active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              backgroundColor: 'var(--theme-primary)',
+              '--tw-ring-color': 'var(--theme-primary)',
+            } as React.CSSProperties}
           >
             {content.cta_text}
-          </button>
+          </a>
         )}
       </div>
     </div>

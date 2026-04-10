@@ -27,6 +27,7 @@ class OptinProgress extends Page
 
     protected string $view = 'filament.pages.optin-progress';
 
+    #[\Livewire\Attributes\Url]
     public int $year;
 
     public function mount(): void

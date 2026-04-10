@@ -5,12 +5,17 @@ export interface FunnelTheme {
     accent?: string
     background?: string
     text?: string
+    surface?: string
+    surface_alt?: string
+    muted?: string
+    border?: string
   }
   fonts?: {
     heading?: string
     body?: string
   }
   logo_url?: string | null
+  logo_alt?: string | null
 }
 
 export interface StepContent {

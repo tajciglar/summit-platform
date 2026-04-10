@@ -36,4 +36,14 @@ class FunnelStep extends Model
     {
         return $this->hasMany(FunnelStepBump::class)->orderBy('sort_order');
     }
+
+    /** Get the next published step in the same funnel. */
+    public function nextPublishedStep(): ?self
+    {
+        return static::where('funnel_id', $this->funnel_id)
+            ->where('sort_order', '>', $this->sort_order)
+            ->where('is_published', true)
+            ->orderBy('sort_order')
+            ->first();
+    }
 }

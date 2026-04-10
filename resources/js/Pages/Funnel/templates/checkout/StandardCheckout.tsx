@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useId } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import {
   Elements,
@@ -8,11 +8,8 @@ import {
   useElements,
 } from '@stripe/react-stripe-js'
 import OrderBumpList from '@/components/funnel/OrderBumpList'
+import { getCsrfToken } from '@/lib/csrf'
 import type { CheckoutPageProps } from '@/types/funnel'
-
-function getCsrfToken(): string {
-  return (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? ''
-}
 
 function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
@@ -29,6 +26,8 @@ export default function StandardCheckout({ step, content, product, stripeKey, ne
   const [selectedBumpIds, setSelectedBumpIds] = useState<string[]>([])
   const [bumpsTotal, setBumpsTotal] = useState(0)
 
+  const nameId = useId()
+  const emailId = useId()
   const totalCents = (product?.price_cents ?? 0) + bumpsTotal
 
   const handleBumpChange = useCallback((ids: string[], total: number) => {
@@ -69,7 +68,10 @@ export default function StandardCheckout({ step, content, product, stripeKey, ne
 
   return (
     <div className="flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8">
+      <div
+        className="max-w-md w-full rounded-2xl shadow-sm p-8"
+        style={{ backgroundColor: 'var(--theme-surface)' }}
+      >
         {content.subheadline && (
           <p className="text-sm font-medium uppercase tracking-widest mb-2" style={{ color: 'var(--theme-primary)' }}>
             {content.subheadline}
@@ -79,62 +81,81 @@ export default function StandardCheckout({ step, content, product, stripeKey, ne
           {content.headline ?? step.name}
         </h1>
         {product && (
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6" style={{ color: 'var(--theme-muted)' }}>
             {product.name} — <span className="font-semibold" style={{ color: 'var(--theme-text)' }}>{formatPrice(product.price_cents)}</span>
             {product.compare_at_cents && (
-              <span className="ml-2 text-sm text-gray-400 line-through">{formatPrice(product.compare_at_cents)}</span>
+              <span className="ml-2 text-sm line-through" style={{ color: 'var(--theme-muted)' }}>{formatPrice(product.compare_at_cents)}</span>
             )}
           </p>
         )}
 
-        {/* Contact fields */}
         <div className="space-y-4 mb-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label htmlFor={nameId} className="block text-sm font-medium mb-1" style={{ color: 'var(--theme-text)' }}>Name</label>
             <input
+              id={nameId}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ '--tw-ring-color': 'var(--theme-primary)' } as React.CSSProperties}
+              className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'var(--theme-border)',
+                backgroundColor: 'var(--theme-surface)',
+                color: 'var(--theme-text)',
+                '--tw-ring-color': 'var(--theme-primary)',
+              } as React.CSSProperties}
               placeholder="Jane Smith"
+              autoComplete="name"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor={emailId} className="block text-sm font-medium mb-1" style={{ color: 'var(--theme-text)' }}>Email</label>
             <input
+              id={emailId}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ '--tw-ring-color': 'var(--theme-primary)' } as React.CSSProperties}
+              className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'var(--theme-border)',
+                backgroundColor: 'var(--theme-surface)',
+                color: 'var(--theme-text)',
+                '--tw-ring-color': 'var(--theme-primary)',
+              } as React.CSSProperties}
               placeholder="jane@example.com"
+              autoComplete="email"
             />
           </div>
         </div>
 
-        {/* Order Bumps */}
         <OrderBumpList bumps={orderBumps} onSelectionChange={handleBumpChange} />
 
-        {/* Total */}
         {bumpsTotal > 0 && (
-          <div className="flex justify-between items-center py-3 border-t border-gray-200 mb-4">
-            <span className="font-medium text-gray-700">Total</span>
+          <div className="flex justify-between items-center py-3 mb-4" style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: 'var(--theme-border)' }}>
+            <span className="font-medium" style={{ color: 'var(--theme-text)' }}>Total</span>
             <span className="text-lg font-bold" style={{ color: 'var(--theme-primary)' }}>{formatPrice(totalCents)}</span>
           </div>
         )}
 
-        {initError && <p className="text-sm text-red-600 mb-4">{initError}</p>}
+        {initError && <p className="text-sm text-red-600 mb-4" role="alert">{initError}</p>}
 
         {!clientSecret && (
           <button
+            type="button"
             onClick={initPaymentIntent}
             disabled={!email || loading}
-            className="w-full text-white font-semibold py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
-            style={{ backgroundColor: 'var(--theme-primary)' }}
+            className="w-full text-white font-semibold py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              backgroundColor: 'var(--theme-primary)',
+              '--tw-ring-color': 'var(--theme-primary)',
+            } as React.CSSProperties}
           >
-            {loading ? 'Loading…' : content.cta_text ?? 'Continue to Payment'}
+            {loading ? 'Loading\u2026' : content.cta_text ?? 'Continue to Payment'}
           </button>
         )}
 
@@ -235,18 +256,21 @@ function CheckoutForm({
         options={{ buttonType: { applePay: 'buy', googlePay: 'buy' }, buttonHeight: 48 }}
       />
       <div className="relative my-4">
-        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-        <div className="relative flex justify-center text-sm"><span className="bg-white px-3 text-gray-400">or pay with card</span></div>
+        <div className="absolute inset-0 flex items-center"><div className="w-full" style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: 'var(--theme-border)' }} /></div>
+        <div className="relative flex justify-center text-sm"><span className="px-3" style={{ backgroundColor: 'var(--theme-surface)', color: 'var(--theme-muted)' }}>or pay with card</span></div>
       </div>
       <PaymentElement options={{ layout: 'tabs', fields: { billingDetails: { name: 'never', email: 'never' } } }} />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="w-full text-white font-semibold py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
-        style={{ backgroundColor: 'var(--theme-primary)' }}
+        className="w-full text-white font-semibold py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity focus-visible:ring-2 focus-visible:ring-offset-2"
+        style={{
+          backgroundColor: 'var(--theme-primary)',
+          '--tw-ring-color': 'var(--theme-primary)',
+        } as React.CSSProperties}
       >
-        {processing ? 'Processing…' : `${ctaText ?? 'Pay'} ${totalLabel}`}
+        {processing ? 'Processing\u2026' : `${ctaText ?? 'Pay'} ${totalLabel}`}
       </button>
     </form>
   )

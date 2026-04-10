@@ -105,11 +105,7 @@ class FunnelController extends Controller
         $product = $step->product;
         $price = $product?->priceForPhase($summit->current_phase);
 
-        $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
-            ->where('sort_order', '>', $step->sort_order)
-            ->where('is_published', true)
-            ->orderBy('sort_order')
-            ->first();
+        $nextStep = $step->nextPublishedStep();
 
         // Load order bumps with phase pricing
         $bumps = $step->bumps()->where('is_active', true)->with('product.prices')->get()
@@ -148,11 +144,7 @@ class FunnelController extends Controller
         $product = $step->product;
         $price = $product?->priceForPhase($summit->current_phase);
 
-        $nextStep = FunnelStep::where('funnel_id', $step->funnel_id)
-            ->where('sort_order', '>', $step->sort_order)
-            ->where('is_published', true)
-            ->orderBy('sort_order')
-            ->first();
+        $nextStep = $step->nextPublishedStep();
 
         return Inertia::render('Funnel/Upsell', array_merge($props, [
             'product' => $product ? [

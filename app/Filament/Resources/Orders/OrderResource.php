@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Orders;
 
-use App\Filament\Resources\Orders\Pages\CreateOrder;
 use App\Filament\Resources\Orders\Pages\EditOrder;
 use App\Filament\Resources\Orders\Pages\ListOrders;
 use App\Filament\Resources\Orders\Schemas\OrderForm;
@@ -21,6 +20,27 @@ class OrderResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = 'Sales';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+
+    protected static ?string $recordTitleAttribute = 'order_number';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['order_number', 'user.email', 'stripe_payment_intent_id'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'Customer' => $record->user?->email ?? '—',
+            'Status' => ucfirst($record->status),
+            'Total' => '$' . number_format($record->total_cents / 100, 2),
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with('user');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -43,7 +63,6 @@ class OrderResource extends Resource
     {
         return [
             'index' => ListOrders::route('/'),
-            'create' => CreateOrder::route('/create'),
             'edit' => EditOrder::route('/{record}/edit'),
         ];
     }

@@ -10,9 +10,16 @@ export default function VideoBlock({ data }: { data: VideoBlockData }) {
           </h2>
         )}
         <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
-          <iframe src={data.video_url} className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          <iframe
+            src={data.video_url}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={data.heading ?? 'Video'}
+            loading="lazy"
+          />
         </div>
-        {data.caption && <p className="text-center text-gray-500 mt-4 text-sm">{data.caption}</p>}
+        {data.caption && <p className="text-center mt-4 text-sm" style={{ color: 'var(--theme-muted)' }}>{data.caption}</p>}
       </div>
     </section>
   )

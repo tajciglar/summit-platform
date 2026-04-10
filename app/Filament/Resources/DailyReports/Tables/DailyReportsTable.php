@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -55,10 +56,10 @@ class DailyReportsTable
                     ->label('Revenue €')
                     ->formatStateUsing(fn ($state) => $state !== null ? '€'.number_format($state / 100, 2) : '—')
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('ad_spend_eur_cents')
-                    ->label('Ad Spend €')
-                    ->formatStateUsing(fn ($state) => $state !== null ? '€'.number_format($state / 100, 2) : '—')
-                    ->sortable(),
+                TextInputColumn::make('ad_spend_eur_cents')
+                    ->label('Ad Spend € (cents)')
+                    ->sortable()
+                    ->rules(['nullable', 'integer']),
                 TextColumn::make('cpl_eur_cents')
                     ->label('CPL €')
                     ->formatStateUsing(fn ($state) => $state !== null ? '€'.number_format($state / 100, 2) : '—')

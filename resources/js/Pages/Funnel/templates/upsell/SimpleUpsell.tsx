@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
+import { sanitizeHtml } from '@/lib/sanitize'
+import { getCsrfToken } from '@/lib/csrf'
 import type { UpsellPageProps } from '@/types/funnel'
-
-function getCsrfToken(): string {
-  return (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? ''
-}
 
 export default function SimpleUpsell({ step, content, product, nextStepSlug, paymentIntentId, summit, funnel }: UpsellPageProps) {
   const [processing, setProcessing] = useState(false)
@@ -44,8 +42,15 @@ export default function SimpleUpsell({ step, content, product, nextStepSlug, pay
 
   return (
     <div className="flex items-center justify-center py-12 px-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-lg p-8 md:p-10 text-center border border-gray-100">
-        {/* Badge */}
+      <div
+        className="max-w-lg w-full rounded-2xl shadow-lg p-8 md:p-10 text-center"
+        style={{
+          backgroundColor: 'var(--theme-surface)',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor: 'var(--theme-border)',
+        }}
+      >
         <div
           className="inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-6 text-white"
           style={{ backgroundColor: 'var(--theme-accent)' }}
@@ -65,11 +70,11 @@ export default function SimpleUpsell({ step, content, product, nextStepSlug, pay
           {content.headline ?? step.name}
         </h1>
         {product && (
-          <p className="text-gray-500 mb-8 text-lg">
+          <p className="mb-8 text-lg" style={{ color: 'var(--theme-muted)' }}>
             Add <span className="font-semibold" style={{ color: 'var(--theme-text)' }}>{product.name}</span> for just{' '}
             <span className="font-bold text-xl" style={{ color: 'var(--theme-primary)' }}>{priceLabel}</span>
             {product.compare_at_cents && (
-              <span className="ml-2 text-base text-red-400 line-through">
+              <span className="ml-2 text-base line-through" style={{ color: 'var(--theme-muted)' }}>
                 ${(product.compare_at_cents / 100).toFixed(2)}
               </span>
             )}
@@ -78,26 +83,36 @@ export default function SimpleUpsell({ step, content, product, nextStepSlug, pay
 
         {content.body && (
           <div
-            className="text-gray-600 mb-8 prose mx-auto"
-            dangerouslySetInnerHTML={{ __html: content.body }}
+            className="mb-8 prose mx-auto"
+            style={{ color: 'var(--theme-muted)' }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(content.body) }}
           />
         )}
 
-        {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+        {error && <p className="text-sm text-red-600 mb-4" role="alert">{error}</p>}
 
         <div className="space-y-3">
           <button
+            type="button"
             onClick={handleAccept}
             disabled={processing}
-            className="w-full text-white font-bold py-4 rounded-xl text-lg shadow-lg hover:scale-[1.02] active:scale-100 disabled:opacity-50 transition-transform"
-            style={{ backgroundColor: 'var(--theme-primary)' }}
+            className="w-full text-white font-bold py-4 rounded-xl text-lg shadow-lg hover:opacity-90 active:scale-[0.98] disabled:opacity-50 transition-all focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              backgroundColor: 'var(--theme-primary)',
+              '--tw-ring-color': 'var(--theme-primary)',
+            } as React.CSSProperties}
           >
-            {processing ? 'Processing…' : content.cta_text ?? `Yes — Add for ${priceLabel}`}
+            {processing ? 'Processing\u2026' : content.cta_text ?? `Yes \u2014 Add for ${priceLabel}`}
           </button>
           <button
+            type="button"
             onClick={() => router.visit(declineUrl)}
             disabled={processing}
-            className="w-full text-gray-400 text-sm py-2 hover:text-gray-600 transition-colors"
+            className="w-full text-sm py-2 hover:opacity-80 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none rounded"
+            style={{
+              color: 'var(--theme-muted)',
+              '--tw-ring-color': 'var(--theme-primary)',
+            } as React.CSSProperties}
           >
             No thanks, skip this offer
           </button>

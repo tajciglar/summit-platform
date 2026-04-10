@@ -1,3 +1,4 @@
+import { sanitizeHtml } from '@/lib/sanitize'
 import type { HeroBlockData } from '@/types/blocks'
 
 export default function HeroBlock({ data }: { data: HeroBlockData }) {
@@ -14,7 +15,7 @@ export default function HeroBlock({ data }: { data: HeroBlockData }) {
     <section className="relative overflow-hidden" style={bgStyle}>
       {data.background_image && (
         <div className="absolute inset-0" style={{ opacity: style === 'image_overlay' ? 0.3 : 0.15 }}>
-          <img src={data.background_image} alt="" className="w-full h-full object-cover" />
+          <img src={data.background_image} alt="" className="w-full h-full object-cover" loading="lazy" />
         </div>
       )}
       <div className="relative max-w-4xl mx-auto px-6 py-20 md:py-28 text-center">
@@ -29,16 +30,19 @@ export default function HeroBlock({ data }: { data: HeroBlockData }) {
           </h1>
         )}
         {data.body && (
-          <div className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8 prose prose-invert" dangerouslySetInnerHTML={{ __html: data.body }} />
+          <div
+            className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8 prose prose-invert"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.body) }}
+          />
         )}
         {data.cta_text && (
           <a
-            href={data.cta_url ?? '#'}
-            className="inline-flex items-center px-10 py-4 rounded-full text-lg font-bold shadow-xl hover:scale-105 active:scale-100 transition-transform"
+            href={data.cta_url ?? '#register'}
+            className="inline-flex items-center px-10 py-4 rounded-lg text-lg font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             style={{ backgroundColor: 'var(--theme-accent)', color: 'var(--theme-secondary)' }}
           >
             {data.cta_text}
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </a>

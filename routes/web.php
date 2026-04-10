@@ -18,15 +18,23 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])
     ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // Checkout API — called from React via fetch
-Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);
-Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent']);
-Route::post('/checkout/upsell', [UpsellController::class, 'charge']);
-Route::post('/optin', [OptinController::class, 'store']);
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/checkout/intent', [CheckoutController::class, 'createIntent']);
+    Route::post('/checkout/update-intent', [CheckoutController::class, 'updateIntent']);
+    Route::post('/checkout/upsell', [UpsellController::class, 'charge']);
+});
+
+Route::post('/optin', [OptinController::class, 'store'])->middleware('throttle:30,1');
 
 // Video access API
-Route::post('/video/check-access', [VideoAccessController::class, 'check']);
-Route::post('/video/start-watching', [VideoAccessController::class, 'startWatching']);
-Route::post('/video/heartbeat', [VideoAccessController::class, 'heartbeat']);
+Route::middleware('throttle:60,1')->group(function () {
+    Route::post('/video/check-access', [VideoAccessController::class, 'check']);
+    Route::post('/video/start-watching', [VideoAccessController::class, 'startWatching']);
+    Route::post('/video/heartbeat', [VideoAccessController::class, 'heartbeat']);
+});
+
+// Builder routes (must be before funnel catch-all)
+require __DIR__.'/builder.php';
 
 // Funnel routes — summit-based URL pattern
 // /{summitSlug}/{funnelSlug}             → first step

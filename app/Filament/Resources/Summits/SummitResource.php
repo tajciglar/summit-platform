@@ -24,6 +24,22 @@ class SummitResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'slug', 'topic'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'Type' => ucfirst($record->summit_type),
+            'Status' => ucfirst($record->status),
+            'Phase' => str_replace('_', ' ', ucfirst($record->current_phase)),
+        ];
+    }
+
     public static function form(Schema $schema): Schema
     {
         return SummitForm::configure($schema);
