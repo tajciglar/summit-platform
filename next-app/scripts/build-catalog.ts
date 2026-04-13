@@ -1,7 +1,7 @@
 import { readdirSync, statSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { zodToJsonSchema } from 'zod-to-json-schema'
+import { z } from 'zod'
 import type { BlockCatalog, CatalogEntry } from '../src/types/block'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -45,7 +45,7 @@ async function buildCatalog(): Promise<BlockCatalog> {
   for (const dir of dirs) {
     const block = await loadBlock(dir)
     if (!block) continue
-    const jsonSchema = zodToJsonSchema(block.schema as never, { target: 'openApi3' })
+    const jsonSchema = z.toJSONSchema(block.schema as z.ZodType)
     entries.push({
       type: block.meta.type,
       category: block.meta.category,

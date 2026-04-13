@@ -1,5 +1,99 @@
 {
-  "version": "2026-04-13T13-00-52-639Z",
-  "generatedAt": "2026-04-13T13:00:52.639Z",
-  "blocks": []
+  "version": "2026-04-13T13-42-45-641Z",
+  "generatedAt": "2026-04-13T13:42:45.642Z",
+  "blocks": [
+    {
+      "type": "HeroWithCountdown",
+      "category": "hero",
+      "version": 1,
+      "validOn": [
+        "optin"
+      ],
+      "purpose": "Above-the-fold hero for summit optins. Large headline + subhead + live countdown timer + primary/secondary CTAs + speaker count callout. Use for time-sensitive summit launches.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "subheadline": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "bodyLines": {
+            "default": [],
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 140
+            }
+          },
+          "speakerCountLabel": {
+            "default": "40+ Leading Experts",
+            "type": "string",
+            "maxLength": 60
+          },
+          "countdownTarget": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "primaryCtaLabel": {
+            "default": "GET INSTANT ACCESS",
+            "type": "string",
+            "maxLength": 40
+          },
+          "secondaryCtaLabel": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "bannerImageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "backgroundStyle": {
+            "default": "gradient",
+            "type": "string",
+            "enum": [
+              "gradient",
+              "image",
+              "solid"
+            ]
+          }
+        },
+        "required": [
+          "headline",
+          "bodyLines",
+          "speakerCountLabel",
+          "countdownTarget",
+          "primaryCtaLabel",
+          "backgroundStyle"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "LIVE MARCH 9–13, 2026",
+        "headline": "WORLD'S LARGEST ADHD PARENTING SUMMIT",
+        "subheadline": "Become Empowered Parent In 5 Days",
+        "bodyLines": [
+          "40+ Leading Experts",
+          "Covering focus, impulsivity, outbursts & screen management"
+        ],
+        "speakerCountLabel": "40+ Leading Experts",
+        "countdownTarget": "2026-03-09T00:00:00Z",
+        "primaryCtaLabel": "GET INSTANT ACCESS",
+        "secondaryCtaLabel": "Claim your FREE ticket",
+        "backgroundStyle": "gradient"
+      },
+      "previewUrl": "/block-previews/HeroWithCountdown.png"
+    }
+  ]
 }
