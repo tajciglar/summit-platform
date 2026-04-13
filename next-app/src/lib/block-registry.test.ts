@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { z } from 'zod'
+import type { BlockMeta } from '@/types/block'
 import { createRegistry } from './block-registry'
 
 describe('block registry', () => {
@@ -7,10 +8,10 @@ describe('block registry', () => {
     const registry = createRegistry()
     const schema = z.object({ text: z.string() })
     const Component = () => null
-    const meta = {
+    const meta: BlockMeta = {
       type: 'TestBlock', category: 'utility', version: 1,
       validOn: ['optin'], purpose: 'test', exampleProps: { text: 'hi' },
-    } as const
+    }
 
     registry.register({ meta, schema, Component })
 
