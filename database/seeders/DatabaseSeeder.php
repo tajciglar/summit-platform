@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(DemoSeeder::class);
+        $this->call(AdhdParentingSummit2026Seeder::class);
     }
 }
