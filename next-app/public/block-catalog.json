@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-14T05-24-09-954Z",
-  "generatedAt": "2026-04-14T05:24:09.955Z",
+  "version": "2026-04-14T05-26-07-124Z",
+  "generatedAt": "2026-04-14T05:26:07.125Z",
   "blocks": [
     {
       "type": "FeatureWithImage",
@@ -311,6 +311,69 @@
         "backgroundColor": "light"
       },
       "previewUrl": "/block-previews/SocialProofBadge.png"
+    },
+    {
+      "type": "SpeakerGridDay",
+      "category": "speakers",
+      "version": 1,
+      "validOn": [
+        "optin"
+      ],
+      "purpose": "Speaker grid for a single day of the summit. Shows the day label, the day’s theme, and 3-12 speaker cards (headshot, name, credentials, session title). If speakerIds is omitted, the block falls back to every speaker whose dayNumber matches — so AI/editors can just set the day and let content flow. Use once per day.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "dayLabel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "theme": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "subtitle": {
+            "type": "string",
+            "maxLength": 140
+          },
+          "speakerIds": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "expandable": {
+            "default": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "day",
+          "dayLabel",
+          "theme",
+          "expandable"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "day": 1,
+        "dayLabel": "Day 1",
+        "theme": "The Butterfly Mind",
+        "subtitle": "Focus & attention strategies",
+        "expandable": true
+      },
+      "previewUrl": "/block-previews/SpeakerGridDay.png"
     },
     {
       "type": "StatsBar3Item",

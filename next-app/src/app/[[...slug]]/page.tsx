@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { resolveFunnel } from '@/lib/api-client'
 import { RenderBlocks } from '@/lib/render-block'
 import { ThemeProvider } from '@/lib/theme-context'
+import { SpeakersProvider } from '@/lib/speakers-context'
 
 interface PageParams {
   slug?: string[]
@@ -20,9 +21,11 @@ export default async function FunnelPage({ params }: { params: Promise<PageParam
 
   return (
     <ThemeProvider theme={data.theme}>
-      <main>
-        <RenderBlocks blocks={data.blocks} />
-      </main>
+      <SpeakersProvider speakers={data.speakers}>
+        <main>
+          <RenderBlocks blocks={data.blocks} />
+        </main>
+      </SpeakersProvider>
     </ThemeProvider>
   )
 }
