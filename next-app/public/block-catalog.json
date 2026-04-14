@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-14T05-49-30-601Z",
-  "generatedAt": "2026-04-14T05:49:30.602Z",
+  "version": "2026-04-14T06-20-21-091Z",
+  "generatedAt": "2026-04-14T06:20:21.093Z",
   "blocks": [
     {
       "type": "BenefitsGrid",
@@ -1272,7 +1272,6 @@
             "maxLength": 140
           },
           "speakerIds": {
-            "minItems": 1,
             "maxItems": 12,
             "type": "array",
             "items": {

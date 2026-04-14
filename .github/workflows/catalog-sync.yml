@@ -1,0 +1,54 @@
+name: Sync Block Catalog
+
+# Rebuilds public/block-catalog.json, pushes it to Bunny, and pings Laravel to
+# invalidate the server-side cache. Secrets are only referenced inside env:
+# blocks (never inline in run:), per GitHub Actions hardening guidance.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'next-app/src/blocks/**'
+      - 'next-app/src/types/block.ts'
+      - 'next-app/scripts/build-catalog.ts'
+      - 'next-app/scripts/upload-catalog.ts'
+  workflow_dispatch:
+
+concurrency:
+  group: catalog-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: next-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          cache-dependency-path: next-app/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build catalog
+        run: pnpm build:catalog
+
+      - name: Sync to Bunny + ping Laravel
+        env:
+          BUNNY_STORAGE_ZONE: ${{ secrets.BUNNY_STORAGE_ZONE }}
+          BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_STORAGE_ACCESS_KEY }}
+          BUNNY_HOSTNAME: ${{ secrets.BUNNY_HOSTNAME }}
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+          LARAVEL_API_URL: ${{ secrets.LARAVEL_API_URL }}
+          CATALOG_REFRESH_TOKEN: ${{ secrets.CATALOG_REFRESH_TOKEN }}
+        run: pnpm sync:catalog

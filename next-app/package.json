@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "build:catalog": "tsx scripts/build-catalog.ts",
+    "sync:catalog": "tsx scripts/upload-catalog.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest"
