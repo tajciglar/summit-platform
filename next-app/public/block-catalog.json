@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-14T05-43-57-601Z",
-  "generatedAt": "2026-04-14T05:43:57.602Z",
+  "version": "2026-04-14T05-49-30-601Z",
+  "generatedAt": "2026-04-14T05:49:30.602Z",
   "blocks": [
     {
       "type": "BenefitsGrid",
@@ -382,6 +382,91 @@
       "previewUrl": "/block-previews/ClosingCTAWithList.png"
     },
     {
+      "type": "FAQAccordion",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell",
+        "thank_you"
+      ],
+      "purpose": "Expandable FAQ section with 1-30 Q&A pairs. Built on the shadcn Accordion primitive. Answers support paragraph breaks via blank lines. Keep answers under ~200 words; long answers signal the product isn’t explaining itself earlier in the page.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "default": "Frequently Asked Questions",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "items": {
+            "minItems": 1,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "answer": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1500
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "headline",
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "How much does it cost to attend?",
+            "answer": "Attendance is completely free. We cover all speakers and platform costs; you can optionally purchase lifetime access to the recordings."
+          },
+          {
+            "question": "What if I can’t watch live?",
+            "answer": "Every session has a 24-hour replay window. If you miss it entirely, lifetime access (a paid upgrade) lets you watch on your schedule."
+          },
+          {
+            "question": "Do I need special equipment?",
+            "answer": "Just a phone, tablet, or laptop with a browser. All sessions stream directly — no apps to install."
+          },
+          {
+            "question": "Will the speakers answer my questions?",
+            "answer": "Yes. Every session ends with a live Q&A window, and we curate questions from attendees in real time."
+          },
+          {
+            "question": "Is this appropriate for parents of neurotypical kids?",
+            "answer": "Most tools apply to any kid — ADHD is the lens, but the strategies around focus, regulation, and communication translate broadly."
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/FAQAccordion.png"
+    },
+    {
       "type": "FeatureWithImage",
       "category": "content",
       "version": 1,
@@ -449,6 +534,97 @@
         "ctaUrl": "#register"
       },
       "previewUrl": "/block-previews/FeatureWithImage.png"
+    },
+    {
+      "type": "Footer",
+      "category": "utility",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell",
+        "downsell",
+        "thank_you"
+      ],
+      "purpose": "Page footer with logo, tagline, up to 10 legal/policy links, copyright, and an optional summit-dates reminder line. Goes on every funnel page. Links accept full URLs or anchors/paths — no schema enforcement so the footer can link to in-page sections as well as privacy/terms pages.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "logoUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "tagline": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "links": {
+            "default": [],
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "required": [
+                "label",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "copyrightText": {
+            "default": "© 2026 All rights reserved.",
+            "type": "string",
+            "maxLength": 200
+          },
+          "summitDatesText": {
+            "type": "string",
+            "maxLength": 140
+          }
+        },
+        "required": [
+          "links",
+          "copyrightText"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "tagline": "Parent-built tools for raising kids with ADHD, ages 4-16.",
+        "links": [
+          {
+            "label": "Privacy Policy",
+            "url": "/privacy"
+          },
+          {
+            "label": "Terms of Use",
+            "url": "/terms"
+          },
+          {
+            "label": "Contact",
+            "url": "mailto:hello@example.com"
+          },
+          {
+            "label": "Speakers",
+            "url": "#speakers"
+          }
+        ],
+        "copyrightText": "© 2026 Althea Academy. All rights reserved.",
+        "summitDatesText": "Free Virtual Event, MARCH 9-13, 2026"
+      },
+      "previewUrl": "/block-previews/Footer.png"
     },
     {
       "type": "FoundersSection",
@@ -927,6 +1103,93 @@
       "previewUrl": "/block-previews/NumberedReasons.png"
     },
     {
+      "type": "OptinFormBlock",
+      "category": "form-cta",
+      "version": 1,
+      "validOn": [
+        "optin"
+      ],
+      "purpose": "Email + optional name optin form. Submits to Laravel POST /api/optin with the current funnel/step context. Required on any optin step — without this block, the page has no conversion mechanism. Three background styles for different page placements (hero-adjacent \"primary\", mid-page \"light\", bottom-of-page \"dark\").",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "subheadline": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "fields": {
+            "default": {
+              "name": true,
+              "email": true
+            },
+            "type": "object",
+            "properties": {
+              "name": {
+                "default": true,
+                "type": "boolean"
+              },
+              "email": {
+                "default": true,
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "email"
+            ],
+            "additionalProperties": false
+          },
+          "submitLabel": {
+            "default": "Secure My Free Ticket",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "secondaryText": {
+            "type": "string",
+            "maxLength": 140
+          },
+          "privacyText": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "backgroundStyle": {
+            "default": "primary",
+            "type": "string",
+            "enum": [
+              "light",
+              "dark",
+              "primary"
+            ]
+          }
+        },
+        "required": [
+          "fields",
+          "submitLabel",
+          "backgroundStyle"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "Reserve your free seat",
+        "subheadline": "We’ll email you the schedule and day 1 session link.",
+        "fields": {
+          "name": true,
+          "email": true
+        },
+        "submitLabel": "Secure My Free Ticket",
+        "secondaryText": "Grab your seat before the summit starts",
+        "privacyText": "We’ll send summit updates and occasional parenting resources. Unsubscribe anytime with one click.",
+        "backgroundStyle": "primary"
+      },
+      "previewUrl": "/block-previews/OptinFormBlock.png"
+    },
+    {
       "type": "SocialProofBadge",
       "category": "social-proof",
       "version": 1,
@@ -1194,6 +1457,113 @@
         "variant": "gradient"
       },
       "previewUrl": "/block-previews/StickyCountdownBar.png"
+    },
+    {
+      "type": "TestimonialCarousel",
+      "category": "social-proof",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell"
+      ],
+      "purpose": "Rotating testimonial carousel with 3-30 customer/parent testimonials. Each slide: long-form quote, author name, optional role, optional photo, optional 1-5 star rating. Auto-advances by default (pause on hover). Use instead of TestimonialGrid when quotes are long and you want one to breathe at a time.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string",
+            "maxLength": 140
+          },
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "testimonials": {
+            "minItems": 3,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "authorName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "authorRole": {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                "authorPhotoUrl": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "rating": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              },
+              "required": [
+                "quote",
+                "authorName"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "autoplay": {
+            "default": true,
+            "type": "boolean"
+          },
+          "intervalMs": {
+            "default": 6000,
+            "type": "integer",
+            "minimum": 2000,
+            "maximum": 20000
+          }
+        },
+        "required": [
+          "testimonials",
+          "autoplay",
+          "intervalMs"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "From past attendees",
+        "headline": "Parents who’ve walked the path you’re on",
+        "testimonials": [
+          {
+            "quote": "I stopped yelling at homework time within the first week. The morning-routine session alone was worth the entire summit — my 9-year-old now actually gets herself out the door.",
+            "authorName": "Sarah M.",
+            "authorRole": "Parent, two ADHD kids",
+            "rating": 5
+          },
+          {
+            "quote": "The emotional regulation day rewired how I respond to meltdowns. I was the parent adding fuel to the fire. I’m not anymore.",
+            "authorName": "David R.",
+            "authorRole": "Dad of 8-year-old",
+            "rating": 5
+          },
+          {
+            "quote": "We’d been to three “parenting ADHD” trainings before this one. This is the first one where every session was actually actionable that night.",
+            "authorName": "Maya K.",
+            "authorRole": "Mom + pediatric nurse",
+            "rating": 5
+          }
+        ],
+        "autoplay": true,
+        "intervalMs": 6000
+      },
+      "previewUrl": "/block-previews/TestimonialCarousel.png"
     },
     {
       "type": "VideoTestimonialSection",
