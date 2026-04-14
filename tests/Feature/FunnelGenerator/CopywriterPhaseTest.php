@@ -45,3 +45,16 @@ it('returns validated block array in emission order', function () {
         ['type' => 'OptinForm', 'version' => 1, 'props' => ['buttonText' => 'Register']],
     ]);
 });
+
+it('returns [] without calling Anthropic when sequence is empty', function () {
+    config()->set('anthropic.api_key', 'test-key');
+
+    Http::fake(); // no expectations — any HTTP call would fail
+
+    $blocks = app(\App\Services\FunnelGenerator\Phases\CopywriterPhase::class)->run(
+        brief: [], catalog: ['blocks' => []], stepType: 'upsell', sequence: [],
+    );
+
+    expect($blocks)->toBe([]);
+    Http::assertNothingSent();
+});
