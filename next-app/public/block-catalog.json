@@ -1,7 +1,194 @@
 {
-  "version": "2026-04-14T05-39-40-622Z",
-  "generatedAt": "2026-04-14T05:39:40.623Z",
+  "version": "2026-04-14T05-43-57-601Z",
+  "generatedAt": "2026-04-14T05:43:57.602Z",
   "blocks": [
+    {
+      "type": "BenefitsGrid",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "upsell"
+      ],
+      "purpose": "Lighter-weight benefits grid — 3-8 icon+title+description items with no card chrome. Similar to LearningOutcomes but uses accent-colored inline icons and flows into the page background instead of boxed cards. Prefer for \"Why attend\" or \"What makes this different\" sections on sales/upsell pages.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "benefits": {
+            "minItems": 3,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "iconName": {
+                  "type": "string",
+                  "enum": [
+                    "star",
+                    "globe",
+                    "clock",
+                    "trending-up",
+                    "check-circle",
+                    "sparkles",
+                    "award"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                }
+              },
+              "required": [
+                "iconName",
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ctaLabel": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "headline",
+          "benefits"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "Why attend",
+        "headline": "Four reasons this summit is unlike any you’ve joined before",
+        "benefits": [
+          {
+            "iconName": "award",
+            "title": "Practitioners, not performers",
+            "description": "Every speaker works with families every week. No career keynote-circuit people."
+          },
+          {
+            "iconName": "clock",
+            "title": "Watch on your schedule",
+            "description": "24-hour replay windows per day so bedtime doesn’t beat you."
+          },
+          {
+            "iconName": "globe",
+            "title": "Fully virtual, globally free",
+            "description": "Join from wherever, on whatever. No travel, no hotels, no registration fee."
+          },
+          {
+            "iconName": "sparkles",
+            "title": "Curated, not kitchen-sink",
+            "description": "No filler panels. Every session earned its place."
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/BenefitsGrid.png"
+    },
+    {
+      "type": "BenefitsWithImages",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page"
+      ],
+      "purpose": "Longer-form benefits section — 2-4 benefits alternating left/right, each with a supporting lifestyle/scenario image. Use when individual benefits deserve more breathing room than a tight grid (50-100 words of copy per benefit).",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "benefits": {
+            "minItems": 2,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 140
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "imageUrl"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "headline",
+          "benefits"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "What you’ll walk away with",
+        "headline": "Real tools, not theory",
+        "benefits": [
+          {
+            "title": "A morning routine that survives the school run",
+            "description": "Step-by-step morning templates built around what actually works with ADHD kids — visual timers, choice-based transitions, and zero nagging. Printable and kid-tested.",
+            "imageUrl": "https://placehold.co/800x600/5e4d9b/ffffff.png?text=Morning+Routine"
+          },
+          {
+            "title": "Conversations that land instead of lectures that don’t",
+            "description": "Specific language patterns for the top 10 flashpoints (homework, screens, bedtime, sibling conflicts) so you stop repeating yourself and they start hearing you.",
+            "imageUrl": "https://placehold.co/800x600/00b553/ffffff.png?text=Conversations"
+          },
+          {
+            "title": "A calm-down toolkit you can actually pull out mid-meltdown",
+            "description": "Three concrete techniques (co-regulation, sensory breaks, name-it-to-tame-it) that work in the heat of the moment. Not just theory — scripts included.",
+            "imageUrl": "https://placehold.co/800x600/302070/ffffff.png?text=Calm+Down"
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/BenefitsWithImages.png"
+    },
     {
       "type": "BonusStack",
       "category": "content",
@@ -110,6 +297,89 @@
         "ctaUrl": "#register"
       },
       "previewUrl": "/block-previews/BonusStack.png"
+    },
+    {
+      "type": "ClosingCTAWithList",
+      "category": "form-cta",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell"
+      ],
+      "purpose": "Final call-to-action block — headline + optional body + 2-10 checkmark bullets + prominent CTA. Use at the end of long landing pages or right before the fold of a sales page to summarize what the visitor is about to get.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "bodyText": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "bullets": {
+            "minItems": 2,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 140
+            }
+          },
+          "ctaLabel": {
+            "default": "GET INSTANT ACCESS",
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "background": {
+            "default": "gradient",
+            "type": "string",
+            "enum": [
+              "light",
+              "primary",
+              "gradient"
+            ]
+          }
+        },
+        "required": [
+          "headline",
+          "bullets",
+          "ctaLabel",
+          "background"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "Last call",
+        "headline": "Here’s everything you get when you register",
+        "bodyText": "One click, 30 seconds. We’ll email you the schedule and the first-day session link.",
+        "bullets": [
+          "5 days of live summit sessions with 40+ experts",
+          "24-hour replay on every session — watch when your kid is asleep",
+          "Live Q&A windows with the day’s speakers",
+          "Day 1 welcome guide + printable session planner",
+          "Private community for 90 days after the summit"
+        ],
+        "ctaLabel": "GET INSTANT ACCESS",
+        "ctaUrl": "#register",
+        "background": "gradient"
+      },
+      "previewUrl": "/block-previews/ClosingCTAWithList.png"
     },
     {
       "type": "FeatureWithImage",
@@ -568,6 +838,95 @@
       "previewUrl": "/block-previews/LogoStripCarousel.png"
     },
     {
+      "type": "NumberedReasons",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "upsell"
+      ],
+      "purpose": "3-7 reasons in a numbered list with large display numerals beside each title + optional description. Classic \"5 Reasons Why\" format. Use when the reasons are worth reading in order rather than scanning as a grid.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "reasons": {
+            "minItems": 3,
+            "maxItems": 7,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 400
+                }
+              },
+              "required": [
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ctaLabel": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "headline",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "5 reasons parents return year after year",
+        "headline": "Why this summit keeps landing",
+        "reasons": [
+          {
+            "title": "Every session is practical, not theoretical",
+            "description": "You leave each day with something you can try at dinner tonight."
+          },
+          {
+            "title": "Speakers answer live questions",
+            "description": "Every expert does a live Q&A window so you can ask about your specific kid."
+          },
+          {
+            "title": "Built around real parent schedules",
+            "description": "24-hour replay on every session so bedtime doesn’t beat you."
+          },
+          {
+            "title": "Speakers who see kids, not just citations",
+            "description": "Every presenter runs an active practice. Research + real families."
+          },
+          {
+            "title": "Free to attend, free to keep the core sessions"
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/NumberedReasons.png"
+    },
+    {
       "type": "SocialProofBadge",
       "category": "social-proof",
       "version": 1,
@@ -835,6 +1194,191 @@
         "variant": "gradient"
       },
       "previewUrl": "/block-previews/StickyCountdownBar.png"
+    },
+    {
+      "type": "VideoTestimonialSection",
+      "category": "social-proof",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "upsell"
+      ],
+      "purpose": "Embedded video testimonials — 1-6 YouTube/Vimeo embeds with title + optional speaker name. Use \"single\" for one prominent video; \"grid\" for a 2-column gallery of shorter clips. embedUrl must be the iframe embed URL (https://www.youtube.com/embed/ID or https://player.vimeo.com/video/ID), not the share URL.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "subheadline": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "videos": {
+            "minItems": 1,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "embedUrl": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "speakerName": {
+                  "type": "string",
+                  "maxLength": 80
+                }
+              },
+              "required": [
+                "embedUrl",
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "layout": {
+            "default": "grid",
+            "type": "string",
+            "enum": [
+              "single",
+              "grid"
+            ]
+          }
+        },
+        "required": [
+          "headline",
+          "videos",
+          "layout"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "What past attendees are saying",
+        "subheadline": "Real parents, real results after applying what they learned.",
+        "videos": [
+          {
+            "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            "title": "I finally stopped yelling at homework time",
+            "speakerName": "Sarah, mom of 2"
+          },
+          {
+            "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            "title": "The morning routine that saved us",
+            "speakerName": "David, dad of 1"
+          }
+        ],
+        "layout": "grid"
+      },
+      "previewUrl": "/block-previews/VideoTestimonialSection.png"
+    },
+    {
+      "type": "WhyThisMattersStats",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page"
+      ],
+      "purpose": "Problem-framing statistics grid for \"why this matters\" sections — 3-8 scary/motivating stats with icon, big number/phrase, and a short explanatory label. Use before a solution pitch; pairs well after the hero.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "introText": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "stats": {
+            "minItems": 3,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "iconName": {
+                  "type": "string",
+                  "enum": [
+                    "alert",
+                    "trending-down",
+                    "users",
+                    "heart-pulse",
+                    "book-x",
+                    "pill"
+                  ]
+                },
+                "bigText": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "iconName",
+                "bigText",
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "headline",
+          "stats"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "Why this matters now",
+        "headline": "ADHD in kids is not a phase — it’s a quiet epidemic",
+        "introText": "The numbers most parents don’t see until they’re already in the middle of it.",
+        "stats": [
+          {
+            "iconName": "users",
+            "bigText": "1 in 7",
+            "label": "U.S. children have been diagnosed with ADHD by age 17."
+          },
+          {
+            "iconName": "trending-down",
+            "bigText": "3x",
+            "label": "Higher risk of anxiety and depression in untreated kids with ADHD."
+          },
+          {
+            "iconName": "book-x",
+            "bigText": "40%",
+            "label": "Of kids with ADHD will be held back at least one grade."
+          },
+          {
+            "iconName": "heart-pulse",
+            "bigText": "80%",
+            "label": "Of parents report significant marital stress over ADHD parenting."
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/WhyThisMattersStats.png"
     }
   ]
 }
