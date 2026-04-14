@@ -64,7 +64,13 @@ class ManageLandingPageBatches extends Page
 
     public function rejectDraft(string $draftId): void
     {
-        $draft = LandingPageDraft::findOrFail($draftId);
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+
+        if ($draft->status !== 'ready' || $draft->batch->status !== 'running') {
+            Notification::make()->title('Draft cannot be rejected.')->warning()->send();
+            return;
+        }
+
         $draft->update(['status' => 'rejected']);
 
         Notification::make()

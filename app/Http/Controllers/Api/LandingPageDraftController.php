@@ -27,11 +27,11 @@ class LandingPageDraftController extends Controller
         $summit = $batch->summit;
         $funnel = $batch->funnel;
 
-        $starts = Carbon::parse($summit->starts_at)->startOfDay();
+        $starts = $summit->starts_at ? Carbon::parse($summit->starts_at)->startOfDay() : null;
 
         $speakers = $summit->summitSpeakers->map(function ($ss) use ($starts) {
-            $dayNumber = $ss->presentation_day
-                ? $starts->diffInDays(Carbon::parse($ss->presentation_day)->startOfDay()) + 1
+            $dayNumber = ($starts && $ss->presentation_day)
+                ? (int) ($starts->diffInDays(Carbon::parse($ss->presentation_day)->startOfDay()) + 1)
                 : 0;
             $s = $ss->speaker;
 

@@ -110,3 +110,31 @@ it('approveDraft does not re-approve an already-approved draft', function () {
     // Status should remain approved (not changed)
     expect($draft->fresh()->status)->toBe('approved');
 });
+
+it('rejectDraft does not reject an already-approved draft', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
+
+    $batch = LandingPageBatch::create([
+        'summit_id'     => $summit->id,
+        'funnel_id'     => $funnel->id,
+        'version_count' => 1,
+        'status'        => 'completed',
+    ]);
+
+    $draft = LandingPageDraft::create([
+        'batch_id'       => $batch->id,
+        'version_number' => 1,
+        'status'         => 'approved',
+        'preview_token'  => 'tok-approved',
+        'blocks'         => [],
+    ]);
+
+    $page = new ManageLandingPageBatches();
+    $page->record = $summit;
+
+    $page->rejectDraft($draft->id);
+
+    // Status must remain approved — guard fired
+    expect($draft->fresh()->status)->toBe('approved');
+});

@@ -6,12 +6,12 @@ export interface Speaker {
   firstName: string
   lastName: string
   fullName: string
-  title: string
-  photoUrl: string
-  shortDescription: string
-  longDescription: string
+  title: string | null
+  photoUrl: string | null
+  shortDescription: string | null
+  longDescription: string | null
   dayNumber: number
-  masterclassTitle: string
+  masterclassTitle: string | null
   sortOrder: number
 }
 
