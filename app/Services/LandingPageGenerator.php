@@ -49,8 +49,8 @@ class LandingPageGenerator
         return [
             'summit_name'        => $summit->title,
             'summit_description' => $summit->description ?? '',
-            'starts_at'          => $summit->starts_at,
-            'ends_at'            => $summit->ends_at,
+            'starts_at'          => $summit->starts_at?->toDateString(),
+            'ends_at'            => $summit->ends_at?->toDateString(),
             'notes'              => $notes,
         ];
     }
