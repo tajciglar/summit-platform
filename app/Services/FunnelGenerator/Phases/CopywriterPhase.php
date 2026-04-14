@@ -87,7 +87,14 @@ class CopywriterPhase
                 $this->validator->validate($schema, $props);
             } catch (InvalidPropsException $e) {
                 $props = $this->retryBlock($brief, $stepType, $type, $schema, $toolByName['emit_'.$type], $e->errors());
-                $this->validator->validate($schema, $props);
+                try {
+                    $this->validator->validate($schema, $props);
+                } catch (InvalidPropsException $retryError) {
+                    throw new CopywriterException(
+                        "Block {$type} failed validation even after retry: "
+                            .implode('; ', array_column($retryError->errors(), 'message')),
+                    );
+                }
             }
 
             $blocks[] = [

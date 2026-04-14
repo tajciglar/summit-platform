@@ -92,3 +92,31 @@ it('retries a single block with error feedback when validation fails', function 
     expect($blocks[0]['props']['headline'])->toBe('Fixed Headline');
     Http::assertSentCount(2);
 });
+
+it('throws CopywriterException (not InvalidPropsException) when retry also returns invalid props', function () {
+    config()->set('anthropic.api_key', 'test-key');
+    config()->set('anthropic.copywriter_model', 'claude-opus-4-6');
+
+    // Both calls return invalid headline = ''
+    Http::fakeSequence('https://api.anthropic.com/v1/messages')
+        ->push([
+            'stop_reason' => 'tool_use',
+            'content' => [['type' => 'tool_use', 'id' => 'tu_1', 'name' => 'emit_HeroWithCountdown', 'input' => ['headline' => '']]],
+        ], 200)
+        ->push([
+            'stop_reason' => 'tool_use',
+            'content' => [['type' => 'tool_use', 'id' => 'tu_2', 'name' => 'emit_HeroWithCountdown', 'input' => ['headline' => '']]],
+        ], 200);
+
+    $catalog = [
+        'blocks' => [[
+            'type' => 'HeroWithCountdown', 'version' => 1, 'validOn' => ['optin'], 'purpose' => '',
+            'schema' => ['type' => 'object', 'properties' => ['headline' => ['type' => 'string', 'minLength' => 1]], 'required' => ['headline']],
+            'exampleProps' => [],
+        ]],
+    ];
+
+    expect(fn () => app(\App\Services\FunnelGenerator\Phases\CopywriterPhase::class)->run(
+        brief: [], catalog: $catalog, stepType: 'optin', sequence: ['HeroWithCountdown'],
+    ))->toThrow(\App\Services\FunnelGenerator\Exceptions\CopywriterException::class);
+});
