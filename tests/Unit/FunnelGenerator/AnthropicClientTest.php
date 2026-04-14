@@ -30,3 +30,23 @@ it('posts to /messages with API key and returns decoded body', function () {
             && $req['model'] === 'claude-opus-4-6';
     });
 });
+
+it('forwards tools and tool_choice to the API body verbatim', function () {
+    config()->set('anthropic.api_key', 'test-key');
+
+    Http::fake([
+        'https://api.anthropic.com/v1/messages' => Http::response(['content' => []], 200),
+    ]);
+
+    (new AnthropicClient())->messages([
+        'model' => 'claude-opus-4-6',
+        'max_tokens' => 100,
+        'messages' => [['role' => 'user', 'content' => 'x']],
+        'tools' => [['name' => 't', 'description' => 'd', 'input_schema' => ['type' => 'object']]],
+        'tool_choice' => ['type' => 'tool', 'name' => 't'],
+    ]);
+
+    Http::assertSent(fn ($req) =>
+        is_array($req['tools']) && $req['tools'][0]['name'] === 't'
+        && $req['tool_choice']['name'] === 't');
+});
