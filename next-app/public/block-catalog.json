@@ -1,7 +1,76 @@
 {
-  "version": "2026-04-14T05-22-37-907Z",
-  "generatedAt": "2026-04-14T05:22:37.908Z",
+  "version": "2026-04-14T05-24-09-954Z",
+  "generatedAt": "2026-04-14T05:24:09.955Z",
   "blocks": [
+    {
+      "type": "FeatureWithImage",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell"
+      ],
+      "purpose": "Two-column feature section — headline + body + supporting image. Image flips to left or right per imagePosition. Use for \"What is this summit?\" or \"About the offer\" explanations. Body supports line breaks via blank lines; plain text only (no markdown rendering yet).",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "bodyRich": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "imageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "imagePosition": {
+            "default": "right",
+            "type": "string",
+            "enum": [
+              "left",
+              "right"
+            ]
+          },
+          "ctaLabel": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "headline",
+          "bodyRich",
+          "imageUrl",
+          "imagePosition"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "What is ADHD Parenting Summit 2026?",
+        "bodyRich": "A reframed approach — 5 days instead of 3, 40+ experts, deeper understanding of your ADHD child.\n\nFrom diagnosis to daily routines, you’ll leave with tools that actually work at home.",
+        "imageUrl": "https://placehold.co/800x600/5e4d9b/ffffff.png",
+        "imagePosition": "right",
+        "ctaLabel": "GET INSTANT ACCESS",
+        "ctaUrl": "#register"
+      },
+      "previewUrl": "/block-previews/FeatureWithImage.png"
+    },
     {
       "type": "HeroWithCountdown",
       "category": "hero",
@@ -242,6 +311,85 @@
         "backgroundColor": "light"
       },
       "previewUrl": "/block-previews/SocialProofBadge.png"
+    },
+    {
+      "type": "StatsBar3Item",
+      "category": "social-proof",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell"
+      ],
+      "purpose": "Three-column stats bar for summit highlights — \"X days / Y speakers / Z attendees\". Large value on top, short descriptor underneath, optional icon above each. Exactly 3 stats; use other blocks for longer numeric lists.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "stats": {
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "iconUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "backgroundColor": {
+            "default": "light",
+            "type": "string",
+            "enum": [
+              "white",
+              "light",
+              "primary"
+            ]
+          }
+        },
+        "required": [
+          "stats",
+          "backgroundColor"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "stats": [
+          {
+            "value": "5 DAYS",
+            "label": "of transformative learning"
+          },
+          {
+            "value": "40+",
+            "label": "World-class speakers"
+          },
+          {
+            "value": "50,000+",
+            "label": "attendees expected"
+          }
+        ],
+        "backgroundColor": "light"
+      },
+      "previewUrl": "/block-previews/StatsBar3Item.png"
     },
     {
       "type": "StickyCountdownBar",

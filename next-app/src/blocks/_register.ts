@@ -4,4 +4,6 @@
 import './hero/HeroWithCountdown'
 import './social-proof/SocialProofBadge'
 import './social-proof/LogoStripCarousel'
+import './social-proof/StatsBar3Item'
+import './content/FeatureWithImage'
 import './utility/StickyCountdownBar'
