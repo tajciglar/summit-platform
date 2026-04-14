@@ -3,4 +3,5 @@
 // is populated at module-load time.
 import './hero/HeroWithCountdown'
 import './social-proof/SocialProofBadge'
+import './social-proof/LogoStripCarousel'
 import './utility/StickyCountdownBar'

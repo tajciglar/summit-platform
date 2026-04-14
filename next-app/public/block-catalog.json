@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-14T05-21-30-225Z",
-  "generatedAt": "2026-04-14T05:21:30.225Z",
+  "version": "2026-04-14T05-22-37-907Z",
+  "generatedAt": "2026-04-14T05:22:37.908Z",
   "blocks": [
     {
       "type": "HeroWithCountdown",
@@ -94,6 +94,103 @@
         "backgroundStyle": "gradient"
       },
       "previewUrl": "/block-previews/HeroWithCountdown.png"
+    },
+    {
+      "type": "LogoStripCarousel",
+      "category": "social-proof",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "upsell",
+        "thank_you"
+      ],
+      "purpose": "Horizontal logo strip for press/publication or partner mentions. Choose \"scroll\" for a continuous marquee when you have many logos (6+); choose \"static\" for a tight centered row with 3–6 logos. Logos render desaturated and lift to full color on hover.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "default": "As featured in",
+            "type": "string",
+            "maxLength": 120
+          },
+          "logos": {
+            "minItems": 3,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "websiteUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "name",
+                "imageUrl"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "animation": {
+            "default": "scroll",
+            "type": "string",
+            "enum": [
+              "scroll",
+              "static"
+            ]
+          }
+        },
+        "required": [
+          "headline",
+          "logos",
+          "animation"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "As featured in",
+        "logos": [
+          {
+            "name": "The Atlantic",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=Atlantic"
+          },
+          {
+            "name": "BBC",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=BBC"
+          },
+          {
+            "name": "Forbes",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=Forbes"
+          },
+          {
+            "name": "NYT",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=NYT"
+          },
+          {
+            "name": "Time",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=Time"
+          },
+          {
+            "name": "Guardian",
+            "imageUrl": "https://placehold.co/160x60/cccccc/333333.png?text=Guardian"
+          }
+        ],
+        "animation": "scroll"
+      },
+      "previewUrl": "/block-previews/LogoStripCarousel.png"
     },
     {
       "type": "SocialProofBadge",
