@@ -74,7 +74,9 @@
                                         <button
                                             wire:click="approveDraft('{{ $draft->id }}')"
                                             wire:confirm="Approve version {{ $draft->version_number }}? This will overwrite the current optin step blocks."
-                                            class="inline-flex items-center gap-1 rounded-md bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700"
+                                            wire:loading.attr="disabled"
+                                            wire:target="approveDraft('{{ $draft->id }}')"
+                                            class="inline-flex items-center gap-1 rounded-md bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <x-heroicon-o-check class="h-3 w-3" />
                                             Approve

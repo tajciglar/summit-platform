@@ -29,9 +29,23 @@ class ManageLandingPageBatches extends Page
         $draft = LandingPageDraft::with('batch.funnel.steps')->findOrFail($draftId);
         $batch = $draft->batch;
 
+        if ($draft->status !== 'ready' || $batch->status !== 'running') {
+            Notification::make()
+                ->title('This draft can no longer be approved.')
+                ->warning()
+                ->send();
+            return;
+        }
+
         $optinStep = $batch->funnel?->steps()->where('slug', 'optin')->first();
 
-        abort_if(! $optinStep, 422, 'No optin step found in the target funnel');
+        if (! $optinStep) {
+            Notification::make()
+                ->title('No optin step found in the target funnel.')
+                ->danger()
+                ->send();
+            return;
+        }
 
         DB::transaction(function () use ($draft, $batch, $optinStep) {
             $optinStep->update(['content' => $draft->blocks]);
