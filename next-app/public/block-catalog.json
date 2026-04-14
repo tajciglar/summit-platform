@@ -1,7 +1,116 @@
 {
-  "version": "2026-04-14T05-26-07-124Z",
-  "generatedAt": "2026-04-14T05:26:07.125Z",
+  "version": "2026-04-14T05-39-40-622Z",
+  "generatedAt": "2026-04-14T05:39:40.623Z",
   "blocks": [
+    {
+      "type": "BonusStack",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout"
+      ],
+      "purpose": "Bonus offer stack — 1-8 exclusive bonuses with title, description, optional value chip (\"($19 value)\"), and optional image. Classic \"Register today and also receive...\" section. Ends with a single CTA. Use before checkout to stack perceived value.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "introText": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "bonuses": {
+            "minItems": 1,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 140
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400
+                },
+                "valueLabel": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ctaLabel": {
+            "default": "GET INSTANT ACCESS",
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "headline",
+          "bonuses",
+          "ctaLabel"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "Register today and also get",
+        "headline": "Four exclusive bonuses — only when you register by the start of the summit",
+        "introText": "These are included with every ticket and disappear when the summit goes live.",
+        "bonuses": [
+          {
+            "title": "Parenting Playbook PDF",
+            "description": "120-page actionable guide distilling the summit’s key strategies by age group.",
+            "valueLabel": "($29 value)"
+          },
+          {
+            "title": "Live Q&A with Day 1 Speakers",
+            "description": "Join speakers live for an open Q&A on focus and attention strategies.",
+            "valueLabel": "($49 value)"
+          },
+          {
+            "title": "Private Community Access",
+            "description": "90 days in a moderated community of 1,000+ parents working through the same tools.",
+            "valueLabel": "($99 value)"
+          },
+          {
+            "title": "Morning Routine Templates",
+            "description": "Printable morning routine boards designed specifically for ADHD kids.",
+            "valueLabel": "($19 value)"
+          }
+        ],
+        "ctaLabel": "GET INSTANT ACCESS",
+        "ctaUrl": "#register"
+      },
+      "previewUrl": "/block-previews/BonusStack.png"
+    },
     {
       "type": "FeatureWithImage",
       "category": "content",
@@ -70,6 +179,99 @@
         "ctaUrl": "#register"
       },
       "previewUrl": "/block-previews/FeatureWithImage.png"
+    },
+    {
+      "type": "FoundersSection",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page"
+      ],
+      "purpose": "About-the-organizers section — 1-4 founder headshots on one side, mission-statement body copy + optional CTA on the other. Use to put a human face on the event before asking for registration. Keep body under ~120 words; readers skim this.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "bodyRich": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "founders": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                "photoUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "name",
+                "photoUrl"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ctaLabel": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "headline",
+          "bodyRich",
+          "founders"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "About the hosts",
+        "headline": "Built by parents, for parents",
+        "bodyRich": "We ran our first summit in 2022 because we were drowning — two kids with ADHD, zero sleep, and no clear playbook. What we found was that the right experts, in the right order, could change everything.\n\nThis year’s summit is the fifth iteration. Every session earned its spot.",
+        "founders": [
+          {
+            "name": "Jane Organizer",
+            "title": "Co-founder, former teacher",
+            "photoUrl": "https://placehold.co/400x400/5e4d9b/ffffff.png?text=JO"
+          },
+          {
+            "name": "Alex Organizer",
+            "title": "Co-founder, parent coach",
+            "photoUrl": "https://placehold.co/400x400/00b553/ffffff.png?text=AO"
+          }
+        ],
+        "ctaLabel": "Join us for Summit 2026",
+        "ctaUrl": "#register"
+      },
+      "previewUrl": "/block-previews/FoundersSection.png"
     },
     {
       "type": "HeroWithCountdown",
@@ -163,6 +365,110 @@
         "backgroundStyle": "gradient"
       },
       "previewUrl": "/block-previews/HeroWithCountdown.png"
+    },
+    {
+      "type": "LearningOutcomes",
+      "category": "content",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page"
+      ],
+      "purpose": "Icon grid of 3-9 learning outcomes or key benefits. Each item: icon (from a fixed lucide set — heart/target/book/bolt/message/users), short title, 1-2 sentence description. Use after the hero to answer \"what will I get out of this?\" in scannable form.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "eyebrow": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "items": {
+            "minItems": 3,
+            "maxItems": 9,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "iconName": {
+                  "type": "string",
+                  "enum": [
+                    "heart",
+                    "target",
+                    "book",
+                    "bolt",
+                    "message",
+                    "users"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "iconName",
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "headline",
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "eyebrow": "What you’ll learn",
+        "headline": "Five days of practical, science-backed parenting tools",
+        "items": [
+          {
+            "iconName": "target",
+            "title": "Focus & Attention",
+            "description": "Strategies that actually work for the butterfly mind."
+          },
+          {
+            "iconName": "heart",
+            "title": "Emotional Regulation",
+            "description": "How to handle meltdowns, shutdowns, and big feelings."
+          },
+          {
+            "iconName": "book",
+            "title": "Executive Function",
+            "description": "Planning, prioritizing, and getting started — without the fight."
+          },
+          {
+            "iconName": "bolt",
+            "title": "Impulsivity",
+            "description": "Tools for the 10-seconds-before-a-bad-decision window."
+          },
+          {
+            "iconName": "message",
+            "title": "Communication",
+            "description": "Language that lands instead of lectures that don’t."
+          },
+          {
+            "iconName": "users",
+            "title": "Screen Management",
+            "description": "Reset the family relationship with devices, without World War III."
+          }
+        ]
+      },
+      "previewUrl": "/block-previews/LearningOutcomes.png"
     },
     {
       "type": "LogoStripCarousel",
