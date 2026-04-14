@@ -58,3 +58,37 @@ it('returns [] without calling Anthropic when sequence is empty', function () {
     expect($blocks)->toBe([]);
     Http::assertNothingSent();
 });
+
+it('retries a single block with error feedback when validation fails', function () {
+    config()->set('anthropic.api_key', 'test-key');
+    config()->set('anthropic.copywriter_model', 'claude-opus-4-6');
+
+    Http::fakeSequence('https://api.anthropic.com/v1/messages')
+        ->push([
+            'stop_reason' => 'tool_use',
+            'content' => [
+                ['type' => 'tool_use', 'id' => 'tu_1', 'name' => 'emit_HeroWithCountdown', 'input' => ['headline' => '']], // invalid — minLength 1
+            ],
+        ], 200)
+        ->push([
+            'stop_reason' => 'tool_use',
+            'content' => [
+                ['type' => 'tool_use', 'id' => 'tu_2', 'name' => 'emit_HeroWithCountdown', 'input' => ['headline' => 'Fixed Headline']],
+            ],
+        ], 200);
+
+    $catalog = [
+        'blocks' => [[
+            'type' => 'HeroWithCountdown', 'version' => 1, 'validOn' => ['optin'], 'purpose' => '',
+            'schema' => ['type' => 'object', 'properties' => ['headline' => ['type' => 'string', 'minLength' => 1]], 'required' => ['headline']],
+            'exampleProps' => ['headline' => 'Ex'],
+        ]],
+    ];
+
+    $blocks = app(\App\Services\FunnelGenerator\Phases\CopywriterPhase::class)->run(
+        brief: ['summit_name' => 'x'], catalog: $catalog, stepType: 'optin', sequence: ['HeroWithCountdown'],
+    );
+
+    expect($blocks[0]['props']['headline'])->toBe('Fixed Headline');
+    Http::assertSentCount(2);
+});
