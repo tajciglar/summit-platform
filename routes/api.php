@@ -10,4 +10,5 @@ Route::get('/funnels/resolve', FunnelResolveController::class)
 Route::post('/admin/catalog/refresh', CatalogRefreshController::class)
     ->middleware('throttle:10,1');
 
-Route::get('/landing-page-drafts/{token}', \App\Http\Controllers\Api\LandingPageDraftController::class);
+Route::get('/landing-page-drafts/{token}', \App\Http\Controllers\Api\LandingPageDraftController::class)
+    ->middleware('throttle:120,1');

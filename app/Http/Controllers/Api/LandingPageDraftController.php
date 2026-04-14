@@ -73,7 +73,7 @@ class LandingPageDraftController extends Controller
                 'ends_at'       => $summit->ends_at,
                 'current_phase' => $summit->current_phase,
             ],
-            'theme'    => ($funnel?->theme ?: null) ?: $this->defaultTheme(),
+            'theme'    => $funnel?->theme ?: $this->defaultTheme(),
             'speakers' => $speakers,
             'products' => $products,
             'draft'    => [
