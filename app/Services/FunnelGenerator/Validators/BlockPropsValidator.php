@@ -11,10 +11,11 @@ class BlockPropsValidator
     public function validate(array $schema, array $props): bool
     {
         $validator = new Validator();
-        $result = $validator->validate(
-            json_decode(json_encode($props)),
-            json_decode(json_encode($schema)),
-        );
+
+        $propsObj = empty($props) ? new \stdClass() : json_decode(json_encode($props));
+        $schemaObj = json_decode(json_encode($schema));
+
+        $result = $validator->validate($propsObj, $schemaObj);
 
         if ($result->isValid()) {
             return true;

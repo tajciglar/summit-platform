@@ -32,3 +32,12 @@ it('throws InvalidPropsException with structured errors for invalid props', func
         expect($e->getMessage())->toContain('headline');
     }
 });
+
+it('accepts empty props when schema has no required fields', function () {
+    $schema = [
+        'type' => 'object',
+        'properties' => ['optionalField' => ['type' => 'string']],
+    ];
+
+    expect((new BlockPropsValidator())->validate($schema, []))->toBeTrue();
+});
