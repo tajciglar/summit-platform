@@ -31,12 +31,12 @@ return new class extends Migration
                 preview_token VARCHAR(64) NOT NULL UNIQUE,
                 error_message VARCHAR(500),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                CONSTRAINT uq_draft_batch_version UNIQUE (batch_id, version_number)
             )
         ');
 
         DB::statement('CREATE INDEX idx_landing_page_drafts_batch ON landing_page_drafts (batch_id)');
-        DB::statement('CREATE INDEX idx_landing_page_drafts_preview_token ON landing_page_drafts (preview_token)');
     }
 
     public function down(): void
