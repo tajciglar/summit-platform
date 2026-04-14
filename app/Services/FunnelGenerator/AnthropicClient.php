@@ -12,16 +12,28 @@ class AnthropicClient
         $response = Http::withHeaders([
             'x-api-key' => config('anthropic.api_key'),
             'anthropic-version' => '2023-06-01',
-            'content-type' => 'application/json',
         ])
             ->timeout(config('anthropic.timeout', 120))
-            ->retry(config('anthropic.retries', 2), 1000, throw: false)
+            ->retry(
+                config('anthropic.retries', 2) + 1,
+                1000,
+                when: fn (\Throwable $e) => $this->shouldRetry($e),
+            )
+            ->throw()
             ->post(rtrim(config('anthropic.base_url'), '/').'/messages', $payload);
 
-        if ($response->failed()) {
-            throw new RequestException($response);
+        return $response->json();
+    }
+
+    private function shouldRetry(\Throwable $exception): bool
+    {
+        if ($exception instanceof RequestException) {
+            $status = $exception->response?->status() ?? 0;
+
+            return $status >= 500 || $status === 429;
         }
 
-        return $response->json();
+        // Retry on network/connection errors (ConnectionException etc.)
+        return true;
     }
 }
