@@ -12,8 +12,12 @@ export function createRegistry(): BlockRegistry {
   return {
     register(def) {
       const key = `${def.meta.type}@${def.meta.version}`
-      if (blocks.has(key)) {
-        throw new Error(`Block already registered: ${key}`)
+      const existing = blocks.get(key)
+      if (existing) {
+        // Same module re-imported (HMR, test re-runs, split bundles): no-op.
+        // Different Component with same key: real name collision — fail loud.
+        if (existing.Component === def.Component) return
+        throw new Error(`Block collision: ${key} registered with a different Component`)
       }
       blocks.set(key, def)
     },

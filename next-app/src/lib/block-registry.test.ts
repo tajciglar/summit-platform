@@ -34,4 +34,26 @@ describe('block registry', () => {
     })
     expect(registry.all()).toHaveLength(1)
   })
+
+  it('is a no-op when the same Component is re-registered (HMR, test re-runs)', () => {
+    const registry = createRegistry()
+    const Component = () => null
+    const def = {
+      meta: { type: 'A', category: 'utility' as const, version: 1, validOn: ['optin' as const], purpose: 'a', exampleProps: {} },
+      schema: z.object({}),
+      Component,
+    }
+    registry.register(def)
+    expect(() => registry.register(def)).not.toThrow()
+    expect(registry.all()).toHaveLength(1)
+  })
+
+  it('throws when a different Component claims the same type+version', () => {
+    const registry = createRegistry()
+    const metaBase = { type: 'A', category: 'utility' as const, version: 1, validOn: ['optin' as const], purpose: 'a', exampleProps: {} }
+    registry.register({ meta: metaBase, schema: z.object({}), Component: () => null })
+    expect(() =>
+      registry.register({ meta: metaBase, schema: z.object({}), Component: () => null }),
+    ).toThrow(/collision/)
+  })
 })
