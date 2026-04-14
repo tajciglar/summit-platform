@@ -87,3 +87,18 @@ it('does not retry on 4xx responses', function () {
 
     Http::assertSentCount(1); // no retries on 4xx
 });
+
+it('sends anthropic-beta prompt-caching header', function () {
+    config()->set('anthropic.api_key', 'test-key');
+    config()->set('anthropic.base_url', 'https://api.anthropic.com/v1');
+
+    Http::fake(['https://api.anthropic.com/v1/messages' => Http::response(['content' => []], 200)]);
+
+    (new \App\Services\FunnelGenerator\AnthropicClient())->messages([
+        'model' => 'claude-opus-4-6',
+        'max_tokens' => 100,
+        'messages' => [['role' => 'user', 'content' => 'hi']],
+    ]);
+
+    Http::assertSent(fn ($req) => $req->hasHeader('anthropic-beta', 'prompt-caching-2024-07-31'));
+});

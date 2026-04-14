@@ -23,18 +23,21 @@ class ArchitectPhase
         $tool = $this->toolBuilder->architectTool($catalog, $stepTypes);
 
         $system = $this->systemPrompt();
+        $cacheBlock = [
+            'type' => 'text',
+            'text' => 'BLOCK CATALOG (v'.($catalog['version'] ?? 'dev')."):\n".$this->catalogDigest($catalog),
+        ];
+        if (config('anthropic.prompt_cache')) {
+            $cacheBlock['cache_control'] = ['type' => 'ephemeral'];
+        }
         $systemBlocks = [
             ['type' => 'text', 'text' => $system],
-            array_filter([
-                'type' => 'text',
-                'text' => "BLOCK CATALOG (v".($catalog['version'] ?? 'dev')."):\n".$this->catalogDigest($catalog),
-                'cache_control' => config('anthropic.prompt_cache') ? ['type' => 'ephemeral'] : null,
-            ], fn ($v) => $v !== null),
+            $cacheBlock,
         ];
 
         $response = $this->client->messages([
             'model' => config('anthropic.architect_model'),
-            'max_tokens' => 2048,
+            'max_tokens' => config('anthropic.max_tokens', 2048),
             'system' => $systemBlocks,
             'tools' => [$tool],
             'tool_choice' => ['type' => 'tool', 'name' => 'architect_funnel'],
