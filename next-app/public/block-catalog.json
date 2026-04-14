@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-13T13-42-45-641Z",
-  "generatedAt": "2026-04-13T13:42:45.642Z",
+  "version": "2026-04-14T04-57-34-172Z",
+  "generatedAt": "2026-04-14T04:57:34.173Z",
   "blocks": [
     {
       "type": "HeroWithCountdown",
@@ -94,6 +94,82 @@
         "backgroundStyle": "gradient"
       },
       "previewUrl": "/block-previews/HeroWithCountdown.png"
+    },
+    {
+      "type": "StickyCountdownBar",
+      "category": "utility",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout"
+      ],
+      "purpose": "Fixed, full-width bar pinned to the top or bottom of the viewport with a short urgency message, live countdown, and a single CTA. Use on time-sensitive summit pages to keep the deadline visible while visitors scroll. Auto-hides after the target when hideWhenExpired is true.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "countdownTarget": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "ctaUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "hideWhenExpired": {
+            "default": true,
+            "type": "boolean"
+          },
+          "position": {
+            "default": "top",
+            "type": "string",
+            "enum": [
+              "top",
+              "bottom"
+            ]
+          },
+          "variant": {
+            "default": "gradient",
+            "type": "string",
+            "enum": [
+              "solid",
+              "gradient"
+            ]
+          }
+        },
+        "required": [
+          "message",
+          "countdownTarget",
+          "ctaLabel",
+          "hideWhenExpired",
+          "position",
+          "variant"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "message": "Summit starts in",
+        "countdownTarget": "2026-03-09T00:00:00Z",
+        "ctaLabel": "Claim Free Ticket",
+        "ctaUrl": "#register",
+        "hideWhenExpired": true,
+        "position": "top",
+        "variant": "gradient"
+      },
+      "previewUrl": "/block-previews/StickyCountdownBar.png"
     }
   ]
 }
