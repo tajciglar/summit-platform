@@ -1,6 +1,6 @@
 {
-  "version": "2026-04-14T04-57-34-172Z",
-  "generatedAt": "2026-04-14T04:57:34.173Z",
+  "version": "2026-04-14T05-21-30-225Z",
+  "generatedAt": "2026-04-14T05:21:30.225Z",
   "blocks": [
     {
       "type": "HeroWithCountdown",
@@ -94,6 +94,57 @@
         "backgroundStyle": "gradient"
       },
       "previewUrl": "/block-previews/HeroWithCountdown.png"
+    },
+    {
+      "type": "SocialProofBadge",
+      "category": "social-proof",
+      "version": 1,
+      "validOn": [
+        "optin",
+        "sales_page",
+        "checkout",
+        "thank_you"
+      ],
+      "purpose": "Single-line social proof badge with an optional icon, a large highlight number/word, and a short descriptor. Place directly under the hero to establish trust via volume (e.g. \"73,124 committed parents\"). Keep the descriptor short and specific — generic praise (\"trusted by thousands\") reads as filler.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "badgeText": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "badgeIconUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "backgroundColor": {
+            "default": "light",
+            "type": "string",
+            "enum": [
+              "light",
+              "accent",
+              "transparent"
+            ]
+          }
+        },
+        "required": [
+          "headline",
+          "backgroundColor"
+        ],
+        "additionalProperties": false
+      },
+      "exampleProps": {
+        "headline": "Loved by 73,124 committed parents",
+        "badgeText": "73,124",
+        "backgroundColor": "light"
+      },
+      "previewUrl": "/block-previews/SocialProofBadge.png"
     },
     {
       "type": "StickyCountdownBar",
