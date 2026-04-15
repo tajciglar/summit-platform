@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { designSection } from '@/lib/blocks/design-phase';
 
+export const runtime = 'nodejs';
+
 function authorize(req: Request): boolean {
   const expected = process.env.INTERNAL_API_TOKEN;
   if (!expected) return false;
