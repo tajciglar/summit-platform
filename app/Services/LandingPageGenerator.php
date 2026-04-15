@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Summit;
 use App\Services\Blocks\BlockCatalogService;
 use App\Services\FunnelGenerator\Phases\ArchitectPhase;
+use App\Services\FunnelGenerator\Phases\BlockDesignPhase;
 use App\Services\FunnelGenerator\Phases\CopywriterPhase;
 use Illuminate\Support\Str;
 
@@ -14,6 +15,7 @@ class LandingPageGenerator
         private ArchitectPhase      $architect,
         private CopywriterPhase     $copywriter,
         private BlockCatalogService $catalogService,
+        private BlockDesignPhase    $blockDesignPhase,
     ) {}
 
     /**
@@ -44,7 +46,37 @@ class LandingPageGenerator
         );
     }
 
-    private function buildBrief(Summit $summit, string $notes): array
+    /**
+     * Generate sections via the BlockDesignPhase (Gemini runtime path).
+     *
+     * @return array<int, array{id:string, type:string, jsx:string, fields:array, status:string, ...}>
+     */
+    public function generateSections(Summit $summit, string $notes = ''): array
+    {
+        $brief   = $this->buildBrief($summit, $notes);
+        $catalog = $this->catalogService->current();
+
+        $sequence = $this->architect->run($brief, $catalog, ['optin']);
+        $names    = $sequence['optin'] ?? [];
+        $total    = count($names);
+
+        $sectionBriefs = [];
+        foreach ($names as $i => $name) {
+            $sectionBriefs[] = [
+                'type'     => $name,
+                'purpose'  => '',
+                'position' => $i + 1,
+                'total'    => $total,
+            ];
+        }
+
+        return $this->blockDesignPhase->run(
+            sectionBriefs: $sectionBriefs,
+            summitContext: $summit->buildSummitContext(),
+        );
+    }
+
+    protected function buildBrief(Summit $summit, string $notes): array
     {
         return [
             'summit_name'        => $summit->title,
