@@ -10,6 +10,7 @@ use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -309,33 +310,65 @@ class ManageLandingPageBatches extends Page
                 ->label('Generate Landing Pages')
                 ->icon('heroicon-o-sparkles')
                 ->color('primary')
-                ->form([
-                    TextInput::make('version_count')
-                        ->label('Number of Versions')
-                        ->numeric()
-                        ->integer()
-                        ->minValue(1)
-                        ->maxValue(10)
-                        ->default(3)
-                        ->required(),
-                    TextInput::make('style_reference')
-                        ->label('Style Reference URL (optional)')
-                        ->url()
-                        ->placeholder('https://example.com/landing-page')
-                        ->helperText('Paste a public URL whose layout/visual style Gemini should mimic.'),
-                    Textarea::make('notes')
-                        ->label('Creative Notes (optional)')
-                        ->rows(3)
-                        ->placeholder('E.g. "Focus on urgency, mention the free gifts"'),
-                ])
+                ->disabled(fn (): bool => config('features.runtime_gemini_gen')
+                    && (($this->record->summit->style_brief_status ?? 'absent') !== 'ready'))
+                ->tooltip(fn (): ?string => config('features.runtime_gemini_gen')
+                    && (($this->record->summit->style_brief_status ?? 'absent') !== 'ready')
+                    ? 'Build the summit\'s Style Brief first (Summit edit page → Build Style Brief).'
+                    : null)
+                ->form(function () {
+                    $catalog = app(\App\Services\Blocks\BlockCatalogService::class)->current();
+                    $options = collect($catalog['blocks'] ?? [])
+                        ->filter(fn ($b) => in_array('optin', $b['validOn'] ?? [], true))
+                        ->mapWithKeys(fn ($b) => [
+                            $b['type'] => ($b['type'] ?? 'unknown').' — '.substr($b['purpose'] ?? '', 0, 80),
+                        ])
+                        ->toArray();
+
+                    $default = $this->record->last_section_selection ?: array_keys($options);
+
+                    return [
+                        TextInput::make('version_count')
+                            ->label('Number of Versions')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1)
+                            ->maxValue(10)
+                            ->default(3)
+                            ->required(),
+                        CheckboxList::make('allowed_types')
+                            ->label('Sections to include')
+                            ->options($options)
+                            ->columns(2)
+                            ->default($default)
+                            ->bulkToggleable()
+                            ->searchable()
+                            ->helperText('Uncheck sections you do NOT want Gemini to generate. Remembered for next time.')
+                            ->minItems(4)
+                            ->required(),
+                        TextInput::make('style_override_url')
+                            ->label('Style override URL (optional, this batch only)')
+                            ->url()
+                            ->placeholder('https://alt-reference.com')
+                            ->helperText('Falls back to the summit\'s reference screenshot when empty.'),
+                        Textarea::make('notes')
+                            ->label('Creative Notes (optional)')
+                            ->rows(3)
+                            ->placeholder('E.g. "Focus on urgency, mention the free gifts"'),
+                    ];
+                })
                 ->action(function (array $data): void {
+                    $this->record->update([
+                        'last_section_selection' => $data['allowed_types'] ?? null,
+                    ]);
                     $batch = LandingPageBatch::create([
                         'summit_id' => $this->record->summit_id,
                         'funnel_id' => $this->record->id,
                         'version_count' => (int) $data['version_count'],
                         'status' => 'queued',
                         'notes' => $data['notes'] ?? null,
-                        'style_reference' => $data['style_reference'] ?? null,
+                        'allowed_types' => $data['allowed_types'] ?? null,
+                        'style_override_url' => $data['style_override_url'] ?? null,
                     ]);
                     dispatch(new GenerateLandingPageBatchJob($batch));
                 })

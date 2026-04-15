@@ -28,8 +28,9 @@ class ToolBuilder
      * Build the meta-tool the Architect call uses.
      *
      * @param  array<int,string>  $stepTypes  Ordered list (optin, sales_page, upsell, thank_you)
+     * @param  array<int,string>|null  $allowedTypes  When non-null, restrict each step's enum to this set.
      */
-    public function architectTool(array $catalog, array $stepTypes): array
+    public function architectTool(array $catalog, array $stepTypes, ?array $allowedTypes = null): array
     {
         $properties = [];
         foreach ($stepTypes as $stepType) {
@@ -37,7 +38,8 @@ class ToolBuilder
                 fn ($b) => $b['type'],
                 array_filter(
                     $catalog['blocks'] ?? [],
-                    fn ($b) => in_array($stepType, $b['validOn'] ?? [], true),
+                    fn ($b) => in_array($stepType, $b['validOn'] ?? [], true)
+                        && ($allowedTypes === null || in_array($b['type'], $allowedTypes, true)),
                 ),
             ));
 

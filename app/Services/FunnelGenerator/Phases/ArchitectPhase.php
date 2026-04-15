@@ -16,11 +16,12 @@ class ArchitectPhase
     /**
      * @param  array  $brief  ['summit_name','audience','tone','speaker_count','start_date','price_vip']
      * @param  array<int,string>  $stepTypes
+     * @param  array<int,string>|null  $allowedTypes  When non-null, restrict the architect's selection to this set.
      * @return array<string, array<int,string>>  e.g. ['optin' => ['HeroWithCountdown','OptinForm'], …]
      */
-    public function run(array $brief, array $catalog, array $stepTypes): array
+    public function run(array $brief, array $catalog, array $stepTypes, ?array $allowedTypes = null): array
     {
-        $tool = $this->toolBuilder->architectTool($catalog, $stepTypes);
+        $tool = $this->toolBuilder->architectTool($catalog, $stepTypes, $allowedTypes);
 
         $system = $this->systemPrompt();
         $cacheBlock = [
