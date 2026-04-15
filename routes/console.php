@@ -10,3 +10,6 @@ Schedule::command('reports:generate-daily')->dailyAt('02:00');
 
 // Sync unsynced optins to ActiveCampaign every 5 minutes
 Schedule::command('optins:sync-activecampaign')->everyFiveMinutes();
+
+// Prune mockup PNGs for rejected drafts older than 7 days
+Schedule::job(new \App\Jobs\PruneMockupsJob)->daily();
