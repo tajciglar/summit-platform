@@ -13,16 +13,18 @@ export function applyFieldValues<T extends Record<string, unknown>>(
 
 function setByPath(root: Record<string, unknown>, path: string, value: unknown): void {
   const parts = path.split('.');
-  let cur: unknown = root;
+  let cur: Record<string, unknown> = root;
   for (let i = 0; i < parts.length - 1; i++) {
     const key = parts[i];
-    if (!isIndexable(cur)) return;
-    cur = (cur as Record<string, unknown>)[key];
+    // Auto-vivify missing intermediate nodes so runtime-generated sections
+    // (which reference props the defaults map doesn't declare) still render.
+    if (!isIndexable(cur[key])) {
+      cur[key] = {};
+    }
+    cur = cur[key] as Record<string, unknown>;
   }
-  if (!isIndexable(cur)) return;
   const last = parts[parts.length - 1];
-  if (!(last in (cur as Record<string, unknown>))) return;
-  (cur as Record<string, unknown>)[last] = value;
+  cur[last] = value;
 }
 
 function isIndexable(v: unknown): v is Record<string, unknown> {

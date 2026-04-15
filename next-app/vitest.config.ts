@@ -15,12 +15,16 @@ export default defineConfig({
     }
   },
   test: {
+    // Playwright e2e specs (tests/e2e) talk to @playwright/test directly
+    // and are not runnable under vitest.
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
     projects: [{
       extends: true,
       test: {
         environment: 'jsdom',
         setupFiles: ['./vitest.setup.ts'],
-        globals: true
+        globals: true,
+        exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
       }
     }, {
       extends: true,

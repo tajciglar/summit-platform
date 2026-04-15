@@ -16,9 +16,23 @@ export async function publishDraft(
     if (s.status === 'failed') throw new Error(`cannot publish: section ${s.id} failed`);
   }
 
-  const htmls = await Promise.all(sections.map(s =>
-    renderSection(s, defaultPropsPerSection?.[s.id] ?? {})
-  ));
+  const htmls = await Promise.all(sections.map(async (s) => {
+    try {
+      return await renderSection(s, defaultPropsPerSection?.[s.id] ?? {});
+    } catch (err) {
+      // Gemini JSX occasionally references props that aren't declared in the
+      // `fields` array (e.g. props.items.map() when only props.title is set).
+      // Rather than failing the whole publish, substitute a visible error
+      // placeholder so the rest of the page still ships.
+      const msg = (err as Error).message.replace(/</g, '&lt;');
+      return (
+        `<section style="padding:1.5rem;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;margin:1rem 0;font-family:system-ui">` +
+        `<strong>Render error in ${s.type}</strong><br/>` +
+        `<code style="font-size:0.875rem">${msg}</code>` +
+        `</section>`
+      );
+    }
+  }));
 
   const manifest = buildManifest(htmls);
   const runtimeSource = await loadRuntimeSource();

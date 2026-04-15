@@ -288,8 +288,17 @@
 
                                                                     @foreach ($fields as $fieldIndex => $field)
                                                                         @php
-                                                                            $fieldType = $field['type'] ?? 'text';
-                                                                            $fieldValue = $field['value'] ?? '';
+                                                                            $fieldType = $field['type'] ?? $field['kind'] ?? 'text';
+                                                                            $rawValue = $field['value'] ?? '';
+                                                                            // Gemini occasionally emits nested arrays for repeating fields
+                                                                            // (e.g. a testimonials carousel). Flatten to a JSON blob so the
+                                                                            // input can still show something and the operator can edit.
+                                                                            if (is_array($rawValue)) {
+                                                                                $fieldValue = json_encode($rawValue, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                                                                                if ($fieldType === 'text') $fieldType = 'textarea';
+                                                                            } else {
+                                                                                $fieldValue = (string) $rawValue;
+                                                                            }
                                                                             $fieldLabel = $field['label'] ?? $field['path'] ?? 'Field';
                                                                             $inputId = 'field-' . $draft->id . '-' . $sectionId . '-' . $fieldIndex;
                                                                             $saveCall = "updateSectionField('{$draft->id}', '{$sectionId}', {$fieldIndex}, \$event.target.value)";
