@@ -18,6 +18,11 @@ class EditSummit extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('landingPages')
+                ->label('Landing Pages')
+                ->icon('heroicon-o-sparkles')
+                ->color('primary')
+                ->url(fn () => SummitResource::getUrl('landing-pages', ['record' => $this->getRecord()])),
             Action::make('preview')
                 ->label('Preview')
                 ->icon('heroicon-o-eye')
