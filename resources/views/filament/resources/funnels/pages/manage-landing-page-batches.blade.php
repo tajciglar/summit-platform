@@ -22,11 +22,13 @@
         };
 
         $sectionColor = fn ($status) => match ($status) {
-            'ready'        => 'success',
-            'regenerating' => 'warning',
-            'generating'   => 'warning',
-            'failed'       => 'danger',
-            default        => 'gray',
+            'ready'         => 'success',
+            'regenerating'  => 'warning',
+            'generating'    => 'warning',
+            'image_failed'  => 'warning',
+            'render_failed' => 'danger',
+            'failed'        => 'danger',
+            default         => 'gray',
         };
 
         $humanise = fn ($t) => Str::of($t ?? '')->replace('_', ' ')->title();
@@ -234,8 +236,19 @@
                                                         </button>
 
                                                         <x-filament::badge :color="$sectionColor($section['status'] ?? '')" size="xs">
-                                                            {{ $section['status'] ?? 'unknown' }}
+                                                            {{ str_replace('_', ' ', $section['status'] ?? 'unknown') }}
                                                         </x-filament::badge>
+
+                                                        @if (! empty($section['mockup_url']))
+                                                            <a
+                                                                href="{{ url($section['mockup_url']) }}"
+                                                                target="_blank"
+                                                                class="text-xs text-primary-600 hover:underline dark:text-primary-400"
+                                                                title="Stage 1 mockup PNG"
+                                                            >
+                                                                View mockup
+                                                            </a>
+                                                        @endif
 
                                                         <x-filament::icon-button
                                                             icon="heroicon-o-arrow-path"

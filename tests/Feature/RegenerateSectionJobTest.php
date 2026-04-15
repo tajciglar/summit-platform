@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Jobs\RegenerateSectionJob;
 use App\Models\LandingPageDraft;
 use App\Services\FunnelGenerator\Phases\BlockDesignPhase;
+use App\Services\StyleBrief\StyleBriefResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
@@ -29,7 +30,7 @@ class RegenerateSectionJobTest extends TestCase
         ]);
         $this->app->instance(BlockDesignPhase::class, $design);
 
-        (new RegenerateSectionJob($draft->id, 'keep-me', 'shorter'))->handle($design);
+        (new RegenerateSectionJob($draft->id, 'keep-me', 'shorter'))->handle($design, new StyleBriefResolver);
 
         $fresh = $draft->fresh();
         $this->assertSame('new', $fresh->sections[0]['jsx']);
