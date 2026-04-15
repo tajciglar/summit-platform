@@ -91,8 +91,8 @@ async function main() {
     envelope = parseEnvelope(rawText)
   } catch (err) {
     console.error(`Failed to parse envelope: ${err instanceof Error ? err.message : err}`)
-    console.error('\nRaw response (first 2000 chars):')
-    console.error(rawText.slice(0, 2000))
+    console.error('\nRaw response (first 5000 chars):')
+    console.error(rawText.slice(0, 5000))
     process.exit(2)
   }
 
