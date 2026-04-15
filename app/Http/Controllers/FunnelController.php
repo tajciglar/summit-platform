@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FunnelStep;
+use App\Models\LandingPageDraft;
 use App\Models\Summit;
 use App\Services\AnalyticsService;
 use App\Services\FunnelResolver;
@@ -17,7 +18,7 @@ class FunnelController extends Controller
         private readonly AnalyticsService $analytics,
     ) {}
 
-    public function show(Request $request, string $summitSlug, string $funnelSlug, ?string $stepSlug = null): Response
+    public function show(Request $request, string $summitSlug, string $funnelSlug, ?string $stepSlug = null): Response|\Illuminate\Http\Response
     {
         $summit = $this->resolver->resolveSummit($summitSlug);
         if (! $summit) {
@@ -33,6 +34,14 @@ class FunnelController extends Controller
         $step = $this->resolver->resolveStep($funnel, $stepSlug, $isPreview);
         if (! $step) {
             abort(404);
+        }
+
+        if (config('features.runtime_gemini_gen')) {
+            $published = $this->resolveLivePublishedDraft($step);
+            if ($published) {
+                return response($published->published_html)
+                    ->header('Content-Type', 'text/html; charset=utf-8');
+            }
         }
 
         // Record page view (skip for previews)
@@ -157,5 +166,26 @@ class FunnelController extends Controller
             'nextStepSlug' => $nextStep?->slug,
             'paymentIntentId' => session('payment_intent_id'),
         ]));
+    }
+
+    private function resolveLivePublishedDraft(FunnelStep $step): ?LandingPageDraft
+    {
+        $content = $step->content;
+
+        if (! is_array($content) || ! array_key_exists('published_draft_id', $content)) {
+            return null;
+        }
+
+        $draft = LandingPageDraft::find($content['published_draft_id']);
+
+        if (! $draft) {
+            return null;
+        }
+
+        if ($draft->status !== 'published' || empty($draft->published_html)) {
+            return null;
+        }
+
+        return $draft;
     }
 }
