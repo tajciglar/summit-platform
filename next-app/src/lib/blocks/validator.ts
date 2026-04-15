@@ -1,8 +1,12 @@
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 
+// lucide-react is intentionally NOT allowed: Next 16's Server Components
+// strip React (no createContext), so lucide's icon factories crash when
+// invoked from renderToString. Gemini is instructed in the design prompt
+// to inline SVGs instead.
 const ALLOWED_IMPORT_SOURCES = (name: string): boolean =>
-  name === 'react' || name === 'lucide-react' || name.startsWith('@/components/ui/');
+  name === 'react' || name.startsWith('@/components/ui/');
 
 const FORBIDDEN_IDENTIFIERS = new Set([
   'fetch', 'XMLHttpRequest', 'WebSocket', 'eval', 'Function',

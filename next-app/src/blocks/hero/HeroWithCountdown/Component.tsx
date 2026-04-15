@@ -1,76 +1,72 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/cn'
+import { Card } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import type { Props } from './schema'
 
 export function HeroWithCountdown(props: Props) {
   const { timeLeft } = useCountdown(props.countdownTarget)
 
-  const bgClass = {
-    gradient: 'bg-gradient-to-br from-[rgb(var(--color-primary))] to-[rgb(var(--color-primary))]/70',
-    image: props.bannerImageUrl ? '' : 'bg-[rgb(var(--color-primary))]',
-    solid: 'bg-[rgb(var(--color-primary))]',
-  }[props.backgroundStyle]
-
   return (
-    <section
-      className={cn('relative overflow-hidden py-20 md:py-32 text-white', bgClass)}
-      style={
-        props.backgroundStyle === 'image' && props.bannerImageUrl
-          ? { backgroundImage: `url(${props.bannerImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : undefined
-      }
-    >
-      <div className="absolute inset-0 bg-black/20" aria-hidden />
-      <div className="relative mx-auto max-w-[1024px] px-6 text-center">
-        {props.eyebrow && (
-          <p className="mb-4 text-sm font-semibold tracking-widest uppercase opacity-90">{props.eyebrow}</p>
-        )}
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">{props.headline}</h1>
-        {props.subheadline && <p className="text-xl md:text-2xl mb-8 opacity-95">{props.subheadline}</p>}
-        <CountdownDisplay timeLeft={timeLeft} />
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-accent))]/90 text-white">
-            {props.primaryCtaLabel}
-          </Button>
-          {props.secondaryCtaLabel && (
-            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/40">
-              {props.secondaryCtaLabel}
+    <section className="bg-[#F0FDFA] py-16 md:py-24 lg:py-32">
+      <div className="mx-auto grid max-w-[1280px] px-6 md:grid-cols-2 md:gap-x-12 lg:gap-x-24 items-center">
+        {/* Left Content Column */}
+        <div className="text-center md:text-left mb-12 md:mb-0">
+          {props.eyebrowLabel && (
+            <div className="inline-flex items-center rounded-full bg-[rgb(var(--color-primary))] px-4 py-2 text-sm font-medium tracking-wide text-white mb-6">
+              {props.eyebrowLabel}
+            </div>
+          )}
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-[-0.02em] text-foreground mb-6">
+            {props.headline}
+          </h1>
+          <p className="font-body text-lg leading-relaxed text-muted-foreground mb-8 max-w-[65ch] mx-auto md:mx-0">
+            {props.body}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
+            <Button size="lg" asChild>
+              <a href={props.primaryCtaHref}>
+                {props.primaryCtaLabel}
+              </a>
             </Button>
+            {props.secondaryCtaLabel && props.secondaryCtaHref && (
+              <Button size="lg" variant="outline" className="border-[rgb(var(--color-primary))] text-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/5">
+                <a href={props.secondaryCtaHref}>
+                  {props.secondaryCtaLabel}
+                </a>
+              </Button>
+            )}
+          </div>
+          {props.footerStat && (
+            <p className="font-body text-sm text-muted-foreground">
+              {props.footerStat}
+            </p>
           )}
         </div>
-        {props.bodyLines.length > 0 && (
-          <ul className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm opacity-95">
-            {props.bodyLines.map((line, i) => (
-              <li key={i}>• {line}</li>
-            ))}
-          </ul>
-        )}
+
+        {/* Right Countdown Card */}
+        <Card className="mx-auto w-full max-w-sm p-8 text-center shadow-lg ring-1 ring-[#E5E7EB] border border-[#E5E7EB]">
+          <div className="text-sm font-semibold uppercase tracking-wide text-foreground/70 mb-4">
+            DAYS:HOURS:MINUTES:SECONDS
+          </div>
+          <div className="flex justify-center gap-2 font-heading text-5xl md:text-6xl font-extrabold tabular-nums text-[rgb(var(--color-primary))] mb-6 leading-none">
+            <span className="min-w-[70px]">{String(timeLeft.days).padStart(2, '0')}</span>:
+            <span className="min-w-[70px]">{String(timeLeft.hours).padStart(2, '0')}</span>:
+            <span className="min-w-[70px]">{String(timeLeft.minutes).padStart(2, '0')}</span>:
+            <span className="min-w-[70px]">{String(timeLeft.seconds).padStart(2, '0')}</span>
+          </div>
+          <div className="font-heading text-lg font-bold uppercase text-foreground/80 mb-6">
+            {props.countdownEventDate}
+          </div>
+          {props.countdownLimitedSpotsLabel && (
+            <span className="inline-flex items-center rounded-full bg-[rgb(var(--color-accent))] px-4 py-2 text-sm font-bold tracking-wider text-white">
+              {props.countdownLimitedSpotsLabel}
+            </span>
+          )}
+        </Card>
       </div>
     </section>
-  )
-}
-
-function CountdownDisplay({
-  timeLeft,
-}: {
-  timeLeft: { days: number; hours: number; minutes: number; seconds: number }
-}) {
-  return (
-    <div className="flex justify-center gap-3 md:gap-6">
-      {[
-        { label: 'DAYS', value: timeLeft.days },
-        { label: 'HOURS', value: timeLeft.hours },
-        { label: 'MINUTES', value: timeLeft.minutes },
-        { label: 'SECONDS', value: timeLeft.seconds },
-      ].map(({ label, value }) => (
-        <div key={label} className="bg-white/15 backdrop-blur-sm rounded-lg p-3 md:p-5 min-w-[64px] md:min-w-[90px]">
-          <div className="text-3xl md:text-5xl font-bold tabular-nums">{String(value).padStart(2, '0')}</div>
-          <div className="text-xs md:text-sm opacity-80 mt-1">{label}</div>
-        </div>
-      ))}
-    </div>
   )
 }
 

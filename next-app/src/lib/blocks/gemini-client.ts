@@ -15,6 +15,11 @@ export async function callGemini(call: GeminiCall, attempt = 0): Promise<string>
     const res = await client.models.generateContent({
       model: MODEL,
       contents: [{ role: 'user', parts }],
+      // Force JSON-only output. Without this, Flash routinely wraps the
+      // envelope in markdown fences or prepends "Here is the JSON:".
+      // The design prompt's `Return strict JSON` instruction alone isn't
+      // enough — responseMimeType is the SDK-level guarantee.
+      config: { responseMimeType: 'application/json' },
     });
     const text = res.text ?? '';
     if (!text) throw new Error('empty response');
