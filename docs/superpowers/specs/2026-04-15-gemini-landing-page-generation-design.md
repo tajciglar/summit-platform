@@ -1,214 +1,269 @@
-# Gemini Landing Page Generation — Design Spec
+# Gemini Block Code Generator — Design Spec
 
 **Date:** 2026-04-15
 **Status:** Draft — pending review
-**Scope:** V1 one-click full-page generation, V2 per-block regeneration
-**Related:** `docs/superpowers/plans/2026-04-14-landing-page-generator.md` (merged)
+**Scope:** V1 Gemini-powered block code generator (dev tool). V2 per-block composition regeneration (operator feature).
+**Related:** `docs/superpowers/plans/2026-04-14-landing-page-generator.md` (merged — existing Claude composition flow)
 
 ---
 
 ## Context
 
-The project already has a Claude-driven landing page generator:
+The project already has a working one-click page generator:
 
-- `app/Services/LandingPageGenerator.php` composes a page via `ArchitectPhase` (block sequence) and `CopywriterPhase` (props).
-- `app/Jobs/GenerateLandingPageVersionJob.php` runs the generator and saves output as `LandingPageDraft.blocks` (JSON).
-- Next.js renders the JSON via the block library at `next-app/src/blocks/**`.
-- Operator reviews the draft in Filament and approves → public page.
+- `LandingPageGenerator` composes a page via `ArchitectPhase` (Claude picks block sequence) + `CopywriterPhase` (Claude fills props).
+- Next.js renders the JSON via block components at `next-app/src/blocks/**`.
+- Filament edits drafts per-block via props.
 
-What the live pipeline produces today is composition + copy. What it does **not** produce is imagery. Block props like `bannerImageUrl`, speaker portraits, founder photos, feature photos, and video thumbnails are either empty, placeholder, or manually filled in Filament. The result: live pages look under-dressed compared to the Gemini-generated reference PNGs in `docs/block-references/` which *are* what the brand wants.
+The **gap** between the live page (`https://www.parenting-summits.com/`) and the reference PNGs in `docs/block-references/`:
+- Not composition — Claude already picks a solid block sequence.
+- Not imagery — distinct concern, parked for later.
+- **Block implementations.** The 20 PNGs were painted by Gemini from prompts describing what each block *should* look like. Our React components for those blocks are real code but don't always render with the same polish (spacing, typography, structure, Tailwind details) the PNGs imply.
 
-Reference PNGs were produced by two one-shot dev scripts (`next-app/scripts/generate-block-references.ts`, `generate-fullpage-composite.ts`) using `gemini-3.1-flash-image-preview`. Those scripts do not touch the running app.
+So the gap is in the blocks themselves. If the blocks render like the PNGs, the live page composed from them will look like the PNGs.
 
 ## Goal
 
-Make the one-click "Generate" flow produce a page that visually matches `docs/block-references/00_FullPageComposite.png` and the live reference at `https://www.parenting-summits.com/`, rendered by Next.js and editable in Filament — by adding Gemini image generation to the existing Claude composition pipeline.
+**V1:** Use Gemini 2.5 Pro as a code generator to (re)build the React block components — once per block, at dev time — so they render visually like the reference PNGs. Commit generated code as normal React blocks. Runtime flow stays as today: Claude composes + Next.js renders + Filament edits.
+
+**V2:** Give operators a "Regenerate this block" action in Filament that re-runs Claude for just one block on a draft (composition/copy only — no code generation). Saves as a new draft version.
 
 ## Non-goals
 
-- Replacing Claude. Claude continues to own block selection and copy.
-- Replacing the block system with raw AI-generated HTML/JSX. Pages remain block-JSON, editable per-block in Filament.
-- Generating net-new block variants with AI. Catalog evolution is a separate workstream (Approach 4 in brainstorm, not in this spec).
-- Per-block regeneration in V1. V2 only.
-- Human face consistency across portraits (each speaker prompt is independent).
+- Runtime page generation by Gemini. Pages are still composed by Claude and rendered from block JSON.
+- Runtime image generation. Separate future workstream.
+- Raw HTML pages per summit. The block system stays the source of truth.
+- Replacing hand-written blocks entirely. Gemini-generated code is reviewed + merged by a dev like any PR — it's a productivity tool, not autopilot.
+- Operator-facing block code generation. V1 is dev-only (risk of broken code reaching production).
 
-## Architecture overview
+---
 
-Two-phase pipeline becomes three-phase:
+## V1 — Gemini block code generator (dev tool)
+
+### User flow (dev)
 
 ```
-Summit data
-   │
-   ▼
-ArchitectPhase (Claude)          → block sequence matching reference pattern
-   │
-   ▼
-CopywriterPhase (Claude)         → text props + image briefs per image slot
-   │
-   ▼
-ImageryPhase (Gemini + Bunny)    → generate + upload images, patch URLs into props
-   │
-   ▼
-LandingPageDraft.blocks (JSON)   → rendered by Next.js, editable in Filament
+# Dev picks a block to build from the 20 references
+pnpm gen:block --name=FAQAccordion \
+               --category=content \
+               --reference=docs/block-references/18_FAQAccordion.png
+
+# Script writes files into next-app/src/blocks/content/FAQAccordion/
+#   Component.tsx   (generated by Gemini)
+#   schema.ts       (generated by Gemini or pre-seeded)
+#   meta.ts         (generated — type, category, validOn, purpose, exampleProps)
+#   index.ts        (generated — exports)
+
+# Dev reviews with git diff
+# Dev runs pnpm typecheck && pnpm storybook to verify
+# Dev commits
 ```
 
-**Why this shape:** Claude stays responsible for structural and textual decisions (including *what kind of image* each slot needs, written as an image brief). Gemini is a pure image-generation worker that takes briefs and returns URLs. The two roles never overlap, so failures in imagery do not corrupt the composition (page still renders with placeholder).
+After merge, the block is picked up automatically by `build-catalog.ts` and becomes available to Claude's ArchitectPhase at runtime — no runtime code changes needed.
 
-## V1 scope
+### What the generator does
 
-### What ships
+`next-app/scripts/generate-block.ts` (new) — TypeScript CLI:
 
-1. **Block catalog image-slot metadata.** Each block's `meta.ts` declares which props are image slots and what the brief schema is. Example for `HeroWithCountdown`:
-   ```ts
-   imageSlots: {
-     bannerImageUrl: {
-       aspect: '4:3',
-       purpose: 'warm hero photograph showing the summit audience (e.g. parent and child)',
-     }
+1. **Load inputs:**
+   - Block name, category, intended `validOn` step types (CLI args)
+   - Reference PNG (Gemini 2.5 Pro accepts image input) — optional but recommended
+   - Design system constants — lifted from `generate-block-references.ts` (single source of truth)
+   - One existing block as a style-reference example (e.g. `HeroWithCountdown` — shows Tailwind conventions, file structure, prop naming)
+   - Optional pre-written schema.ts (if dev wants full control over props)
+   - Block prompt from `generate-block-references.ts` BLOCKS array (if regenerating an existing reference)
+
+2. **Call Gemini 2.5 Pro** with one request carrying all of the above plus an instruction to output a JSON envelope:
+   ```json
+   {
+     "schema_ts": "...",
+     "meta_ts": "...",
+     "component_tsx": "...",
+     "index_ts": "..."
    }
    ```
-   Catalog builder (`next-app/scripts/build-catalog.ts`) lifts this into the published catalog JSON so Laravel sees it.
 
-2. **CopywriterPhase produces image briefs.** When filling props for a block that has image slots, Claude additionally returns an `_imageBriefs: { propName: brief }` shape alongside the normal props. Brief is a short text description (one to three sentences) grounded in the block's `purpose` metadata plus summit context (tone, audience, palette).
+3. **Write files** to `next-app/src/blocks/{category}/{name}/`. Refuse to overwrite unless `--force` flag.
 
-3. **ImageryPhase (new).** `app/Services/FunnelGenerator/Phases/ImageryPhase.php`:
-   - Input: the blocks array from CopywriterPhase (with `_imageBriefs` attached).
-   - For each image brief, call `GeminiImageService::generate(brief, aspect)` in parallel (capped concurrency, e.g. 4 — same as the dev script).
-   - For each returned PNG: upload to Bunny CDN via `BunnyUploader`, receive public URL.
-   - Patch the URL into the right prop on the block. Strip `_imageBriefs` before returning.
-   - Return the same blocks array with `bannerImageUrl` etc. filled.
+4. **Post-write sanity:** run `pnpm typecheck` and report errors inline. Does not auto-fix.
 
-4. **GeminiImageService (new).** `app/Services/Imagery/GeminiImageService.php`:
-   - Uses `@google/genai` equivalent in PHP — call the REST API directly with Laravel `Http` (no official PHP SDK; the REST interface is stable).
-   - Model: `gemini-3.1-flash-image-preview` (same as dev scripts, already proven quality).
-   - System prompt includes the project design system (palette, typography, mood) — lifted verbatim from `generate-block-references.ts`.
-   - Returns raw PNG bytes plus metadata (dimensions, aspect).
-   - Retry once on transient failure; beyond that, return null (ImageryPhase falls back to placeholder URL).
+### Why TypeScript / Next.js side, not Laravel
 
-5. **BunnyUploader (new).** `app/Services/Storage/BunnyUploader.php`:
-   - Accepts (bytes, extension, prefix) → uploads to configured Bunny storage zone → returns public URL.
-   - Path convention: `landing-pages/{summit_id}/{draft_id}/{slot-hash}.png` so regeneration in V2 can overwrite deterministically if wanted.
-   - Reuses `BUNNY_CDN_*` env vars already in `.env.example`.
+- The blocks live in the Next.js app. Generating them there means no cross-project plumbing.
+- Gemini's `@google/genai` SDK is already in `next-app` for the image scripts.
+- The existing design-system constants (the `DESIGN_SYSTEM` string) already live in `next-app/scripts/generate-block-references.ts` — we reuse it verbatim.
+- Dev tools don't need to exist inside Filament/Laravel.
 
-6. **Wire into LandingPageGenerator.** `generate()` becomes:
-   ```php
-   $sequence  = $this->architect->run(...);
-   $blocks    = $this->copywriter->run(...);      // now returns _imageBriefs
-   $blocks    = $this->imagery->run($blocks);     // fills image URLs
-   return $this->addUuids($blocks);
-   ```
+### Files this touches
 
-7. **Job changes.** `GenerateLandingPageVersionJob` timeout stays at 900s. Memory budget: ~16 image calls × ~100KB PNG = trivial. Concurrency inside ImageryPhase (not inside the job itself) keeps wall time under 60s for a 20-block page.
+New:
+- `next-app/scripts/generate-block.ts` — the CLI itself.
+- `next-app/scripts/lib/gemini-client.ts` — thin wrapper around `GoogleGenAI` with the shared system prompt + envelope parsing.
+- `next-app/scripts/lib/design-system.ts` — export `DESIGN_SYSTEM` constant (extract from `generate-block-references.ts`; both scripts import it).
+- `next-app/scripts/lib/block-template.md` — a markdown prompt template describing the file layout, naming conventions, schema-vs-component split, Tailwind rules (dark mode handling, responsive breakpoints, accessibility basics).
 
-8. **Filament surface.** No UI changes in V1. Existing batch/draft UI works unchanged — drafts just now render with real imagery.
+Edited:
+- `next-app/package.json` — add `"gen:block": "tsx scripts/generate-block.ts"` under `scripts`.
+- `next-app/scripts/generate-block-references.ts` — import `DESIGN_SYSTEM` from the shared lib instead of defining it inline.
 
-### What does not ship in V1
+Not edited:
+- Laravel side: **zero changes** in V1.
+- Runtime generation flow (`LandingPageGenerator`, phases, jobs): **zero changes** in V1.
 
-- Per-block regeneration (V2).
-- Image cache / reuse across pages (acceptable: each page pays its own image cost first-gen).
-- Operator-editable image briefs (first pass: Claude chooses, no override).
-- Style-reference images (V2 could let operator upload a mood board Gemini conditions on).
-- Cost dashboard / quota (nice-to-have, not blocking).
+### Quality gates (dev workflow)
 
-## V2 scope — per-block regeneration
+Each generated block goes through:
 
-### What ships in V2
+1. `pnpm typecheck` — must pass.
+2. `pnpm lint` — warnings acceptable, errors fixed before commit.
+3. Visual check via `pnpm storybook` or a quick `next dev` render — does it look like the reference PNG?
+4. Iteration: if output is off, dev tweaks the CLI input (better prompt, different style reference block) and re-runs with `--force`.
+5. Commit the block. PR review optional but encouraged for the first several.
 
-1. **Regenerate-block action in Filament** on each row of the draft's block list: "Regenerate this block" with optional free-text note ("make it warmer", "shorter answers").
+### What Gemini sees (prompt shape)
 
-2. **New job** `RegenerateBlockJob(draft_id, block_index, note)`:
-   - Loads current draft blocks.
-   - Re-runs `CopywriterPhase` for just that one block (single-item call, same catalog entry, same brief, plus optional note).
-   - Re-runs `ImageryPhase` for just that block (regenerates only its images).
-   - Replaces the entry at `block_index` in the composition (other blocks' props unchanged).
-   - Persists as a **new `LandingPageDraft` version** belonging to the same batch (immutable, keeps full history; matches how full-page regeneration already works).
+```
+System: You are an expert React + Tailwind v4 developer building blocks for
+        a Next.js 16 landing-page builder. Follow the file conventions exactly.
 
-3. **Catalog changes**: CopywriterPhase gains a single-block mode (`runOne(block, brief, catalog, note)`) reusing the same tool schema.
+User message (multimodal):
+  - Text: "Generate block {name} in category {category}. validOn: {stepTypes}.
+           Purpose: {purpose}."
+  - Text: The DESIGN_SYSTEM block (palette, typography, mood).
+  - Text: The block-template.md rules (file layout, a11y, responsive rules).
+  - Text: Example block source (Component.tsx + meta.ts + schema.ts from HeroWithCountdown).
+  - Image: the reference PNG (e.g. 18_FAQAccordion.png).
+  - Text: "Return a JSON envelope with schema_ts, meta_ts, component_tsx,
+           index_ts as string fields. No markdown fences. No commentary."
+```
 
-4. **Bunny upload path**: new draft → new `draft_id` in path → no overwrite risk; old imagery remains accessible until cleanup.
-
-### What does not ship in V2
-
-- Prompt editing per block (power-user; V3).
-- Multi-block regeneration in one action (can do sequentially via multiple clicks).
-- Image-only regeneration (regenerate keeps copy+image coupled; reasoning: Claude's brief + prop pair should stay consistent).
-
-## Data model changes
-
-### Laravel
-
-- `LandingPageDraft`: no schema change (the `blocks` JSON column already carries image URLs). Consider adding `gemini_cost_usd` decimal later for cost tracking; **not in V1**.
-- `LandingPageBatch`: no change.
-- New config: `config/imagery.php` — Gemini model name, concurrency cap, retry policy, placeholder URL.
-
-### Block catalog (TypeScript → JSON)
-
-- `BlockMeta` type gains optional `imageSlots: Record<string, { aspect: string; purpose: string }>`.
-- `build-catalog.ts` serializes it.
-- `BlockCatalogService` in Laravel returns it unchanged (already passes through arbitrary fields).
-
-### Environment
-
-- `GEMINI_API_KEY` — already in `.env.example`.
-- `BUNNY_CDN_HOSTNAME`, `BUNNY_CDN_STORAGE_ZONE`, `BUNNY_CDN_API_KEY` — already in `.env.example` (empty; need values for prod).
-- `GEMINI_IMAGE_MODEL` — optional override, defaults to `gemini-3.1-flash-image-preview`.
-- `IMAGERY_CONCURRENCY` — default 4.
-
-## Integration points
-
-- **CopywriterPhase ↔ ImageryPhase:** the `_imageBriefs` convention on each block is the contract. ImageryPhase must never need to call Claude; CopywriterPhase must never need to know about Gemini/Bunny.
-- **ImageryPhase ↔ GeminiImageService:** service exposes `generate(prompt, aspect): ?string` (PNG bytes or null on failure).
-- **ImageryPhase ↔ BunnyUploader:** uploader exposes `upload(bytes, path): string` (public URL) or throws.
-- **LandingPageGenerator ↔ Phases:** constructor-injected via Laravel container. No behavior change to its public `generate()` signature.
-
-## Error handling
+### Error handling
 
 | Failure | Behavior |
 |---|---|
-| Gemini API rate-limited or 5xx | Retry once with jitter. On second failure → skip that image slot, log, continue. |
-| Gemini returns no image part (only text) | Log text for diagnostics, fall back to placeholder URL. |
-| Bunny upload fails | Retry once. On second failure → bubble up; ImageryPhase falls back to placeholder URL for that slot. |
-| Claude brief missing for declared image slot | Use the block's `exampleProps` image URL if present, else placeholder. Log warning (indicates catalog/prompt drift). |
-| Whole ImageryPhase throws unexpectedly | Job catches → draft status becomes `ready` anyway with text-only blocks (imagery is value-add, not critical-path). Error stored in `LandingPageDraft.error_message` prefixed `[imagery]`. |
+| Gemini returns text instead of JSON envelope | Surface raw text to dev, exit non-zero. Do not write files. |
+| Envelope JSON malformed | Same. |
+| `component_tsx` uses imports we don't have | `pnpm typecheck` catches. Dev tweaks + re-runs. |
+| Reference PNG path invalid | Fail fast with clear message before calling Gemini. |
+| API key missing | Fail fast. |
+| Rate limit / 5xx | Retry once with backoff. Beyond that, surface and exit. |
 
-**Placeholder URL:** a single static PNG shipped with the Next.js app at `next-app/public/placeholders/image-slot.png` (aspect-neutral, low-weight). Reference stored in `config/imagery.php` as an absolute URL derived from `APP_URL`. Operator knows: placeholder = Gemini failed, can regenerate that block in V2.
+No silent partial writes. Either the whole envelope lands or nothing does.
 
-## Cost + latency budget
+### Testing
 
-Per full-page generation (~18–28 blocks, ~8–16 image slots):
+- **Unit:** `next-app/scripts/__tests__/envelope.test.ts` — given fake Gemini JSON, parser extracts fields correctly, rejects malformed shapes.
+- **Unit:** file-writer refuses to overwrite without `--force`.
+- **Manual:** regenerate 2–3 blocks from the reference set (`FAQAccordion`, `StatsBar3Item`, `BonusStack`), verify typecheck + visual sanity.
+- No integration test against real Gemini (flaky + expensive; dev scripts don't get CI tests).
 
-| Item | Per generation |
-|---|---|
-| Claude Architect | ~1 call, ~5k in / ~500 out tokens → low cents |
-| Claude Copywriter | ~1 call, ~10–20k in / ~3–5k out tokens → low cents |
-| Gemini Image | 8–16 calls × ~$0.039 (3.1 Flash Image pricing) → **$0.30–$0.60 per page** |
-| Bunny upload | bandwidth in, ~negligible |
-| **Total** | ~**$0.35–$0.70 per page** |
-| Wall time | ~30–60s (Claude ~15s, Gemini parallel ×4 worst-case ~45s) |
+### Scope limits (V1)
 
-Per-block regeneration (V2): 1 Claude call + 0–2 Gemini calls → well under $0.10 and 15s.
+- Block-by-block, not batch. Dev runs the script 20 times if they want the full set regenerated.
+- No storybook file generation. Devs write those by hand when they want them.
+- No auto-seeding of `exampleProps` in `meta.ts` from summit data — Gemini makes up plausible values; dev edits if needed.
+- No catalog upload step — existing `build-catalog.ts` + `upload-catalog.ts` handle it after blocks are committed.
 
-## Testing
+---
 
-Test pyramid (existing PHPUnit setup):
+## V2 — Per-block composition regeneration (operator feature)
 
-- **Unit:** `GeminiImageServiceTest` with `Http::fake()` — assert request shape, parse success/failure cases.
-- **Unit:** `BunnyUploaderTest` with `Http::fake()` — URL construction, retry, error paths.
-- **Unit:** `ImageryPhaseTest` — given blocks with briefs, verify parallel dispatch, URL patching, placeholder fallback on failure.
-- **Feature:** `GenerateLandingPageVersionJobTest` — end-to-end with all external services faked; assert draft ends in `ready` with image URLs present.
-- **Manual:** one real generation against a seeded summit, eyeball against `00_FullPageComposite.png` — must look recognizably similar.
+Independent of V1 — V2 does not use Gemini. It's a Laravel/Filament surface over the existing Claude composition flow.
 
-No contract test against Gemini itself (external service, tested via the dev scripts already).
+### User flow (operator)
+
+1. Operator opens a `LandingPageDraft` in Filament.
+2. Each block row in the blocks list has a "Regenerate this block" button + optional free-text note input ("make it shorter", "change the tone to warmer").
+3. Click → enqueues `RegenerateBlockJob`.
+4. New draft created (same batch) with that block replaced; all other blocks byte-identical to the source draft.
+5. Operator reviews → approves.
+
+### Implementation
+
+New job `app/Jobs/RegenerateBlockJob.php`:
+```
+public function __construct(
+    public readonly LandingPageDraft $sourceDraft,
+    public readonly int $blockIndex,
+    public readonly string $note = '',
+) {}
+```
+
+Handler:
+- Copy `sourceDraft` → new `LandingPageDraft` under the same batch, status `generating`.
+- Load catalog; find the block definition matching `sourceDraft->blocks[$blockIndex]->type`.
+- Call a new `CopywriterPhase::runOne($block, $brief, $catalog, $note)` that reuses the existing tool schema but restricted to a single block.
+- Replace `blocks[$blockIndex]` with the new output. Preserve the block's `id` UUID (React key stability on the preview page).
+- Mark new draft `ready`.
+
+New Filament action: a per-row action on the draft blocks table calling `RegenerateBlockJob::dispatch(...)`.
+
+### Why a new draft, not in-place edit
+
+Matches existing full-page regeneration semantics. Operators expect every generation to be reviewable and revertable. Keeps history for debugging drift.
+
+### Error handling
+
+- Copywriter fails → new draft status `failed`, keeps `source_draft_id` reference for diagnostics.
+- Claude returns empty output → treat as failure, don't silently overwrite with nothing.
+
+### Testing
+
+- **Unit:** `CopywriterPhase::runOne` test — given one block entry + brief, returns a well-formed block.
+- **Feature:** `RegenerateBlockJobTest` — given a draft with 20 blocks, re-generates index 7; resulting draft has blocks 0–6 and 8–19 byte-identical, block 7 replaced.
+- **Manual:** click regenerate on FAQ block in a real draft, verify other blocks unchanged.
+
+### Scope limits (V2)
+
+- No simultaneous multi-block regen (operator clicks sequentially).
+- No image generation (imagery is parked).
+- No block-type switching (can't say "replace the FAQ with a stats bar" — that's V3).
+- Note field max 500 chars.
+
+---
+
+## Data model changes
+
+None in V1. V2 adds only:
+- `landing_page_drafts.source_draft_id` (nullable FK) — records the draft a regeneration branched from. Useful for diagnostics; not UI-exposed.
+- Migration: `database/migrations/{timestamp}_add_source_draft_id_to_landing_page_drafts.php`.
+
+## Environment
+
+- `GEMINI_API_KEY` — already in `.env.example`. Used only by the CLI (V1).
+- `GEMINI_CODE_MODEL` — optional, defaults to `gemini-2.5-pro`. Separate env var from the image model so they can be tuned independently.
+- No Bunny, no new Laravel env vars.
+
+## Cost + latency
+
+**V1 (one-off, dev workflow):**
+- ~$0.05–0.15 per block-generation call (Gemini 2.5 Pro with image input).
+- Wall time ~10–30s per block.
+- Dev runs it maybe 20 times for initial seeding, then occasionally per new block.
+
+**V2 (per operator action):**
+- 1 Claude call, restricted to one block → ~$0.01.
+- Wall time ~5–15s.
+
+Neither requires a budget or rate-limit infrastructure.
 
 ## Rollout
 
-1. Merge V1 behind config: if `IMAGERY_ENABLED=false`, ImageryPhase short-circuits → no imagery, existing behavior preserved.
-2. Enable on staging → run against 2–3 seeded summits → compare against PNG references.
-3. Enable in production → first real generation per new summit.
-4. V2 after V1 proves stable for ~a week.
+### V1
+1. Build the CLI + shared `DESIGN_SYSTEM` lib.
+2. Regenerate `02_HeroWithCountdown` → compare rendered block to the PNG → iterate on prompt template until output is good.
+3. Roll through the remaining 19 blocks, committing each.
+4. Ship.
+
+### V2
+1. Add migration + `source_draft_id` column.
+2. Add `CopywriterPhase::runOne()`.
+3. Add `RegenerateBlockJob` + test.
+4. Add Filament per-row action.
+5. Ship.
 
 ## Open questions
 
-- **Image consistency across speakers on one page:** each Gemini call is independent, so 8 speaker portraits in a `SpeakerGridDay` will vary in lighting/style. Acceptable for V1 (PNG references show this too). Later: pass a common style-seed prompt to all image calls for the same block.
-- **Legal/brand review of AI faces:** Gemini-generated portraits look like real people. For speakers we have actual headshots in `speakers` table — CopywriterPhase should prefer existing speaker photos and only generate when none exist. Spec assumes this is already handled by the block using `speaker.photo_url`. **Verify during implementation.**
-- **Existing imagery columns on Speaker/Summit models:** if models already hold photo URLs, those take precedence over Gemini generation. This needs a check in CopywriterPhase: if the data is present, no `_imageBrief` is emitted for that slot.
+- **Do we regenerate existing blocks or only new ones?** Recommend: existing blocks stay as-is until a dev intentionally runs the CLI against them. No forced overwrite.
+- **Schema synthesis quality:** Gemini may pick prop names that differ from our conventions. Mitigation: the example block it sees demonstrates conventions. If it persistently diverges, seed the `schema.ts` manually and pass it to the CLI instead of generating it.
+- **Operator-facing Gemini regen (V3?):** should operators eventually be able to regenerate block *code* from Filament? Not recommended — generated code hitting production without dev review is a safety problem. Parked.
