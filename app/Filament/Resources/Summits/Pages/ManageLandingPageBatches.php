@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\Actions\GenerateLandingPagesAction;
 use App\Filament\Resources\Summits\SummitResource;
+use App\Jobs\RegenerateSectionJob;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use Filament\Notifications\Notification;
@@ -75,6 +76,36 @@ class ManageLandingPageBatches extends Page
 
         Notification::make()
             ->title("Version {$draft->version_number} rejected.")
+            ->send();
+    }
+
+    public function regenerateSection(string $draftId, string $sectionId, ?string $note = null): void
+    {
+        $draft = LandingPageDraft::findOrFail($draftId);
+
+        if (! in_array($draft->status, ['ready', 'approved'])) {
+            Notification::make()
+                ->title('Section can only be regenerated on a ready or approved draft.')
+                ->warning()
+                ->send();
+            return;
+        }
+
+        $sections = $draft->sections ?? [];
+        foreach ($sections as &$section) {
+            if ($section['id'] === $sectionId) {
+                $section['status'] = 'regenerating';
+                break;
+            }
+        }
+        unset($section);
+        $draft->update(['sections' => $sections]);
+
+        RegenerateSectionJob::dispatch($draftId, $sectionId, $note);
+
+        Notification::make()
+            ->title('Regenerating section — refresh in a moment to see the result.')
+            ->success()
             ->send();
     }
 
