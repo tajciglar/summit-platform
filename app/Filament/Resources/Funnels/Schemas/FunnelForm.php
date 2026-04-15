@@ -74,6 +74,35 @@ class FunnelForm
                     ->columns(2)
                     ->collapsible()
                     ->collapsed(),
+
+                Section::make('Style Brief Override')
+                    ->description('Optional — customise this funnel\'s Style Brief. Empty = inherit from summit.')
+                    ->collapsible()
+                    ->collapsed(fn ($record) => empty($record?->style_brief_override))
+                    ->schema([
+                        Textarea::make('style_brief_override')
+                            ->label('Override JSON (partial Style Brief keys)')
+                            ->rows(8)
+                            ->helperText('Only the keys you override — the rest are deep-merged from the summit brief. E.g. `{"palette":{"primary":"#ff0000"}}`.')
+                            ->placeholder('{}')
+                            ->dehydrateStateUsing(fn ($state) => filled($state)
+                                ? (json_decode(is_array($state) ? json_encode($state) : (string) $state, true) ?? null)
+                                : null)
+                            ->afterStateHydrated(function ($component, $state) {
+                                if (is_array($state)) {
+                                    $component->state(json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                                }
+                            })
+                            ->rules([
+                                function () {
+                                    return function (string $attribute, $value, \Closure $fail) {
+                                        if (blank($value)) return;
+                                        $decoded = is_array($value) ? $value : json_decode((string) $value, true);
+                                        if (! is_array($decoded)) $fail('Must be valid JSON.');
+                                    };
+                                },
+                            ]),
+                    ]),
             ]);
     }
 }
