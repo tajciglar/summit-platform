@@ -15,11 +15,14 @@ class Funnel extends Model
     protected $fillable = [
         'summit_id', 'slug', 'name', 'description',
         'target_phase', 'is_active', 'theme',
+        'style_brief_override', 'last_section_selection',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'theme' => 'array',
+        'style_brief_override' => 'array',
+        'last_section_selection' => 'array',
     ];
 
     public function summit(): BelongsTo

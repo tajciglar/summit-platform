@@ -15,11 +15,14 @@ class Summit extends Model
         'slug', 'title', 'description', 'topic', 'hero_image_url',
         'status', 'current_phase', 'timezone', 'starts_at', 'ends_at',
         'summit_type',
+        'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'style_brief' => 'array',
+        'style_brief_built_at' => 'datetime',
     ];
 
     public function phaseSchedules(): HasMany

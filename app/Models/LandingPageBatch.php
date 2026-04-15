@@ -18,7 +18,8 @@ class LandingPageBatch extends Model
         'version_count',
         'status',
         'notes',
-        'style_reference',
+        'allowed_types',
+        'style_override_url',
         'completed_at',
     ];
 
@@ -26,6 +27,7 @@ class LandingPageBatch extends Model
     {
         return [
             'completed_at' => 'datetime',
+            'allowed_types' => 'array',
         ];
     }
 
