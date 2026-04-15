@@ -57,6 +57,7 @@ it('batch job assigns sequential version numbers', function () {
 });
 
 it('version job saves blocks and marks draft ready', function () {
+    config()->set('features.runtime_gemini_gen', false);
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
@@ -92,6 +93,7 @@ it('version job saves blocks and marks draft ready', function () {
 });
 
 it('version job marks draft failed on exception', function () {
+    config()->set('features.runtime_gemini_gen', false);
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 

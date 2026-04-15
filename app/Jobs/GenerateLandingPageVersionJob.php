@@ -12,11 +12,11 @@ class GenerateLandingPageVersionJob implements ShouldQueue
 {
     use Queueable;
 
-    // Must exceed BlockDesignPhase HTTP timeout (180s) so a slow section
-    // doesn't cause the job itself to time out before it can report the
-    // failure back through the defensive error handler.
-    public int $timeout = 240;
-    public int $tries   = 1;
+    // Two-stage pipeline: ~90s Stage 1 + ~120s Stage 2 per section, parallelised.
+    // 420s gives ~7 minutes which comfortably covers 10 parallel sections plus retries.
+    public int $timeout = 420;
+
+    public int $tries = 1;
 
     public function __construct(public readonly LandingPageDraft $draft) {}
 
@@ -26,17 +26,26 @@ class GenerateLandingPageVersionJob implements ShouldQueue
 
         try {
             $summit = $this->draft->batch->summit;
-            $notes  = $this->draft->batch->notes ?? '';
-            $styleRef = $this->draft->batch->style_reference;
+            $funnel = $this->draft->batch->funnel;
+            $notes = $this->draft->batch->notes ?? '';
+            $override = $this->draft->batch->style_override_url ?? null;
+            $allowed = $this->draft->batch->allowed_types ?? null;
 
             if (config('features.runtime_gemini_gen')) {
-                $sections = $generator->generateSections($summit, $notes, $styleRef);
+                $sections = $generator->generateSections(
+                    summit: $summit,
+                    funnel: $funnel,
+                    notes: $notes,
+                    styleOverrideUrl: $override,
+                    allowedTypes: $allowed,
+                    draftId: (string) $this->draft->id,
+                );
                 $this->draft->update([
                     'sections' => $sections,
-                    'status'   => 'ready',
+                    'status' => 'ready',
                 ]);
             } else {
-                $blocks = $generator->generate($summit, $notes, $styleRef);
+                $blocks = $generator->generate($summit, $notes, $override);
                 $this->draft->update([
                     'blocks' => $blocks,
                     'status' => 'ready',
@@ -44,7 +53,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
             }
         } catch (Throwable $e) {
             $this->draft->update([
-                'status'        => 'failed',
+                'status' => 'failed',
                 'error_message' => substr($e->getMessage(), 0, 500),
             ]);
             throw $e;

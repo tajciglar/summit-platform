@@ -8,6 +8,7 @@ use App\Services\FunnelGenerator\Phases\ArchitectPhase;
 use App\Services\FunnelGenerator\Phases\BlockDesignPhase;
 use App\Services\FunnelGenerator\Phases\CopywriterPhase;
 use App\Services\LandingPageGenerator;
+use App\Services\StyleBrief\StyleBriefResolver;
 use Mockery;
 
 it('returns flat block array with uuid ids', function () {
@@ -38,7 +39,7 @@ it('returns flat block array with uuid ids', function () {
         ->withArgs(fn ($brief, $cat, $stepType, $seq) => $stepType === 'optin')
         ->andReturn($fakeBlocks);
 
-    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase);
+    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase, new StyleBriefResolver);
     $blocks    = $generator->generate($summit, 'Focus on single parents.');
 
     expect($blocks)->toHaveCount(1);
@@ -71,7 +72,7 @@ it('passes summit context in brief', function () {
         ->andReturn(['optin' => []]);
     $copywriter->shouldReceive('run')->andReturn([]);
 
-    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase);
+    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase, new StyleBriefResolver);
     $generator->generate($summit, 'Extra notes here.');
 
     expect($capturedBrief['summit_name'])->toBe('My Summit');

@@ -23,6 +23,12 @@ export interface BuildDesignPromptInput {
   previousSectionJsx: string | null;
   regenerationNote: string | null;
   currentJsx?: string;
+  styleBrief?: Record<string, unknown>;
+  // Stage-1 output — the visual target for Stage 2. When present, Gemini is
+  // instructed to match it pixel-wise (colors, spacing, typography, layout).
+  mockupImage?: { mime: string; data: string } | null;
+  // Fallback anchor when Stage 1 failed — the summit's Phase-0 URL screenshot.
+  referenceImage?: { mime: string; data: string } | null;
 }
 
 export interface DesignPrompt {
@@ -30,10 +36,8 @@ export interface DesignPrompt {
   image?: { mime: string; data: string };
 }
 
-// Inline runtime example. Deliberately NOT the gen:block CLI example —
-// that one outputs a 4-file envelope ({schema_ts, meta_ts, component_tsx,
-// index_ts}) and Gemini will copy that shape if shown it. Runtime needs a
-// single-file {jsx, fields} envelope.
+// Inline runtime example — single-file `{ jsx, fields }` envelope.
+// Not the gen:block CLI's 4-file shape; Gemini will mimic whichever example we show.
 const RUNTIME_EXAMPLE = `{
   "jsx": "export default function S(props) {\\n  return (\\n    <section className=\\"py-20 bg-white\\">\\n      <div className=\\"mx-auto max-w-3xl px-6 text-center\\">\\n        <h2 className=\\"text-4xl font-bold tracking-tight\\">{props.headline}</h2>\\n        <p className=\\"mt-4 text-lg text-gray-600\\">{props.subheadline}</p>\\n        <a href={props.ctaHref} className=\\"mt-8 inline-block rounded-md bg-indigo-600 px-6 py-3 text-white font-semibold\\">{props.ctaLabel}</a>\\n      </div>\\n    </section>\\n  )\\n}",
   "fields": [
@@ -49,11 +53,26 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     loadDesignSystem(),
     loadPrimitiveSources(),
   ]);
-  const refPath = `docs/block-references/${input.section.type}.png`;
-  const image = await loadReferenceImage(refPath).catch(() => null);
+
+  // Prefer mockup (Stage 1 output) over any other visual anchor. Fallback
+  // order: mockupImage → referenceImage (summit URL screenshot) → legacy
+  // per-type docs/block-references/{type}.png.
+  let anchor: { mime: string; data: string } | null = input.mockupImage ?? input.referenceImage ?? null;
+  if (!anchor) {
+    const refPath = `docs/block-references/${input.section.type}.png`;
+    anchor = await loadReferenceImage(refPath).catch(() => null);
+  }
+
+  const intro = input.mockupImage
+    ? `You are an expert React + Tailwind v4 developer. Implement the attached mockup PNG as a single React component. Match the mockup EXACTLY — colors, spacing, typography, icon shapes, layout.`
+    : `You are an expert React + Tailwind v4 developer designing ONE landing-page section. Match the layout, density, palette and visual hierarchy of the reference PNG (if provided).`;
+
+  const styleBriefBlock = input.styleBrief
+    ? [`=== Style Brief (authoritative palette/typography/components) ===`, JSON.stringify(input.styleBrief, null, 2)]
+    : [];
 
   const text = [
-    `You are an expert React + Tailwind v4 developer designing ONE landing-page section. Match the layout, density, palette and visual hierarchy of the reference PNG (if provided).`,
+    intro,
     ``,
     `Section brief:`,
     `  type: ${input.section.type}`,
@@ -62,6 +81,8 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     ``,
     `Summit context:`,
     JSON.stringify(input.summit, null, 2),
+    ``,
+    ...styleBriefBlock,
     ``,
     `=== Design System ===`,
     designSystem,
@@ -84,8 +105,9 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     `- For icons, inline SVGs directly in the JSX (24x24 viewBox, currentColor stroke).`,
     `- No client hooks (useState/useEffect/etc), no script/style tags, no network calls, no dynamic imports.`,
     `- Tailwind v4 classes only. No Framer Motion.`,
+    `- Apply the Style Brief palette's hex codes inline (e.g. "bg-[#5e4d9b]") or via Tailwind arbitrary values where the design system doesn't already cover them.`,
     `- Every editable string/image MUST appear in "fields" with its AST path (e.g. "props.headline").`,
   ].filter(Boolean).join('\n');
 
-  return image ? { text, image } : { text };
+  return anchor ? { text, image: anchor } : { text };
 }
