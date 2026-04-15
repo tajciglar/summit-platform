@@ -84,6 +84,61 @@ class ManageLandingPageBatches extends Page
             ->send();
     }
 
+    public function publishDraft(string $draftId): void
+    {
+        $draft = LandingPageDraft::with('batch.funnel.steps')->findOrFail($draftId);
+        abort_unless($draft->batch->funnel_id === $this->record->id, 403);
+        $batch = $draft->batch;
+
+        if ($draft->status !== 'ready' || $batch->status !== 'running') {
+            Notification::make()->title('This draft can no longer be published.')->warning()->send();
+
+            return;
+        }
+
+        $sections = $draft->sections ?? [];
+        if (empty($sections)) {
+            Notification::make()->title('This draft has no sections to publish.')->warning()->send();
+
+            return;
+        }
+
+        foreach ($sections as $section) {
+            if (($section['status'] ?? null) !== 'ready') {
+                Notification::make()
+                    ->title('All sections must be in the "ready" state before publishing.')
+                    ->warning()
+                    ->send();
+
+                return;
+            }
+        }
+
+        $optinStep = $batch->funnel?->steps()->where('slug', 'optin')->first();
+
+        if (! $optinStep) {
+            Notification::make()->title('No optin step found in the target funnel.')->danger()->send();
+
+            return;
+        }
+
+        DB::transaction(function () use ($draft, $batch, $optinStep) {
+            $optinStep->update(['content' => ['published_draft_id' => (string) $draft->id]]);
+            $draft->update(['status' => 'publishing']);
+            LandingPageDraft::where('batch_id', $batch->id)
+                ->where('id', '!=', $draft->id)
+                ->update(['status' => 'rejected']);
+            $batch->update(['status' => 'completed', 'completed_at' => now()]);
+        });
+
+        PublishLandingPageDraftJob::dispatch((string) $draft->id);
+
+        Notification::make()
+            ->title("Version {$draft->version_number} published — rendering in the background!")
+            ->success()
+            ->send();
+    }
+
     public function rejectDraft(string $draftId): void
     {
         $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
@@ -118,6 +173,9 @@ class ManageLandingPageBatches extends Page
         foreach ($sections as &$section) {
             if ($section['id'] === $sectionId) {
                 $section['status'] = 'regenerating';
+                if ($note !== null && $note !== '') {
+                    $section['regeneration_note'] = $note;
+                }
                 break;
             }
         }
@@ -127,6 +185,121 @@ class ManageLandingPageBatches extends Page
         RegenerateSectionJob::dispatch($draftId, $sectionId, $note);
 
         Notification::make()->title('Regenerating section — refresh in a moment to see the result.')->success()->send();
+    }
+
+    public function regenerateAllSections(string $draftId): void
+    {
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->funnel_id === $this->record->id, 403);
+
+        if ($draft->status !== 'ready') {
+            Notification::make()->title('Only ready drafts can be fully regenerated.')->warning()->send();
+
+            return;
+        }
+
+        $sections = $draft->sections ?? [];
+        if (empty($sections)) {
+            Notification::make()->title('This draft has no sections.')->warning()->send();
+
+            return;
+        }
+
+        foreach ($sections as &$section) {
+            $section['status'] = 'regenerating';
+        }
+        unset($section);
+
+        $draft->update(['sections' => $sections]);
+
+        foreach ($sections as $section) {
+            RegenerateSectionJob::dispatch((string) $draft->id, (string) $section['id'], null);
+        }
+
+        Notification::make()
+            ->title('Regenerating all sections — refresh in a moment to see results.')
+            ->success()
+            ->send();
+    }
+
+    public function updateSectionField(string $draftId, string $sectionId, int $fieldIndex, string $value): void
+    {
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->funnel_id === $this->record->id, 403);
+
+        $sections = $draft->sections ?? [];
+        $updated = false;
+
+        foreach ($sections as &$section) {
+            if (($section['id'] ?? null) === $sectionId) {
+                if (isset($section['fields'][$fieldIndex])) {
+                    $section['fields'][$fieldIndex]['value'] = $value;
+                    $updated = true;
+                }
+                break;
+            }
+        }
+        unset($section);
+
+        if (! $updated) {
+            return;
+        }
+
+        $draft->update(['sections' => $sections]);
+
+        Notification::make()->title('Saved.')->success()->duration(1500)->send();
+    }
+
+    public function deleteSection(string $draftId, string $sectionId): void
+    {
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->funnel_id === $this->record->id, 403);
+
+        $sections = $draft->sections ?? [];
+        $filtered = array_values(array_filter(
+            $sections,
+            fn ($s) => ($s['id'] ?? null) !== $sectionId,
+        ));
+
+        if (count($filtered) === count($sections)) {
+            return; // nothing removed
+        }
+
+        $draft->update(['sections' => $filtered]);
+
+        Notification::make()->title('Section removed.')->success()->send();
+    }
+
+    public function deleteDraft(string $draftId): void
+    {
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->funnel_id === $this->record->id, 403);
+
+        if (in_array($draft->status, ['generating', 'publishing'], true)) {
+            Notification::make()
+                ->title('Cannot delete a draft while it is generating or publishing.')
+                ->warning()
+                ->send();
+
+            return;
+        }
+
+        $batch = $draft->batch;
+        $versionNumber = $draft->version_number;
+
+        DB::transaction(function () use ($draft, $batch) {
+            $draft->delete();
+
+            // If this was the last draft in the batch, remove the batch too.
+            if ($batch && $batch->drafts()->count() === 0) {
+                $batch->delete();
+            }
+        });
+
+        Notification::make()
+            ->title("Version {$versionNumber} deleted.")
+            ->success()
+            ->send();
     }
 
     protected function getHeaderActions(): array
