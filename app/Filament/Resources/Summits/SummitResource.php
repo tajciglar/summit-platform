@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Summits;
 
 use App\Filament\Resources\Summits\Pages\CreateSummit;
 use App\Filament\Resources\Summits\Pages\EditSummit;
+use App\Filament\Resources\Summits\Pages\EditSummitStyleBrief;
 use App\Filament\Resources\Summits\Pages\ListSummits;
 use App\Filament\Resources\Summits\Schemas\SummitForm;
 use App\Filament\Resources\Summits\Tables\SummitsTable;
@@ -69,6 +70,7 @@ class SummitResource extends Resource
             'index' => ListSummits::route('/'),
             'create' => CreateSummit::route('/create'),
             'edit' => EditSummit::route('/{record}/edit'),
+            'style-brief' => EditSummitStyleBrief::route('/{record}/style-brief'),
         ];
     }
 }

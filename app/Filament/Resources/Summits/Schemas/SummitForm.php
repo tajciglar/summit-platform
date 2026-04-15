@@ -4,9 +4,11 @@ namespace App\Filament\Resources\Summits\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class SummitForm
@@ -53,6 +55,19 @@ class SummitForm
                     ->required(),
                 DateTimePicker::make('starts_at'),
                 DateTimePicker::make('ends_at'),
+                Section::make('Style')
+                    ->description('Drives AI-generated landing page look & feel across every funnel of this summit.')
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('style_reference_url')
+                            ->label('Style Reference URL')
+                            ->placeholder('https://parenting-summits.com')
+                            ->url()
+                            ->helperText('Used to auto-build a reusable Style Brief (palette, typography, density, hero pattern).'),
+                        Placeholder::make('style_brief_status_label')
+                            ->label('Style Brief Status')
+                            ->content(fn ($record) => $record?->style_brief_status ?? 'absent'),
+                    ]),
             ]);
     }
 }

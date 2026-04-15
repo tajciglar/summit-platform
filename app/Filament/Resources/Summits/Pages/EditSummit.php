@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\SummitResource;
+use App\Jobs\BuildStyleBriefJob;
 use App\Models\Summit;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -18,6 +19,26 @@ class EditSummit extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('buildStyleBrief')
+                ->label('Build Style Brief')
+                ->icon('heroicon-o-sparkles')
+                ->color('primary')
+                ->visible(fn (): bool => filled($this->getRecord()->style_reference_url))
+                ->requiresConfirmation()
+                ->modalDescription(fn (): string => 'This will screenshot the reference URL and analyse it with Gemini. Takes ~30–60 seconds.')
+                ->action(function (): void {
+                    BuildStyleBriefJob::dispatch($this->getRecord()->id);
+                    Notification::make()
+                        ->title('Building style brief — refresh in ~30s')
+                        ->success()
+                        ->send();
+                }),
+            Action::make('editStyleBrief')
+                ->label('Edit Style Brief')
+                ->icon('heroicon-o-pencil-square')
+                ->color('gray')
+                ->visible(fn (): bool => in_array($this->getRecord()->style_brief_status, ['ready', 'failed'], true))
+                ->url(fn () => SummitResource::getUrl('style-brief', ['record' => $this->getRecord()])),
             Action::make('preview')
                 ->label('Preview')
                 ->icon('heroicon-o-eye')
