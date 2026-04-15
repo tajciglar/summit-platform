@@ -132,10 +132,22 @@ User message (multimodal):
   - Text: The DESIGN_SYSTEM block (palette, typography, mood).
   - Text: The block-template.md rules (file layout, a11y, responsive rules).
   - Text: Example block source (Component.tsx + meta.ts + schema.ts from HeroWithCountdown).
+  - Text: Primitive source code for every @/components/ui/* component Gemini might use
+          (accordion.tsx, button.tsx, card.tsx, input.tsx, label.tsx, select.tsx,
+          separator.tsx, textarea.tsx). See "Spike findings" below for why.
   - Image: the reference PNG (e.g. 18_FAQAccordion.png).
   - Text: "Return a JSON envelope with schema_ts, meta_ts, component_tsx,
            index_ts as string fields. No markdown fences. No commentary."
 ```
+
+### Spike findings (2026-04-15)
+
+A two-iteration spike against `FAQAccordion` proved:
+
+1. **Works.** Gemini 2.5 Pro produces structurally valid, typechecking React block code in ~60s per block.
+2. **Needs explicit primitive list.** First iteration (no primitive hint) reinvented the accordion from scratch with `useState`. Second iteration (with primitive import list in prompt) correctly used `@/components/ui/accordion`.
+3. **Needs primitive source code, not just import names.** Second iteration typechecked clean on most fields but assumed shadcn/radix API (`type="single" collapsible`) for the Accordion. This project uses base-ui underneath, which has a different API. Conclusion: the prompt must include the *actual source* of each primitive Gemini might reach for, so it stops guessing. Budget ~500–1000 tokens per primitive in the prompt.
+4. **Output quality approaches hand-written after tuning.** Second-iteration Component was ~50 lines vs the hand-written ~30; structurally similar; server-component; prop-driven.
 
 ### Error handling
 
