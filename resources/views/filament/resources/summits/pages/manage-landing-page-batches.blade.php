@@ -91,6 +91,40 @@
                                         </button>
                                     @endif
                                 </div>
+
+                                @if ($draft->sections)
+                                    <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Sections</p>
+                                    <div class="mt-1 space-y-1">
+                                        @foreach ($draft->sections as $section)
+                                            <div class="flex items-center justify-between gap-2">
+                                                <span class="text-xs text-gray-700 dark:text-gray-300 truncate">
+                                                    {{ $section['type'] }}
+                                                </span>
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <x-filament::badge :color="match($section['status'] ?? '') {
+                                                        'ready'        => 'success',
+                                                        'regenerating' => 'warning',
+                                                        'failed'       => 'danger',
+                                                        default        => 'gray',
+                                                    }">
+                                                        {{ $section['status'] ?? 'unknown' }}
+                                                    </x-filament::badge>
+                                                    <button
+                                                        wire:click="regenerateSection('{{ $draft->id }}', '{{ $section['id'] }}')"
+                                                        wire:loading.attr="disabled"
+                                                        wire:target="regenerateSection('{{ $draft->id }}', '{{ $section['id'] }}')"
+                                                        class="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    >
+                                                        ↺ Regenerate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            @if (($section['status'] ?? '') === 'failed' && ! empty($section['error']))
+                                                <p class="text-xs text-red-500">{{ $section['error'] }}</p>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         @endforeach
 

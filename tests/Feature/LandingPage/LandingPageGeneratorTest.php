@@ -5,6 +5,7 @@ namespace Tests\Feature\LandingPage;
 use App\Models\Summit;
 use App\Services\Blocks\BlockCatalogService;
 use App\Services\FunnelGenerator\Phases\ArchitectPhase;
+use App\Services\FunnelGenerator\Phases\BlockDesignPhase;
 use App\Services\FunnelGenerator\Phases\CopywriterPhase;
 use App\Services\LandingPageGenerator;
 use Mockery;
@@ -20,9 +21,10 @@ it('returns flat block array with uuid ids', function () {
     $fakeSequence = ['optin' => [['type' => 'HeroBlock', 'version' => 1]]];
     $fakeBlocks   = [['type' => 'HeroBlock', 'version' => 1, 'props' => ['headline' => 'Join us']]];
 
-    $architect  = Mockery::mock(ArchitectPhase::class);
-    $copywriter = Mockery::mock(CopywriterPhase::class);
-    $catalog    = Mockery::mock(BlockCatalogService::class);
+    $architect       = Mockery::mock(ArchitectPhase::class);
+    $copywriter      = Mockery::mock(CopywriterPhase::class);
+    $catalog         = Mockery::mock(BlockCatalogService::class);
+    $blockDesignPhase = Mockery::mock(BlockDesignPhase::class);
 
     $catalog->shouldReceive('current')->once()->andReturn([]);
 
@@ -36,7 +38,7 @@ it('returns flat block array with uuid ids', function () {
         ->withArgs(fn ($brief, $cat, $stepType, $seq) => $stepType === 'optin')
         ->andReturn($fakeBlocks);
 
-    $generator = new LandingPageGenerator($architect, $copywriter, $catalog);
+    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase);
     $blocks    = $generator->generate($summit, 'Focus on single parents.');
 
     expect($blocks)->toHaveCount(1);
@@ -55,9 +57,10 @@ it('passes summit context in brief', function () {
 
     $capturedBrief = null;
 
-    $architect  = Mockery::mock(ArchitectPhase::class);
-    $copywriter = Mockery::mock(CopywriterPhase::class);
-    $catalog    = Mockery::mock(BlockCatalogService::class);
+    $architect        = Mockery::mock(ArchitectPhase::class);
+    $copywriter       = Mockery::mock(CopywriterPhase::class);
+    $catalog          = Mockery::mock(BlockCatalogService::class);
+    $blockDesignPhase = Mockery::mock(BlockDesignPhase::class);
 
     $catalog->shouldReceive('current')->andReturn([]);
     $architect->shouldReceive('run')
@@ -68,7 +71,7 @@ it('passes summit context in brief', function () {
         ->andReturn(['optin' => []]);
     $copywriter->shouldReceive('run')->andReturn([]);
 
-    $generator = new LandingPageGenerator($architect, $copywriter, $catalog);
+    $generator = new LandingPageGenerator($architect, $copywriter, $catalog, $blockDesignPhase);
     $generator->generate($summit, 'Extra notes here.');
 
     expect($capturedBrief['summit_name'])->toBe('My Summit');

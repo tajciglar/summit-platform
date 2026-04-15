@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\Actions\GenerateLandingPagesAction;
 use App\Filament\Resources\Summits\SummitResource;
+use App\Jobs\RegenerateSectionJob;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use Filament\Notifications\Notification;
@@ -27,6 +28,7 @@ class ManageLandingPageBatches extends Page
     public function approveDraft(string $draftId): void
     {
         $draft = LandingPageDraft::with('batch.funnel.steps')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
         $batch = $draft->batch;
 
         if ($draft->status !== 'ready' || $batch->status !== 'running') {
@@ -47,17 +49,30 @@ class ManageLandingPageBatches extends Page
             return;
         }
 
-        DB::transaction(function () use ($draft, $batch, $optinStep) {
-            $optinStep->update(['content' => $draft->blocks]);
-            $draft->update(['status' => 'approved']);
+        $useNewPath = config('features.runtime_gemini_gen') && !empty($draft->sections);
+
+        DB::transaction(function () use ($draft, $batch, $optinStep, $useNewPath) {
+            if ($useNewPath) {
+                $optinStep->update(['content' => ['published_draft_id' => (string) $draft->id]]);
+                $draft->update(['status' => 'publishing']);
+            } else {
+                $optinStep->update(['content' => $draft->blocks]);
+                $draft->update(['status' => 'approved']);
+            }
             LandingPageDraft::where('batch_id', $batch->id)
                 ->where('id', '!=', $draft->id)
                 ->update(['status' => 'rejected']);
             $batch->update(['status' => 'completed', 'completed_at' => now()]);
         });
 
+        if ($useNewPath) {
+            \App\Jobs\PublishLandingPageDraftJob::dispatch((string) $draft->id);
+        }
+
         Notification::make()
-            ->title("Version {$draft->version_number} approved and pushed to production!")
+            ->title($useNewPath
+                ? "Version {$draft->version_number} approved — publishing to Next.js in the background!"
+                : "Version {$draft->version_number} approved and pushed to production!")
             ->success()
             ->send();
     }
@@ -65,6 +80,7 @@ class ManageLandingPageBatches extends Page
     public function rejectDraft(string $draftId): void
     {
         $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
 
         if ($draft->status !== 'ready' || $draft->batch->status !== 'running') {
             Notification::make()->title('Draft cannot be rejected.')->warning()->send();
@@ -75,6 +91,41 @@ class ManageLandingPageBatches extends Page
 
         Notification::make()
             ->title("Version {$draft->version_number} rejected.")
+            ->send();
+    }
+
+    public function regenerateSection(string $draftId, string $sectionId, ?string $note = null): void
+    {
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
+
+        if (!\Illuminate\Support\Str::isUuid($sectionId)) {
+            return;
+        }
+
+        if ($draft->status !== 'ready') {
+            Notification::make()
+                ->title('Only ready drafts can have sections regenerated.')
+                ->warning()
+                ->send();
+            return;
+        }
+
+        $sections = $draft->sections ?? [];
+        foreach ($sections as &$section) {
+            if ($section['id'] === $sectionId) {
+                $section['status'] = 'regenerating';
+                break;
+            }
+        }
+        unset($section);
+        $draft->update(['sections' => $sections]);
+
+        RegenerateSectionJob::dispatch($draftId, $sectionId, $note);
+
+        Notification::make()
+            ->title('Regenerating section — refresh in a moment to see the result.')
+            ->success()
             ->send();
     }
 

@@ -25,12 +25,19 @@ class GenerateLandingPageVersionJob implements ShouldQueue
             $summit = $this->draft->batch->summit;
             $notes  = $this->draft->batch->notes ?? '';
 
-            $blocks = $generator->generate($summit, $notes);
-
-            $this->draft->update([
-                'blocks' => $blocks,
-                'status' => 'ready',
-            ]);
+            if (config('features.runtime_gemini_gen')) {
+                $sections = $generator->generateSections($summit, $notes);
+                $this->draft->update([
+                    'sections' => $sections,
+                    'status'   => 'ready',
+                ]);
+            } else {
+                $blocks = $generator->generate($summit, $notes);
+                $this->draft->update([
+                    'blocks' => $blocks,
+                    'status' => 'ready',
+                ]);
+            }
         } catch (Throwable $e) {
             $this->draft->update([
                 'status'        => 'failed',

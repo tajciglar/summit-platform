@@ -71,4 +71,30 @@ class Summit extends Model
     {
         return $this->hasMany(SummitChecklistItem::class)->orderBy('sort_order');
     }
+
+    public function buildSummitContext(): array
+    {
+        $speakers = [];
+        try {
+            $this->loadMissing('summitSpeakers.speaker');
+            foreach ($this->summitSpeakers as $link) {
+                $speakers[] = [
+                    'name'  => $link->speaker?->full_name ?? '',
+                    'photo' => $link->speaker?->photo_url ?? null,
+                ];
+            }
+        } catch (\Throwable) {
+            $speakers = [];
+        }
+
+        return [
+            'name'        => $this->title,
+            'date'        => $this->starts_at?->toDateString() ?? '',
+            'brandColors' => [],
+            'mode'        => 'light',
+            'speakers'    => $speakers,
+            'toneBrief'   => '',
+            'product'     => null,
+        ];
+    }
 }
