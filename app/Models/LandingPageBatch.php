@@ -18,6 +18,7 @@ class LandingPageBatch extends Model
         'version_count',
         'status',
         'notes',
+        'style_reference',
         'completed_at',
     ];
 

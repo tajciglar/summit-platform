@@ -17,7 +17,7 @@ class BlockDesignPhase
             foreach ($sectionBriefs as $i => $brief) {
                 $out[] = $pool->as("s_{$i}")
                     ->withToken($token)
-                    ->timeout(90)
+                    ->timeout(180)
                     ->post("{$base}/api/sections/generate", [
                         'section' => $brief,
                         'summit' => $summitContext,
@@ -30,8 +30,21 @@ class BlockDesignPhase
         $sections = [];
         foreach ($sectionBriefs as $i => $_) {
             $resp = $responses["s_{$i}"];
-            if (!$resp->successful()) {
-                $sections[] = $this->failedStub($sectionBriefs[$i]['type'], "HTTP {$resp->status()}");
+            // Http::pool() stores Throwables in the response map when the
+            // underlying request errored (connection/SSL/timeout etc.). Guard
+            // against that before calling Response-only methods.
+            if ($resp instanceof \Throwable) {
+                $sections[] = $this->failedStub(
+                    $sectionBriefs[$i]['type'],
+                    'Request error: '.substr($resp->getMessage(), 0, 240),
+                );
+                continue;
+            }
+            if (! $resp->successful()) {
+                $sections[] = $this->failedStub(
+                    $sectionBriefs[$i]['type'],
+                    "HTTP {$resp->status()}: ".substr($resp->body(), 0, 240),
+                );
                 continue;
             }
             $sections[] = $resp->json();
@@ -43,7 +56,7 @@ class BlockDesignPhase
     {
         $base = rtrim(config('services.next_app.url'), '/');
         $token = config('services.next_app.token');
-        $resp = Http::withToken($token)->timeout(90)->post("{$base}/api/sections/regenerate", [
+        $resp = Http::withToken($token)->timeout(180)->post("{$base}/api/sections/regenerate", [
             'section' => ['type' => $currentSection['type'], 'purpose' => '', 'position' => 0, 'total' => 0],
             'summit' => $summitContext,
             'currentJsx' => $currentSection['jsx'] ?? null,

@@ -12,7 +12,10 @@ class GenerateLandingPageVersionJob implements ShouldQueue
 {
     use Queueable;
 
-    public int $timeout = 180;
+    // Must exceed BlockDesignPhase HTTP timeout (180s) so a slow section
+    // doesn't cause the job itself to time out before it can report the
+    // failure back through the defensive error handler.
+    public int $timeout = 240;
     public int $tries   = 1;
 
     public function __construct(public readonly LandingPageDraft $draft) {}
@@ -24,15 +27,16 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         try {
             $summit = $this->draft->batch->summit;
             $notes  = $this->draft->batch->notes ?? '';
+            $styleRef = $this->draft->batch->style_reference;
 
             if (config('features.runtime_gemini_gen')) {
-                $sections = $generator->generateSections($summit, $notes);
+                $sections = $generator->generateSections($summit, $notes, $styleRef);
                 $this->draft->update([
                     'sections' => $sections,
                     'status'   => 'ready',
                 ]);
             } else {
-                $blocks = $generator->generate($summit, $notes);
+                $blocks = $generator->generate($summit, $notes, $styleRef);
                 $this->draft->update([
                     'blocks' => $blocks,
                     'status' => 'ready',

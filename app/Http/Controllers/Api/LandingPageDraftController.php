@@ -65,6 +65,7 @@ class LandingPageDraftController extends Controller
 
         return response()->json([
             'blocks'   => $draft->blocks ?? [],
+            'sections' => $draft->sections ?? [],
             'summit'   => [
                 'id'            => $summit->id,
                 'title'         => $summit->title,
@@ -73,7 +74,7 @@ class LandingPageDraftController extends Controller
                 'ends_at'       => $summit->ends_at,
                 'current_phase' => $summit->current_phase,
             ],
-            'theme'    => $funnel?->theme ?: $this->defaultTheme(),
+            'theme'    => $this->normaliseTheme($funnel?->theme),
             'speakers' => $speakers,
             'products' => $products,
             'draft'    => [
@@ -93,6 +94,40 @@ class LandingPageDraftController extends Controller
             'fontBody'        => 'Inter',
             'logoUrl'         => null,
             'backgroundStyle' => 'light',
+        ];
+    }
+
+    /**
+     * Normalise a funnel's stored theme to the flat shape the Next.js
+     * ThemeProvider expects. Funnels store theme as
+     *   { colors: { primary, accent, ... }, fonts: { heading, body }, logo_url }
+     * but the frontend wants
+     *   { primaryColor, accentColor, fontHeading, fontBody, logoUrl, backgroundStyle }.
+     * Missing keys fall back to defaults so hexToRgbTriplet() never sees undefined.
+     */
+    private function normaliseTheme(mixed $raw): array
+    {
+        $defaults = $this->defaultTheme();
+        if (! is_array($raw) || $raw === []) {
+            return $defaults;
+        }
+
+        // Already flat (has primaryColor)? Return after filling any gaps.
+        if (isset($raw['primaryColor']) || isset($raw['accentColor'])) {
+            return array_merge($defaults, array_filter($raw, fn ($v) => $v !== null));
+        }
+
+        // Nested shape → flatten.
+        $colors = is_array($raw['colors'] ?? null) ? $raw['colors'] : [];
+        $fonts = is_array($raw['fonts'] ?? null) ? $raw['fonts'] : [];
+
+        return [
+            'primaryColor'    => $colors['primary'] ?? $defaults['primaryColor'],
+            'accentColor'     => $colors['accent']  ?? $defaults['accentColor'],
+            'fontHeading'     => $fonts['heading']  ?? $defaults['fontHeading'],
+            'fontBody'        => $fonts['body']     ?? $defaults['fontBody'],
+            'logoUrl'         => $raw['logo_url']   ?? $raw['logoUrl'] ?? $defaults['logoUrl'],
+            'backgroundStyle' => $raw['backgroundStyle'] ?? $defaults['backgroundStyle'],
         ];
     }
 }

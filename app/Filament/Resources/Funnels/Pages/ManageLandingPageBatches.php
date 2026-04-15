@@ -318,6 +318,11 @@ class ManageLandingPageBatches extends Page
                         ->maxValue(10)
                         ->default(3)
                         ->required(),
+                    TextInput::make('style_reference')
+                        ->label('Style Reference URL (optional)')
+                        ->url()
+                        ->placeholder('https://example.com/landing-page')
+                        ->helperText('Paste a public URL whose layout/visual style Gemini should mimic.'),
                     Textarea::make('notes')
                         ->label('Creative Notes (optional)')
                         ->rows(3)
@@ -330,6 +335,7 @@ class ManageLandingPageBatches extends Page
                         'version_count' => (int) $data['version_count'],
                         'status' => 'queued',
                         'notes' => $data['notes'] ?? null,
+                        'style_reference' => $data['style_reference'] ?? null,
                     ]);
                     dispatch(new GenerateLandingPageBatchJob($batch));
                 })

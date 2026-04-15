@@ -21,9 +21,24 @@ class AnthropicClient
                 when: fn (\Throwable $e) => $this->shouldRetry($e),
             )
             ->throw()
-            ->post(rtrim(config('anthropic.base_url'), '/').'/messages', $payload);
+            ->post($this->messagesEndpoint(), $payload);
 
         return $response->json();
+    }
+
+    /**
+     * Build the messages endpoint URL, defensively appending /v1 when the
+     * configured base URL omits it (common when shell env leaks a bare
+     * `https://api.anthropic.com` over the .env default).
+     */
+    private function messagesEndpoint(): string
+    {
+        $base = rtrim((string) config('anthropic.base_url'), '/');
+        if (! preg_match('#/v\d+$#', $base)) {
+            $base .= '/v1';
+        }
+
+        return $base.'/messages';
     }
 
     private function shouldRetry(\Throwable $exception): bool

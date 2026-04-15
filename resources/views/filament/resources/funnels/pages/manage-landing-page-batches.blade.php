@@ -30,7 +30,22 @@
         };
 
         $humanise = fn ($t) => Str::of($t ?? '')->replace('_', ' ')->title();
+
+        // Auto-refresh only while something is in flight — stop polling once
+        // every batch is completed/failed and no draft is transient.
+        $hasActive = $batches->contains(
+            fn ($b) => in_array($b->status, ['queued', 'running'], true)
+                || $b->drafts->contains(fn ($d) => in_array(
+                    $d->status,
+                    ['pending', 'generating', 'regenerating', 'publishing'],
+                    true,
+                )),
+        );
     @endphp
+
+    @if ($hasActive)
+        <div wire:poll.5000ms></div>
+    @endif
 
     @if ($batches->isEmpty())
         <x-filament::section>

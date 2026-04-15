@@ -1,10 +1,12 @@
 import type { BlockRow } from '@/types/block'
+import type { Section } from './blocks/types'
 import type { Theme } from './theme-context'
 
 const API_BASE = process.env.NEXT_PUBLIC_LARAVEL_API_URL || 'http://localhost:8000'
 
 export interface DraftPreview {
   blocks: BlockRow[]
+  sections?: Section[]
   summit: {
     id: string
     title: string

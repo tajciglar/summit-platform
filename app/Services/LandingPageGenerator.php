@@ -23,9 +23,9 @@ class LandingPageGenerator
      *
      * @return array<int, array{id:string, type:string, version:int, props:array}>
      */
-    public function generate(Summit $summit, string $notes = ''): array
+    public function generate(Summit $summit, string $notes = '', ?string $styleReference = null): array
     {
-        $brief   = $this->buildBrief($summit, $notes);
+        $brief   = $this->buildBrief($summit, $notes, $styleReference);
         $catalog = $this->catalogService->current();
 
         // Phase 1 — Architect picks blocks for optin only
@@ -51,9 +51,9 @@ class LandingPageGenerator
      *
      * @return array<int, array{id:string, type:string, jsx:string, fields:array, status:string, ...}>
      */
-    public function generateSections(Summit $summit, string $notes = ''): array
+    public function generateSections(Summit $summit, string $notes = '', ?string $styleReference = null): array
     {
-        $brief   = $this->buildBrief($summit, $notes);
+        $brief   = $this->buildBrief($summit, $notes, $styleReference);
         $catalog = $this->catalogService->current();
 
         $sequence = $this->architect->run($brief, $catalog, ['optin']);
@@ -70,13 +70,20 @@ class LandingPageGenerator
             ];
         }
 
+        // Inject style_reference into the summit context so BlockDesignPhase
+        // forwards it to Gemini in the per-section design prompt.
+        $context = $summit->buildSummitContext();
+        if (! empty($styleReference)) {
+            $context['style_reference_url'] = $styleReference;
+        }
+
         return $this->blockDesignPhase->run(
             sectionBriefs: $sectionBriefs,
-            summitContext: $summit->buildSummitContext(),
+            summitContext: $context,
         );
     }
 
-    protected function buildBrief(Summit $summit, string $notes): array
+    protected function buildBrief(Summit $summit, string $notes, ?string $styleReference = null): array
     {
         return [
             'summit_name'        => $summit->title,
@@ -84,6 +91,7 @@ class LandingPageGenerator
             'starts_at'          => $summit->starts_at?->toDateString(),
             'ends_at'            => $summit->ends_at?->toDateString(),
             'notes'              => $notes,
+            'style_reference'    => $styleReference,
         ];
     }
 }
