@@ -2,6 +2,7 @@ import { config } from 'dotenv'
 import { readFileSync, existsSync } from 'node:fs'
 import { resolve, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { spawnSync } from 'node:child_process'
 
 import { DESIGN_SYSTEM } from './lib/design-system'
 import { packPrimitives } from './lib/primitive-packer'
@@ -103,7 +104,21 @@ async function main() {
   console.log(`✓ Component.tsx  (${envelope.component_tsx.length} chars)`)
   console.log(`✓ index.ts       (${envelope.index_ts.length} chars)`)
   console.log(`\nDone in ${Math.round((Date.now() - started) / 1000)}s.`)
-  console.log(`\nNext: add '${name}' to src/blocks/_register.ts, run pnpm typecheck, review in Storybook.`)
+
+  const nextAppDir = resolve(_dirname, '..')
+  if (hasFlag('skip-typecheck')) {
+    console.log('\nSkipping typecheck (--skip-typecheck).')
+  } else {
+    console.log('\nRunning pnpm typecheck…')
+    const result = spawnSync('pnpm', ['typecheck'], { cwd: nextAppDir, stdio: 'inherit' })
+    if (result.status !== 0) {
+      console.error(`\nTypecheck failed (exit ${result.status}). Block written but needs fixes.`)
+      process.exit(3)
+    }
+    console.log('✓ typecheck passed')
+  }
+
+  console.log(`\nNext: add '${name}' to src/blocks/_register.ts, review in Storybook.`)
 }
 
 main().catch((err) => {
