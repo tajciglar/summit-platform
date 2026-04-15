@@ -59,4 +59,9 @@ return [
         'timeout' => (int) env('FUNNELFORGE_TIMEOUT', 120),
     ],
 
+    'next_app' => [
+        'url' => env('NEXT_APP_URL', 'http://localhost:3000'),
+        'token' => env('INTERNAL_API_TOKEN'),
+    ],
+
 ];
