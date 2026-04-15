@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Filament\Resources\Summits\Pages\ManageLandingPageBatches;
+use App\Filament\Resources\Funnels\Pages\ManageLandingPageBatches;
 use App\Jobs\PublishLandingPageDraftJob;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
@@ -17,10 +17,10 @@ class ManageLandingPageBatchesApproveTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function makePage(Summit $summit): ManageLandingPageBatches
+    private function makePage(Funnel $funnel): ManageLandingPageBatches
     {
         $page = new ManageLandingPageBatches();
-        $page->record = $summit;
+        $page->record = $funnel;
         return $page;
     }
 
@@ -55,7 +55,7 @@ class ManageLandingPageBatchesApproveTest extends TestCase
             'blocks'   => ['foo' => 'bar'],
         ]);
 
-        $this->makePage($summit)->approveDraft($draft->id);
+        $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['foo' => 'bar'], $optinStep->fresh()->content);
         $this->assertSame('approved', $draft->fresh()->status);
@@ -82,7 +82,7 @@ class ManageLandingPageBatchesApproveTest extends TestCase
             'sections' => [['id' => 'abc', 'type' => 'hero', 'status' => 'ready']],
         ]);
 
-        $this->makePage($summit)->approveDraft($draft->id);
+        $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['published_draft_id' => $draft->id], $optinStep->fresh()->content);
         $this->assertSame('publishing', $draft->fresh()->status);
@@ -111,7 +111,7 @@ class ManageLandingPageBatchesApproveTest extends TestCase
             'blocks'   => ['foo' => 'bar'],
         ]);
 
-        $this->makePage($summit)->approveDraft($draft->id);
+        $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['foo' => 'bar'], $optinStep->fresh()->content);
         $this->assertSame('approved', $draft->fresh()->status);

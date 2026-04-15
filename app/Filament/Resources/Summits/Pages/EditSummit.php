@@ -18,11 +18,6 @@ class EditSummit extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('landingPages')
-                ->label('Landing Pages')
-                ->icon('heroicon-o-sparkles')
-                ->color('primary')
-                ->url(fn () => SummitResource::getUrl('landing-pages', ['record' => $this->getRecord()])),
             Action::make('preview')
                 ->label('Preview')
                 ->icon('heroicon-o-eye')
@@ -53,11 +48,11 @@ class EditSummit extends EditRecord
                     TextInput::make('title')
                         ->label('New Summit Title')
                         ->required()
-                        ->default(fn () => $this->getRecord()->title . ' (Copy)'),
+                        ->default(fn () => $this->getRecord()->title.' (Copy)'),
                     TextInput::make('slug')
                         ->label('New Slug')
                         ->required()
-                        ->default(fn () => $this->getRecord()->slug . '-copy'),
+                        ->default(fn () => $this->getRecord()->slug.'-copy'),
                 ])
                 ->action(function (array $data) {
                     /** @var Summit $source */
@@ -74,13 +69,13 @@ class EditSummit extends EditRecord
                     foreach ($source->funnels as $funnel) {
                         $newFunnel = $funnel->replicate(['id', 'summit_id', 'created_at', 'updated_at']);
                         $newFunnel->summit_id = $clone->id;
-                        $newFunnel->slug = $funnel->slug . '-' . Str::random(4);
+                        $newFunnel->slug = $funnel->slug.'-'.Str::random(4);
                         $newFunnel->save();
 
                         foreach ($funnel->steps as $step) {
                             $newStep = $step->replicate(['id', 'funnel_id', 'created_at', 'updated_at']);
                             $newStep->funnel_id = $newFunnel->id;
-                            $newStep->slug = $step->slug . '-' . Str::random(4);
+                            $newStep->slug = $step->slug.'-'.Str::random(4);
                             $newStep->save();
 
                             foreach ($step->bumps as $bump) {

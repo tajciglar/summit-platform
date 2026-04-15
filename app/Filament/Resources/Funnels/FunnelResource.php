@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Funnels;
 use App\Filament\Resources\Funnels\Pages\CreateFunnel;
 use App\Filament\Resources\Funnels\Pages\EditFunnel;
 use App\Filament\Resources\Funnels\Pages\ListFunnels;
+use App\Filament\Resources\Funnels\Pages\ManageLandingPageBatches;
 use App\Filament\Resources\Funnels\Schemas\FunnelForm;
 use App\Filament\Resources\Funnels\Tables\FunnelsTable;
 use App\Models\Funnel;
@@ -47,6 +48,7 @@ class FunnelResource extends Resource
             'index' => ListFunnels::route('/'),
             'create' => CreateFunnel::route('/create'),
             'edit' => EditFunnel::route('/{record}/edit'),
+            'landing-pages' => ManageLandingPageBatches::route('/{record}/landing-pages'),
         ];
     }
 }

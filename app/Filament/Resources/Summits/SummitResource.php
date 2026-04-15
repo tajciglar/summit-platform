@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Summits;
 use App\Filament\Resources\Summits\Pages\CreateSummit;
 use App\Filament\Resources\Summits\Pages\EditSummit;
 use App\Filament\Resources\Summits\Pages\ListSummits;
-use App\Filament\Resources\Summits\Pages\ManageLandingPageBatches;
 use App\Filament\Resources\Summits\Schemas\SummitForm;
 use App\Filament\Resources\Summits\Tables\SummitsTable;
 use App\Models\Summit;
@@ -14,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SummitResource extends Resource
 {
@@ -32,7 +32,7 @@ class SummitResource extends Resource
         return ['title', 'slug', 'topic'];
     }
 
-    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
             'Type' => ucfirst($record->summit_type),
@@ -69,7 +69,6 @@ class SummitResource extends Resource
             'index' => ListSummits::route('/'),
             'create' => CreateSummit::route('/create'),
             'edit' => EditSummit::route('/{record}/edit'),
-            'landing-pages' => ManageLandingPageBatches::route('/{record}/landing-pages'),
         ];
     }
 }

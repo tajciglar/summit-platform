@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Filament\Resources\Summits\Pages\ManageLandingPageBatches;
+use App\Filament\Resources\Funnels\Pages\ManageLandingPageBatches;
 use App\Jobs\RegenerateSectionJob;
+use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
@@ -20,9 +21,11 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         Queue::fake();
 
         $summit = Summit::factory()->create();
+        $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
+            'funnel_id' => $funnel->id,
             'status'    => 'running',
         ]);
 
@@ -37,7 +40,7 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         ]);
 
         $page = new ManageLandingPageBatches();
-        $page->record = $summit;
+        $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
 
@@ -55,9 +58,11 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         Queue::fake();
 
         $summit = Summit::factory()->create();
+        $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
+            'funnel_id' => $funnel->id,
             'status'    => 'running',
         ]);
 
@@ -72,7 +77,7 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         ]);
 
         $page = new ManageLandingPageBatches();
-        $page->record = $summit;
+        $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
 
@@ -87,9 +92,11 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         Queue::fake();
 
         $summit = Summit::factory()->create();
+        $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
+            'funnel_id' => $funnel->id,
             'status'    => 'completed',
         ]);
 
@@ -104,7 +111,7 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         ]);
 
         $page = new ManageLandingPageBatches();
-        $page->record = $summit;
+        $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
 
@@ -116,9 +123,11 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         Queue::fake();
 
         $summit = Summit::factory()->create();
+        $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
+            'funnel_id' => $funnel->id,
             'status'    => 'running',
         ]);
 
@@ -131,7 +140,7 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         ]);
 
         $page = new ManageLandingPageBatches();
-        $page->record = $summit;
+        $page->record = $funnel;
 
         $page->regenerateSection($draft->id, 'not-a-uuid', null);
 
