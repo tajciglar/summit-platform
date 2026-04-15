@@ -4,9 +4,7 @@ import { resolve, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
 
-import { DESIGN_SYSTEM } from './lib/design-system'
-import { packPrimitives } from './lib/primitive-packer'
-import { packExampleBlock } from './lib/example-block-packer'
+import { loadDesignSystem, loadPrimitiveSources, loadExampleBlock } from './lib/prompt-parts'
 import { loadBlockTemplate } from './lib/block-template'
 import { generateBlockCode } from './lib/gemini-client'
 import { parseEnvelope } from './lib/envelope'
@@ -67,7 +65,7 @@ async function main() {
     process.exit(1)
   }
 
-  const referencePath = resolve(_dirname, '../..', reference)
+  const referencePath = resolve(process.cwd(), reference)
   if (!existsSync(referencePath)) {
     console.error(`Reference PNG not found: ${referencePath}`)
     process.exit(1)
@@ -81,8 +79,8 @@ async function main() {
   console.log(`Reference: ${reference}`)
   console.log(`Output:    ${outDir}${force ? ' (force overwrite)' : ''}\n`)
 
-  const primitives = packPrimitives(PRIMITIVES)
-  const exampleBlock = packExampleBlock(EXAMPLE_CATEGORY, EXAMPLE_NAME)
+  const primitives = await loadPrimitiveSources(PRIMITIVES)
+  const exampleBlock = await loadExampleBlock(EXAMPLE_CATEGORY, EXAMPLE_NAME)
   const blockTemplate = loadBlockTemplate()
   const referencePng = readFileSync(referencePath)
 
@@ -91,7 +89,7 @@ async function main() {
     apiKey: process.env.GEMINI_API_KEY,
     model: MODEL,
     systemPrompt: SYSTEM_PROMPT,
-    designSystem: DESIGN_SYSTEM,
+    designSystem: await loadDesignSystem(),
     primitives,
     exampleBlock,
     blockTemplate,
