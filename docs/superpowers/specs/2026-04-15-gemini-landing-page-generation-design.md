@@ -279,3 +279,15 @@ Neither requires a budget or rate-limit infrastructure.
 - **Do we regenerate existing blocks or only new ones?** Recommend: existing blocks stay as-is until a dev intentionally runs the CLI against them. No forced overwrite.
 - **Schema synthesis quality:** Gemini may pick prop names that differ from our conventions. Mitigation: the example block it sees demonstrates conventions. If it persistently diverges, seed the `schema.ts` manually and pass it to the CLI instead of generating it.
 - **Operator-facing Gemini regen (V3?):** should operators eventually be able to regenerate block *code* from Filament? Not recommended — generated code hitting production without dev review is a safety problem. Parked.
+
+## Phase 10 verification notes (2026-04-15)
+
+Live run: `pnpm gen:block --name=VerifyFAQ --category=_verify --reference=docs/block-references/18_FAQAccordion.png`
+
+**Pipeline:** 64s end-to-end. Gemini returned a well-formed envelope, all four files written, design-system palette respected (teal-600 + `#F0FDFA` light-teal bg), server component (no `"use client"`), primitives imported correctly, `globalRegistry.register` present.
+
+**Gotchas found:**
+1. **`BlockMeta.category` is a constrained union** — `_verify` is not allowed. Sandbox runs must use a real category (e.g. `content`) or we temporarily widen the union. Not a generator bug; a verification-setup issue.
+2. **Primitive API drift** — Gemini passed `defaultValue={faqs[0]?.id}` (string) but our Accordion expects `string[]`. Prompt already warns against this, but it still happens. The post-write typecheck gate catches this (exit 3), so devs won't ship it unnoticed. Expected imperfection for a first-pass generator; manual review step in Storybook is the backstop.
+
+**Conclusion:** CLI is fit for purpose. Next step — regenerate `02_HeroWithCountdown` against a real category and iterate on prompt wording if the Accordion-API miss recurs across blocks.
