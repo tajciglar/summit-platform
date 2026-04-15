@@ -36,4 +36,9 @@ class LandingPageDraft extends Model
     {
         return $this->belongsTo(LandingPageBatch::class, 'batch_id');
     }
+
+    public function buildSummitContext(): array
+    {
+        return $this->batch->summit->buildSummitContext();
+    }
 }
