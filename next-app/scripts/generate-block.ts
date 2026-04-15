@@ -30,6 +30,9 @@ const PRIMITIVES = ['accordion', 'button', 'card', 'input', 'label', 'select', '
 const EXAMPLE_CATEGORY = 'hero'
 const EXAMPLE_NAME = 'HeroWithCountdown'
 
+const NAME_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/
+const CATEGORY_PATTERN = /^[a-z][a-z0-9-]*$/
+
 function getArg(flag: string): string | undefined {
   return process.argv.slice(2).find((a) => a.startsWith(`--${flag}=`))?.split('=')[1]
 }
@@ -47,6 +50,15 @@ async function main() {
 
   if (!name || !category || !reference) {
     console.error('Usage: pnpm gen:block --name=<Block> --category=<cat> --reference=<png> [--validOn=optin,sales_page] [--force]')
+    process.exit(1)
+  }
+
+  if (!NAME_PATTERN.test(name)) {
+    console.error(`--name rejected: ${JSON.stringify(name)} (expected PascalCase/alphanumeric)`)
+    process.exit(1)
+  }
+  if (!CATEGORY_PATTERN.test(category)) {
+    console.error(`--category rejected: ${JSON.stringify(category)} (expected kebab-case)`)
     process.exit(1)
   }
 
@@ -111,6 +123,10 @@ async function main() {
   } else {
     console.log('\nRunning pnpm typecheck…')
     const result = spawnSync('pnpm', ['typecheck'], { cwd: nextAppDir, stdio: 'inherit' })
+    if (result.error) {
+      console.error(`\nFailed to spawn pnpm typecheck: ${result.error.message}`)
+      process.exit(3)
+    }
     if (result.status !== 0) {
       console.error(`\nTypecheck failed (exit ${result.status}). Block written but needs fixes.`)
       process.exit(3)
