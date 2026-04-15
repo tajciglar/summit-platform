@@ -26,22 +26,24 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
             'status'    => 'running',
         ]);
 
+        $sectionId = '550e8400-e29b-41d4-a716-446655440000';
+
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
             'status'   => 'ready',
             'sections' => [
-                ['id' => 'abc', 'type' => 'hero', 'status' => 'ready'],
+                ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
         $page = new ManageLandingPageBatches();
         $page->record = $summit;
 
-        $page->regenerateSection($draft->id, 'abc', null);
+        $page->regenerateSection($draft->id, $sectionId, null);
 
-        Queue::assertPushed(RegenerateSectionJob::class, function ($job) use ($draft) {
+        Queue::assertPushed(RegenerateSectionJob::class, function ($job) use ($draft, $sectionId) {
             return $job->draftId === $draft->id
-                && $job->sectionId === 'abc'
+                && $job->sectionId === $sectionId
                 && $job->note === null;
         });
 
@@ -59,22 +61,80 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
             'status'    => 'running',
         ]);
 
+        $sectionId = '550e8400-e29b-41d4-a716-446655440000';
+
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
             'status'   => 'generating',
             'sections' => [
-                ['id' => 'abc', 'type' => 'hero', 'status' => 'ready'],
+                ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
         $page = new ManageLandingPageBatches();
         $page->record = $summit;
 
-        $page->regenerateSection($draft->id, 'abc', null);
+        $page->regenerateSection($draft->id, $sectionId, null);
 
         Queue::assertNotPushed(RegenerateSectionJob::class);
 
         // Section status must remain untouched
         $this->assertSame('ready', $draft->fresh()->sections[0]['status']);
+    }
+
+    public function test_regenerate_section_does_nothing_for_approved_draft(): void
+    {
+        Queue::fake();
+
+        $summit = Summit::factory()->create();
+
+        $batch = LandingPageBatch::factory()->create([
+            'summit_id' => $summit->id,
+            'status'    => 'completed',
+        ]);
+
+        $sectionId = '550e8400-e29b-41d4-a716-446655440000';
+
+        $draft = LandingPageDraft::factory()->create([
+            'batch_id' => $batch->id,
+            'status'   => 'approved',
+            'sections' => [
+                ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
+            ],
+        ]);
+
+        $page = new ManageLandingPageBatches();
+        $page->record = $summit;
+
+        $page->regenerateSection($draft->id, $sectionId, null);
+
+        Queue::assertNotPushed(RegenerateSectionJob::class);
+    }
+
+    public function test_regenerate_section_ignores_invalid_section_id(): void
+    {
+        Queue::fake();
+
+        $summit = Summit::factory()->create();
+
+        $batch = LandingPageBatch::factory()->create([
+            'summit_id' => $summit->id,
+            'status'    => 'running',
+        ]);
+
+        $draft = LandingPageDraft::factory()->create([
+            'batch_id' => $batch->id,
+            'status'   => 'ready',
+            'sections' => [
+                ['id' => '550e8400-e29b-41d4-a716-446655440000', 'type' => 'hero', 'status' => 'ready'],
+            ],
+        ]);
+
+        $page = new ManageLandingPageBatches();
+        $page->record = $summit;
+
+        $page->regenerateSection($draft->id, 'not-a-uuid', null);
+
+        Queue::assertNotPushed(RegenerateSectionJob::class);
     }
 }

@@ -28,6 +28,7 @@ class ManageLandingPageBatches extends Page
     public function approveDraft(string $draftId): void
     {
         $draft = LandingPageDraft::with('batch.funnel.steps')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
         $batch = $draft->batch;
 
         if ($draft->status !== 'ready' || $batch->status !== 'running') {
@@ -66,6 +67,7 @@ class ManageLandingPageBatches extends Page
     public function rejectDraft(string $draftId): void
     {
         $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
 
         if ($draft->status !== 'ready' || $draft->batch->status !== 'running') {
             Notification::make()->title('Draft cannot be rejected.')->warning()->send();
@@ -81,11 +83,16 @@ class ManageLandingPageBatches extends Page
 
     public function regenerateSection(string $draftId, string $sectionId, ?string $note = null): void
     {
-        $draft = LandingPageDraft::findOrFail($draftId);
+        $draft = LandingPageDraft::with('batch')->findOrFail($draftId);
+        abort_unless($draft->batch->summit_id === $this->record->id, 403);
 
-        if (! in_array($draft->status, ['ready', 'approved'])) {
+        if (!\Illuminate\Support\Str::isUuid($sectionId)) {
+            return;
+        }
+
+        if ($draft->status !== 'ready') {
             Notification::make()
-                ->title('Section can only be regenerated on a ready or approved draft.')
+                ->title('Only ready drafts can have sections regenerated.')
                 ->warning()
                 ->send();
             return;
