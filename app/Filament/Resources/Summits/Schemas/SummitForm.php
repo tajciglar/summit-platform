@@ -57,7 +57,6 @@ class SummitForm
                 DateTimePicker::make('ends_at'),
                 Section::make('Style')
                     ->description('Drives AI-generated landing page look & feel across every funnel of this summit.')
-                    ->collapsible()
                     ->schema([
                         TextInput::make('style_reference_url')
                             ->label('Style Reference URL')

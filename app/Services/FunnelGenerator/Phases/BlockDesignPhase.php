@@ -3,6 +3,7 @@
 namespace App\Services\FunnelGenerator\Phases;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
@@ -64,13 +65,39 @@ class BlockDesignPhase
         foreach ($sectionBriefs as $i => $brief) {
             $resp = $imageResponses["img_{$i}"] ?? null;
             $sectionId = (string) Str::uuid();
-            if ($resp instanceof Throwable || ! $resp?->successful() || ($resp->json('status') !== 'ok')) {
+            if ($resp instanceof Throwable) {
+                Log::warning('BlockDesignPhase Stage 1 threw', [
+                    'section' => $brief['type'] ?? null,
+                    'error' => $resp->getMessage(),
+                ]);
+                $mockups[$i] = ['id' => $sectionId, 'image' => null, 'url' => null];
+                continue;
+            }
+            if (! $resp?->successful()) {
+                Log::warning('BlockDesignPhase Stage 1 non-2xx', [
+                    'section' => $brief['type'] ?? null,
+                    'status' => $resp?->status(),
+                    'body' => substr((string) $resp?->body(), 0, 240),
+                ]);
+                $mockups[$i] = ['id' => $sectionId, 'image' => null, 'url' => null];
+                continue;
+            }
+            if ($resp->json('status') !== 'ok') {
+                Log::warning('BlockDesignPhase Stage 1 soft-fail', [
+                    'section' => $brief['type'] ?? null,
+                    'response' => substr($resp->body(), 0, 240),
+                ]);
                 $mockups[$i] = ['id' => $sectionId, 'image' => null, 'url' => null];
                 continue;
             }
             $mime = $resp->json('mime') ?? 'image/png';
             $data = (string) $resp->json('base64');
-            $path = $draftId !== '' ? "draft-mockups/{$draftId}/{$sectionId}.png" : "draft-mockups/transient/{$sectionId}.png";
+            // Gemini returns JPEG or PNG; honour the MIME in the filename so
+            // the browser renders the right content type.
+            $ext = str_contains($mime, 'jpeg') ? 'jpg' : 'png';
+            $path = $draftId !== ''
+                ? "draft-mockups/{$draftId}/{$sectionId}.{$ext}"
+                : "draft-mockups/transient/{$sectionId}.{$ext}";
             Storage::disk('public')->put($path, base64_decode($data));
             $mockups[$i] = [
                 'id' => $sectionId,
@@ -181,9 +208,10 @@ class BlockDesignPhase
                     'data' => (string) $imgResp->json('base64'),
                 ];
                 $sectionId = $currentSection['id'] ?? (string) Str::uuid();
+                $ext = str_contains($mockupImage['mime'], 'jpeg') ? 'jpg' : 'png';
                 $path = $draftId !== ''
-                    ? "draft-mockups/{$draftId}/{$sectionId}.png"
-                    : "draft-mockups/transient/{$sectionId}.png";
+                    ? "draft-mockups/{$draftId}/{$sectionId}.{$ext}"
+                    : "draft-mockups/transient/{$sectionId}.{$ext}";
                 Storage::disk('public')->put($path, base64_decode($mockupImage['data']));
                 $mockupUrl = '/storage/' . $path;
             }
