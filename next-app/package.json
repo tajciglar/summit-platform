@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
+    "@google/genai": "^1.50.0",
     "@tabler/icons-react": "^3.41.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
     "motion": "^12.38.0",
