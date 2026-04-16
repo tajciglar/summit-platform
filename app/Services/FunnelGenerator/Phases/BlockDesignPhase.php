@@ -169,6 +169,55 @@ class BlockDesignPhase
             $sections[] = $section;
         }
 
+        // Stage 3 — parallel polish calls for sections that rendered successfully.
+        $polishable = [];
+        foreach ($sections as $i => $section) {
+            if (($section['status'] ?? '') === 'ready' && ! empty($section['jsx'])) {
+                $polishable[$i] = $section;
+            }
+        }
+
+        if (! empty($polishable) && ! empty($styleBrief)) {
+            $polishResponses = Http::pool(function ($pool) use ($polishable, $styleBrief, $base, $token) {
+                $out = [];
+                foreach ($polishable as $i => $section) {
+                    $out[] = $pool->as("polish_{$i}")
+                        ->withToken($token)
+                        ->timeout(60)
+                        ->post("{$base}/api/sections/polish", [
+                            'jsx' => $section['jsx'],
+                            'styleBrief' => $styleBrief,
+                            'skeleton' => null,
+                            'sectionType' => $section['type'] ?? '',
+                        ]);
+                }
+                return $out;
+            });
+
+            foreach ($polishable as $i => $section) {
+                $resp = $polishResponses["polish_{$i}"] ?? null;
+                if ($resp instanceof Throwable) {
+                    Log::warning('BlockDesignPhase Stage 3 threw', [
+                        'section' => $section['type'] ?? null,
+                        'error' => $resp->getMessage(),
+                    ]);
+                    continue;
+                }
+                if (! $resp?->successful()) {
+                    Log::warning('BlockDesignPhase Stage 3 non-2xx', [
+                        'section' => $section['type'] ?? null,
+                        'status' => $resp?->status(),
+                    ]);
+                    continue;
+                }
+                $polished = $resp->json();
+                if (! empty($polished['jsx'])) {
+                    $sections[$i]['jsx'] = $polished['jsx'];
+                    $sections[$i]['polish_changes'] = $polished['changes'] ?? [];
+                }
+            }
+        }
+
         return $sections;
     }
 
