@@ -1,4 +1,6 @@
-import { callGeminiImage, type GeminiImageResult } from './gemini-client';
+import { callGeminiImage, type GeminiImage, type GeminiImageResult } from './gemini-client';
+import { loadReferenceImage } from '../../../scripts/lib/prompt-parts';
+import { loadSkeleton } from '../skeletons';
 import type { SectionBrief, SummitContext } from './design-prompt';
 
 export interface ImageStageInput {
@@ -9,11 +11,25 @@ export interface ImageStageInput {
 }
 
 export async function designSectionImage(input: ImageStageInput): Promise<GeminiImageResult> {
+  const skel = await loadSkeleton(input.section.type);
+
+  const skeletonBlock = skel
+    ? [
+        `Layout skeleton (MANDATORY — match this grid/flex structure exactly):`,
+        '```',
+        skel.skeleton.trim(),
+        '```',
+        `Slots to fill: ${skel.slots.join(', ')}`,
+        ``,
+      ]
+    : [];
+
   const prompt = [
     `Design ONE landing-page section as a 1440x900 mockup image.`,
     ``,
     `Section: ${input.section.type} — ${input.section.purpose || 'n/a'} (position ${input.section.position} of ${input.section.total}).`,
     ``,
+    ...skeletonBlock,
     `Style Brief (authoritative visual constraints — use these EXACT hex codes, fonts, shapes):`,
     JSON.stringify(input.styleBrief, null, 2),
     ``,
@@ -24,17 +40,18 @@ export async function designSectionImage(input: ImageStageInput): Promise<Gemini
     `- Output ONE image sized 1440x900, no watermarks, no cropping.`,
     `- Apply the Style Brief palette hex codes (primary/accent/background etc).`,
     `- Apply the Style Brief typography (heading_font for headlines, body_font for body).`,
-    `- Apply the Style Brief hero_pattern for hero-type sections.`,
-    `- Typography hierarchy: clear H1, supporting body, CTA button when relevant.`,
+    `- Section max-width: 1120px centered. Section padding: 75px vertical, 20px horizontal.`,
+    `- Typography hierarchy: clear H1 (48px), supporting body (18px), CTA button when relevant.`,
+    `- CTA buttons: pill shape (border-radius: 500px), bold font, primary or cta color.`,
     `- Realistic imagery or placeholder photography; no lorem ipsum.`,
+    `- Match the attached reference image's visual density, spacing, and proportions if provided.`,
   ].join('\n');
 
-  // NOTE: Gemini-3.1-flash-image-preview reliably drops its image output when
-  // a large reference screenshot is attached (size > ~200KB payload). The
-  // Style Brief already encodes the visual constraints, so we run Stage 1
-  // text-only and rely on Stage 2 (which handles attachments well) to match
-  // the mockup to the reference visually.
-  const refs: Array<{ mime: string; data: string }> = [];
-  void input.referenceImage;
+  // Load per-type reference PNG as visual anchor for layout fidelity
+  const refs: GeminiImage[] = [];
+  const refPath = `docs/block-references/${input.section.type}.png`;
+  const refImg = await loadReferenceImage(refPath).catch(() => null);
+  if (refImg) refs.push(refImg);
+
   return callGeminiImage(prompt, refs);
 }
