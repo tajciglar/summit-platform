@@ -28,6 +28,7 @@ export function makeSection(partial: Pick<Section, 'type' | 'jsx' | 'fields'> & 
     type: partial.type,
     jsx: partial.jsx,
     fields: partial.fields,
+    css: partial.css,
     status: partial.status ?? 'ready',
     regeneration_note: partial.regeneration_note ?? null,
     source_section_id: partial.source_section_id ?? null,
