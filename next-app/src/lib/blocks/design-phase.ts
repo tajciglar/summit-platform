@@ -2,6 +2,7 @@ import { buildDesignPrompt, type BuildDesignPromptInput } from './design-prompt'
 import { callGemini } from './gemini-client';
 import { validateJsx } from './validator';
 import { makeSection, type Section, type SectionField } from './types';
+import { extractCss } from './css-extractor';
 
 interface Envelope { jsx: string; fields: Array<{ path: string; kind: string; value: unknown }> }
 
@@ -74,7 +75,8 @@ export async function designSection(input: BuildDesignPromptInput): Promise<Sect
     const v = validateJsx(env.jsx);
     if (!v.ok) { lastError = v.error ?? 'validator rejected'; continue; }
 
-    return makeSection({ type: input.section.type, jsx: env.jsx, fields: env.fields as SectionField[] });
+    const css = await extractCss(env.jsx);
+    return makeSection({ type: input.section.type, jsx: env.jsx, fields: env.fields as SectionField[], css });
   }
 
   return {
