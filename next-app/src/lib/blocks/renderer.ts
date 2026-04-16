@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import * as React from 'react';
 import { compileJsxModule, type CompiledComponent } from './jsx-compile';
 import { applyFieldValues } from './field-extractor';
+import { extractCss } from './css-extractor';
 import type { Section } from './types';
 import { resolveUiPrimitive } from './primitive-resolver';
 
@@ -27,7 +28,13 @@ export async function renderSection<T extends Record<string, unknown>>(
   }
 
   const props = applyFieldValues(defaultProps, section.fields);
-  return ReactDOMServer.renderToString(React.createElement(Component, props));
+  const html = ReactDOMServer.renderToString(React.createElement(Component, props));
+
+  const css = section.css || await extractCss(section.jsx);
+  if (css) {
+    return `<style>${css}</style>${html}`;
+  }
+  return html;
 }
 
 export function clearRendererCache(): void {
