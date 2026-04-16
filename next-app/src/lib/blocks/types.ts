@@ -1,12 +1,12 @@
 import { randomUUID } from 'crypto';
 
 export type SectionStatus = 'ready' | 'regenerating' | 'failed';
-export type SectionFieldKind = 'text' | 'url' | 'image';
+export type SectionFieldKind = 'text' | 'url' | 'image' | 'array' | 'json';
 
 export interface SectionField {
   path: string;
   kind: SectionFieldKind;
-  value: string;
+  value: unknown;
 }
 
 export interface Section {

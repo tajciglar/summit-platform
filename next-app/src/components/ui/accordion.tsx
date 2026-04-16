@@ -1,7 +1,25 @@
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 
 import { cn } from "@/lib/utils"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+
+// Inline SVG chevrons instead of lucide-react — lucide's icon factories
+// require createContext which is stripped in Next 16 Server Components,
+// crashing renderToString when the Accordion is used in Gemini-generated JSX.
+function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  )
+}
+
+function ChevronUpIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  )
+}
 
 function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
   return (

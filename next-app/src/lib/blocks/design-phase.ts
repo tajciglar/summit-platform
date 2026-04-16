@@ -1,9 +1,9 @@
 import { buildDesignPrompt, type BuildDesignPromptInput } from './design-prompt';
 import { callGemini } from './gemini-client';
 import { validateJsx } from './validator';
-import { makeSection, type Section } from './types';
+import { makeSection, type Section, type SectionField } from './types';
 
-interface Envelope { jsx: string; fields: Array<{ path: string; kind: 'text' | 'url' | 'image'; value: string }> }
+interface Envelope { jsx: string; fields: Array<{ path: string; kind: string; value: unknown }> }
 
 function parseEnvelope(raw: string): Envelope | null {
   // Flash frequently wraps JSON in markdown code fences (with or without a
@@ -74,7 +74,7 @@ export async function designSection(input: BuildDesignPromptInput): Promise<Sect
     const v = validateJsx(env.jsx);
     if (!v.ok) { lastError = v.error ?? 'validator rejected'; continue; }
 
-    return makeSection({ type: input.section.type, jsx: env.jsx, fields: env.fields });
+    return makeSection({ type: input.section.type, jsx: env.jsx, fields: env.fields as SectionField[] });
   }
 
   return {
