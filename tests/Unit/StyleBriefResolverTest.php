@@ -48,7 +48,7 @@ class StyleBriefResolverTest extends TestCase
     public function test_null_funnel_returns_default(): void
     {
         $brief = (new StyleBriefResolver)->resolveForFunnel(null);
-        $this->assertSame('#5e4d9b', $brief['palette']['primary']);
+        $this->assertSame('#704fe6', $brief['palette']['primary']);
     }
 
     public function test_resolve_for_summit_merges_only_base(): void
@@ -58,6 +58,6 @@ class StyleBriefResolverTest extends TestCase
         ]);
         $brief = (new StyleBriefResolver)->resolveForSummit($summit);
         $this->assertSame('#abcdef', $brief['palette']['primary']);
-        $this->assertSame('Plus Jakarta Sans', $brief['typography']['heading_font']);
+        $this->assertSame('Poppins', $brief['typography']['heading_font']);
     }
 }
