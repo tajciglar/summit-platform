@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   // will fail and be shown as render errors in the preview until we either
   // (a) bundle lucide into a runtime asset like client-runtime.js, or
   // (b) prompt Gemini away from importing lucide.
-  serverExternalPackages: ["react-dom", "@base-ui/react"],
+  serverExternalPackages: ["react-dom", "@base-ui/react", "@tailwindcss/node", "lightningcss", "tailwindcss"],
 };
 
 export default nextConfig;
