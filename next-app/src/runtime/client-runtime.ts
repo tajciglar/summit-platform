@@ -61,8 +61,64 @@ function hydrateOptinForm(el: HTMLElement): void {
   });
 }
 
+function handleBrokenImages(): void {
+  document.addEventListener(
+    'error',
+    (ev) => {
+      if (!(ev.target instanceof HTMLImageElement)) return;
+      const img = ev.target;
+      if (img.dataset.placeholdered) return;
+      img.dataset.placeholdered = '1';
+      img.style.display = 'none';
+
+      const placeholder = document.createElement('div');
+      placeholder.style.width = '100%';
+      placeholder.style.aspectRatio = '16/9';
+      placeholder.style.borderRadius = '0.75rem';
+      placeholder.style.background = 'linear-gradient(135deg,#e2e8f0 0%,#f1f5f9 100%)';
+      placeholder.style.display = 'flex';
+      placeholder.style.alignItems = 'center';
+      placeholder.style.justifyContent = 'center';
+
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('width', '48');
+      svg.setAttribute('height', '48');
+      svg.setAttribute('stroke', '#94a3b8');
+      svg.setAttribute('stroke-width', '1.5');
+      svg.setAttribute('fill', 'none');
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', '3');
+      rect.setAttribute('y', '3');
+      rect.setAttribute('width', '18');
+      rect.setAttribute('height', '18');
+      rect.setAttribute('rx', '2');
+      svg.appendChild(rect);
+
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', '8.5');
+      circle.setAttribute('cy', '8.5');
+      circle.setAttribute('r', '1.5');
+      svg.appendChild(circle);
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'm21 15-5-5L5 21');
+      svg.appendChild(path);
+
+      placeholder.appendChild(svg);
+      img.insertAdjacentElement('afterend', placeholder);
+    },
+    true
+  );
+}
+
 if (typeof document !== 'undefined' && document.readyState !== 'loading') {
+  handleBrokenImages();
   hydrateAll();
 } else if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => hydrateAll());
+  document.addEventListener('DOMContentLoaded', () => {
+    handleBrokenImages();
+    hydrateAll();
+  });
 }
