@@ -1,10 +1,16 @@
+/**
+ * @deprecated V3 pipeline no longer uses this module for the main generation flow.
+ * Types moved to ./types.ts. Code generation now uses ./claude-coder.ts.
+ * Kept for backward compatibility with scripts and tests.
+ */
+
 import { loadDesignSystem, loadPrimitiveSources, loadReferenceImage } from '../../../scripts/lib/prompt-parts';
 import { loadSkeleton } from '../skeletons';
+import type { BuildDesignPromptInput, DesignPrompt } from './types';
 
 export type { SectionBrief, SummitContext, BuildDesignPromptInput, DesignPrompt } from './types';
 
 // Inline runtime example — single-file `{ jsx, fields }` envelope.
-// Not the gen:block CLI's 4-file shape; Gemini will mimic whichever example we show.
 const RUNTIME_EXAMPLE = `{
   "jsx": "export default function S(props) {\\n  return (\\n    <section className=\\"py-20 bg-white\\">\\n      <div className=\\"mx-auto max-w-3xl px-6 text-center\\">\\n        <h2 className=\\"text-4xl font-bold tracking-tight\\">{props.headline}</h2>\\n        <p className=\\"mt-4 text-lg text-gray-600\\">{props.subheadline}</p>\\n        <a href={props.ctaHref} className=\\"mt-8 inline-block rounded-md bg-indigo-600 px-6 py-3 text-white font-semibold\\">{props.ctaLabel}</a>\\n      </div>\\n    </section>\\n  )\\n}",
   "fields": [
@@ -15,6 +21,7 @@ const RUNTIME_EXAMPLE = `{
   ]
 }`;
 
+/** @deprecated Use claudeGenerateCode() from ./claude-coder.ts instead. */
 export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<DesignPrompt> {
   const [designSystem, primitives, skel] = await Promise.all([
     loadDesignSystem(),
