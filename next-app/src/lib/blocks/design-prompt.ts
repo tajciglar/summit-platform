@@ -1,16 +1,43 @@
-/**
- * @deprecated V3 pipeline no longer uses this module for the main generation flow.
- * Types moved to ./types.ts. Code generation now uses ./claude-coder.ts.
- * Kept for backward compatibility with scripts and tests.
- */
-
 import { loadDesignSystem, loadPrimitiveSources, loadReferenceImage } from '../../../scripts/lib/prompt-parts';
-import { loadSkeleton } from '../skeletons';
-import type { BuildDesignPromptInput, DesignPrompt } from './types';
 
-export type { SectionBrief, SummitContext, BuildDesignPromptInput, DesignPrompt } from './types';
+export interface SectionBrief {
+  type: string;
+  purpose: string;
+  position: number;
+  total: number;
+}
+
+export interface SummitContext {
+  name: string;
+  date: string;
+  brandColors: Record<string, string>;
+  mode: 'dark' | 'light';
+  speakers: Array<{ name: string; photo?: string; title?: string }>;
+  toneBrief: string;
+  product: null | { name: string; price: number; description: string };
+}
+
+export interface BuildDesignPromptInput {
+  section: SectionBrief;
+  summit: SummitContext;
+  previousSectionJsx: string | null;
+  regenerationNote: string | null;
+  currentJsx?: string;
+  styleBrief?: Record<string, unknown>;
+  // Stage-1 output — the visual target for Stage 2. When present, Gemini is
+  // instructed to match it pixel-wise (colors, spacing, typography, layout).
+  mockupImage?: { mime: string; data: string } | null;
+  // Fallback anchor when Stage 1 failed — the summit's Phase-0 URL screenshot.
+  referenceImage?: { mime: string; data: string } | null;
+}
+
+export interface DesignPrompt {
+  text: string;
+  image?: { mime: string; data: string };
+}
 
 // Inline runtime example — single-file `{ jsx, fields }` envelope.
+// Not the gen:block CLI's 4-file shape; Gemini will mimic whichever example we show.
 const RUNTIME_EXAMPLE = `{
   "jsx": "export default function S(props) {\\n  return (\\n    <section className=\\"py-20 bg-white\\">\\n      <div className=\\"mx-auto max-w-3xl px-6 text-center\\">\\n        <h2 className=\\"text-4xl font-bold tracking-tight\\">{props.headline}</h2>\\n        <p className=\\"mt-4 text-lg text-gray-600\\">{props.subheadline}</p>\\n        <a href={props.ctaHref} className=\\"mt-8 inline-block rounded-md bg-indigo-600 px-6 py-3 text-white font-semibold\\">{props.ctaLabel}</a>\\n      </div>\\n    </section>\\n  )\\n}",
   "fields": [
@@ -21,14 +48,15 @@ const RUNTIME_EXAMPLE = `{
   ]
 }`;
 
-/** @deprecated Use claudeGenerateCode() from ./claude-coder.ts instead. */
 export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<DesignPrompt> {
-  const [designSystem, primitives, skel] = await Promise.all([
+  const [designSystem, primitives] = await Promise.all([
     loadDesignSystem(),
     loadPrimitiveSources(),
-    loadSkeleton(input.section.type),
   ]);
 
+  // Prefer mockup (Stage 1 output) over any other visual anchor. Fallback
+  // order: mockupImage → referenceImage (summit URL screenshot) → legacy
+  // per-type docs/block-references/{type}.png.
   let anchor: { mime: string; data: string } | null = input.mockupImage ?? input.referenceImage ?? null;
   if (!anchor) {
     const refPath = `docs/block-references/${input.section.type}.png`;
@@ -43,21 +71,6 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     ? [`=== Style Brief (authoritative palette/typography/components) ===`, JSON.stringify(input.styleBrief, null, 2)]
     : [];
 
-  const skeletonBlock = skel
-    ? [
-        `=== Layout Skeleton (MANDATORY — preserve this structure) ===`,
-        `The skeleton below defines the grid/flex layout for this section type.`,
-        `You MUST use this exact grid structure. Do NOT change grid-cols, max-width, or flex layout.`,
-        `Replace each __SLOT_xxx__ comment with styled JSX content.`,
-        `Replace __bg__ with the appropriate background color from the Style Brief.`,
-        `Replace __border_color__ and __divide_color__ with the border color from the Style Brief.`,
-        '```',
-        skel.skeleton.trim(),
-        '```',
-        `Slots to fill: ${skel.slots.join(', ')}`,
-      ]
-    : [];
-
   const text = [
     intro,
     ``,
@@ -70,8 +83,6 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     JSON.stringify(input.summit, null, 2),
     ``,
     ...styleBriefBlock,
-    ``,
-    ...skeletonBlock,
     ``,
     `=== Design System ===`,
     designSystem,
@@ -94,12 +105,8 @@ export async function buildDesignPrompt(input: BuildDesignPromptInput): Promise<
     `- For icons, inline SVGs directly in the JSX (24x24 viewBox, currentColor stroke).`,
     `- No client hooks (useState/useEffect/etc), no script/style tags, no network calls, no dynamic imports.`,
     `- Tailwind v4 classes only. No Framer Motion.`,
-    `- Apply the Style Brief palette's hex codes inline (e.g. "bg-[#704fe6]") or via Tailwind arbitrary values.`,
-    `- Font families: use font-['Poppins'] for body, font-['Cormorant_Garamond'] for accent headings per Style Brief.`,
-    `- Max-width for section containers: max-w-[1120px]. Section padding: py-[75px] px-5.`,
-    `- CTA buttons: rounded-full (pill shape), font-bold, px-8 py-4.`,
+    `- Apply the Style Brief palette's hex codes inline (e.g. "bg-[#5e4d9b]") or via Tailwind arbitrary values where the design system doesn't already cover them.`,
     `- Every editable string/image MUST appear in "fields" with its AST path (e.g. "props.headline").`,
-    skel ? `- CRITICAL: Preserve the skeleton's grid/flex layout exactly. Only fill the __SLOT__ placeholders.` : '',
   ].filter(Boolean).join('\n');
 
   return anchor ? { text, image: anchor } : { text };
