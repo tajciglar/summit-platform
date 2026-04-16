@@ -4,6 +4,7 @@ import { RenderBlocks } from '@/lib/render-block'
 import type { Section } from '@/lib/blocks/types'
 import { ThemeProvider } from '@/lib/theme-context'
 import { SpeakersProvider } from '@/lib/speakers-context'
+import { BrokenImageHandler } from '@/components/broken-image-handler'
 
 interface PageParams {
   token: string
@@ -45,6 +46,7 @@ export default async function PreviewPage({ params }: { params: Promise<PagePara
               <RenderBlocks blocks={data.blocks} />
             )}
           </main>
+          <BrokenImageHandler />
         </div>
       </SpeakersProvider>
     </ThemeProvider>
