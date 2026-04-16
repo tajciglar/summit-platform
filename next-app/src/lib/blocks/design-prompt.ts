@@ -1,41 +1,7 @@
 import { loadDesignSystem, loadPrimitiveSources, loadReferenceImage } from '../../../scripts/lib/prompt-parts';
 import { loadSkeleton } from '../skeletons';
 
-export interface SectionBrief {
-  type: string;
-  purpose: string;
-  position: number;
-  total: number;
-}
-
-export interface SummitContext {
-  name: string;
-  date: string;
-  brandColors: Record<string, string>;
-  mode: 'dark' | 'light';
-  speakers: Array<{ name: string; photo?: string; title?: string }>;
-  toneBrief: string;
-  product: null | { name: string; price: number; description: string };
-}
-
-export interface BuildDesignPromptInput {
-  section: SectionBrief;
-  summit: SummitContext;
-  previousSectionJsx: string | null;
-  regenerationNote: string | null;
-  currentJsx?: string;
-  styleBrief?: Record<string, unknown>;
-  // Stage-1 output — the visual target for Stage 2. When present, Gemini is
-  // instructed to match it pixel-wise (colors, spacing, typography, layout).
-  mockupImage?: { mime: string; data: string } | null;
-  // Fallback anchor when Stage 1 failed — the summit's Phase-0 URL screenshot.
-  referenceImage?: { mime: string; data: string } | null;
-}
-
-export interface DesignPrompt {
-  text: string;
-  image?: { mime: string; data: string };
-}
+export type { SectionBrief, SummitContext, BuildDesignPromptInput, DesignPrompt } from './types';
 
 // Inline runtime example — single-file `{ jsx, fields }` envelope.
 // Not the gen:block CLI's 4-file shape; Gemini will mimic whichever example we show.

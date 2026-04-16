@@ -1,7 +1,7 @@
 import { callGeminiImage, type GeminiImage, type GeminiImageResult } from './gemini-client';
 import { loadReferenceImage } from '../../../scripts/lib/prompt-parts';
 import { loadSkeleton } from '../skeletons';
-import type { SectionBrief, SummitContext } from './design-prompt';
+import type { SectionBrief, SummitContext } from './types';
 
 export interface ImageStageInput {
   section: SectionBrief;
