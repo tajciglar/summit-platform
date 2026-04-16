@@ -14,6 +14,7 @@ export interface Section {
   type: string;
   jsx: string;
   fields: SectionField[];
+  css?: string;
   status: SectionStatus;
   regeneration_note: string | null;
   source_section_id: string | null;
