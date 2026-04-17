@@ -164,6 +164,7 @@ class SpeakerResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
+            ->reorderable('sort_order')
             ->defaultSort('sort_order');
     }
 
