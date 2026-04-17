@@ -138,14 +138,25 @@ class AdminPanelProvider extends PanelProvider
                     return;
                 }
 
-                $activeId = CurrentSummit::getId();
+                // isActiveWhen runs at render time, so it correctly sees the
+                // session (panel boot runs BEFORE StartSession middleware).
                 $items = [];
+                $sort = 0;
                 foreach ($summits as $summit) {
+                    $summitId = $summit->id;
                     $items[] = NavigationItem::make($summit->title)
                         ->group('Summit')
+                        ->sort($sort++)
                         ->url(route('admin.current-summit.set', ['summit' => $summit->id]))
-                        ->isActiveWhen(fn (): bool => $summit->id === $activeId);
+                        ->isActiveWhen(fn (): bool => $summitId === CurrentSummit::getId());
                 }
+
+                // "+ New summit" sits at the bottom of the group. No icon —
+                // Filament errors if group AND item both have icons.
+                $items[] = NavigationItem::make('+ New summit')
+                    ->group('Summit')
+                    ->sort(999)
+                    ->url(fn (): string => SummitResource::getUrl('create'));
 
                 $panel->navigationItems($items);
             });

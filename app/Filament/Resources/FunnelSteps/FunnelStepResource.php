@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\FunnelSteps;
 
 use App\Enums\BlockType;
+use App\Filament\Resources\Funnels\Pages\GenerateLandingPagesPage;
 use App\Models\FunnelStep;
+use App\Models\LandingPageDraft;
 use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -19,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -75,19 +78,28 @@ class FunnelStepResource extends Resource
                     Toggle::make('is_published')->default(false),
                 ]),
 
-            Section::make('Page content')
-                ->description('The block tree rendered at /{summit}/{funnel}/{step}. Reorder, add, and remove blocks inline.')
+            // Landing-page drafts render under step details on the view page
+            // (see ViewFunnelStep). Page content is edited per-landing-page,
+            // not on the step record itself.
+            Section::make('Landing pages')
+                ->description('Generated variants for this step. Click one to edit its content.')
+                ->visibleOn('view')
+                ->visible(fn (?FunnelStep $record): bool => $record?->step_type === 'optin')
                 ->components([
-                    Builder::make('page_content')
-                        ->hiddenLabel()
-                        ->blocks(self::pageContentBlocks())
-                        ->afterStateHydrated(fn (Builder $component, $state) => $component->state(self::coerceToBuilderState($state)))
-                        ->blockNumbers(false)
-                        ->collapsible()
-                        ->collapsed()
-                        ->cloneable()
-                        ->addActionLabel('Add block')
-                        ->reorderableWithButtons(),
+                    View::make('filament.components.landing-pages-list')
+                        ->viewData(fn (?FunnelStep $record): array => [
+                            'drafts' => $record
+                                ? LandingPageDraft::query()
+                                    ->whereHas('batch', fn ($q) => $q->where('funnel_id', $record->funnel_id))
+                                    ->with('batch:id,funnel_id,created_at')
+                                    ->latest()
+                                    ->get()
+                                : collect(),
+                            'generateUrl' => $record
+                                ? GenerateLandingPagesPage::getUrl(['record' => $record->funnel_id])
+                                : '#',
+                            'funnelId' => $record?->funnel_id,
+                        ]),
                 ]),
         ]);
     }
