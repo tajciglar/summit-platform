@@ -10,7 +10,7 @@ class TemplateRegistry
     public function __construct(?string $manifestPath = null)
     {
         $path = $manifestPath ?? base_path('next-app/public/template-manifest.json');
-        if (!is_file($path)) {
+        if (! is_file($path)) {
             throw new \RuntimeException("Template manifest not found at {$path}. Run `pnpm build:templates` in next-app.");
         }
         $raw = file_get_contents($path);
@@ -18,7 +18,7 @@ class TemplateRegistry
             throw new \RuntimeException("Could not read template manifest at {$path}.");
         }
         $manifest = json_decode($raw, associative: true);
-        if (!is_array($manifest)) {
+        if (! is_array($manifest)) {
             throw new \RuntimeException("Template manifest at {$path} is not valid JSON.");
         }
         $this->templates = collect($manifest['templates'] ?? [])->keyBy('key')->all();
@@ -33,14 +33,54 @@ class TemplateRegistry
     /** @return array{key:string, label:string, thumbnail:string, tags:array, jsonSchema:array} */
     public function get(string $key): array
     {
-        if (!isset($this->templates[$key])) {
+        if (! isset($this->templates[$key])) {
             throw new \InvalidArgumentException("Unknown template key: {$key}");
         }
+
         return $this->templates[$key];
     }
 
     public function exists(string $key): bool
     {
         return isset($this->templates[$key]);
+    }
+
+    public function supportsSections(string $key): bool
+    {
+        $t = $this->get($key);
+
+        return isset($t['supportedSections']) && is_array($t['supportedSections']);
+    }
+
+    /** @return list<string> */
+    public function supportedSections(string $key): array
+    {
+        $t = $this->get($key);
+
+        return $t['supportedSections'] ?? [];
+    }
+
+    /** @return list<string> */
+    public function sectionOrder(string $key): array
+    {
+        $t = $this->get($key);
+
+        return $t['sectionOrder'] ?? [];
+    }
+
+    /** @return list<string> */
+    public function defaultEnabledSections(string $key): array
+    {
+        $t = $this->get($key);
+
+        return $t['defaultEnabledSections'] ?? [];
+    }
+
+    /** @return array<string, array<string, mixed>> */
+    public function sectionSchemas(string $key): array
+    {
+        $t = $this->get($key);
+
+        return $t['sectionSchemas'] ?? [];
     }
 }
