@@ -49,7 +49,7 @@ it('marks draft as failed when filler throws', function () {
     ]);
 
     $this->mock(TemplateFiller::class, function ($m) {
-        $m->shouldReceive('fill')->andThrow(new \RuntimeException('oops'));
+        $m->shouldReceive('fill')->andThrow(new RuntimeException('oops'));
     });
 
     GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
@@ -57,4 +57,63 @@ it('marks draft as failed when filler throws', function () {
     $draft = LandingPageDraft::first();
     expect($draft->status)->toBe('failed');
     expect($draft->error_message)->toContain('oops');
+});
+
+it('seeds enabled_sections from defaultEnabledSections for opus-v1', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')
+            ->once()
+            ->andReturn([
+                'content' => ['hero' => ['headline' => 'X']],
+                'tokens' => 100,
+            ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft)->not->toBeNull();
+    expect($draft->status)->toBe('ready');
+    expect($draft->enabled_sections)
+        ->toBeArray()
+        ->toContain('hero')
+        ->toContain('footer')
+        ->toContain('faq');
+    expect($draft->enabled_sections)->toHaveCount(10);
+});
+
+it('leaves enabled_sections null for legacy templates like opus-v2', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')
+            ->once()
+            ->andReturn([
+                'content' => ['summit' => ['name' => 'Test Summit']],
+                'tokens' => 100,
+            ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v2', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft)->not->toBeNull();
+    expect($draft->status)->toBe('ready');
+    expect($draft->enabled_sections)->toBeNull();
 });

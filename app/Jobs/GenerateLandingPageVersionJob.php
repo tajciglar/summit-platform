@@ -6,6 +6,7 @@ use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
 use App\Services\Templates\TemplateFiller;
+use App\Services\Templates\TemplateRegistry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,7 +28,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         public int $versionNumber,
     ) {}
 
-    public function handle(TemplateFiller $filler): void
+    public function handle(TemplateFiller $filler, TemplateRegistry $registry): void
     {
         $batch = LandingPageBatch::findOrFail($this->batchId);
 
@@ -57,8 +58,13 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 styleReferenceUrl: $batch->style_reference_url,
             );
 
+            $enabledSections = $registry->supportsSections($this->templateKey)
+                ? $registry->defaultEnabledSections($this->templateKey)
+                : null;
+
             $draft->update([
                 'sections' => $result['content'],
+                'enabled_sections' => $enabledSections,
                 'token_count' => $result['tokens'],
                 'generation_ms' => (int) ((microtime(true) - $start) * 1000),
                 'status' => 'ready',
