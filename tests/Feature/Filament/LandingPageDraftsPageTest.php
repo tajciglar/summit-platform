@@ -1,12 +1,14 @@
 <?php
 
 use App\Filament\Resources\Funnels\Pages\LandingPageDraftsPage;
+use App\Models\Domain;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Gate;
 
 use function Pest\Livewire\livewire;
@@ -15,6 +17,15 @@ beforeEach(function () {
     // Bypass Filament Shield permission checks for tests.
     Gate::before(fn () => true);
     $this->actingAs(User::factory()->admin()->create());
+
+    // Filament multi-tenant resources require an active tenant for URL generation.
+    $tenant = Domain::create([
+        'name' => 'Test Domain',
+        'hostname' => 'test.localhost',
+        'slug' => 'test-domain',
+        'is_active' => true,
+    ]);
+    Filament::setTenant($tenant);
 });
 
 it('renders the drafts page without drafts', function () {

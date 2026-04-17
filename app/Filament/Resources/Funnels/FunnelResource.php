@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Funnels;
 
-use App\Filament\Resources\Funnels\Pages;
+use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Funnel;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 
 class FunnelResource extends Resource
 {
-    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+    use ScopesTenantViaSummitDomains;
 
     protected static ?string $model = Funnel::class;
 
@@ -138,6 +138,7 @@ class FunnelResource extends Resource
             'edit' => Pages\EditFunnel::route('/{record}/edit'),
             'generate-landing-pages' => Pages\GenerateLandingPagesPage::route('/{record}/generate-landing-pages'),
             'landing-pages' => Pages\LandingPageDraftsPage::route('/{record}/landing-pages'),
+            'edit-landing-page-draft' => Pages\EditLandingPageDraftPage::route('/{record}/landing-pages/{draft}/edit'),
         ];
     }
 }

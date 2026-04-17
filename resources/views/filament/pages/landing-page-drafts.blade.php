@@ -48,6 +48,9 @@
                                    target="_blank"
                                    class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">Preview</a>
 
+                                <a href="{{ \App\Filament\Resources\Funnels\FunnelResource::getUrl('edit-landing-page-draft', ['record' => $this->funnel->id, 'draft' => $draft->id]) }}"
+                                   class="px-3 py-1 text-sm bg-amber-100 hover:bg-amber-200 text-amber-800 rounded">Edit</a>
+
                                 @if($draft->status === 'ready')
                                     <button wire:click="approve('{{ $draft->id }}')"
                                             class="px-3 py-1 text-sm bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded">Approve</button>
