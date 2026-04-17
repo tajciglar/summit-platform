@@ -3,6 +3,8 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { templates, templateKeys } from '../src/templates/registry';
+import type { TemplateDefinition } from '../src/templates/types';
+import { catalog, catalogKeys } from '../src/sections/catalog';
 
 // Note on the JSON Schema conversion library choice:
 //
@@ -16,20 +18,71 @@ import { templates, templateKeys } from '../src/templates/registry';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Build catalog block (shared across templates). Keyed by section key so
+// Laravel / the AI pipeline can look up schemas + metadata by catalog key.
+const catalogOut: Record<string, unknown> = {};
+for (const key of catalogKeys) {
+  const entry = catalog[key];
+  catalogOut[key] = {
+    key: entry.key,
+    label: entry.label,
+    description: entry.description,
+    tier: entry.tier,
+    pageTypes: entry.pageTypes,
+    defaultOrder: entry.defaultOrder,
+    schema: z.toJSONSchema(entry.schema),
+  };
+}
+
+const manifestTemplates = templateKeys.map((key) => {
+  // Narrow to the shared TemplateDefinition interface so optional
+  // section fields are visible. The registry uses `satisfies` to preserve
+  // each concrete TContent, which hides the optional fields from the union.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const t = templates[key] as TemplateDefinition<any>;
+  // Base manifest entry — unchanged from Phase 1.
+  const base: Record<string, unknown> = {
+    key: t.key,
+    label: t.label,
+    thumbnail: t.thumbnail,
+    tags: t.tags,
+    jsonSchema: z.toJSONSchema(t.schema),
+  };
+
+  // Per-template section metadata — additive. Templates without
+  // `supportedSections` continue to emit only `jsonSchema`.
+  if (t.supportedSections) {
+    const sectionSchemas: Record<string, unknown> = {};
+    for (const sectionKey of t.supportedSections) {
+      const entry = catalog[sectionKey];
+      if (!entry) {
+        throw new Error(
+          `Template ${t.key} references unknown catalog section "${sectionKey}"`,
+        );
+      }
+      sectionSchemas[sectionKey] = z.toJSONSchema(entry.schema);
+    }
+    base.supportedSections = [...t.supportedSections];
+    base.sectionOrder = t.sectionOrder ? [...t.sectionOrder] : [...t.supportedSections];
+    base.defaultEnabledSections = t.defaultEnabledSections
+      ? [...t.defaultEnabledSections]
+      : [...t.supportedSections];
+    base.sectionSchemas = sectionSchemas;
+  }
+
+  return base;
+});
+
 const manifest = {
-  templates: templateKeys.map((key) => {
-    const t = templates[key];
-    return {
-      key: t.key,
-      label: t.label,
-      thumbnail: t.thumbnail,
-      tags: t.tags,
-      jsonSchema: z.toJSONSchema(t.schema),
-    };
-  }),
+  catalog: catalogOut,
+  templates: manifestTemplates,
 };
 
 const outPath = resolve(__dirname, '../public/template-manifest.json');
 mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, JSON.stringify(manifest, null, 2));
-console.log(`\u2713 Wrote ${manifest.templates.length} templates to ${outPath}`);
+console.log(
+  `\u2713 Wrote ${manifest.templates.length} templates + ${
+    Object.keys(manifest.catalog).length
+  } catalog entries to ${outPath}`,
+);

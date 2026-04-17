@@ -46,6 +46,17 @@ export interface TemplateDefinition<TContent = unknown> {
   Component: ComponentType<{ content: TContent; speakers: Record<string, Speaker>; funnelId: string }>;
   /** descriptive tags for filtering */
   tags: readonly TemplateTag[];
+  /**
+   * Catalog keys this template knows how to render. When present, the manifest
+   * emits `sectionSchemas` (keyed JSON-schemas) so Filament + the AI pipeline
+   * can drive per-section editing. Templates without this field continue to
+   * use the legacy whole-template `jsonSchema` block.
+   */
+  supportedSections?: readonly string[];
+  /** Default render order when no per-funnel override exists. */
+  sectionOrder?: readonly string[];
+  /** Sections enabled by default for new funnels. */
+  defaultEnabledSections?: readonly string[];
 }
 
 export interface PublishedContent {

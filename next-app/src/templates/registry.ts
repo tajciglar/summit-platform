@@ -15,6 +15,11 @@ import { Variant3 } from './Variant3';
 import { Variant3Schema } from './variant-3.schema';
 import { AdhdSummit } from './AdhdSummit';
 import { AdhdSummitSchema } from './adhd-summit.schema';
+import {
+  opusV1SupportedSections,
+  opusV1SectionOrder,
+  opusV1DefaultEnabledSections,
+} from './opus-v1/sections';
 
 export const templates = {
   'opus-v1': {
@@ -24,6 +29,9 @@ export const templates = {
     schema: OpusV1Schema,
     Component: OpusV1,
     tags: ['editorial', 'serif', 'warm'] as const,
+    supportedSections: opusV1SupportedSections,
+    sectionOrder: opusV1SectionOrder,
+    defaultEnabledSections: opusV1DefaultEnabledSections,
   },
   'opus-v2': {
     key: 'opus-v2',

@@ -1,4 +1,940 @@
 {
+  "catalog": {
+    "masthead": {
+      "key": "masthead",
+      "label": "Masthead / nav",
+      "description": "Sticky top navigation",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 5,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "volume": {
+            "type": "string",
+            "minLength": 1
+          },
+          "eyebrow": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "volume",
+          "eyebrow"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "hero": {
+      "key": "hero",
+      "label": "Hero",
+      "description": "Above-the-fold headline + dates + CTA",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 10,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "issueLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dateRangeLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "metaLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "readerCount": {
+            "type": "string",
+            "minLength": 1
+          },
+          "eyebrow": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 3
+          },
+          "subheadline": {
+            "type": "string",
+            "minLength": 3
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ctaSubtext": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ratingText": {
+            "type": "string",
+            "minLength": 1
+          },
+          "figCaption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "heroSpeakerIds": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          }
+        },
+        "required": [
+          "issueLabel",
+          "dateRangeLabel",
+          "metaLabel",
+          "readerCount",
+          "eyebrow",
+          "headline",
+          "subheadline",
+          "ctaLabel",
+          "ratingText",
+          "figCaption",
+          "heroSpeakerIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "marquee": {
+      "key": "marquee",
+      "label": "Press marquee",
+      "description": "Scrolling strip of publication names",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 20,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "items": {
+            "minItems": 3,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "stats-hero": {
+      "key": "stats-hero",
+      "label": "Big-numbers stats",
+      "description": "Three social-proof big numbers",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 25,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "statLabel1": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statValue1": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statLabel2": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statValue2": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statLabel3": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statValue3": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "statLabel1",
+          "statValue1",
+          "statLabel2",
+          "statValue2",
+          "statLabel3",
+          "statValue3"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "summit-overview": {
+      "key": "summit-overview",
+      "label": "Summit overview",
+      "description": "What this summit is about + editors note",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 30,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bodyParagraphs": {
+            "minItems": 2,
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "featureBand": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bullets": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "body",
+              "bullets"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "bodyParagraphs",
+          "ctaLabel",
+          "featureBand"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "speakers-by-day": {
+      "key": "speakers-by-day",
+      "label": "Speakers by day",
+      "description": "Speakers grouped by summit day",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 40,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "days": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dayLabel": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dayDate": {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                },
+                "dayTheme": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "roman": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "speakerIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                }
+              },
+              "required": [
+                "dayLabel",
+                "dayDate",
+                "speakerIds"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "days"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "value-prop": {
+      "key": "value-prop",
+      "label": "What you'll get",
+      "description": "Transformations / outcomes list",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 50,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subhead": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 6,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "subhead",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "supplement": {
+      "key": "supplement",
+      "label": "Free supplement",
+      "description": "Free gift / included bonus card",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 55,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "cardLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cardTitle": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cardFooter": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cardVolume": {
+            "type": "string",
+            "minLength": 1
+          },
+          "badgeLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "eyebrow": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bullets": {
+            "minItems": 2,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "cardLabel",
+          "cardTitle",
+          "cardFooter",
+          "cardVolume",
+          "badgeLabel",
+          "eyebrow",
+          "headline",
+          "body",
+          "bullets",
+          "ctaLabel"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "bonus-stack": {
+      "key": "bonus-stack",
+      "label": "Bonus stack",
+      "description": "Grid of included bonus items",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 60,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subhead": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 1,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "valueLabel": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "bullets": {
+                  "minItems": 1,
+                  "maxItems": 5,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "valueLabel"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "subhead",
+          "ctaLabel",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "host-founder": {
+      "key": "host-founder",
+      "label": "Meet the host",
+      "description": "Founders / hosts with quotes",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 70,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 2,
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "role": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "initials": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4
+                }
+              },
+              "required": [
+                "name",
+                "role",
+                "quote",
+                "initials"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "testimonials-attendees": {
+      "key": "testimonials-attendees",
+      "label": "Attendee testimonials",
+      "description": "Past attendee quotes",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 80,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subhead": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "location": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "initials": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4
+                }
+              },
+              "required": [
+                "quote",
+                "name",
+                "location",
+                "initials"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "subhead",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "pull-quote": {
+      "key": "pull-quote",
+      "label": "Pull quote",
+      "description": "Divider pull-quote band",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 85,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attribution": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "quote",
+          "attribution"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "facts-stats": {
+      "key": "facts-stats",
+      "label": "Problem-space facts",
+      "description": "Grid of problem-domain data points",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 90,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subhead": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 6,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "label",
+                "value",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "subhead",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reasons-to-attend": {
+      "key": "reasons-to-attend",
+      "label": "Reasons to attend",
+      "description": "Numbered reasons to register",
+      "tier": "optional",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 95,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "roman": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "items": {
+            "minItems": 5,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "roman",
+          "headline",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "faq": {
+      "key": "faq",
+      "label": "FAQ",
+      "description": "Expandable Q&A list",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 100,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "items": {
+            "minItems": 3,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "answer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "closing-cta": {
+      "key": "closing-cta",
+      "label": "Closing CTA",
+      "description": "Final call to action",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 110,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "eyebrow": {
+            "type": "string",
+            "minLength": 1
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subheadline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ctaLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fineprint": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "headline",
+          "subheadline",
+          "ctaLabel"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "footer": {
+      "key": "footer",
+      "label": "Footer",
+      "description": "Legal + links footer",
+      "tier": "core",
+      "pageTypes": [
+        "landing"
+      ],
+      "defaultOrder": 120,
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tagline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "volume": {
+            "type": "string",
+            "minLength": 1
+          },
+          "copyright": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "tagline",
+          "volume",
+          "copyright"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
   "templates": [
     {
       "key": "opus-v1",
@@ -789,6 +1725,822 @@
           "footer"
         ],
         "additionalProperties": false
+      },
+      "supportedSections": [
+        "masthead",
+        "hero",
+        "marquee",
+        "stats-hero",
+        "summit-overview",
+        "speakers-by-day",
+        "value-prop",
+        "supplement",
+        "bonus-stack",
+        "host-founder",
+        "testimonials-attendees",
+        "pull-quote",
+        "facts-stats",
+        "reasons-to-attend",
+        "faq",
+        "closing-cta",
+        "footer"
+      ],
+      "sectionOrder": [
+        "masthead",
+        "hero",
+        "marquee",
+        "stats-hero",
+        "summit-overview",
+        "speakers-by-day",
+        "value-prop",
+        "supplement",
+        "bonus-stack",
+        "host-founder",
+        "testimonials-attendees",
+        "pull-quote",
+        "facts-stats",
+        "reasons-to-attend",
+        "faq",
+        "closing-cta",
+        "footer"
+      ],
+      "defaultEnabledSections": [
+        "masthead",
+        "hero",
+        "summit-overview",
+        "speakers-by-day",
+        "value-prop",
+        "host-founder",
+        "testimonials-attendees",
+        "faq",
+        "closing-cta",
+        "footer"
+      ],
+      "sectionSchemas": {
+        "masthead": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "volume": {
+              "type": "string",
+              "minLength": 1
+            },
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "volume",
+            "eyebrow"
+          ],
+          "additionalProperties": false
+        },
+        "hero": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "issueLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "dateRangeLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "metaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "readerCount": {
+              "type": "string",
+              "minLength": 1
+            },
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 3
+            },
+            "subheadline": {
+              "type": "string",
+              "minLength": 3
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ctaSubtext": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ratingText": {
+              "type": "string",
+              "minLength": 1
+            },
+            "figCaption": {
+              "type": "string",
+              "minLength": 1
+            },
+            "heroSpeakerIds": {
+              "minItems": 1,
+              "maxItems": 4,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              }
+            }
+          },
+          "required": [
+            "issueLabel",
+            "dateRangeLabel",
+            "metaLabel",
+            "readerCount",
+            "eyebrow",
+            "headline",
+            "subheadline",
+            "ctaLabel",
+            "ratingText",
+            "figCaption",
+            "heroSpeakerIds"
+          ],
+          "additionalProperties": false
+        },
+        "marquee": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "items": {
+              "minItems": 3,
+              "maxItems": 20,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "stats-hero": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "statLabel1": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statValue1": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statLabel2": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statValue2": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statLabel3": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statValue3": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "statLabel1",
+            "statValue1",
+            "statLabel2",
+            "statValue2",
+            "statLabel3",
+            "statValue3"
+          ],
+          "additionalProperties": false
+        },
+        "summit-overview": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "bodyParagraphs": {
+              "minItems": 2,
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "featureBand": {
+              "type": "object",
+              "properties": {
+                "eyebrow": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "headline": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "body": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "bullets": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "eyebrow",
+                "headline",
+                "body",
+                "bullets"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "bodyParagraphs",
+            "ctaLabel",
+            "featureBand"
+          ],
+          "additionalProperties": false
+        },
+        "speakers-by-day": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "days": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "dayLabel": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dayDate": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  "dayTheme": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "roman": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "speakerIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  }
+                },
+                "required": [
+                  "dayLabel",
+                  "dayDate",
+                  "speakerIds"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "days"
+          ],
+          "additionalProperties": false
+        },
+        "value-prop": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subhead": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 6,
+              "maxItems": 6,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "subhead",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "supplement": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "cardLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cardTitle": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cardFooter": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cardVolume": {
+              "type": "string",
+              "minLength": 1
+            },
+            "badgeLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1
+            },
+            "bullets": {
+              "minItems": 2,
+              "maxItems": 6,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "cardLabel",
+            "cardTitle",
+            "cardFooter",
+            "cardVolume",
+            "badgeLabel",
+            "eyebrow",
+            "headline",
+            "body",
+            "bullets",
+            "ctaLabel"
+          ],
+          "additionalProperties": false
+        },
+        "bonus-stack": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subhead": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 1,
+              "maxItems": 5,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "valueLabel": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "bullets": {
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "valueLabel"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "subhead",
+            "ctaLabel",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "host-founder": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 2,
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "role": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "initials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4
+                  }
+                },
+                "required": [
+                  "name",
+                  "role",
+                  "quote",
+                  "initials"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "testimonials-attendees": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subhead": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 3,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "location": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "initials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4
+                  }
+                },
+                "required": [
+                  "quote",
+                  "name",
+                  "location",
+                  "initials"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "subhead",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "pull-quote": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "quote": {
+              "type": "string",
+              "minLength": 1
+            },
+            "attribution": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "quote",
+            "attribution"
+          ],
+          "additionalProperties": false
+        },
+        "facts-stats": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subhead": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 6,
+              "maxItems": 6,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "label",
+                  "value",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "subhead",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "reasons-to-attend": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "roman": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "items": {
+              "minItems": 5,
+              "maxItems": 5,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "roman",
+            "headline",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "faq": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "items": {
+              "minItems": 3,
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "answer": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "question",
+                  "answer"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "closing-cta": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subheadline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fineprint": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "headline",
+            "subheadline",
+            "ctaLabel"
+          ],
+          "additionalProperties": false
+        },
+        "footer": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "tagline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "volume": {
+              "type": "string",
+              "minLength": 1
+            },
+            "copyright": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "tagline",
+            "volume",
+            "copyright"
+          ],
+          "additionalProperties": false
+        }
       }
     },
     {
