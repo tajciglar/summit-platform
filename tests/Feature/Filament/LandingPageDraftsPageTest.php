@@ -2,6 +2,7 @@
 
 use App\Filament\Resources\Funnels\Pages\LandingPageDraftsPage;
 use App\Models\Funnel;
+use App\Models\FunnelStep;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
@@ -106,4 +107,28 @@ it('polls every 3s while a draft is generating', function () {
 
     $page = livewire(LandingPageDraftsPage::class, ['record' => $funnel->id]);
     expect($page->instance()->getPollingInterval())->toBe('3s');
+});
+
+it('publish action calls PublishDraftService', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    FunnelStep::factory()->for($funnel)->create([
+        'step_type' => 'optin',
+        'page_content' => [],
+    ]);
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'version_count' => 1, 'status' => 'running',
+    ]);
+    $draft = LandingPageDraft::create([
+        'batch_id' => $batch->id, 'version_number' => 1,
+        'template_key' => 'opus-v1',
+        'sections' => ['summit' => ['name' => 'X']],
+        'status' => 'shortlisted', 'preview_token' => 't1',
+    ]);
+
+    livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
+        ->call('publish', $draft->id);
+
+    expect($draft->fresh()->status)->toBe('published');
 });

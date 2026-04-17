@@ -53,8 +53,9 @@ class LandingPageDraftsPage extends Page
 
     public function publish(string $draftId): void
     {
-        // Task 23 will introduce PublishDraftService. For now, throw — Task 24 wires it up.
-        throw new \RuntimeException('Publish not yet wired — Task 23/24 will connect PublishDraftService.');
+        $draft = LandingPageDraft::findOrFail($draftId);
+        app(\App\Services\Templates\PublishDraftService::class)
+            ->publish($draft, auth()->user());
     }
 
     public function getPollingInterval(): ?string
