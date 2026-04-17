@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'summit_id',
         'category',
+        'kind',
         'slug',
         'name',
         'description',
@@ -38,6 +39,8 @@ class Product extends Model
         'stripe_price_post_id',
         'intro_price_cents',
         'intro_period_months',
+        'bundled_product_ids',
+        'combo_discount_cents',
     ];
 
     protected function casts(): array
@@ -45,7 +48,81 @@ class Product extends Model
         return [
             'grants_vip_access' => 'boolean',
             'is_active' => 'boolean',
+            'bundled_product_ids' => 'array',
         ];
+    }
+
+    /**
+     * Products bundled inside this combo. Empty for non-combo products.
+     */
+    public function bundledProducts()
+    {
+        $ids = $this->bundled_product_ids ?? [];
+
+        return self::query()->whereIn('id', $ids)->get();
+    }
+
+    /**
+     * Stripe line items to send at checkout. For standalone/bump/upsell: one
+     * item with this product's own stripe_price_id. For combos: one per child.
+     *
+     * @return array<int, array{product_id:string, product_name:string, stripe_price_id:?string, unit_price_cents:?int}>
+     */
+    public function checkoutLineItemsForPhase(string $phase): array
+    {
+        if ($this->kind === 'combo') {
+            return $this->bundledProducts()
+                ->map(fn (self $child) => [
+                    'product_id' => $child->id,
+                    'product_name' => $child->name,
+                    'stripe_price_id' => $child->stripePriceIdForPhase($phase),
+                    'unit_price_cents' => $child->priceCentsForPhase($phase),
+                ])
+                ->values()
+                ->all();
+        }
+
+        return [[
+            'product_id' => $this->id,
+            'product_name' => $this->name,
+            'stripe_price_id' => $this->stripePriceIdForPhase($phase),
+            'unit_price_cents' => $this->priceCentsForPhase($phase),
+        ]];
+    }
+
+    /**
+     * Sum of children's phase prices, before the combo-level discount.
+     */
+    public function comboBaseCentsForPhase(string $phase): int
+    {
+        if ($this->kind !== 'combo') {
+            return (int) ($this->priceCentsForPhase($phase) ?? 0);
+        }
+
+        return (int) collect($this->checkoutLineItemsForPhase($phase))
+            ->sum(fn (array $item) => (int) ($item['unit_price_cents'] ?? 0));
+    }
+
+    /**
+     * What the customer actually pays for this combo: base − discount (never negative).
+     */
+    public function comboTotalCentsForPhase(string $phase): int
+    {
+        $base = $this->comboBaseCentsForPhase($phase);
+
+        return max(0, $base - (int) ($this->combo_discount_cents ?? 0));
+    }
+
+    /**
+     * Unified "display price" for any product kind, for tables/cards.
+     */
+    public function displayPriceCentsForPhase(string $phase): ?int
+    {
+        if ($this->kind === 'combo') {
+            return $this->comboTotalCentsForPhase($phase);
+        }
+
+        return $this->priceCentsForPhase($phase);
     }
 
     public function summit(): BelongsTo
