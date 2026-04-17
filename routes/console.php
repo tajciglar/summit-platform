@@ -2,14 +2,5 @@
 
 use Illuminate\Support\Facades\Schedule;
 
-// Auto-update summit phases every 5 minutes based on phase schedules
+// Auto-update summit current_phase based on inline phase dates.
 Schedule::command('summits:update-phases')->everyFiveMinutes();
-
-// Generate daily reports for active summits at 2 AM
-Schedule::command('reports:generate-daily')->dailyAt('02:00');
-
-// Sync unsynced optins to ActiveCampaign every 5 minutes
-Schedule::command('optins:sync-activecampaign')->everyFiveMinutes();
-
-// Prune mockup PNGs for rejected drafts older than 7 days
-Schedule::job(new \App\Jobs\PruneMockupsJob)->daily();

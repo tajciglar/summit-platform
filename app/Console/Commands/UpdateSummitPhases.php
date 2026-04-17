@@ -3,14 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Models\Summit;
-use App\Models\SummitPhaseSchedule;
 use Illuminate\Console\Command;
 
 class UpdateSummitPhases extends Command
 {
     protected $signature = 'summits:update-phases';
 
-    protected $description = 'Auto-update summit current_phase based on phase schedules';
+    protected $description = 'Auto-update summit current_phase by comparing NOW() against inline phase dates';
 
     public function handle(): int
     {
@@ -18,18 +17,12 @@ class UpdateSummitPhases extends Command
         $updated = 0;
 
         foreach ($summits as $summit) {
-            $currentSchedule = SummitPhaseSchedule::where('summit_id', $summit->id)
-                ->where('starts_at', '<=', now())
-                ->where(function ($q) {
-                    $q->whereNull('ends_at')
-                        ->orWhere('ends_at', '>', now());
-                })
-                ->orderBy('starts_at', 'desc')
-                ->first();
+            $nextPhase = $summit->computePhase();
 
-            if ($currentSchedule && $currentSchedule->phase !== $summit->current_phase) {
-                $summit->update(['current_phase' => $currentSchedule->phase]);
-                $this->info("Updated {$summit->title}: {$summit->current_phase} → {$currentSchedule->phase}");
+            if ($nextPhase !== null && $nextPhase !== $summit->current_phase) {
+                $previous = $summit->current_phase;
+                $summit->update(['current_phase' => $nextPhase]);
+                $this->info("Updated {$summit->title}: {$previous} → {$nextPhase}");
                 $updated++;
             }
         }
