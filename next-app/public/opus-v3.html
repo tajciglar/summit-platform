@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADHD Parenting Summit 2026 — A softer way to parent a bright, busy mind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:  { 50:'#FAF7F2', 100:'#F4EDE2', 200:'#EEE3D0', 300:'#E3D5BB' },
+            sage:   { 50:'#E9EEEA', 200:'#B3C3B7', 500:'#7A9283', 600:'#4A6B5D', 700:'#3D5A4E', 800:'#2F4A40' },
+            rose:   { 300:'#E8B9A0', 400:'#DEA389', 500:'#D89878', 600:'#C4835F' },
+            clay:   { 500:'#D17B4E', 600:'#C4663D', 700:'#A85430' },
+            ink:    { 800:'#2A2419', 700:'#3A3221', 600:'#5A4E3C' },
+            soft:   { 500:'#8A7E6C', 600:'#6B5E4C' }
+          },
+          fontFamily: {
+            display: ['Fraunces','serif'],
+            sans: ['DM Sans','ui-sans-serif','system-ui','sans-serif'],
+            accent: ['Nunito','DM Sans','sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior:smooth; }
+    body { font-family:'DM Sans',system-ui,sans-serif; background:#FAF7F2; color:#2A2419; font-feature-settings:"ss01"; font-size:18px; line-height:1.65; }
+    h1,h2,h3,h4 { font-family:'Fraunces','serif'; font-optical-sizing:auto; letter-spacing:-0.01em; }
+    .eyebrow { font-family:'Nunito','DM Sans',sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-weight:700; font-size:0.9rem; }
+    .pill { border-radius:999px; }
+    .soft-card { background:#FFFFFF; border-radius:28px; box-shadow:0 20px 60px -25px rgba(74,107,93,0.25); border:1px solid rgba(74,107,93,0.08); transition:transform 0.25s ease, box-shadow 0.25s ease; }
+    .soft-card:hover { transform:translateY(-3px); box-shadow:0 30px 70px -25px rgba(74,107,93,0.32); }
+    .cream-card { background:#F4EDE2; border-radius:28px; border:1px solid rgba(74,107,93,0.08); }
+    .btn-primary { background:#C4663D; color:#FAF7F2; padding:1.1rem 2.25rem; border-radius:999px; font-weight:700; font-size:1.1rem; display:inline-flex; align-items:center; gap:0.6rem; transition:transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease; box-shadow:0 10px 30px -10px rgba(196,102,61,0.45); }
+    .btn-primary:hover { background:#A85430; transform:translateY(-2px); box-shadow:0 16px 36px -8px rgba(196,102,61,0.55); }
+    .btn-ghost { background:transparent; color:#2F4A40; padding:1rem 1.9rem; border-radius:999px; font-weight:600; font-size:1.05rem; border:2px solid #7A9283; transition:background 0.2s ease; }
+    .btn-ghost:hover { background:#E9EEEA; }
+    .dropcap::first-letter { font-family:'Fraunces','serif'; font-weight:900; font-size:4.5rem; float:left; line-height:0.88; padding:0.3rem 0.5rem 0 0; color:#4A6B5D; }
+
+    /* Blob decorative */
+    .blob { position:absolute; border-radius:50%; filter:blur(40px); opacity:0.5; pointer-events:none; z-index:0; }
+    .blob-rose { background:radial-gradient(circle at 30% 30%, #E8B9A0, transparent 70%); }
+    .blob-sage { background:radial-gradient(circle at 70% 30%, #B3C3B7, transparent 70%); }
+    .blob-clay { background:radial-gradient(circle at 40% 60%, #D17B4E, transparent 70%); }
+
+    /* Marquee */
+    .marquee-wrap { overflow:hidden; position:relative; }
+    .marquee-wrap::before, .marquee-wrap::after { content:''; position:absolute; top:0; height:100%; width:120px; z-index:2; pointer-events:none; }
+    .marquee-wrap::before { left:0; background:linear-gradient(90deg,#FAF7F2,transparent); }
+    .marquee-wrap::after { right:0; background:linear-gradient(-90deg,#FAF7F2,transparent); }
+    .marquee-track { display:flex; width:max-content; animation:marq 42s linear infinite; }
+    .marquee-item { padding:0 2.2rem; white-space:nowrap; color:#4A6B5D; font-family:'Fraunces','serif'; font-weight:600; font-size:1.45rem; letter-spacing:-0.01em; }
+    @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* Handwritten underline */
+    .hand-under {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 12' fill='none'><path d='M2 6 Q 30 10, 60 5 T 120 6 T 178 7' stroke='%23D89878' stroke-width='2.5' stroke-linecap='round' fill='none' opacity='0.9'/></svg>");
+      background-repeat:no-repeat; background-position:bottom center; background-size:100% 12px;
+      padding-bottom:10px;
+    }
+
+    /* Wavy section divider */
+    .wave-top { display:block; width:100%; height:40px; }
+
+    /* FAQ */
+    details { background:#FFFFFF; border-radius:24px; margin-bottom:1rem; border:1px solid rgba(74,107,93,0.1); overflow:hidden; transition:box-shadow 0.2s; }
+    details[open] { box-shadow:0 18px 50px -25px rgba(74,107,93,0.25); }
+    details summary { cursor:pointer; list-style:none; padding:1.5rem 1.8rem; font-family:'Fraunces','serif'; font-weight:600; font-size:1.3rem; color:#2A2419; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    details summary::-webkit-details-marker { display:none; }
+    .pm-icon { width:32px; height:32px; border-radius:999px; background:#F4EDE2; color:#4A6B5D; display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.1rem; line-height:1; flex-shrink:0; transition:transform 0.25s, background 0.25s, color 0.25s; }
+    details[open] .pm-icon { background:#4A6B5D; color:#FAF7F2; transform:rotate(45deg); }
+
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(42,36,25,0.5); backdrop-filter:blur(5px); z-index:100; display:none; align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-backdrop.open { display:flex; }
+    .modal-card { background:#FAF7F2; max-width:540px; width:100%; border-radius:32px; box-shadow:0 40px 80px -20px rgba(74,107,93,0.35); border:1px solid rgba(74,107,93,0.1); }
+    body.modal-open { overflow:hidden; }
+
+    /* Focus */
+    :focus-visible { outline:3px solid rgba(74,107,93,0.6); outline-offset:3px; border-radius:6px; }
+
+    /* Skip nav */
+    .skip-nav { position:absolute; left:-9999px; }
+    .skip-nav:focus { position:fixed; top:1rem; left:1rem; background:#4A6B5D; color:#FAF7F2; padding:0.75rem 1.25rem; z-index:200; font-weight:600; border-radius:24px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track { animation:none !important; }
+      html { scroll-behavior:auto; }
+      .soft-card:hover, .btn-primary:hover { transform:none; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <a href="#main" class="skip-nav">Skip to content</a>
+
+  <!-- ========== TOP BAR ========== -->
+  <header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur border-b border-sage-200/40">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#4A6B5D"/><path d="M9 16 Q 16 8, 23 16 Q 16 24, 9 16" fill="#E8B9A0"/></svg>
+        <span class="font-display font-bold text-xl text-sage-800 tracking-tight">ADHD Parenting Summit</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <span class="hidden md:inline text-sage-800 text-base font-semibold">Feb 10–14, 2026 · Free</span>
+        <a href="#optin" onclick="openOptin(event)" class="btn-primary text-base py-3 px-6">Reserve seat</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+  <!-- ========== HERO ========== -->
+  <section class="relative bg-cream-50 overflow-hidden pt-14 md:pt-20 pb-20 md:pb-28">
+    <div class="blob blob-rose" style="width:500px;height:500px;top:-100px;left:-150px"></div>
+    <div class="blob blob-sage" style="width:600px;height:600px;bottom:-200px;right:-200px"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-12 gap-12 items-center">
+
+        <div class="md:col-span-6">
+          <!-- Prominent date block -->
+          <div class="inline-flex items-center gap-3 bg-white border border-sage-200 rounded-full pl-2 pr-5 py-2 mb-7 shadow-md">
+            <span class="bg-clay-600 text-cream-50 eyebrow px-3 py-1.5 rounded-full">Gentle 5-Day Summit</span>
+            <span class="font-display font-bold text-sage-800 text-base md:text-lg">Feb 10–14, 2026 · Free &amp; Online</span>
+          </div>
+          <h1 class="font-display font-black text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-ink-800 mb-8">
+            Your bright, <span class="italic text-clay-600">busy-minded</span> child is not a problem to be&nbsp;solved.
+          </h1>
+          <p class="text-ink-700 text-xl md:text-2xl leading-[1.55] mb-10 max-w-xl">
+            Five days with <strong class="text-sage-800">40 of the field's most thoughtful neuropsychologists, therapists, and educators</strong> — a soft place to land, and the practical guidance to keep going.
+          </p>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
+            <a href="#optin" onclick="openOptin(event)" class="btn-primary text-lg">
+              Reserve your free seat
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="#what-is-this" class="btn-ghost">Learn more</a>
+          </div>
+
+          <div class="flex items-center gap-5 pt-7 border-t-2 border-sage-200/60">
+            <div class="flex -space-x-3">
+              <div class="w-14 h-14 rounded-full border-[3px] border-cream-50 flex items-center justify-center font-accent font-bold text-base text-cream-50 shadow-lg" style="background:linear-gradient(135deg,#D89878,#C4835F)">SJ</div>
+              <div class="w-14 h-14 rounded-full border-[3px] border-cream-50 flex items-center justify-center font-accent font-bold text-base text-cream-50 shadow-lg" style="background:linear-gradient(135deg,#7A9283,#4A6B5D)">MC</div>
+              <div class="w-14 h-14 rounded-full border-[3px] border-cream-50 flex items-center justify-center font-accent font-bold text-base text-cream-50 shadow-lg" style="background:linear-gradient(135deg,#E8B9A0,#D89878)">EF</div>
+              <div class="w-14 h-14 rounded-full border-[3px] border-cream-50 flex items-center justify-center font-accent font-bold text-base text-cream-50 shadow-lg" style="background:linear-gradient(135deg,#4A6B5D,#3D5A4E)">JW</div>
+            </div>
+            <div>
+              <p class="text-clay-600 font-bold tracking-widest mb-0.5 text-lg">★ ★ ★ ★ ★</p>
+              <p class="text-ink-700 text-base md:text-lg">Loved by <span class="text-sage-800 font-bold">73,124</span> parents</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero collage -->
+        <div class="md:col-span-6">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="flex flex-col items-center">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6" style="background:linear-gradient(160deg,#D89878,#C4835F)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">SJ</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Dr.&nbsp;Sarah Jensen</p>
+            </div>
+            <div class="flex flex-col items-center -mt-8">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6 rotate-[2deg]" style="background:linear-gradient(160deg,#7A9283,#4A6B5D)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">EF</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Dr.&nbsp;Edward Feldman</p>
+            </div>
+            <div class="flex flex-col items-center mt-4">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6" style="background:linear-gradient(160deg,#E8B9A0,#D89878)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">PS</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Dr.&nbsp;Peg Shannon</p>
+            </div>
+            <div class="flex flex-col items-center -mt-4">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6 -rotate-[1.5deg]" style="background:linear-gradient(160deg,#C4835F,#A85430)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">SC</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Dr.&nbsp;Sarah Chen</p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6" style="background:linear-gradient(160deg,#4A6B5D,#2F4A40)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">MT</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Mark&nbsp;Thompson</p>
+            </div>
+            <div class="flex flex-col items-center -mt-10">
+              <div class="aspect-[3/4] w-full rounded-[2rem] overflow-hidden flex items-end justify-center pb-6 rotate-[1deg]" style="background:linear-gradient(160deg,#B3C3B7,#7A9283)">
+                <span class="font-display font-black text-cream-50/80 text-4xl">LP</span>
+              </div>
+              <p class="text-sm font-bold text-sage-800 mt-3 text-center">Dr.&nbsp;Lisa Park</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRESS MARQUEE ========== -->
+  <section class="bg-cream-50 py-10">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="eyebrow text-sage-700 text-center mb-6">As Featured In</p>
+      <div class="marquee-wrap">
+        <div class="marquee-track">
+          <span class="marquee-item">The New York Times</span>
+          <span class="marquee-item">Psychology Today</span>
+          <span class="marquee-item">The Atlantic</span>
+          <span class="marquee-item">The Guardian</span>
+          <span class="marquee-item">TIME</span>
+          <span class="marquee-item">TEDx</span>
+          <span class="marquee-item">Scientific American</span>
+          <span class="marquee-item">Forbes</span>
+          <span class="marquee-item">BBC</span>
+          <span class="marquee-item">Washington Post</span>
+          <span class="marquee-item">The New York Times</span>
+          <span class="marquee-item">Psychology Today</span>
+          <span class="marquee-item">The Atlantic</span>
+          <span class="marquee-item">The Guardian</span>
+          <span class="marquee-item">TIME</span>
+          <span class="marquee-item">TEDx</span>
+          <span class="marquee-item">Scientific American</span>
+          <span class="marquee-item">Forbes</span>
+          <span class="marquee-item">BBC</span>
+          <span class="marquee-item">Washington Post</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS — SAGE BAND ========== -->
+  <section class="bg-sage-600 text-cream-50 py-20 md:py-24 relative overflow-hidden">
+    <svg class="wave-top absolute top-0 left-0 right-0" viewBox="0 0 1200 40" preserveAspectRatio="none" fill="#FAF7F2" aria-hidden="true"><path d="M0 40 Q 300 0, 600 20 T 1200 10 L 1200 0 L 0 0 Z"/></svg>
+    <div class="max-w-6xl mx-auto px-6 relative">
+      <p class="eyebrow text-rose-300 text-center mb-14 mt-8">By the Numbers</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <div>
+          <p class="font-display font-black text-8xl md:text-9xl leading-none mb-4">5</p>
+          <p class="font-accent text-cream-50 text-xl md:text-2xl font-semibold">days of unhurried conversation</p>
+        </div>
+        <div class="md:border-x md:border-cream-50/20">
+          <p class="font-display font-black text-8xl md:text-9xl leading-none mb-4 text-rose-300">40<span class="text-cream-50 text-6xl align-top">+</span></p>
+          <p class="font-accent text-cream-50 text-xl md:text-2xl font-semibold">experts, writers, therapists</p>
+        </div>
+        <div>
+          <p class="font-display font-black text-8xl md:text-9xl leading-none mb-4">50<span class="text-6xl align-top">K</span></p>
+          <p class="font-accent text-cream-50 text-xl md:text-2xl font-semibold">parents before you, welcomed softly</p>
+        </div>
+      </div>
+    </div>
+    <svg class="wave-top absolute bottom-0 left-0 right-0 rotate-180" viewBox="0 0 1200 40" preserveAspectRatio="none" fill="#F4EDE2" aria-hidden="true"><path d="M0 40 Q 300 0, 600 20 T 1200 10 L 1200 0 L 0 0 Z"/></svg>
+  </section>
+
+  <!-- ========== WHAT IS THIS ========== -->
+  <section id="what-is-this" class="bg-cream-100 py-20 md:py-28 relative overflow-hidden">
+    <div class="blob blob-rose" style="width:400px;height:400px;top:10%;right:-150px;opacity:0.3"></div>
+    <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-7">
+        <span class="eyebrow text-clay-600 mb-4 inline-block">What is This?</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl leading-tight text-ink-800 mb-8">
+          An <span class="hand-under text-sage-600">unhurried</span> answer to an overwhelming question.
+        </h2>
+        <p class="dropcap text-xl md:text-2xl text-ink-700 leading-[1.7] mb-6">
+          We built this summit because we could not find it: a generous, evidence-based conversation that treats ADHD parenting as something other than a problem to be fixed. Across five gentle evenings, <strong class="text-sage-800">forty thoughtful voices</strong> offer practical guidance and — just as importantly — the reassurance that you are not alone.
+        </p>
+        <p class="text-xl md:text-2xl text-ink-700 leading-[1.7] mb-10">
+          Watch live or catch the replays at your pace. Bring your partner. <strong class="text-sage-800">The sessions are free. The strategies are real.</strong> The relief, we hope, is audible.
+        </p>
+        <a href="#optin" onclick="openOptin(event)" class="btn-primary">
+          Reserve your seat
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="md:col-span-5">
+        <div class="relative h-96 md:h-[26rem]">
+          <div class="absolute top-0 left-8 w-32 h-32 rounded-full flex items-center justify-center bg-rose-400 shadow-xl">
+            <svg class="w-14 h-14 text-cream-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </div>
+          <div class="absolute top-20 right-6 w-40 h-40 rounded-full flex items-center justify-center bg-sage-600 shadow-xl">
+            <svg class="w-16 h-16 text-cream-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <div class="absolute bottom-4 left-20 w-36 h-36 rounded-full flex items-center justify-center bg-clay-600 shadow-xl">
+            <svg class="w-14 h-14 text-cream-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <p class="absolute bottom-0 right-0 font-display italic text-sage-700 text-sm max-w-[10rem] text-right">Live talks · a printed Collection · a quiet community</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SPEAKERS — DAY 1 ========== -->
+  <section class="bg-cream-50 py-20 md:py-28 relative overflow-hidden">
+    <div class="relative max-w-6xl mx-auto px-6 text-center">
+      <span class="eyebrow text-clay-600 mb-3 inline-block">Day One · Opening Circle</span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 mb-14 leading-tight">
+        Understanding <span class="italic text-sage-600">your child's</span> brain.
+      </h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#D89878,#C4835F)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">SJ</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Dr. Sarah Jensen</p>
+          <p class="text-soft-600 text-base font-medium">Pediatric Neuropsychologist</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#7A9283,#4A6B5D)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">MC</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Michael Chen</p>
+          <p class="text-soft-600 text-base font-medium">ADHD Coach</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#E8B9A0,#D89878)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">MR</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Maria Rodriguez</p>
+          <p class="text-soft-600 text-base font-medium">Child Development</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#4A6B5D,#2F4A40)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">JW</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Dr. James Wilson</p>
+          <p class="text-soft-600 text-base font-medium">Psychiatrist</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#D17B4E,#C4663D)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">ED</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Emily Davis</p>
+          <p class="text-soft-600 text-base font-medium">Education Consultant</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#B3C3B7,#7A9283)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">RL</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Dr. Robert Lee</p>
+          <p class="text-soft-600 text-base font-medium">Family Therapist</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#DEA389,#C4835F)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">LT</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Linda Thompson</p>
+          <p class="text-soft-600 text-base font-medium">Special Ed Advocate</p>
+        </figure>
+        <figure class="flex flex-col items-center">
+          <div class="w-32 h-32 rounded-full mb-4 flex items-end justify-center pb-5 transition-all hover:scale-105" style="background:linear-gradient(135deg,#3D5A4E,#2F4A40)">
+            <span class="font-display font-black text-cream-50/80 text-3xl">AP</span>
+          </div>
+          <p class="font-display font-bold text-xl text-sage-800">Dr. Aisha Patel</p>
+          <p class="text-soft-600 text-base font-medium">Clinical Psychologist</p>
+        </figure>
+      </div>
+
+      <div class="mt-14">
+        <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-2 text-sage-800 font-bold text-lg border-b-2 border-rose-400 pb-1 hover:text-clay-600">See the full forty — register free →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHAT YOU'LL LEARN ========== -->
+  <section class="bg-cream-100 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Six Shifts by Day Five</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">What the end of the week <span class="italic text-sage-600">may sound like</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
+            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Understand Why They Act Out</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">The neuroscience behind the behavior. "Bad child" becomes "dysregulated nervous system" — and your response changes.</p>
+        </article>
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
+            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">End the Yelling Cycle</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">Calm responses that actually work — because you found a different script, not more willpower.</p>
+        </article>
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
+            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Fix Morning Chaos</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">Gentle routines that reduce daily friction. No gold-star charts. Things that hold up in real kitchens.</p>
+        </article>
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
+            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Build Emotional Resilience</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">Help your child regulate big emotions — not suppress them. The difference, over time, changes everything.</p>
+        </article>
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
+            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Navigate School Systems</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">IEPs, 504s, and teacher communication — firm, warm, and hard to refuse.</p>
+        </article>
+        <article class="soft-card p-8">
+          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
+            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Connect With Other Parents</h3>
+          <p class="text-ink-700 text-lg leading-relaxed">A side-channel for those late-night questions. You are not alone in this.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FREE GIFT ========== -->
+  <section class="relative bg-cream-50 py-20 md:py-28 overflow-hidden">
+    <div class="blob blob-sage" style="width:500px;height:500px;top:-150px;right:-100px"></div>
+    <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-5 flex justify-center">
+        <div class="relative">
+          <div class="absolute -inset-8 rounded-full bg-rose-300 opacity-30 blur-2xl"></div>
+          <div class="relative w-60 h-80 rounded-[2rem] overflow-hidden shadow-xl border-4 border-cream-100 transform -rotate-3" style="background:linear-gradient(160deg,#FAF7F2,#F4EDE2)">
+            <div class="absolute left-0 top-0 bottom-0 w-3 bg-sage-600"></div>
+            <div class="p-8 pl-10 h-full flex flex-col justify-between">
+              <div>
+                <p class="eyebrow text-sage-600 mb-3">A Gentle Collection</p>
+                <div class="w-10 h-[2px] bg-rose-400 mb-5"></div>
+                <h3 class="font-display font-black text-2xl text-ink-800 leading-tight">The ADHD Parenting Mastery Collection</h3>
+              </div>
+              <div>
+                <p class="font-display italic text-soft-500 text-sm">Enclosed with your seat</p>
+                <p class="eyebrow text-soft-500 mt-2">Vol. VII · 2026</p>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -top-3 -right-3 bg-clay-600 text-cream-50 font-accent font-bold text-xs px-4 py-2 pill shadow-lg transform rotate-6">FREE GIFT</div>
+        </div>
+      </div>
+      <div class="md:col-span-7">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Enclosed with Registration</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight mb-6">
+          A <span class="hand-under">gentle collection</span>, enclosed.
+        </h2>
+        <p class="text-ink-700 text-xl md:text-2xl leading-relaxed mb-8">
+          A bound selection of scripts, templates, and quiet checklists — drawn from our contributors' clinical practice and printed for the kitchen drawer. Your copy arrives the moment you register.
+        </p>
+        <ul class="space-y-4 mb-10">
+          <li class="flex items-start gap-3 text-ink-700 text-lg"><span class="w-7 h-7 rounded-full bg-sage-50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-sage-700 font-bold">✓</span></span><span>Morning-routine visual schedules, tested in real homes</span></li>
+          <li class="flex items-start gap-3 text-ink-700 text-lg"><span class="w-7 h-7 rounded-full bg-sage-50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-sage-700 font-bold">✓</span></span><span>De-escalation scripts for meltdowns — the first sentence matters most</span></li>
+          <li class="flex items-start gap-3 text-ink-700 text-lg"><span class="w-7 h-7 rounded-full bg-sage-50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-sage-700 font-bold">✓</span></span><span>IEP &amp; 504 request templates — firm, warm, hard to refuse</span></li>
+          <li class="flex items-start gap-3 text-ink-700 text-lg"><span class="w-7 h-7 rounded-full bg-sage-50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-sage-700 font-bold">✓</span></span><span>Printable calm-down card set for the refrigerator door</span></li>
+        </ul>
+        <a href="#optin" onclick="openOptin(event)" class="btn-primary">
+          Claim seat + Collection
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BONUS STACK ========== -->
+  <section class="bg-cream-100 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Three Gentle Bonuses</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight mb-4">Three gifts, <span class="hand-under">worth $291</span>, yours free.</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="soft-card p-8">
+          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">The ADHD Morning Playbook</h3>
+          <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 7-day system for transforming chaotic mornings into calm, connected starts.</p>
+          <ul class="space-y-2 text-base text-ink-700">
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Visual schedule templates</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Transition scripts that work</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Calm-down toolkit</li>
+          </ul>
+        </article>
+        <article class="soft-card p-8">
+          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">Meltdown to Breakthrough</h3>
+          <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 5-step de-escalation framework that turns outbursts into growth moments.</p>
+          <ul class="space-y-2 text-base text-ink-700">
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>5-step de-escalation method</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Emotional coaching scripts</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Printable calm-down cards</li>
+          </ul>
+        </article>
+        <article class="soft-card p-8">
+          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
+          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">School Advocacy Toolkit</h3>
+          <p class="text-ink-700 text-lg mb-5 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
+          <ul class="space-y-2 text-base text-ink-700">
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>IEP/504 request templates</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Teacher communication scripts</li>
+            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Accommodation checklists</li>
+          </ul>
+        </article>
+      </div>
+      <div class="text-center mt-12">
+        <a href="#optin" onclick="openOptin(event)" class="btn-primary">
+          Claim seat + all three bonuses
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOUNDERS ========== -->
+  <section class="bg-cream-50 py-20 md:py-28">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 text-center mb-14 leading-tight">From the founders</h2>
+      <div class="grid md:grid-cols-2 gap-12 md:gap-16">
+        <div class="text-center md:text-left">
+          <div class="w-32 h-32 rounded-full flex items-center justify-center font-display font-black text-3xl text-cream-50 mx-auto md:mx-0 mb-5 shadow-xl" style="background:linear-gradient(135deg,#D89878,#C4835F)">RW</div>
+          <h3 class="font-display font-bold text-2xl text-ink-800">Roman Wiltman</h3>
+          <p class="text-sage-700 text-base mb-5 font-semibold">Co-Founder</p>
+          <blockquote class="font-display italic text-xl md:text-2xl text-ink-700 leading-relaxed dropcap">
+            Our journey started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to.
+          </blockquote>
+        </div>
+        <div class="text-center md:text-left">
+          <div class="w-32 h-32 rounded-full flex items-center justify-center font-display font-black text-3xl text-cream-50 mx-auto md:mx-0 mb-5 shadow-xl" style="background:linear-gradient(135deg,#7A9283,#4A6B5D)">AS</div>
+          <h3 class="font-display font-bold text-2xl text-ink-800">Anisah Semen</h3>
+          <p class="text-sage-700 text-base mb-5 font-semibold">Co-Founder</p>
+          <blockquote class="font-display italic text-xl md:text-2xl text-ink-700 leading-relaxed dropcap">
+            Every child with ADHD has incredible strengths waiting to be unlocked. Our mission is to help parents see those strengths — and, gently, to nurture them.
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="bg-cream-100 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">What Parents Say</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">73,124 parents. <span class="italic text-sage-600">One common theme.</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="soft-card p-8">
+          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
+          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has <span class="hand-under">completely transformed</span>."</p>
+          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#D89878,#C4835F)">RB</div>
+            <div>
+              <p class="font-display font-bold text-lg text-sage-800">Rachel Berman</p>
+              <p class="text-soft-600 text-base">Ohio, USA</p>
+            </div>
+          </div>
+        </article>
+        <article class="soft-card p-8">
+          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
+          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"Finally someone who understands. The strategies are <span class="hand-under">practical, not theoretical</span>. My daughter's mornings are so much calmer now."</p>
+          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#7A9283,#4A6B5D)">KB</div>
+            <div>
+              <p class="font-display font-bold text-lg text-sage-800">Kamila Bosco</p>
+              <p class="text-soft-600 text-base">London, UK</p>
+            </div>
+          </div>
+        </article>
+        <article class="soft-card p-8">
+          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
+          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. <span class="hand-under">That alone was worth it.</span>"</p>
+          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#E8B9A0,#D89878)">JM</div>
+            <div>
+              <p class="font-display font-bold text-lg text-sage-800">Jennifer Mitchell</p>
+              <p class="text-soft-600 text-base">Toronto, CA</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PULL QUOTE — SAGE ========== -->
+  <section class="bg-sage-600 text-cream-50 py-24 md:py-32 relative overflow-hidden">
+    <svg class="wave-top absolute top-0 left-0 right-0" viewBox="0 0 1200 40" preserveAspectRatio="none" fill="#F4EDE2" aria-hidden="true"><path d="M0 40 Q 300 0, 600 20 T 1200 10 L 1200 0 L 0 0 Z"/></svg>
+    <div class="max-w-4xl mx-auto px-6 text-center relative mt-6">
+      <svg class="w-16 h-16 mx-auto mb-6 opacity-40 text-rose-300" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11H10v10H0z"/></svg>
+      <p class="font-display font-black text-3xl md:text-5xl leading-[1.15] mb-8 italic">
+        The earlier you learn how to support your child with ADHD, the better your chances of managing their condition and minimizing long-term challenges.
+      </p>
+      <p class="text-rose-300 font-accent font-bold text-base md:text-lg tracking-wide">— Dr. Sarah Jensen · Pediatric Neuropsychologist</p>
+    </div>
+  </section>
+
+  <!-- ========== WHY THIS MATTERS ========== -->
+  <section class="bg-cream-50 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Why This Matters</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">The reality of ADHD in families today.</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">1 in 9</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Children diagnosed with ADHD in the US</p>
+        </div>
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-clay-700 mb-3 leading-none">74%</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Of parents feel isolated and unsupported</p>
+        </div>
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">3.2×</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Higher reported stress in ADHD families</p>
+        </div>
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">15+</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Years of clinical research represented</p>
+        </div>
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-clay-700 mb-3 leading-none">28%</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Of school-age children struggle academically</p>
+        </div>
+        <div class="cream-card p-8 text-center">
+          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">93%</p>
+          <p class="text-ink-700 text-base leading-relaxed font-medium">Of past attendees recommend this summit</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FIVE BIG SHIFTS ========== -->
+  <section class="bg-cream-100 py-20 md:py-28">
+    <div class="max-w-3xl mx-auto px-6">
+      <span class="eyebrow text-clay-600 mb-3 inline-block">Five Gentle Shifts</span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight mb-14">What changes by <span class="italic text-sage-600">Day Five</span></h2>
+      <div class="space-y-8">
+        <article class="flex gap-6 soft-card p-7">
+          <span class="font-display font-black text-4xl text-rose-500 leading-none shrink-0">01</span>
+          <div>
+            <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">From Punishment to Partnership</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">An evidence-backed approach that builds cooperation naturally — without bribes, threats, or the exhausting architecture of either.</p>
+          </div>
+        </article>
+        <article class="flex gap-6 soft-card p-7">
+          <span class="font-display font-black text-4xl text-rose-500 leading-none shrink-0">02</span>
+          <div>
+            <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">From Reacting to Anticipating</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">See the meltdown coming 20 minutes out. Redirect the nervous system before the room is on fire.</p>
+          </div>
+        </article>
+        <article class="flex gap-6 soft-card p-7">
+          <span class="font-display font-black text-4xl text-rose-500 leading-none shrink-0">03</span>
+          <div>
+            <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">From Isolated to Supported</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">A cohort of parents who have been where you are. The 2 a.m. texts stop being a solo act.</p>
+          </div>
+        </article>
+        <article class="flex gap-6 soft-card p-7">
+          <span class="font-display font-black text-4xl text-rose-500 leading-none shrink-0">04</span>
+          <div>
+            <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">From Overwhelmed to Equipped</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">Trade vague anxiety for specific language and tools. You'll know what to say on Monday at 7:42 a.m.</p>
+          </div>
+        </article>
+        <article class="flex gap-6 soft-card p-7">
+          <span class="font-display font-black text-4xl text-rose-500 leading-none shrink-0">05</span>
+          <div>
+            <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">From Shame to Sovereignty</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">Your child's neurology is not a verdict on your parenting. A lived fact, not a mantra to repeat.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="bg-cream-50 py-20 md:py-28">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Common Questions</span>
+        <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">Gentle answers</h2>
+      </div>
+      <details>
+        <summary>Is it really free? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">Yes, entirely. All 40 sessions, the Collection, and the 3 bonus guides. Optional upgrade offers come later — they never gate the free content.</p>
+      </details>
+      <details>
+        <summary>What if I miss a live session? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">Each session is recorded and available for 48 hours after it airs. Readers with the All-Access Pass keep permanent access.</p>
+      </details>
+      <details>
+        <summary>Is this suitable if my child isn't formally diagnosed? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">Absolutely. Many attendees are observing ADHD traits and deciding whether to pursue assessment. Content is relevant regardless.</p>
+      </details>
+      <details>
+        <summary>My partner wants to attend — separate seat? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">One registration covers your household. Bring your partner, grandparents, co-parent, or an older child if appropriate.</p>
+      </details>
+      <details>
+        <summary>Is medical advice offered? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">Contributors are qualified clinicians, but the summit is educational, not clinical. We'll point you toward where to go for personalized guidance.</p>
+      </details>
+      <details>
+        <summary>How do I register? <span class="pm-icon">+</span></summary>
+        <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">
+          Hit any "Reserve seat" button — name + email, under 30 seconds.
+          <a href="#optin" onclick="openOptin(event)" class="inline-block mt-3 text-clay-700 font-bold text-lg border-b-2 border-rose-400 pb-0.5">Reserve seat →</a>
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== FINAL CTA ========== -->
+  <section class="relative py-24 md:py-32 overflow-hidden" style="background:linear-gradient(135deg,#D89878,#C4663D)">
+    <div class="blob" style="width:500px;height:500px;top:-150px;right:-100px;background:radial-gradient(circle,#FAF7F2,transparent 70%);opacity:0.25"></div>
+    <div class="max-w-4xl mx-auto px-6 text-center relative">
+      <div class="inline-flex items-center gap-3 bg-white/15 border border-white/25 rounded-full px-5 py-2 mb-8 backdrop-blur-sm">
+        <span class="w-2 h-2 rounded-full bg-rose-300"></span>
+        <span class="font-accent font-bold text-cream-50 text-base">Registration closes Feb 9, 2026</span>
+      </div>
+      <h2 class="font-display font-black text-5xl md:text-6xl lg:text-7xl text-cream-50 leading-[1.05] mb-8 tracking-tight">
+        Take a deep <span class="italic">breath</span>. <br/>Then reserve your seat.
+      </h2>
+      <p class="text-cream-50 text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+        Five days with forty of the field's most thoughtful minds — yours, free, delivered to your inbox.
+      </p>
+      <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-cream-50 hover:bg-cream-100 text-clay-700 font-bold text-xl px-12 py-5 pill transition shadow-2xl">
+        Reserve your free seat
+        <span aria-hidden="true">→</span>
+      </a>
+      <p class="text-cream-50 font-accent font-semibold text-base mt-8 tracking-wide">Free · No credit card · Unsubscribe anytime</p>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-cream-100 py-14 relative overflow-hidden">
+    <svg class="wave-top absolute top-0 left-0 right-0" viewBox="0 0 1200 40" preserveAspectRatio="none" fill="#C4663D" aria-hidden="true" style="opacity:0.15"><path d="M0 40 Q 300 0, 600 20 T 1200 10 L 1200 0 L 0 0 Z"/></svg>
+    <div class="max-w-6xl mx-auto px-6 pt-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-sage-200/50">
+        <div class="flex items-center gap-3">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#4A6B5D"/><path d="M9 16 Q 16 8, 23 16 Q 16 24, 9 16" fill="#E8B9A0"/></svg>
+          <div>
+            <p class="font-display font-bold text-2xl text-sage-800">ADHD Parenting Summit</p>
+            <p class="font-display italic text-ink-700 text-base md:text-lg">A softer way to parent a bright, busy mind.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 text-base text-ink-700 font-semibold">
+          <a href="#" class="hover:text-clay-700">Privacy</a>
+          <a href="#" class="hover:text-clay-700">Terms</a>
+          <a href="#" class="hover:text-clay-700">Contact</a>
+        </div>
+      </div>
+      <p class="text-ink-700 text-base mt-6 text-center md:text-left">&copy; 2026 Althea Academy. Made with care.</p>
+    </div>
+  </footer>
+
+  <!-- ========== OPTIN MODAL ========== -->
+  <div class="modal-backdrop" id="optinModal" role="dialog" aria-modal="true" aria-labelledby="optinTitle">
+    <div class="modal-card p-8 md:p-10 relative">
+      <button onclick="closeOptin()" aria-label="Close" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-cream-100 hover:bg-cream-200 flex items-center justify-center text-sage-700 text-xl leading-none">×</button>
+      <div id="optinBody">
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Reserve a Seat</span>
+        <h3 id="optinTitle" class="font-display font-black text-3xl md:text-4xl text-ink-800 leading-tight mb-2">Take your gentle seat.</h3>
+        <p class="text-ink-700 text-lg mb-8">Name and email — we'll send the schedule, the Collection, and your access link to your inbox.</p>
+        <form id="optinForm" onsubmit="return handleOptin(event)" class="space-y-5">
+          <div>
+            <label for="fname" class="eyebrow text-sage-800 block mb-2">Your Name</label>
+            <input id="fname" name="name" type="text" required class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="Sarah Jensen">
+          </div>
+          <div>
+            <label for="email" class="eyebrow text-sage-800 block mb-2">Email Address</label>
+            <input id="email" name="email" type="email" required class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="sarah@example.com">
+          </div>
+          <button type="submit" class="btn-primary w-full justify-center mt-3 text-lg py-4">
+            Reserve my seat <span aria-hidden="true">→</span>
+          </button>
+          <p class="text-center text-ink-700 text-base pt-2 font-medium">Free · No credit card · Unsubscribe anytime</p>
+        </form>
+      </div>
+      <div id="optinSuccess" class="text-center py-8" hidden>
+        <div class="w-16 h-16 rounded-full bg-sage-50 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <p class="font-display font-black text-3xl text-ink-800 mb-3">Your seat is reserved.</p>
+        <p class="text-ink-700 text-lg">The schedule and Collection are on their way to your inbox.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openOptin(ev) {
+      if (ev) ev.preventDefault();
+      document.getElementById('optinModal').classList.add('open');
+      document.body.classList.add('modal-open');
+      setTimeout(() => { const f = document.getElementById('fname'); if (f) f.focus(); }, 40);
+    }
+    function closeOptin() {
+      document.getElementById('optinModal').classList.remove('open');
+      document.body.classList.remove('modal-open');
+    }
+    function handleOptin(ev) {
+      ev.preventDefault();
+      const name = document.getElementById('fname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!name || !email) return false;
+      document.getElementById('optinBody').hidden = true;
+      document.getElementById('optinSuccess').hidden = false;
+      return false;
+    }
+    document.getElementById('optinModal').addEventListener('click', (e) => {
+      if (e.target.id === 'optinModal') closeOptin();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeOptin();
+    });
+  </script>
+
+</body>
+</html>
