@@ -1,6 +1,12 @@
 <?php
 
-use App\Models\{FunnelStep, FunnelStepRevision, LandingPageBatch, LandingPageDraft, Summit, Funnel, User};
+use App\Models\Funnel;
+use App\Models\FunnelStep;
+use App\Models\FunnelStepRevision;
+use App\Models\LandingPageBatch;
+use App\Models\LandingPageDraft;
+use App\Models\Summit;
+use App\Models\User;
 use App\Services\Templates\PublishDraftService;
 
 it('writes template_key + content to the optin step and snapshots the previous content', function () {
@@ -18,6 +24,7 @@ it('writes template_key + content to the optin step and snapshots the previous c
         'batch_id' => $batch->id, 'version_number' => 1,
         'template_key' => 'opus-v1',
         'sections' => ['summit' => ['name' => 'New']],
+        'enabled_sections' => ['hero', 'faq'],
         'status' => 'ready',
         'preview_token' => 'tok',
     ]);
@@ -29,6 +36,7 @@ it('writes template_key + content to the optin step and snapshots the previous c
     expect($step->page_content)->toEqual([
         'template_key' => 'opus-v1',
         'content' => ['summit' => ['name' => 'New']],
+        'enabled_sections' => ['hero', 'faq'],
     ]);
 
     expect(FunnelStepRevision::count())->toBe(1);
@@ -84,5 +92,6 @@ it('skips snapshot when page_content is empty', function () {
     expect($step->fresh()->page_content)->toEqual([
         'template_key' => 'opus-v1',
         'content' => ['x' => 1],
+        'enabled_sections' => null,
     ]);
 });

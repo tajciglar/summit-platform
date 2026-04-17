@@ -1,6 +1,15 @@
+import type { ComponentType } from 'react';
 import { notFound } from 'next/navigation';
 import { fetchDraft, speakersById } from '@/lib/api/laravel';
 import { getTemplate } from '@/templates/registry';
+import type { Speaker } from '@/templates/types';
+
+type OpusV1ComponentProps = {
+  content: unknown;
+  speakers: Record<string, Speaker>;
+  funnelId: string;
+  enabledSections?: string[];
+};
 
 export const dynamic = 'force-dynamic';
 
@@ -36,5 +45,20 @@ export default async function PreviewPage({
 
   const speakers = speakersById(draft.speakers);
   const Component = template.Component;
+  // Only opus-v1 currently accepts `enabledSections`. Other templates render
+  // their full content as-is (Phase 2a scope). Normalize null → undefined so
+  // the layout falls back to its default enabled set for legacy drafts.
+  const enabledSections = draft.enabled_sections ?? undefined;
+  if (draft.template_key === 'opus-v1') {
+    const OpusV1Component = Component as ComponentType<OpusV1ComponentProps>;
+    return (
+      <OpusV1Component
+        content={parsed.data}
+        enabledSections={enabledSections}
+        speakers={speakers}
+        funnelId={draft.funnel_id}
+      />
+    );
+  }
   return <Component content={parsed.data} speakers={speakers} funnelId={draft.funnel_id} />;
 }

@@ -6,11 +6,13 @@ export interface DraftPayload extends PublishedContent {
   speakers: Speaker[];
   status: string;
   funnel_id: string;
+  enabled_sections: string[] | null;
 }
 
 export interface PublicPayload extends PublishedContent {
   speakers: Speaker[];
   funnel_id: string;
+  enabled_sections: string[] | null;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {

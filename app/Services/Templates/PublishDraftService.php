@@ -2,7 +2,10 @@
 
 namespace App\Services\Templates;
 
-use App\Models\{FunnelStep, FunnelStepRevision, LandingPageDraft, User};
+use App\Models\FunnelStep;
+use App\Models\FunnelStepRevision;
+use App\Models\LandingPageDraft;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PublishDraftService
@@ -16,7 +19,7 @@ class PublishDraftService
                 ->firstOrFail();
 
             // Snapshot previous content if non-empty
-            if (!empty($step->page_content)) {
+            if (! empty($step->page_content)) {
                 FunnelStepRevision::create([
                     'funnel_step_id' => $step->id,
                     'page_content_snapshot' => $step->page_content,
@@ -30,6 +33,7 @@ class PublishDraftService
                 'page_content' => [
                     'template_key' => $draft->template_key,
                     'content' => $draft->sections,
+                    'enabled_sections' => $draft->enabled_sections,
                 ],
             ]);
 

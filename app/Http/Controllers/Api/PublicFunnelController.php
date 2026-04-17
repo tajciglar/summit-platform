@@ -41,6 +41,7 @@ class PublicFunnelController extends Controller
         return response()->json([
             'template_key' => $content['template_key'],
             'content' => $content['content'] ?? [],
+            'enabled_sections' => $content['enabled_sections'] ?? null,
             'speakers' => $speakers,
             'funnel_id' => $funnel->id,
         ]);

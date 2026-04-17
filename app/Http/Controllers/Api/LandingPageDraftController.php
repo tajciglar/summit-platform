@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{LandingPageDraft, Speaker};
+use App\Models\LandingPageDraft;
+use App\Models\Speaker;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
@@ -33,6 +34,7 @@ class LandingPageDraftController extends Controller
         return response()->json([
             'template_key' => $draft->template_key,
             'content' => $draft->sections ?? [],
+            'enabled_sections' => $draft->enabled_sections,
             'speakers' => $speakers,
             'status' => $draft->status,
             'funnel_id' => $draft->batch->funnel_id,
