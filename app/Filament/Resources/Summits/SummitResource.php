@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources\Summits;
 
+use App\Actions\DuplicateSummit;
 use App\Filament\Resources\Summits\Pages;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
 use App\Models\Summit;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -191,6 +194,28 @@ class SummitResource extends Resource
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('duplicate')
+                    ->label('Duplicate')
+                    ->icon(Heroicon::OutlinedDocumentDuplicate)
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->modalHeading('Duplicate this summit?')
+                    ->modalDescription('Copies the summit with all speakers, products, funnels, steps, and order bumps. The copy starts as a draft with phase dates shifted forward by one year.')
+                    ->modalSubmitActionLabel('Duplicate')
+                    ->action(function (Summit $record): void {
+                        $clone = app(DuplicateSummit::class)->handle($record);
+
+                        Notification::make()
+                            ->title('Summit duplicated')
+                            ->body('Created '.$clone->title.'.')
+                            ->success()
+                            ->actions([
+                                \Filament\Notifications\Actions\Action::make('view')
+                                    ->label('Open copy')
+                                    ->url(self::getUrl('edit', ['record' => $clone])),
+                            ])
+                            ->send();
+                    }),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
