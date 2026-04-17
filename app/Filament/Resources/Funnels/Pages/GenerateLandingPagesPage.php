@@ -13,6 +13,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Schema;
 
@@ -76,6 +77,16 @@ class GenerateLandingPagesPage extends Page implements HasForms
 
     public function submit(): void
     {
+        if (! $this->funnel->steps()->where('step_type', 'optin')->exists()) {
+            Notification::make()
+                ->title('Cannot generate landing pages')
+                ->body('This funnel has no optin step. Add one before generating.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
         $data = $this->form->getState();
 
         $pool = $data['template_pool'] ?? [];

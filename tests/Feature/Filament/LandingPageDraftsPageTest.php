@@ -7,11 +7,14 @@ use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
-    $this->actingAs(User::factory()->create());
+    // Bypass Filament Shield permission checks for tests.
+    Gate::before(fn () => true);
+    $this->actingAs(User::factory()->admin()->create());
 });
 
 it('renders the drafts page without drafts', function () {
@@ -131,4 +134,25 @@ it('publish action calls PublishDraftService', function () {
         ->call('publish', $draft->id);
 
     expect($draft->fresh()->status)->toBe('published');
+});
+
+it('publish action shows notification when funnel has no optin step', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    // No FunnelStep with step_type=optin
+
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'version_count' => 1, 'status' => 'running',
+    ]);
+    $draft = LandingPageDraft::create([
+        'batch_id' => $batch->id, 'version_number' => 1,
+        'template_key' => 'opus-v1', 'sections' => [],
+        'status' => 'shortlisted', 'preview_token' => 't1',
+    ]);
+
+    livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
+        ->call('publish', $draft->id);
+
+    expect($draft->fresh()->status)->toBe('shortlisted'); // unchanged — publish was blocked
 });

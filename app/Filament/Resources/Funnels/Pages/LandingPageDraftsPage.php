@@ -6,7 +6,9 @@ use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use App\Models\LandingPageDraft;
 use App\Services\Templates\TemplateRegistry;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LandingPageDraftsPage extends Page
 {
@@ -54,8 +56,17 @@ class LandingPageDraftsPage extends Page
     public function publish(string $draftId): void
     {
         $draft = LandingPageDraft::findOrFail($draftId);
-        app(\App\Services\Templates\PublishDraftService::class)
-            ->publish($draft, auth()->user());
+
+        try {
+            app(\App\Services\Templates\PublishDraftService::class)
+                ->publish($draft, auth()->user());
+        } catch (ModelNotFoundException $e) {
+            Notification::make()
+                ->title('Cannot publish')
+                ->body('This funnel has no optin step.')
+                ->danger()
+                ->send();
+        }
     }
 
     public function getPollingInterval(): ?string
