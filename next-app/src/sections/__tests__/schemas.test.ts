@@ -120,3 +120,28 @@ describe('section schemas', () => {
     }).success).toBe(true);
   });
 });
+
+import { catalog, catalogKeys } from '../catalog';
+
+describe('catalog', () => {
+  it('every entry has a schema', () => {
+    for (const key of catalogKeys) {
+      expect(catalog[key].schema).toBeDefined();
+    }
+  });
+
+  it('no duplicate defaultOrder within a page type', () => {
+    const byPageType: Record<string, number[]> = {};
+    for (const key of catalogKeys) {
+      const entry = catalog[key];
+      for (const pt of entry.pageTypes) {
+        byPageType[pt] ??= [];
+        byPageType[pt].push(entry.defaultOrder);
+      }
+    }
+    for (const [pt, orders] of Object.entries(byPageType)) {
+      const unique = new Set(orders);
+      expect(unique.size, `page-type ${pt} has duplicate defaultOrder`).toBe(orders.length);
+    }
+  });
+});
