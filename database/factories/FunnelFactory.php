@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Funnel;
 use App\Models\Summit;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Funnel>
@@ -15,13 +16,15 @@ class FunnelFactory extends Factory
 
     public function definition(): array
     {
+        $name = fake()->words(2, true).' Funnel';
+
         return [
             'summit_id' => Summit::factory(),
-            'slug' => fake()->unique()->slug(2),
-            'name' => fake()->sentence(3),
+            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(100, 999),
+            'name' => $name,
             'description' => fake()->sentence(),
+            'target_phase' => fake()->randomElement(['pre', 'late_pre', 'during', 'post', null]),
             'is_active' => true,
-            'theme' => [],
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Summit;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Summit>
@@ -14,16 +15,21 @@ class SummitFactory extends Factory
 
     public function definition(): array
     {
+        $title = fake()->unique()->catchPhrase().' Summit';
+
         return [
-            'slug' => fake()->unique()->slug(2),
-            'title' => fake()->sentence(3),
+            'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1000, 9999),
+            'title' => $title,
             'description' => fake()->paragraph(),
-            'topic' => fake()->words(2, true),
-            'status' => 'draft',
-            'current_phase' => 'pre_summit',
+            'topic' => fake()->word(),
+            'status' => 'published',
+            'current_phase' => 'pre',
             'timezone' => 'America/New_York',
-            'starts_at' => now()->addDays(30),
-            'ends_at' => now()->addDays(33),
+            'pre_summit_starts_at' => now()->subDays(30),
+            'late_pre_summit_starts_at' => now()->subDays(7),
+            'during_summit_starts_at' => now()->addDays(7),
+            'post_summit_starts_at' => now()->addDays(14),
+            'ends_at' => now()->addDays(30),
         ];
     }
 }
