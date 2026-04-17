@@ -79,6 +79,7 @@ class FunnelStepResource extends Resource
                     Builder::make('page_content')
                         ->hiddenLabel()
                         ->blocks(self::pageContentBlocks())
+                        ->afterStateHydrated(fn (Builder $component, $state) => $component->state(self::coerceToBuilderState($state)))
                         ->blockNumbers(false)
                         ->collapsible()
                         ->collapsed()
@@ -184,5 +185,33 @@ class FunnelStepResource extends Resource
                 ->icon($type->icon())
                 ->schema($type->filamentFields()))
             ->all();
+    }
+
+    /**
+     * Filament Builder expects a sequential list of {type, data} entries.
+     * Landing-page-generator output stores a different shape (e.g.
+     * {"content": {...}}). For legacy shapes we start the Builder empty
+     * rather than crashing — the operator can rebuild from scratch or
+     * regenerate via the Landing Pages UI.
+     *
+     * @param  mixed  $state
+     * @return array<int, array{type: string, data: array}>
+     */
+    public static function coerceToBuilderState($state): array
+    {
+        if (! is_array($state) || empty($state)) {
+            return [];
+        }
+
+        // Already a sequential list
+        if (array_is_list($state)) {
+            return array_values(array_filter(
+                $state,
+                fn ($item) => is_array($item) && isset($item['type']),
+            ));
+        }
+
+        // Associative map → not Builder-compatible (likely generator output)
+        return [];
     }
 }

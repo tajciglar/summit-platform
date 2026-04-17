@@ -20,19 +20,10 @@ class ViewFunnel extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        // Landing-page generator actions live on the step view now — scoped
+        // by step_type (optin step → Generate Landing Pages, sales_page step
+        // → Generate Sales Page, etc.). The funnel view stays lean.
         return [
-            Action::make('generateLandingPages')
-                ->label('Generate Landing Pages')
-                ->icon('heroicon-o-sparkles')
-                ->color('primary')
-                ->url(fn () => GenerateLandingPagesPage::getUrl(['record' => $this->record])),
-
-            Action::make('viewLandingPages')
-                ->label('View Landing Pages')
-                ->icon('heroicon-o-squares-2x2')
-                ->color('gray')
-                ->url(fn () => LandingPageDraftsPage::getUrl(['record' => $this->record])),
-
             Action::make('new_step')
                 ->label('New step')
                 ->icon('heroicon-o-plus')
