@@ -42,6 +42,12 @@ class SummitResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    /**
+     * Summits ARE the tenant — the list of summits is where admins pick one,
+     * so the list itself must not be scoped to the current tenant.
+     */
+    protected static bool $isScopedToTenant = false;
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['title', 'slug', 'topic'];

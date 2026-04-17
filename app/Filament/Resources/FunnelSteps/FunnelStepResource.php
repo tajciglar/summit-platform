@@ -142,6 +142,27 @@ class FunnelStepResource extends Resource
             ->defaultSort('sort_order');
     }
 
+    /**
+     * FunnelStep has no summit_id of its own — tenant-scope through the funnel.
+     */
+    public static function scopeEloquentQueryToTenant(
+        \Illuminate\Database\Eloquent\Builder $query,
+        ?\Illuminate\Database\Eloquent\Model $tenant,
+    ): \Illuminate\Database\Eloquent\Builder {
+        $tenant ??= \Filament\Facades\Filament::getTenant();
+
+        if (! $tenant) {
+            return $query;
+        }
+
+        return $query->whereHas('funnel', fn ($q) => $q->whereKey($tenant->getKey()));
+    }
+
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        return 'funnel';
+    }
+
     public static function getPages(): array
     {
         return [

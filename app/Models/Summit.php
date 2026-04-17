@@ -5,16 +5,23 @@ namespace App\Models;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Filament\Models\Contracts\HasName;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Summit extends Model implements HasMedia
+class Summit extends Model implements HasMedia, HasName
 {
     use HasFactory, HasUuid, InteractsWithMedia;
+
+    public function getFilamentName(): string
+    {
+        return $this->title ?? 'Untitled summit';
+    }
 
     protected $fillable = [
         'slug',
@@ -41,6 +48,14 @@ class Summit extends Model implements HasMedia
             'post_summit_starts_at' => 'datetime',
             'ends_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Admins who can operate on this summit (Filament tenant membership).
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'summit_user')->withPivot('created_at');
     }
 
     public function pages(): HasMany

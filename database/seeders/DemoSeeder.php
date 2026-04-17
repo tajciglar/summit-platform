@@ -37,6 +37,21 @@ class DemoSeeder extends Seeder
             'current_phase' => 'pre',
         ]);
 
+        // Attach admin to this summit so the tenant switcher has a target.
+        $admin->summits()->syncWithoutDetaching([$summit->id]);
+
+        // Second demo summit so the tenant switcher has something to switch to.
+        $secondSummit = Summit::factory()->create([
+            'slug' => 'productivity-summit-2026',
+            'title' => 'Productivity Summit 2026',
+            'topic' => 'productivity',
+            'description' => 'A 3-day virtual summit on focus and deep work.',
+            'status' => 'draft',
+            'current_phase' => 'pre',
+        ]);
+        $admin->summits()->syncWithoutDetaching([$secondSummit->id]);
+        Speaker::factory()->count(4)->create(['summit_id' => $secondSummit->id]);
+
         Speaker::factory()->count(8)->create(['summit_id' => $summit->id]);
 
         $vipPass = Product::factory()->create([

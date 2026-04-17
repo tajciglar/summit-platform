@@ -34,6 +34,9 @@ class AffiliateResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'code';
 
+    /** Affiliates are not scoped to a specific summit — they can refer across them. */
+    protected static bool $isScopedToTenant = false;
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['code', 'first_name', 'last_name', 'email', 'company'];

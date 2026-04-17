@@ -108,6 +108,30 @@ class FunnelStepBumpResource extends Resource
         ]);
     }
 
+    /**
+     * Bump has no summit_id — scope through funnel_step.funnel.summit_id.
+     */
+    public static function scopeEloquentQueryToTenant(
+        \Illuminate\Database\Eloquent\Builder $query,
+        ?\Illuminate\Database\Eloquent\Model $tenant,
+    ): \Illuminate\Database\Eloquent\Builder {
+        $tenant ??= \Filament\Facades\Filament::getTenant();
+
+        if (! $tenant) {
+            return $query;
+        }
+
+        return $query->whereHas(
+            'funnelStep.funnel',
+            fn ($q) => $q->whereKey($tenant->getKey()),
+        );
+    }
+
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        return 'funnelStep';
+    }
+
     public static function getPages(): array
     {
         return [

@@ -35,6 +35,8 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'email';
 
+    protected static bool $isScopedToTenant = false;
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['email', 'first_name', 'last_name', 'stripe_customer_id'];

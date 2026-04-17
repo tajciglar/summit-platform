@@ -5,14 +5,18 @@ namespace App\Models;
 use App\Models\Concerns\HasUuid;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasName, HasTenants
 {
     use HasFactory, HasRoles, HasUuid, Notifiable;
 
@@ -53,6 +57,36 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function getFilamentName(): string
     {
         return trim(($this->first_name ?? '').' '.($this->last_name ?? '')) ?: $this->email;
+    }
+
+    /**
+     * Summits this admin can operate on. Filament tenancy driver.
+     */
+    public function summits(): BelongsToMany
+    {
+        return $this->belongsToMany(Summit::class, 'summit_user')->withPivot('created_at');
+    }
+
+    /**
+     * Filament tenancy: which tenants (Summits) this user can access.
+     * Super admins see every summit automatically.
+     */
+    public function getTenants(Panel $panel): Collection
+    {
+        if ($this->hasRole('super_admin')) {
+            return Summit::query()->orderBy('title')->get();
+        }
+
+        return $this->summits()->orderBy('title')->get();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        if ($this->hasRole('super_admin')) {
+            return true;
+        }
+
+        return $this->summits()->whereKey($tenant->getKey())->exists();
     }
 
     public function orders(): HasMany

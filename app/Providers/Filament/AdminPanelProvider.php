@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\Summit;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -40,6 +41,8 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::Sky,
             ])
             ->sidebarCollapsibleOnDesktop()
+            ->tenant(Summit::class, slugAttribute: 'slug')
+            ->tenantMenu()
             ->navigationGroups([
                 NavigationGroup::make('Content')
                     ->icon('heroicon-o-sparkles')
@@ -75,7 +78,8 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                FilamentShieldPlugin::make(),
+                // Roles are a global concept — don't scope them to the current summit.
+                FilamentShieldPlugin::make()->scopeToTenant(false),
             ])
             ->authMiddleware([
                 Authenticate::class,

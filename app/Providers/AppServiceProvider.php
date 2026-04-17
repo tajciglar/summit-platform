@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(\App\Services\Templates\TemplateRegistry::class);
+
+        // (Shield's scopeToTenant is configured via the plugin in AdminPanelProvider.)
     }
 
     /**
