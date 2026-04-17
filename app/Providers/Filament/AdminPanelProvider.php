@@ -53,6 +53,9 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Sales')
                     ->icon('heroicon-o-banknotes')
                     ->collapsible(false),
+                NavigationGroup::make('Analytics')
+                    ->icon('heroicon-o-chart-bar-square')
+                    ->collapsible(false),
                 NavigationGroup::make('Settings')
                     ->icon('heroicon-o-cog-6-tooth')
                     ->collapsed(),
@@ -78,8 +81,10 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                // Roles are a global concept — don't scope them to the current summit.
-                FilamentShieldPlugin::make()->scopeToTenant(false),
+                // Roles are a global concept. Tenancy opt-out for Shield's
+                // RoleResource is applied in AppServiceProvider::boot()
+                // (the correct method lives on the Resource, not the plugin).
+                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
