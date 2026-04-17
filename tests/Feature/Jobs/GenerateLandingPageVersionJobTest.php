@@ -1,11 +1,13 @@
 <?php
 
+use App\Enums\SummitAudience;
 use App\Jobs\GenerateLandingPageVersionJob;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
 use App\Models\Summit;
+use App\Services\Templates\AudiencePalettes;
 use App\Services\Templates\TemplateFiller;
 
 it('creates a draft with content from TemplateFiller', function () {
@@ -116,4 +118,78 @@ it('leaves enabled_sections null for legacy templates like opus-v2', function ()
     expect($draft)->not->toBeNull();
     expect($draft->status)->toBe('ready');
     expect($draft->enabled_sections)->toBeNull();
+});
+
+it('stores audience and palette on the draft when summit has audience', function () {
+    $summit = Summit::factory()->create(['audience' => SummitAudience::AdhdWomen]);
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft)->not->toBeNull();
+    expect($draft->audience)->toBe(SummitAudience::AdhdWomen);
+    expect($draft->palette)->toBe(AudiencePalettes::PALETTES['adhd-women']);
+});
+
+it('stores audience from batch override when present (overrides summit default)', function () {
+    $summit = Summit::factory()->create(['audience' => SummitAudience::Herbal]);
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+        'audience_override' => SummitAudience::Ai,
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->audience)->toBe(SummitAudience::Ai);
+    expect($draft->palette)->toBe(AudiencePalettes::PALETTES['ai']);
+});
+
+it('stores NEUTRAL palette when summit has no audience', function () {
+    $summit = Summit::factory()->create(['audience' => null]);
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->audience)->toBeNull();
+    expect($draft->palette)->toBe(AudiencePalettes::NEUTRAL);
 });

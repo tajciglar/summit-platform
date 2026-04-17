@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
+use App\Services\Templates\AudienceResolver;
 use App\Services\Templates\TemplateFiller;
 use App\Services\Templates\TemplateRegistry;
 use Illuminate\Bus\Queueable;
@@ -28,7 +29,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         public int $versionNumber,
     ) {}
 
-    public function handle(TemplateFiller $filler, TemplateRegistry $registry): void
+    public function handle(TemplateFiller $filler, TemplateRegistry $registry, AudienceResolver $audienceResolver): void
     {
         $batch = LandingPageBatch::findOrFail($this->batchId);
 
@@ -62,9 +63,14 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 ? $registry->defaultEnabledSections($this->templateKey)
                 : null;
 
+            $audienceEnum = $audienceResolver->resolveEnum($batch);
+            $palette = $audienceResolver->resolveForBatch($batch);
+
             $draft->update([
                 'sections' => $result['content'],
                 'enabled_sections' => $enabledSections,
+                'audience' => $audienceEnum,
+                'palette' => $palette,
                 'token_count' => $result['tokens'],
                 'generation_ms' => (int) ((microtime(true) - $start) * 1000),
                 'status' => 'ready',
