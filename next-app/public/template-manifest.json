@@ -1,0 +1,1785 @@
+{
+  "templates": [
+    {
+      "key": "opus-v1",
+      "label": "Editorial (Ochre / Ink)",
+      "thumbnail": "/template-thumbs/opus-v1.jpg",
+      "tags": [
+        "editorial",
+        "serif",
+        "warm"
+      ],
+      "jsonSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "summit": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tagline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "tagline",
+              "startDate",
+              "endDate",
+              "timezone"
+            ],
+            "additionalProperties": false
+          },
+          "masthead": {
+            "type": "object",
+            "properties": {
+              "volume": {
+                "type": "string",
+                "minLength": 1
+              },
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "volume",
+              "eyebrow"
+            ],
+            "additionalProperties": false
+          },
+          "hero": {
+            "type": "object",
+            "properties": {
+              "issueLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dateRangeLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "metaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "readerCount": {
+                "type": "string",
+                "minLength": 1
+              },
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 3
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 3
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaSubtext": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ratingText": {
+                "type": "string",
+                "minLength": 1
+              },
+              "figCaption": {
+                "type": "string",
+                "minLength": 1
+              },
+              "heroSpeakerIds": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              }
+            },
+            "required": [
+              "issueLabel",
+              "dateRangeLabel",
+              "metaLabel",
+              "readerCount",
+              "eyebrow",
+              "headline",
+              "subheadline",
+              "ctaLabel",
+              "ratingText",
+              "figCaption",
+              "heroSpeakerIds"
+            ],
+            "additionalProperties": false
+          },
+          "featuredIn": {
+            "minItems": 3,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "socialProof": {
+            "type": "object",
+            "properties": {
+              "statLabel1": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statValue1": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statLabel2": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statValue2": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statLabel3": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statValue3": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "statLabel1",
+              "statValue1",
+              "statLabel2",
+              "statValue2",
+              "statLabel3",
+              "statValue3"
+            ],
+            "additionalProperties": false
+          },
+          "whatIsThis": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bodyParagraphs": {
+                "minItems": 2,
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "bodyParagraphs",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "featureBand": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bullets": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "body",
+              "bullets"
+            ],
+            "additionalProperties": false
+          },
+          "speakersByDay": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dayLabel": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dayDate": {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                },
+                "dayTheme": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "roman": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "speakerIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                }
+              },
+              "required": [
+                "dayLabel",
+                "dayDate",
+                "speakerIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "transformations": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 6,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "subhead",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "supplement": {
+            "type": "object",
+            "properties": {
+              "cardLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardFooter": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardVolume": {
+                "type": "string",
+                "minLength": 1
+              },
+              "badgeLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bullets": {
+                "minItems": 2,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "cardLabel",
+              "cardTitle",
+              "cardFooter",
+              "cardVolume",
+              "badgeLabel",
+              "eyebrow",
+              "headline",
+              "body",
+              "bullets",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "bonusStackSection": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "subhead",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "bonusStack": {
+            "minItems": 1,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "valueLabel": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "bullets": {
+                  "minItems": 1,
+                  "maxItems": 5,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "valueLabel"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "founders": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 2,
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "role": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "initials": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "role",
+                    "quote",
+                    "initials"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "testimonials": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "location": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "initials": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4
+                    }
+                  },
+                  "required": [
+                    "quote",
+                    "name",
+                    "location",
+                    "initials"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "subhead",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "pullQuote": {
+            "type": "object",
+            "properties": {
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "attribution": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "quote",
+              "attribution"
+            ],
+            "additionalProperties": false
+          },
+          "figures": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 6,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "value",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "subhead",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "shifts": {
+            "type": "object",
+            "properties": {
+              "roman": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 5,
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "roman",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "faqs": {
+            "minItems": 3,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "answer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "closing": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fineprint": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "footer": {
+            "type": "object",
+            "properties": {
+              "tagline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "volume": {
+                "type": "string",
+                "minLength": 1
+              },
+              "copyright": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "tagline",
+              "volume",
+              "copyright"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "summit",
+          "masthead",
+          "hero",
+          "featuredIn",
+          "socialProof",
+          "whatIsThis",
+          "featureBand",
+          "speakersByDay",
+          "transformations",
+          "supplement",
+          "bonusStackSection",
+          "bonusStack",
+          "founders",
+          "testimonials",
+          "pullQuote",
+          "figures",
+          "shifts",
+          "faqs",
+          "closing",
+          "footer"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "key": "opus-v2",
+      "label": "System (Lime / Ink)",
+      "thumbnail": "/template-thumbs/opus-v2.jpg",
+      "tags": [
+        "modern",
+        "mono",
+        "dark"
+      ],
+      "jsonSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "summit": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tagline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "tagline",
+              "startDate",
+              "endDate",
+              "timezone"
+            ],
+            "additionalProperties": false
+          },
+          "topBar": {
+            "type": "object",
+            "properties": {
+              "codeTag": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "statusPill": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "codeTag",
+              "name",
+              "statusPill",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "hero": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dateRangeLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "heroLine1": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineLead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineAccent": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineTrail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 3
+              },
+              "primaryCtaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "secondaryCtaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "readerCount": {
+                "type": "string",
+                "minLength": 1
+              },
+              "readerCountSuffix": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ratingLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "featuredLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "moreLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "heroSpeakerIds": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "dateRangeLabel",
+              "eyebrow",
+              "heroLine1",
+              "headlineLead",
+              "headlineAccent",
+              "headlineTrail",
+              "subheadline",
+              "primaryCtaLabel",
+              "secondaryCtaLabel",
+              "readerCount",
+              "readerCountSuffix",
+              "ratingLabel",
+              "featuredLabel",
+              "moreLabel",
+              "heroSpeakerIds"
+            ],
+            "additionalProperties": false
+          },
+          "press": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "outlets": {
+                "minItems": 3,
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "outlets"
+            ],
+            "additionalProperties": false
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suffix": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "value",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "overview": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineLead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineAccent": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineTrail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bodyParagraphs": {
+                "minItems": 1,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "systemCardLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "components": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headlineLead",
+              "headlineAccent",
+              "headlineTrail",
+              "bodyParagraphs",
+              "ctaLabel",
+              "systemCardLabel",
+              "components"
+            ],
+            "additionalProperties": false
+          },
+          "speakersDay": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "countLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "speakerIds": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headline",
+              "countLabel",
+              "speakerIds",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "outcomes": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineLead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineAccent": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineTrail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "itemBadge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 6,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headlineLead",
+              "headlineTrail",
+              "itemBadge",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGift": {
+            "type": "object",
+            "properties": {
+              "codeEyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bullets": {
+                "minItems": 2,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardFilename": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardFiles": {
+                "minItems": 2,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "cardCommand": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cardBadge": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "codeEyebrow",
+              "headline",
+              "body",
+              "bullets",
+              "ctaLabel",
+              "cardFilename",
+              "cardTitle",
+              "cardFiles",
+              "cardCommand",
+              "cardBadge"
+            ],
+            "additionalProperties": false
+          },
+          "bonuses": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineLead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineAccent": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineTrail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "filename": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "bullets": {
+                      "minItems": 1,
+                      "maxItems": 5,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "filename",
+                    "valueLabel",
+                    "title",
+                    "description",
+                    "bullets"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headlineLead",
+              "headlineAccent",
+              "headlineTrail",
+              "subhead",
+              "ctaLabel",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "founders": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 2,
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "role": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "initials": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "role",
+                    "quote",
+                    "initials"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "testimonials": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineLead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineAccent": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headlineTrail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subhead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "location": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "initials": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4
+                    }
+                  },
+                  "required": [
+                    "quote",
+                    "name",
+                    "location",
+                    "initials"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headlineLead",
+              "headlineTrail",
+              "subhead",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "pullQuote": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "attribution": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "quote",
+              "attribution"
+            ],
+            "additionalProperties": false
+          },
+          "figures": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 6,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "trend": {
+                      "type": "string",
+                      "enum": [
+                        "rising",
+                        "plateau",
+                        "falling",
+                        "volatile"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "value",
+                    "description",
+                    "trend"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "shifts": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 5,
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "faqSection": {
+            "type": "object",
+            "properties": {
+              "sectionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "sectionLabel",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "faqs": {
+            "minItems": 3,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "answer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "closing": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fineprint": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "subheadline",
+              "ctaLabel"
+            ],
+            "additionalProperties": false
+          },
+          "footer": {
+            "type": "object",
+            "properties": {
+              "codeTag": {
+                "type": "string",
+                "minLength": 1
+              },
+              "brandName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tagline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summitLinksLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summitLinks": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "href": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "legalLinksLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "legalLinks": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "href": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "contactLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contactEmail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "copyright": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "codeTag",
+              "brandName",
+              "tagline",
+              "summitLinksLabel",
+              "summitLinks",
+              "legalLinksLabel",
+              "legalLinks",
+              "contactLabel",
+              "contactEmail",
+              "copyright"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "summit",
+          "topBar",
+          "hero",
+          "press",
+          "stats",
+          "overview",
+          "speakersDay",
+          "outcomes",
+          "freeGift",
+          "bonuses",
+          "founders",
+          "testimonials",
+          "pullQuote",
+          "figures",
+          "shifts",
+          "faqSection",
+          "faqs",
+          "closing",
+          "footer"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}
