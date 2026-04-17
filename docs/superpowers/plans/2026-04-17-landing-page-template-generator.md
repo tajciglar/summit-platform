@@ -1719,7 +1719,7 @@ it('creates a draft with content from TemplateFiller', function () {
         $m->shouldReceive('fill')
             ->once()
             ->andReturn([
-                'content' => ['summit' => ['name' => $summit->name], 'hero' => ['headline' => 'H']],
+                'content' => ['summit' => ['name' => $summit->title], 'hero' => ['headline' => 'H']],
                 'tokens' => 300,
             ]);
     });
@@ -1728,7 +1728,7 @@ it('creates a draft with content from TemplateFiller', function () {
 
     $draft = LandingPageDraft::first();
     expect($draft->template_key)->toBe('opus-v1');
-    expect($draft->sections)->toBe(['summit' => ['name' => $summit->name], 'hero' => ['headline' => 'H']]);
+    expect($draft->sections)->toBe(['summit' => ['name' => $summit->title], 'hero' => ['headline' => 'H']]);
     expect($draft->status)->toBe('ready');
     expect($draft->token_count)->toBe(300);
     expect($draft->version_number)->toBe(1);
@@ -3019,7 +3019,7 @@ it('runs the full generate → approve → publish flow', function () {
     });
 
     // Setup
-    $summit = Summit::factory()->create(['name' => 'Integration Summit']);
+    $summit = Summit::factory()->create(['title' => 'Integration Summit']);
     $funnel = Funnel::factory()->for($summit)->create();
     FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'page_content' => []]);
     Speaker::factory()->for($summit)->create(['goes_live_at' => now()]);
