@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Summits;
 use App\Actions\DuplicateSummit;
 use App\Filament\Resources\Summits\Pages;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
+use App\Filament\Resources\Summits\RelationManagers\SpeakersRelationManager;
 use App\Models\Summit;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -234,7 +235,9 @@ class SummitResource extends Resource
     public static function getRelations(): array
     {
         return [
+            SpeakersRelationManager::class,
             FunnelsRelationManager::class,
+            RelationManagers\OrdersRelationManager::class,
         ];
     }
 
