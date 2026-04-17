@@ -119,8 +119,15 @@
 
             {{-- Nested: order bumps under checkout steps --}}
             @if ($step->step_type === 'checkout')
+                @php
+                    $bumpEditUrl = fn (\App\Models\FunnelStepBump $b) => \App\Filament\Resources\FunnelStepBumps\FunnelStepBumpResource::getUrl('edit', ['record' => $b]);
+                    $bumpCreateUrl = \App\Filament\Resources\FunnelStepBumps\FunnelStepBumpResource::getUrl('create').'?funnel_step_id='.$step->id;
+                @endphp
                 @foreach ($step->bumps as $bump)
-                    <div class="flex items-center gap-4 border-t border-gray-100 bg-gray-50/50 px-5 py-3 pl-14 dark:border-white/5 dark:bg-white/[0.02]">
+                    <a
+                        href="{{ $bumpEditUrl($bump) }}"
+                        class="flex items-center gap-4 border-t border-gray-100 bg-gray-50/50 px-5 py-3 pl-14 hover:bg-primary-50/50 dark:border-white/5 dark:bg-white/[0.02] dark:hover:bg-primary-500/5"
+                    >
                         <div class="shrink-0 text-gray-300 dark:text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
                                 <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z" clip-rule="evenodd" />
@@ -128,7 +135,7 @@
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="text-xs font-medium text-gray-500 dark:text-gray-400">Order Bump</div>
-                            <div class="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                            <div class="truncate text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
                                 {{ $bump->headline ?: $bump->product?->name ?: 'Unnamed bump' }}
                             </div>
                         </div>
@@ -137,11 +144,11 @@
                         @else
                             <x-filament::badge color="gray" size="xs">Inactive</x-filament::badge>
                         @endif
-                    </div>
+                    </a>
                 @endforeach
                 <div class="border-t border-gray-100 bg-gray-50/30 px-5 py-3 dark:border-white/5 dark:bg-white/[0.02]">
                     <a
-                        href="{{ $editUrl($step) }}"
+                        href="{{ $bumpCreateUrl }}"
                         class="inline-flex items-center gap-1.5 rounded-md border border-dashed border-primary-400 px-3 py-1.5 text-sm font-medium text-primary-600 hover:bg-primary-50 dark:border-primary-500 dark:text-primary-400 dark:hover:bg-primary-500/10"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
