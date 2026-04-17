@@ -6,6 +6,18 @@
 @import "../templates/opus-v1.styles.css";
 /* opus-v2 template styles */
 @import "../templates/opus-v2.styles.css";
+/* opus-v3 template styles */
+@import "../templates/opus-v3.styles.css";
+/* opus-v4 template styles */
+@import "../templates/opus-v4.styles.css";
+/* variant-1 template styles */
+@import "../templates/variant-1.styles.css";
+/* variant-2 template styles */
+@import "../templates/variant-2.styles.css";
+/* variant-3 template styles */
+@import "../templates/variant-3.styles.css";
+/* adhd-summit template styles */
+@import "../templates/adhd-summit.styles.css";
 
 @custom-variant dark (&:is(.dark *));
 
