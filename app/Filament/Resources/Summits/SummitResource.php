@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Summits;
 
 use App\Actions\DuplicateSummit;
+use App\Enums\SummitAudience;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
 use App\Filament\Resources\Summits\RelationManagers\SpeakersRelationManager;
 use App\Models\Summit;
@@ -124,6 +125,13 @@ class SummitResource extends Resource
                             TextInput::make('topic')
                                 ->maxLength(255)
                                 ->helperText('e.g. ADHD parenting, productivity, mindset')
+                                ->columnSpan(6),
+                            Select::make('audience')
+                                ->label('Audience')
+                                ->options(SummitAudience::options())
+                                ->native(false)
+                                ->placeholder('— neutral / none —')
+                                ->helperText('Controls the palette colors applied to every generated landing page.')
                                 ->columnSpan(6),
                             Textarea::make('description')
                                 ->rows(3)
