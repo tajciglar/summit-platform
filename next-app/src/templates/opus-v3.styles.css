@@ -1,0 +1,249 @@
+/* Opus V3 — template-scoped styles.
+ * Ported from next-app/public/opus-v3.html <style> block.
+ * Gentle / cozy editorial aesthetic: Fraunces serif display + DM Sans body
+ * + Nunito accent; cream + sage + rose + clay palette.
+ *
+ * All selectors are scoped to .opus-v3-root / .opus-v3-body to avoid
+ * collisions with other templates or host app CSS.
+ */
+
+.opus-v3-root { scroll-behavior: smooth; }
+.opus-v3-body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #FAF7F2;
+  color: #2A2419;
+  font-feature-settings: "ss01";
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.opus-v3-body h1,
+.opus-v3-body h2,
+.opus-v3-body h3,
+.opus-v3-body h4 {
+  font-family: 'Fraunces', serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+.opus-v3-body .opus-v3-eyebrow {
+  font-family: 'Nunito', 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.opus-v3-body .opus-v3-pill { border-radius: 999px; }
+
+.opus-v3-body .opus-v3-soft-card {
+  background: #FFFFFF;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px -25px rgba(74,107,93,0.25);
+  border: 1px solid rgba(74,107,93,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.opus-v3-body .opus-v3-soft-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 30px 70px -25px rgba(74,107,93,0.32);
+}
+
+.opus-v3-body .opus-v3-cream-card {
+  background: #F4EDE2;
+  border-radius: 28px;
+  border: 1px solid rgba(74,107,93,0.08);
+}
+
+.opus-v3-body .opus-v3-btn-primary {
+  background: #C4663D;
+  color: #FAF7F2;
+  padding: 1.1rem 2.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px -10px rgba(196,102,61,0.45);
+}
+.opus-v3-body .opus-v3-btn-primary:hover {
+  background: #A85430;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -8px rgba(196,102,61,0.55);
+}
+
+.opus-v3-body .opus-v3-btn-ghost {
+  background: transparent;
+  color: #2F4A40;
+  padding: 1rem 1.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: 2px solid #7A9283;
+  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.opus-v3-body .opus-v3-btn-ghost:hover { background: #E9EEEA; }
+
+.opus-v3-body .opus-v3-dropcap::first-letter {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 4.5rem;
+  float: left;
+  line-height: 0.88;
+  padding: 0.3rem 0.5rem 0 0;
+  color: #4A6B5D;
+}
+
+/* Blob decorations */
+.opus-v3-body .opus-v3-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+.opus-v3-body .opus-v3-blob-rose {
+  background: radial-gradient(circle at 30% 30%, #E8B9A0, transparent 70%);
+}
+.opus-v3-body .opus-v3-blob-sage {
+  background: radial-gradient(circle at 70% 30%, #B3C3B7, transparent 70%);
+}
+.opus-v3-body .opus-v3-blob-clay {
+  background: radial-gradient(circle at 40% 60%, #D17B4E, transparent 70%);
+}
+
+/* Marquee */
+.opus-v3-body .opus-v3-marquee-wrap { overflow: hidden; position: relative; }
+.opus-v3-body .opus-v3-marquee-wrap::before,
+.opus-v3-body .opus-v3-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+.opus-v3-body .opus-v3-marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #FAF7F2, transparent);
+}
+.opus-v3-body .opus-v3-marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(-90deg, #FAF7F2, transparent);
+}
+.opus-v3-body .opus-v3-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: opus-v3-marq 42s linear infinite;
+}
+.opus-v3-body .opus-v3-marquee-item {
+  padding: 0 2.2rem;
+  white-space: nowrap;
+  color: #4A6B5D;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+@keyframes opus-v3-marq {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Handwritten underline */
+.opus-v3-body .opus-v3-hand-under {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 12' fill='none'><path d='M2 6 Q 30 10, 60 5 T 120 6 T 178 7' stroke='%23D89878' stroke-width='2.5' stroke-linecap='round' fill='none' opacity='0.9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 100% 12px;
+  padding-bottom: 10px;
+}
+
+/* Wavy section divider */
+.opus-v3-body .opus-v3-wave-top {
+  display: block;
+  width: 100%;
+  height: 40px;
+}
+
+/* FAQ */
+.opus-v3-body details {
+  background: #FFFFFF;
+  border-radius: 24px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(74,107,93,0.1);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.opus-v3-body details[open] {
+  box-shadow: 0 18px 50px -25px rgba(74,107,93,0.25);
+}
+.opus-v3-body details summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.5rem 1.8rem;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #2A2419;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.opus-v3-body details summary::-webkit-details-marker { display: none; }
+.opus-v3-body .opus-v3-pm-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #F4EDE2;
+  color: #4A6B5D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.25s, background 0.25s, color 0.25s;
+}
+.opus-v3-body details[open] .opus-v3-pm-icon {
+  background: #4A6B5D;
+  color: #FAF7F2;
+  transform: rotate(45deg);
+}
+
+/* Focus */
+.opus-v3-body :focus-visible {
+  outline: 3px solid rgba(74,107,93,0.6);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Skip nav */
+.opus-v3-body .opus-v3-skip-nav { position: absolute; left: -9999px; }
+.opus-v3-body .opus-v3-skip-nav:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: #4A6B5D;
+  color: #FAF7F2;
+  padding: 0.75rem 1.25rem;
+  z-index: 200;
+  font-weight: 600;
+  border-radius: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opus-v3-body .opus-v3-marquee-track { animation: none !important; }
+  .opus-v3-root { scroll-behavior: auto; }
+  .opus-v3-body .opus-v3-soft-card:hover,
+  .opus-v3-body .opus-v3-btn-primary:hover { transform: none; }
+}
