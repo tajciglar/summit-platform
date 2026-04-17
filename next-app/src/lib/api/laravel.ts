@@ -1,4 +1,5 @@
 import type { PublishedContent, Speaker } from '@/templates/types';
+import type { Palette } from '../palette';
 
 const BASE = process.env.LARAVEL_API_URL ?? 'http://localhost:8000';
 
@@ -7,12 +8,16 @@ export interface DraftPayload extends PublishedContent {
   status: string;
   funnel_id: string;
   enabled_sections: string[] | null;
+  audience: string | null;
+  palette: Palette | null;
 }
 
 export interface PublicPayload extends PublishedContent {
   speakers: Speaker[];
   funnel_id: string;
   enabled_sections: string[] | null;
+  audience: string | null;
+  palette: Palette | null;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {
