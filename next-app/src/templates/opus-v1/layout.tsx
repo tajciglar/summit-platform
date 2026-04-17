@@ -1,4 +1,5 @@
 import { OptinModal } from '@/components/OptinModal';
+import { paletteStyle, type Palette } from '@/lib/palette';
 import type { Speaker } from '../types';
 import type { OpusV1Content } from '../opus-v1.schema';
 import { opusV1ContentToSections, type SectionContentMap } from './bridge';
@@ -14,6 +15,7 @@ export type OpusV1LayoutProps = {
   enabledSections?: string[];
   speakers: Record<string, Speaker>;
   funnelId: string;
+  palette?: Palette | null;
 };
 
 export function OpusV1Layout({
@@ -21,6 +23,7 @@ export function OpusV1Layout({
   enabledSections,
   speakers,
   funnelId,
+  palette,
 }: OpusV1LayoutProps) {
   const enabled = enabledSections ?? opusV1DefaultEnabledSections;
   const sections = opusV1ContentToSections(content);
@@ -32,7 +35,10 @@ export function OpusV1Layout({
   };
 
   return (
-    <div className="opus-v1-root opus-v1-body antialiased">
+    <div
+      className="opus-v1-root opus-v1-body antialiased"
+      style={paletteStyle(palette)}
+    >
       <a href="#main" className="skip-nav">Skip to content</a>
 
       <main id="main">

@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import { notFound } from 'next/navigation';
 import { fetchDraft, speakersById } from '@/lib/api/laravel';
+import type { Palette } from '@/lib/palette';
 import { getTemplate } from '@/templates/registry';
 import type { Speaker } from '@/templates/types';
 
@@ -9,6 +10,7 @@ type OpusV1ComponentProps = {
   speakers: Record<string, Speaker>;
   funnelId: string;
   enabledSections?: string[];
+  palette?: Palette | null;
 };
 
 export const dynamic = 'force-dynamic';
@@ -45,9 +47,11 @@ export default async function PreviewPage({
 
   const speakers = speakersById(draft.speakers);
   const Component = template.Component;
-  // Only opus-v1 currently accepts `enabledSections`. Other templates render
-  // their full content as-is (Phase 2a scope). Normalize null → undefined so
-  // the layout falls back to its default enabled set for legacy drafts.
+  // Only opus-v1 currently accepts `enabledSections` and `palette`. Other
+  // templates render their full content as-is (Phase 2a + 3a-1 scope).
+  // Normalize null → undefined for enabledSections so the layout falls back
+  // to its default enabled set for legacy drafts. palette stays null/Palette
+  // because `paletteStyle(null)` returns undefined on purpose.
   const enabledSections = draft.enabled_sections ?? undefined;
   if (draft.template_key === 'opus-v1') {
     const OpusV1Component = Component as ComponentType<OpusV1ComponentProps>;
@@ -57,6 +61,7 @@ export default async function PreviewPage({
         enabledSections={enabledSections}
         speakers={speakers}
         funnelId={draft.funnel_id}
+        palette={draft.palette}
       />
     );
   }
