@@ -48,6 +48,14 @@ class SummitResource extends Resource
      */
     protected static bool $isScopedToTenant = false;
 
+    /**
+     * Hidden from the sidebar — the tenant picker in the top-left handles
+     * day-to-day switching. Super admins who need to create or rename a
+     * summit go via the "Manage summits" link in the tenant menu (see
+     * AdminPanelProvider::tenantMenuItems()).
+     */
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['title', 'slug', 'topic'];

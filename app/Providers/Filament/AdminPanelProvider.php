@@ -2,12 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Summit;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -41,8 +43,16 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::Sky,
             ])
             ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('15rem')
+            ->collapsedSidebarWidth('4rem')
             ->tenant(Summit::class, slugAttribute: 'slug')
             ->tenantMenu()
+            ->tenantMenuItems([
+                MenuItem::make()
+                    ->label('Manage summits')
+                    ->icon('heroicon-o-squares-2x2')
+                    ->url(fn (): string => SummitResource::getUrl('index')),
+            ])
             ->navigationGroups([
                 NavigationGroup::make('Content')
                     ->icon('heroicon-o-sparkles')
