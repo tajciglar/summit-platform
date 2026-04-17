@@ -77,6 +77,8 @@ class GenerateLandingPagesPage extends Page implements HasForms
 
     public function submit(): void
     {
+        \Illuminate\Support\Facades\Log::info('GenerateLandingPagesPage::submit called', ['funnel_id' => $this->funnel->id]);
+
         if (! $this->funnel->steps()->where('step_type', 'optin')->exists()) {
             Notification::make()
                 ->title('Cannot generate landing pages')
@@ -114,7 +116,7 @@ class GenerateLandingPagesPage extends Page implements HasForms
         return [
             Action::make('submit')
                 ->label('Start Generation')
-                ->submit('submit'),
+                ->action('submit'),
         ];
     }
 }
