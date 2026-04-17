@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Speaker;
 use App\Models\Summit;
 use App\Services\Anthropic\AnthropicClient;
 use App\Services\Templates\TemplateFiller;
@@ -35,6 +34,8 @@ beforeEach(function () {
         'tags' => [],
         'jsonSchema' => $this->schema,
     ]);
+    // Legacy unit tests exercise the whole-template schema path only.
+    $this->registry->shouldReceive('supportsSections')->with('opus-v1')->andReturn(false);
 });
 
 it('calls anthropic with schema in system prompt and returns validated content', function () {
@@ -85,7 +86,7 @@ it('throws after two failed attempts', function () {
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $client);
     expect(fn () => $filler->fill($summit, 'opus-v1', collect(), null, null))
-        ->toThrow(\RuntimeException::class);
+        ->toThrow(RuntimeException::class);
 });
 
 it('throws when schema validation fails twice', function () {
@@ -97,5 +98,5 @@ it('throws when schema validation fails twice', function () {
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $client);
     expect(fn () => $filler->fill($summit, 'opus-v1', collect(), null, null))
-        ->toThrow(\RuntimeException::class, 'schema validation');
+        ->toThrow(RuntimeException::class, 'schema validation');
 });

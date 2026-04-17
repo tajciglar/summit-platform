@@ -30,9 +30,20 @@ class TemplateFiller
         ?string $styleReferenceUrl,
     ): array {
         $template = $this->registry->get($templateKey);
-        $schema = $template['jsonSchema'];
 
-        $systemPrompt = $this->buildSystemPrompt($schema);
+        // Section-aware templates build the effective schema from per-section schemas
+        // keyed by section name; legacy templates use the whole-template jsonSchema.
+        $sectionMode = $this->registry->supportsSections($templateKey);
+        $schema = $sectionMode
+            ? [
+                'type' => 'object',
+                'properties' => $this->registry->sectionSchemas($templateKey),
+                'required' => $this->registry->supportedSections($templateKey),
+                'additionalProperties' => false,
+            ]
+            : $template['jsonSchema'];
+
+        $systemPrompt = $this->buildSystemPrompt($schema, $sectionMode);
         $userPrompt = $this->buildUserPrompt($summit, $speakers, $notes, $styleReferenceUrl);
 
         $lastError = null;
@@ -58,23 +69,27 @@ class TemplateFiller
             $objectGraph = json_decode(json_encode($json));
             $schemaJson = json_encode($schema);
 
-            $validator = new Validator();
+            $validator = new Validator;
             $result = $validator->validate($objectGraph, $schemaJson);
 
             if ($result->isValid()) {
                 return ['content' => $json, 'tokens' => $totalTokens];
             }
 
-            $errors = (new ErrorFormatter())->format($result->error());
+            $errors = (new ErrorFormatter)->format($result->error());
             $lastError = 'schema validation failed: '.json_encode($errors);
         }
 
         throw new \RuntimeException("TemplateFiller: {$lastError}");
     }
 
-    private function buildSystemPrompt(array $schema): string
+    private function buildSystemPrompt(array $schema, bool $sectionMode = false): string
     {
         $schemaJson = json_encode($schema, JSON_PRETTY_PRINT);
+
+        $sectionHint = $sectionMode
+            ? "\n- Return a single JSON object whose top-level keys are each section name (hero, marquee, summit-overview, etc.). Fill every section with realistic content consistent with the summit context."
+            : '';
 
         return <<<PROMPT
 You are a landing-page copywriter for online summits. Given a summit's data, you fill in the slots of a pre-designed template by returning a JSON object that matches this JSON Schema exactly:
@@ -86,7 +101,7 @@ Requirements:
 - Every required field must be present and non-empty.
 - Do not invent speakers — use only the IDs provided in the user message.
 - Keep copy specific, human, and on-brand. No generic marketing speak ("revolutionize", "game-changer").
-- Headlines should be 6-14 words. Subheadings 10-20.
+- Headlines should be 6-14 words. Subheadings 10-20.{$sectionHint}
 PROMPT;
     }
 
