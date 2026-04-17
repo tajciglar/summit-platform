@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Funnels\Pages;
 
+use App\Enums\SummitAudience;
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
@@ -16,6 +17,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Log;
 
 class GenerateLandingPagesPage extends Page implements HasForms
 {
@@ -63,6 +65,12 @@ class GenerateLandingPagesPage extends Page implements HasForms
                             ->all();
                     })
                     ->helperText('Leave empty to use all templates.'),
+                Select::make('audience_override')
+                    ->label('Audience override (optional)')
+                    ->options(SummitAudience::options())
+                    ->native(false)
+                    ->placeholder('Use summit default')
+                    ->helperText('Override the summit\'s audience just for this batch.'),
                 Textarea::make('notes')
                     ->label('Creative Notes')
                     ->rows(3)
@@ -77,7 +85,7 @@ class GenerateLandingPagesPage extends Page implements HasForms
 
     public function submit(): void
     {
-        \Illuminate\Support\Facades\Log::info('GenerateLandingPagesPage::submit called', ['funnel_id' => $this->funnel->id]);
+        Log::info('GenerateLandingPagesPage::submit called', ['funnel_id' => $this->funnel->id]);
 
         if (! $this->funnel->steps()->where('step_type', 'optin')->exists()) {
             Notification::make()
@@ -100,6 +108,7 @@ class GenerateLandingPagesPage extends Page implements HasForms
             'template_pool' => ! empty($pool) ? $pool : null,
             'notes' => $data['notes'] ?? null,
             'style_reference_url' => $data['style_reference_url'] ?? null,
+            'audience_override' => $data['audience_override'] ?? null,
             'status' => 'queued',
         ]);
 
