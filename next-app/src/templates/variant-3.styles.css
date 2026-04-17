@@ -1,0 +1,177 @@
+/* Variant 3 — template-scoped styles.
+ * Ported verbatim from next-app/public/variant-3.html <style> block.
+ * Brand-green + gold + soft-cream palette. Poppins + Source Sans 3.
+ *
+ * All selectors are scoped to .variant-3-root / .variant-3-body to avoid
+ * collisions with other templates or host app CSS.
+ */
+
+.variant-3-root { scroll-behavior: smooth; }
+.variant-3-body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background: #FFFFFF;
+  color: #1A2E1A;
+}
+
+.variant-3-body h1,
+.variant-3-body h2,
+.variant-3-body h3,
+.variant-3-body h4,
+.variant-3-body h5,
+.variant-3-body h6,
+.variant-3-body .variant-3-heading {
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/* Avatars */
+.variant-3-body .variant-3-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  border: 4px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.variant-3-body .variant-3-avatar-sm {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 2px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* FAQ details — bordered card with green left border */
+.variant-3-body details summary { cursor: pointer; list-style: none; }
+.variant-3-body details summary::-webkit-details-marker { display: none; }
+.variant-3-body details[open] summary .variant-3-chevron { transform: rotate(180deg); }
+.variant-3-body .variant-3-chevron { transition: transform 0.2s; }
+
+/* CTA pulse */
+@keyframes variant-3-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(22,163,74,0); }
+}
+@keyframes variant-3-pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234,179,8,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(234,179,8,0); }
+}
+.variant-3-body .variant-3-pulse-glow { animation: variant-3-pulse-glow 2s infinite; }
+.variant-3-body .variant-3-pulse-gold { animation: variant-3-pulse-gold 2s infinite; }
+
+/* Logo marquee */
+.variant-3-body .variant-3-marquee-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.variant-3-body .variant-3-marquee-wrap::before,
+.variant-3-body .variant-3-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.variant-3-body .variant-3-marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #fff 0%, transparent 100%);
+}
+.variant-3-body .variant-3-marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(270deg, #fff 0%, transparent 100%);
+}
+.variant-3-body .variant-3-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: variant-3-marquee-scroll 35s linear infinite;
+}
+.variant-3-body .variant-3-marquee-item {
+  white-space: nowrap;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  flex-shrink: 0;
+  padding: 0 1.75rem;
+  color: #1A2E1A;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+.variant-3-body .variant-3-marquee-item:hover { opacity: 0.85; }
+@keyframes variant-3-marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Timeline vertical line */
+.variant-3-body .variant-3-timeline {
+  position: relative;
+}
+.variant-3-body .variant-3-timeline::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #16A34A 0%, #EAB308 100%);
+  border-radius: 2px;
+}
+.variant-3-body .variant-3-timeline-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #16A34A, #14532D);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 6px #F0FDF4;
+}
+.variant-3-body .variant-3-timeline-dot-last {
+  background: linear-gradient(135deg, #EAB308, #CA8A04);
+}
+
+/* Focus */
+.variant-3-body :focus-visible {
+  outline: 2px solid #16A34A;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip nav */
+.variant-3-body .variant-3-skip-nav { position: absolute; left: -9999px; }
+.variant-3-body .variant-3-skip-nav:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: #14532D;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  z-index: 200;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .variant-3-body .variant-3-marquee-track,
+  .variant-3-body .variant-3-pulse-glow,
+  .variant-3-body .variant-3-pulse-gold { animation: none !important; }
+  .variant-3-root { scroll-behavior: auto; }
+}
