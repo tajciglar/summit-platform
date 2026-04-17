@@ -64,4 +64,11 @@ return [
         'token' => env('INTERNAL_API_TOKEN'),
     ],
 
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-opus-4-7'),
+        'base_url' => env('ANTHROPIC_BASE_URL', 'https://api.anthropic.com'),
+        'max_tokens' => (int) env('ANTHROPIC_MAX_TOKENS', 8192),
+    ],
+
 ];
