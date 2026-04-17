@@ -51,11 +51,21 @@ class Summit extends Model implements HasMedia, HasName
     }
 
     /**
-     * Admins who can operate on this summit (Filament tenant membership).
+     * Admins who can operate on this summit (legacy — tenancy is Domain-based
+     * now; kept for back-compat with existing seeders).
      */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'summit_user')->withPivot('created_at');
+    }
+
+    /**
+     * Domains (brand hosts) this summit lives on. A summit can be hosted on
+     * multiple domains simultaneously.
+     */
+    public function domains(): BelongsToMany
+    {
+        return $this->belongsToMany(Domain::class, 'domain_summit')->withPivot('created_at');
     }
 
     public function pages(): HasMany

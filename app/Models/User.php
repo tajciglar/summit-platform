@@ -60,7 +60,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     }
 
     /**
-     * Summits this admin can operate on. Filament tenancy driver.
+     * Summits this admin can operate on (legacy — kept for back-compat).
      */
     public function summits(): BelongsToMany
     {
@@ -68,16 +68,26 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     }
 
     /**
-     * Filament tenancy: which tenants (Summits) this user can access.
-     * Super admins see every summit automatically.
+     * Domains this admin can operate on. Filament tenancy driver — picking a
+     * domain in the switcher scopes every downstream resource to the summits
+     * hosted on that domain.
+     */
+    public function domains(): BelongsToMany
+    {
+        return $this->belongsToMany(Domain::class, 'domain_user')->withPivot('created_at');
+    }
+
+    /**
+     * Filament tenancy: which tenants (Domains) this user can access.
+     * Super admins see every domain automatically.
      */
     public function getTenants(Panel $panel): Collection
     {
         if ($this->hasRole('super_admin')) {
-            return Summit::query()->orderBy('title')->get();
+            return Domain::query()->orderBy('name')->get();
         }
 
-        return $this->summits()->orderBy('title')->get();
+        return $this->domains()->orderBy('name')->get();
     }
 
     public function canAccessTenant(Model $tenant): bool
@@ -86,7 +96,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
             return true;
         }
 
-        return $this->summits()->whereKey($tenant->getKey())->exists();
+        return $this->domains()->whereKey($tenant->getKey())->exists();
     }
 
     public function orders(): HasMany

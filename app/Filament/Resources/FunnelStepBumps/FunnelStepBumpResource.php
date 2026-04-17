@@ -109,7 +109,7 @@ class FunnelStepBumpResource extends Resource
     }
 
     /**
-     * Bump has no summit_id — scope through funnel_step.funnel.summit_id.
+     * Bump → FunnelStep → Funnel → Summit → Domains. Tenant is Domain.
      */
     public static function scopeEloquentQueryToTenant(
         \Illuminate\Database\Eloquent\Builder $query,
@@ -122,7 +122,7 @@ class FunnelStepBumpResource extends Resource
         }
 
         return $query->whereHas(
-            'funnelStep.funnel',
+            'funnelStep.funnel.summit.domains',
             fn ($q) => $q->whereKey($tenant->getKey()),
         );
     }

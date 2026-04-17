@@ -31,6 +31,8 @@ use Illuminate\Support\Str;
 
 class SpeakerResource extends Resource
 {
+    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+
     protected static ?string $model = Speaker::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMicrophone;

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Coupon;
+use App\Models\Domain;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
 use App\Models\Product;
@@ -28,6 +29,38 @@ class DemoSeeder extends Seeder
             ],
         );
 
+        // Three brand domains — the tenant switcher lists these.
+        $parentingSummits = Domain::create([
+            'name' => 'Parenting Summits',
+            'hostname' => 'parenting-summits.com',
+            'slug' => 'parenting-summits',
+            'brand_color' => '#4F46E5',
+            'is_active' => true,
+        ]);
+
+        $vzgoja = Domain::create([
+            'name' => 'Vzgoja',
+            'hostname' => 'vzgoja.si',
+            'slug' => 'vzgoja',
+            'brand_color' => '#10B981',
+            'is_active' => true,
+        ]);
+
+        $althea = Domain::create([
+            'name' => 'Althea Academy',
+            'hostname' => 'althea-academy.com',
+            'slug' => 'althea-academy',
+            'brand_color' => '#EC4899',
+            'is_active' => true,
+        ]);
+
+        // Admin gets access to all three.
+        $admin->domains()->syncWithoutDetaching([
+            $parentingSummits->id,
+            $vzgoja->id,
+            $althea->id,
+        ]);
+
         $summit = Summit::factory()->create([
             'slug' => 'adhd-parenting-summit-2026',
             'title' => 'ADHD Parenting Summit 2026',
@@ -37,8 +70,14 @@ class DemoSeeder extends Seeder
             'current_phase' => 'pre',
         ]);
 
-        // Attach admin to this summit so the tenant switcher has a target.
+        // Legacy pivot (kept for back-compat).
         $admin->summits()->syncWithoutDetaching([$summit->id]);
+
+        // ADHD summit hosted on Parenting Summits + Althea Academy.
+        $summit->domains()->syncWithoutDetaching([
+            $parentingSummits->id,
+            $althea->id,
+        ]);
 
         // Second demo summit so the tenant switcher has something to switch to.
         $secondSummit = Summit::factory()->create([
@@ -50,6 +89,10 @@ class DemoSeeder extends Seeder
             'current_phase' => 'pre',
         ]);
         $admin->summits()->syncWithoutDetaching([$secondSummit->id]);
+
+        // Productivity summit hosted on Vzgoja only.
+        $secondSummit->domains()->syncWithoutDetaching([$vzgoja->id]);
+
         Speaker::factory()->count(4)->create(['summit_id' => $secondSummit->id]);
 
         Speaker::factory()->count(8)->create(['summit_id' => $summit->id]);

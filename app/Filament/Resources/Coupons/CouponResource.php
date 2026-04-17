@@ -25,6 +25,8 @@ use Filament\Tables\Table;
 
 class CouponResource extends Resource
 {
+    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+
     protected static ?string $model = Coupon::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;

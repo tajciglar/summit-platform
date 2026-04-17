@@ -14,6 +14,8 @@ use Filament\Tables\Table;
 
 class OrderResource extends Resource
 {
+    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+
     protected static ?string $model = Order::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;

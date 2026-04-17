@@ -43,16 +43,8 @@ class SummitResource extends Resource
     protected static ?string $recordTitleAttribute = 'title';
 
     /**
-     * Summits ARE the tenant — the list of summits is where admins pick one,
-     * so the list itself must not be scoped to the current tenant.
-     */
-    protected static bool $isScopedToTenant = false;
-
-    /**
-     * Hidden from the sidebar — the tenant picker in the top-left handles
-     * day-to-day switching. Super admins who need to create or rename a
-     * summit go via the "Manage summits" link in the tenant menu (see
-     * AdminPanelProvider::tenantMenuItems()).
+     * Tenant is now Domain, not Summit. Summits scope to the current domain
+     * via their many-to-many `domains` relation (see scopeEloquentQueryToTenant).
      */
     protected static bool $shouldRegisterNavigation = false;
 
@@ -272,5 +264,27 @@ class SummitResource extends Resource
             'view' => Pages\ViewSummit::route('/{record}'),
             'edit' => Pages\EditSummit::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * Summit owns a direct M2M to Domain; scope via that.
+     */
+    public static function scopeEloquentQueryToTenant(
+        \Illuminate\Database\Eloquent\Builder $query,
+        ?\Illuminate\Database\Eloquent\Model $tenant,
+    ): \Illuminate\Database\Eloquent\Builder {
+        $tenant ??= \Filament\Facades\Filament::getTenant();
+        if (! $tenant) {
+            return $query;
+        }
+
+        return $query->whereHas('domains', fn ($q) => $q->whereKey($tenant->getKey()));
+    }
+
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        // When creating a summit inside a domain tenant, Filament will attach
+        // it via this relation on the new record.
+        return 'domains';
     }
 }

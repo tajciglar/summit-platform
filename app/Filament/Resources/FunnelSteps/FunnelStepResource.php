@@ -144,7 +144,7 @@ class FunnelStepResource extends Resource
     }
 
     /**
-     * FunnelStep has no summit_id of its own — tenant-scope through the funnel.
+     * FunnelStep → Funnel → Summit → Domains. Tenant is Domain.
      */
     public static function scopeEloquentQueryToTenant(
         \Illuminate\Database\Eloquent\Builder $query,
@@ -156,7 +156,10 @@ class FunnelStepResource extends Resource
             return $query;
         }
 
-        return $query->whereHas('funnel', fn ($q) => $q->whereKey($tenant->getKey()));
+        return $query->whereHas(
+            'funnel.summit.domains',
+            fn ($q) => $q->whereKey($tenant->getKey()),
+        );
     }
 
     public static function getTenantOwnershipRelationshipName(): string

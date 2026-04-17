@@ -27,6 +27,8 @@ use Illuminate\Support\Str;
 
 class FunnelResource extends Resource
 {
+    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+
     protected static ?string $model = Funnel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFunnel;

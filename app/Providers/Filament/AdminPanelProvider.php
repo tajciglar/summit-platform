@@ -2,8 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Domains\DomainResource;
 use App\Filament\Resources\Summits\SummitResource;
-use App\Models\Summit;
+use App\Models\Domain;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -45,9 +46,13 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('15rem')
             ->collapsedSidebarWidth('4rem')
-            ->tenant(Summit::class, slugAttribute: 'slug')
+            ->tenant(Domain::class, slugAttribute: 'slug')
             ->tenantMenu()
             ->tenantMenuItems([
+                MenuItem::make()
+                    ->label('Manage domains')
+                    ->icon('heroicon-o-globe-alt')
+                    ->url(fn (): string => DomainResource::getUrl('index')),
                 MenuItem::make()
                     ->label('Manage summits')
                     ->icon('heroicon-o-squares-2x2')

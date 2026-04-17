@@ -31,6 +31,8 @@ use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
+    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+
     protected static ?string $model = Product::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
