@@ -61,30 +61,94 @@ class SummitResource extends Resource
         return ['title', 'slug', 'topic'];
     }
 
+    /**
+     * Form layout mirrors the ViewSummit infolist so clicking Edit keeps
+     * the exact same visual structure — only the fields become interactive.
+     */
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
             Section::make('Basics')
-                ->description('The summit identity and marketing copy.')
-                ->columns(2)
+                ->description('Summit identity, lifecycle status, and phase schedule.')
+                ->columnSpanFull()
                 ->components([
-                    TextInput::make('title')
-                        ->required()
-                        ->maxLength(500)
-                        ->live(onBlur: true)
-                        ->afterStateUpdated(function (string $operation, $state, callable $set): void {
-                            if ($operation === 'create') {
-                                $set('slug', Str::slug((string) $state));
-                            }
-                        }),
-                    TextInput::make('slug')
-                        ->required()
-                        ->maxLength(255)
-                        ->unique(ignoreRecord: true)
-                        ->helperText('URL-safe identifier. Auto-filled from title.'),
-                    TextInput::make('topic')
-                        ->maxLength(255)
-                        ->helperText('e.g. ADHD parenting, productivity, mindset'),
+                    Grid::make(12)
+                        ->schema([
+                            TextInput::make('title')
+                                ->required()
+                                ->maxLength(500)
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(function (string $operation, $state, callable $set): void {
+                                    if ($operation === 'create') {
+                                        $set('slug', Str::slug((string) $state));
+                                    }
+                                })
+                                ->columnSpan(6),
+                            Select::make('status')
+                                ->options([
+                                    'draft' => 'Draft',
+                                    'published' => 'Published',
+                                    'archived' => 'Archived',
+                                ])
+                                ->default('draft')
+                                ->required()
+                                ->native(false)
+                                ->columnSpan(2),
+                            Select::make('current_phase')
+                                ->label('Current phase')
+                                ->options([
+                                    'pre' => 'Pre-summit',
+                                    'late_pre' => 'Late pre-summit',
+                                    'during' => 'During summit',
+                                    'post' => 'Post-summit',
+                                ])
+                                ->default('pre')
+                                ->required()
+                                ->native(false)
+                                ->helperText('Updated automatically by cron.')
+                                ->columnSpan(2),
+                            TextInput::make('timezone')
+                                ->label('Timezone')
+                                ->default('America/New_York')
+                                ->required()
+                                ->maxLength(100)
+                                ->columnSpan(2),
+                            TextInput::make('slug')
+                                ->required()
+                                ->maxLength(255)
+                                ->unique(ignoreRecord: true)
+                                ->prefix('/')
+                                ->helperText('URL-safe identifier. Auto-filled from title.')
+                                ->columnSpan(6),
+                            TextInput::make('topic')
+                                ->maxLength(255)
+                                ->helperText('e.g. ADHD parenting, productivity, mindset')
+                                ->columnSpan(6),
+                            Textarea::make('description')
+                                ->rows(3)
+                                ->maxLength(2000)
+                                ->columnSpanFull(),
+                        ]),
+
+                    Grid::make(5)
+                        ->schema([
+                            DateTimePicker::make('pre_summit_starts_at')
+                                ->label('Pre-summit starts')
+                                ->seconds(false),
+                            DateTimePicker::make('late_pre_summit_starts_at')
+                                ->label('Late pre-summit')
+                                ->seconds(false),
+                            DateTimePicker::make('during_summit_starts_at')
+                                ->label('During summit')
+                                ->seconds(false),
+                            DateTimePicker::make('post_summit_starts_at')
+                                ->label('Post-summit')
+                                ->seconds(false),
+                            DateTimePicker::make('ends_at')
+                                ->label('Ends')
+                                ->seconds(false),
+                        ]),
+
                     SpatieMediaLibraryFileUpload::make('hero')
                         ->collection('hero')
                         ->image()
@@ -92,61 +156,6 @@ class SummitResource extends Resource
                         ->imageCropAspectRatio('16:9')
                         ->maxSize(8192)
                         ->helperText('Recommended 1920×1080. JPEG / PNG / WebP / AVIF.')
-                        ->columnSpanFull(),
-                    Textarea::make('description')
-                        ->rows(3)
-                        ->maxLength(2000)
-                        ->columnSpanFull(),
-                ]),
-
-            Section::make('Status & Timezone')
-                ->columns(3)
-                ->components([
-                    Select::make('status')
-                        ->options([
-                            'draft' => 'Draft',
-                            'published' => 'Published',
-                            'archived' => 'Archived',
-                        ])
-                        ->default('draft')
-                        ->required()
-                        ->native(false),
-                    Select::make('current_phase')
-                        ->options([
-                            'pre' => 'Pre-summit',
-                            'late_pre' => 'Late pre-summit',
-                            'during' => 'During summit',
-                            'post' => 'Post-summit',
-                        ])
-                        ->default('pre')
-                        ->required()
-                        ->native(false)
-                        ->helperText('Updated automatically by cron.'),
-                    TextInput::make('timezone')
-                        ->default('America/New_York')
-                        ->required()
-                        ->maxLength(100),
-                ]),
-
-            Section::make('Phase schedule')
-                ->description('Each phase starts at the timestamp below. The cron reads these to update current_phase.')
-                ->columns(2)
-                ->components([
-                    DateTimePicker::make('pre_summit_starts_at')
-                        ->label('Pre-summit starts')
-                        ->seconds(false),
-                    DateTimePicker::make('late_pre_summit_starts_at')
-                        ->label('Late pre-summit starts')
-                        ->seconds(false),
-                    DateTimePicker::make('during_summit_starts_at')
-                        ->label('During summit starts')
-                        ->seconds(false),
-                    DateTimePicker::make('post_summit_starts_at')
-                        ->label('Post-summit starts')
-                        ->seconds(false),
-                    DateTimePicker::make('ends_at')
-                        ->label('Ends at')
-                        ->seconds(false)
                         ->columnSpanFull(),
                 ]),
         ]);
