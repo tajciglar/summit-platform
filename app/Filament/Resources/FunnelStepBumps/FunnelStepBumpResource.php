@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\FunnelStepBumps;
 
-use App\Filament\Resources\FunnelStepBumps\Pages;
+use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use App\Models\FunnelStepBump;
+use App\Support\CurrentSummit;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -15,6 +17,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class FunnelStepBumpResource extends Resource
 {
@@ -110,21 +114,31 @@ class FunnelStepBumpResource extends Resource
 
     /**
      * Bump → FunnelStep → Funnel → Summit → Domains. Tenant is Domain.
+     * When a summit is selected, narrow further to that summit's funnels.
      */
     public static function scopeEloquentQueryToTenant(
-        \Illuminate\Database\Eloquent\Builder $query,
-        ?\Illuminate\Database\Eloquent\Model $tenant,
-    ): \Illuminate\Database\Eloquent\Builder {
-        $tenant ??= \Filament\Facades\Filament::getTenant();
+        Builder $query,
+        ?Model $tenant,
+    ): Builder {
+        $tenant ??= Filament::getTenant();
 
         if (! $tenant) {
             return $query;
         }
 
-        return $query->whereHas(
+        $query->whereHas(
             'funnelStep.funnel.summit.domains',
             fn ($q) => $q->whereKey($tenant->getKey()),
         );
+
+        if ($summitId = CurrentSummit::getId()) {
+            $query->whereHas(
+                'funnelStep.funnel',
+                fn ($q) => $q->where('summit_id', $summitId),
+            );
+        }
+
+        return $query;
     }
 
     public static function getTenantOwnershipRelationshipName(): string
@@ -148,10 +162,10 @@ class FunnelStepBumpResource extends Resource
         array $parameters = [],
         bool $isAbsolute = true,
         ?string $panel = null,
-        ?\Illuminate\Database\Eloquent\Model $tenant = null,
+        ?Model $tenant = null,
         bool $shouldGuessMissingParameters = false,
     ): string {
-        return \App\Filament\Resources\FunnelSteps\FunnelStepResource::getUrl(
+        return FunnelStepResource::getUrl(
             'index', $parameters, $isAbsolute, $panel, $tenant, $shouldGuessMissingParameters,
         );
     }

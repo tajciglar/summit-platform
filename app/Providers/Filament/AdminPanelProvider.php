@@ -5,13 +5,15 @@ namespace App\Providers\Filament;
 use App\Filament\Resources\Domains\DomainResource;
 use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Domain;
-use Filament\Http\Middleware\Authenticate;
+use App\Support\CurrentSummit;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -48,6 +50,9 @@ class AdminPanelProvider extends PanelProvider
             ->collapsedSidebarWidth('4rem')
             ->tenant(Domain::class, slugAttribute: 'slug')
             ->tenantMenu()
+            // Tenant dropdown = domain switcher + domain management.
+            // Summit picker lives as its own card at the top of the sidebar
+            // (rendered via SIDEBAR_NAV_START hook in AppServiceProvider).
             ->tenantMenuItems([
                 MenuItem::make()
                     ->label('Manage domains')
@@ -59,6 +64,11 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => SummitResource::getUrl('index')),
             ])
             ->navigationGroups([
+                // Summit group goes first; items are injected per-request in
+                // AppServiceProvider based on the current domain's summits.
+                NavigationGroup::make('Summit')
+                    ->icon('heroicon-o-calendar-days')
+                    ->collapsible(false),
                 NavigationGroup::make('Content')
                     ->icon('heroicon-o-sparkles')
                     ->collapsible(false),
@@ -101,6 +111,43 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            // Inject one Summit nav item per summit available on the active
+            // domain. Runs once per request after the panel (and tenant) boots.
+            // Panel boot runs before tenant resolution, so we parse the
+            // {tenant} slug out of the incoming URL ourselves. This registers
+            // one Summit nav item per summit on the active domain.
+            ->bootUsing(function (Panel $panel): void {
+                $path = trim(request()->path(), '/');          // admin/althea-academy/...
+                $segments = explode('/', $path);                // ['admin', 'althea-academy', ...]
+                $tenantSlug = $segments[1] ?? null;
+                if (! $tenantSlug || $tenantSlug === 'login') {
+                    return;
+                }
+
+                $domain = Domain::where('slug', $tenantSlug)->first();
+                if (! $domain) {
+                    return;
+                }
+
+                $summits = $domain->summits()
+                    ->withoutGlobalScopes()
+                    ->orderBy('title')
+                    ->get();
+                if ($summits->isEmpty()) {
+                    return;
+                }
+
+                $activeId = CurrentSummit::getId();
+                $items = [];
+                foreach ($summits as $summit) {
+                    $items[] = NavigationItem::make($summit->title)
+                        ->group('Summit')
+                        ->url(route('admin.current-summit.set', ['summit' => $summit->id]))
+                        ->isActiveWhen(fn (): bool => $summit->id === $activeId);
+                }
+
+                $panel->navigationItems($items);
+            });
     }
 }

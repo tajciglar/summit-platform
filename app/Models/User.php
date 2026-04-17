@@ -60,7 +60,8 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     }
 
     /**
-     * Summits this admin can operate on (legacy — kept for back-compat).
+     * Summits this admin can directly access (legacy — tenancy is Domain
+     * now; kept for back-compat where other code still expects it).
      */
     public function summits(): BelongsToMany
     {
@@ -68,9 +69,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     }
 
     /**
-     * Domains this admin can operate on. Filament tenancy driver — picking a
-     * domain in the switcher scopes every downstream resource to the summits
-     * hosted on that domain.
+     * Domains this admin can operate on. Filament tenancy driver.
      */
     public function domains(): BelongsToMany
     {

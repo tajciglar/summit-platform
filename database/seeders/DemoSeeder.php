@@ -12,7 +12,6 @@ use App\Models\Summit;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DemoSeeder extends Seeder
 {
@@ -54,7 +53,7 @@ class DemoSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Admin gets access to all three.
+        // Admin can operate on all three brand domains.
         $admin->domains()->syncWithoutDetaching([
             $parentingSummits->id,
             $vzgoja->id,
@@ -154,6 +153,6 @@ class DemoSeeder extends Seeder
         ]);
 
         $this->command?->info('Demo data seeded.');
-        $this->command?->info("Admin login: admin@example.test / password");
+        $this->command?->info('Admin login: admin@example.test / password');
     }
 }

@@ -2,15 +2,16 @@
 
 namespace App\Filament\Resources\FunnelSteps;
 
-use App\Filament\Resources\FunnelSteps\Pages;
+use App\Enums\BlockType;
 use App\Models\FunnelStep;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use App\Enums\BlockType;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;
@@ -25,6 +26,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class FunnelStepResource extends Resource
 {
@@ -144,22 +146,30 @@ class FunnelStepResource extends Resource
     }
 
     /**
-     * FunnelStep → Funnel → Summit → Domains. Tenant is Domain.
+     * FunnelStep → Funnel → Summit → Domains. Tenant is Domain. When a
+     * specific summit is picked in the tenant dropdown, further narrow to
+     * that summit's funnels.
      */
     public static function scopeEloquentQueryToTenant(
         \Illuminate\Database\Eloquent\Builder $query,
-        ?\Illuminate\Database\Eloquent\Model $tenant,
+        ?Model $tenant,
     ): \Illuminate\Database\Eloquent\Builder {
-        $tenant ??= \Filament\Facades\Filament::getTenant();
+        $tenant ??= Filament::getTenant();
 
         if (! $tenant) {
             return $query;
         }
 
-        return $query->whereHas(
+        $query->whereHas(
             'funnel.summit.domains',
             fn ($q) => $q->whereKey($tenant->getKey()),
         );
+
+        if ($summitId = CurrentSummit::getId()) {
+            $query->whereHas('funnel', fn ($q) => $q->where('summit_id', $summitId));
+        }
+
+        return $query;
     }
 
     public static function getTenantOwnershipRelationshipName(): string

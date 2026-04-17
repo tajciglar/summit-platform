@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\Summits;
 
 use App\Actions\DuplicateSummit;
-use App\Filament\Resources\Summits\Pages;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
 use App\Filament\Resources\Summits\RelationManagers\SpeakersRelationManager;
 use App\Models\Summit;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -14,12 +14,13 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Notifications\Notification;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -28,6 +29,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class SummitResource extends Resource
@@ -43,8 +46,14 @@ class SummitResource extends Resource
     protected static ?string $recordTitleAttribute = 'title';
 
     /**
-     * Tenant is now Domain, not Summit. Summits scope to the current domain
-     * via their many-to-many `domains` relation (see scopeEloquentQueryToTenant).
+     * Tenant is Domain — scope summits to those hosted on the active domain
+     * via the domains many-to-many (see scopeEloquentQueryToTenant at the
+     * bottom of this file).
+     */
+
+    /**
+     * Hidden from sidebar — reached via the "Manage summits" link in the
+     * tenant picker menu (top-right).
      */
     protected static bool $shouldRegisterNavigation = false;
 
@@ -149,6 +158,15 @@ class SummitResource extends Resource
                         ->maxSize(8192)
                         ->helperText('Recommended 1920×1080. JPEG / PNG / WebP / AVIF.')
                         ->columnSpanFull(),
+
+                    Select::make('domains')
+                        ->label('Published on domains')
+                        ->relationship('domains', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
+                        ->columnSpanFull()
+                        ->helperText('Which brand sites host this summit. One summit can be on multiple domains.'),
                 ]),
         ]);
     }
@@ -267,24 +285,29 @@ class SummitResource extends Resource
     }
 
     /**
-     * Summit owns a direct M2M to Domain; scope via that.
+     * Summit scopes to domain via its M2M `domains` relation. Also narrows
+     * to the picked summit when one is selected in the tenant dropdown.
      */
     public static function scopeEloquentQueryToTenant(
-        \Illuminate\Database\Eloquent\Builder $query,
-        ?\Illuminate\Database\Eloquent\Model $tenant,
-    ): \Illuminate\Database\Eloquent\Builder {
-        $tenant ??= \Filament\Facades\Filament::getTenant();
+        Builder $query,
+        ?Model $tenant,
+    ): Builder {
+        $tenant ??= Filament::getTenant();
         if (! $tenant) {
             return $query;
         }
 
-        return $query->whereHas('domains', fn ($q) => $q->whereKey($tenant->getKey()));
+        $query->whereHas('domains', fn ($q) => $q->whereKey($tenant->getKey()));
+
+        if ($summitId = CurrentSummit::getId()) {
+            $query->whereKey($summitId);
+        }
+
+        return $query;
     }
 
     public static function getTenantOwnershipRelationshipName(): string
     {
-        // When creating a summit inside a domain tenant, Filament will attach
-        // it via this relation on the new record.
         return 'domains';
     }
 }

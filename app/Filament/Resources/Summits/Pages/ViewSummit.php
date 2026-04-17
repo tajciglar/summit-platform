@@ -113,6 +113,13 @@ class ViewSummit extends ViewRecord
                                 ->dateTime()
                                 ->placeholder('—'),
                         ]),
+
+                    TextEntry::make('domains.name')
+                        ->label('Published on')
+                        ->badge()
+                        ->separator(', ')
+                        ->color('primary')
+                        ->placeholder('Not published to any domain'),
                 ]),
         ]);
     }
