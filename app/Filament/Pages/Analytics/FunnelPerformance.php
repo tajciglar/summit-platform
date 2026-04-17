@@ -5,6 +5,7 @@ namespace App\Filament\Pages\Analytics;
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use App\Models\Order;
+use App\Models\PageView;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
@@ -13,8 +14,7 @@ use Illuminate\Support\Collection;
 use UnitEnum;
 
 /**
- * Per-funnel revenue + order stats for the current summit.
- * Derived from completed orders joined on funnel_id.
+ * Per-funnel orders + revenue + views + conversion rate for the current summit.
  */
 class FunnelPerformance extends Page
 {
@@ -31,7 +31,7 @@ class FunnelPerformance extends Page
     protected string $view = 'filament.pages.analytics.funnel-performance';
 
     /**
-     * @return Collection<int, array{funnel: Funnel, orders: int, revenue_cents: int, aov_cents: int}>
+     * @return Collection<int, array{funnel: Funnel, views: int, orders: int, revenue_cents: int, aov_cents: int, conversion_rate: float}>
      */
     public function getRows(): Collection
     {
@@ -45,7 +45,7 @@ class FunnelPerformance extends Page
             ->orderBy('name')
             ->get();
 
-        $stats = Order::query()
+        $orderStats = Order::query()
             ->where('summit_id', $summit->getKey())
             ->where('status', 'completed')
             ->selectRaw('funnel_id, COUNT(*) AS orders_count, COALESCE(SUM(total_cents), 0) AS revenue_cents')
@@ -53,17 +53,27 @@ class FunnelPerformance extends Page
             ->get()
             ->keyBy('funnel_id');
 
-        return $funnels->map(function (Funnel $funnel) use ($stats) {
-            $row = $stats->get($funnel->id);
-            $orders = (int) ($row->orders_count ?? 0);
-            $revenue = (int) ($row->revenue_cents ?? 0);
+        $viewStats = PageView::query()
+            ->where('summit_id', $summit->getKey())
+            ->selectRaw('funnel_id, COUNT(*) AS views_count')
+            ->groupBy('funnel_id')
+            ->get()
+            ->keyBy('funnel_id');
+
+        return $funnels->map(function (Funnel $funnel) use ($orderStats, $viewStats) {
+            $orders = (int) ($orderStats->get($funnel->id)?->orders_count ?? 0);
+            $revenue = (int) ($orderStats->get($funnel->id)?->revenue_cents ?? 0);
+            $views = (int) ($viewStats->get($funnel->id)?->views_count ?? 0);
             $aov = $orders > 0 ? intdiv($revenue, $orders) : 0;
+            $conversionRate = $views > 0 ? ($orders / $views) * 100 : 0.0;
 
             return [
                 'funnel' => $funnel,
+                'views' => $views,
                 'orders' => $orders,
                 'revenue_cents' => $revenue,
                 'aov_cents' => $aov,
+                'conversion_rate' => $conversionRate,
             ];
         });
     }
@@ -71,10 +81,14 @@ class FunnelPerformance extends Page
     public function getTotals(): array
     {
         $rows = $this->getRows();
+        $totalViews = (int) $rows->sum('views');
+        $totalOrders = (int) $rows->sum('orders');
 
         return [
-            'orders' => (int) $rows->sum('orders'),
+            'views' => $totalViews,
+            'orders' => $totalOrders,
             'revenue_cents' => (int) $rows->sum('revenue_cents'),
+            'conversion_rate' => $totalViews > 0 ? ($totalOrders / $totalViews) * 100 : 0.0,
         ];
     }
 

@@ -1,20 +1,36 @@
 @php
     $rows = $this->getRows();
     $fmt = fn (int $cents) => '$'.number_format($cents / 100, 2);
-    $totalRevenue = (int) $rows->sum('revenue_cents');
+    $pct = fn (float $rate) => number_format($rate, 2).'%';
+    $rateColor = fn (float $rate) => match (true) {
+        $rate >= 5 => 'success',
+        $rate >= 2 => 'warning',
+        $rate > 0 => 'gray',
+        default => 'gray',
+    };
+    $totalViews = (int) $rows->sum('views');
     $totalOrders = (int) $rows->sum('orders');
+    $totalRevenue = (int) $rows->sum('revenue_cents');
+    $overallConversion = $totalViews > 0 ? ($totalOrders / $totalViews) * 100 : 0;
 @endphp
 
 <x-filament-panels::page>
     <div class="space-y-6">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
             <x-filament::section>
                 <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">UTM combinations</div>
                 <div class="mt-1 text-2xl font-bold text-gray-950 dark:text-white">{{ $rows->count() }}</div>
             </x-filament::section>
             <x-filament::section>
-                <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Orders attributed</div>
-                <div class="mt-1 text-2xl font-bold text-gray-950 dark:text-white">{{ number_format($totalOrders) }}</div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Views</div>
+                <div class="mt-1 text-2xl font-bold text-gray-950 dark:text-white">{{ number_format($totalViews) }}</div>
+            </x-filament::section>
+            <x-filament::section>
+                <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Orders · Conv</div>
+                <div class="mt-1 text-2xl font-bold text-gray-950 dark:text-white">
+                    {{ number_format($totalOrders) }}
+                    <span class="ml-2 text-sm font-medium text-gray-500">{{ $pct($overallConversion) }}</span>
+                </div>
             </x-filament::section>
             <x-filament::section>
                 <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Total revenue</div>
@@ -26,9 +42,7 @@
             <x-slot name="heading">Revenue by UTM source × campaign</x-slot>
             @if ($rows->isEmpty())
                 <div class="py-8 text-center text-sm text-gray-500">
-                    No attributed orders yet. UTM parameters are captured on
-                    <code class="rounded bg-gray-100 px-1 py-0.5 text-xs dark:bg-white/10">visitor_sessions</code>
-                    at the start of each browser session and linked to orders on checkout.
+                    No page views or attributed orders yet.
                 </div>
             @else
                 <table class="w-full">
@@ -36,7 +50,9 @@
                         <tr class="border-b border-gray-200 dark:border-white/10">
                             <th class="py-2 pr-4 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">Source</th>
                             <th class="py-2 pr-4 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">Campaign</th>
+                            <th class="py-2 pr-4 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Views</th>
                             <th class="py-2 pr-4 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Orders</th>
+                            <th class="py-2 pr-4 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Conv</th>
                             <th class="py-2 pr-4 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Revenue</th>
                             <th class="py-2 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Share</th>
                         </tr>
@@ -60,7 +76,19 @@
                                     @endif
                                 </td>
                                 <td class="py-3 pr-4 text-right tabular-nums text-sm text-gray-700 dark:text-gray-200">
+                                    {{ number_format($row['views']) }}
+                                </td>
+                                <td class="py-3 pr-4 text-right tabular-nums text-sm text-gray-700 dark:text-gray-200">
                                     {{ number_format($row['orders']) }}
+                                </td>
+                                <td class="py-3 pr-4 text-right">
+                                    @if ($row['views'] > 0)
+                                        <x-filament::badge :color="$rateColor($row['conversion_rate'])" size="xs">
+                                            {{ $pct($row['conversion_rate']) }}
+                                        </x-filament::badge>
+                                    @else
+                                        <span class="text-xs text-gray-400">—</span>
+                                    @endif
                                 </td>
                                 <td class="py-3 pr-4 text-right tabular-nums text-sm font-semibold text-gray-950 dark:text-white">
                                     {{ $fmt($row['revenue_cents']) }}

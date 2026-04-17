@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Analytics;
 
 use App\Models\Order;
+use App\Models\PageView;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
@@ -11,8 +12,8 @@ use Illuminate\Support\Collection;
 use UnitEnum;
 
 /**
- * Revenue attributed to each utm_source / utm_campaign combination.
- * Joins completed orders onto visitor_sessions (UTM lives there).
+ * Revenue attributed to each utm_source / utm_campaign combination, merged
+ * with view counts so admins can see which channels convert best.
  */
 class UtmBreakdown extends Page
 {
@@ -29,7 +30,7 @@ class UtmBreakdown extends Page
     protected string $view = 'filament.pages.analytics.utm-breakdown';
 
     /**
-     * @return Collection<int, array{source: string, campaign: string, orders: int, revenue_cents: int}>
+     * @return Collection<int, array{source:string, campaign:string, views:int, orders:int, revenue_cents:int, conversion_rate:float}>
      */
     public function getRows(): Collection
     {
@@ -38,7 +39,8 @@ class UtmBreakdown extends Page
             return collect();
         }
 
-        $rows = Order::query()
+        // Orders joined on visitor_sessions for UTM source/campaign.
+        $orderStats = Order::query()
             ->from('orders')
             ->leftJoin('visitor_sessions', 'orders.visitor_session_id', '=', 'visitor_sessions.id')
             ->where('orders.summit_id', $summit->getKey())
@@ -50,14 +52,40 @@ class UtmBreakdown extends Page
                 COALESCE(SUM(orders.total_cents), 0) AS revenue_cents
             ")
             ->groupBy('source', 'campaign')
-            ->orderByDesc('revenue_cents')
-            ->get();
+            ->get()
+            ->keyBy(fn ($r) => "{$r->source}|{$r->campaign}");
 
-        return $rows->map(fn ($r) => [
-            'source' => $r->source,
-            'campaign' => $r->campaign,
-            'orders' => (int) $r->orders_count,
-            'revenue_cents' => (int) $r->revenue_cents,
-        ]);
+        // page_views denormalizes utm_source/utm_campaign, so no join needed.
+        $viewStats = PageView::query()
+            ->where('summit_id', $summit->getKey())
+            ->selectRaw("
+                COALESCE(utm_source, '(none)') AS source,
+                COALESCE(utm_campaign, '(none)') AS campaign,
+                COUNT(*) AS views_count
+            ")
+            ->groupBy('source', 'campaign')
+            ->get()
+            ->keyBy(fn ($r) => "{$r->source}|{$r->campaign}");
+
+        // Union: UTMs that brought views but no orders still appear (conv 0%).
+        $keys = $orderStats->keys()->merge($viewStats->keys())->unique();
+
+        return $keys->map(function (string $key) use ($orderStats, $viewStats) {
+            [$source, $campaign] = explode('|', $key, 2);
+            $views = (int) ($viewStats->get($key)?->views_count ?? 0);
+            $orders = (int) ($orderStats->get($key)?->orders_count ?? 0);
+            $revenue = (int) ($orderStats->get($key)?->revenue_cents ?? 0);
+
+            return [
+                'source' => $source,
+                'campaign' => $campaign,
+                'views' => $views,
+                'orders' => $orders,
+                'revenue_cents' => $revenue,
+                'conversion_rate' => $views > 0 ? ($orders / $views) * 100 : 0.0,
+            ];
+        })
+            ->sortByDesc('revenue_cents')
+            ->values();
     }
 }
