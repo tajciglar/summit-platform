@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SummitAudience;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class LandingPageBatch extends Model
         'allowed_types',
         'template_pool',
         'completed_at',
+        'audience_override',
     ];
 
     protected function casts(): array
@@ -32,6 +34,7 @@ class LandingPageBatch extends Model
             'allowed_types' => 'array',
             'template_pool' => 'array',
             'completed_at' => 'datetime',
+            'audience_override' => SummitAudience::class,
         ];
     }
 
