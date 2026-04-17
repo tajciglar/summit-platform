@@ -18,5 +18,5 @@ export default async function OptinPage({
   if (!parsed.success) notFound();
 
   const Component = template.Component;
-  return <Component content={parsed.data} speakers={speakersById(published.speakers)} />;
+  return <Component content={parsed.data} speakers={speakersById(published.speakers)} funnelId={funnel} />;
 }

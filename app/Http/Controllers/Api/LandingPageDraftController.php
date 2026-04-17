@@ -35,6 +35,7 @@ class LandingPageDraftController extends Controller
             'content' => $draft->sections ?? [],
             'speakers' => $speakers,
             'status' => $draft->status,
+            'funnel_id' => $draft->batch->funnel_id,
         ]);
     }
 }

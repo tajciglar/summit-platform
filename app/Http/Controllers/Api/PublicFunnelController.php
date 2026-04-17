@@ -42,6 +42,7 @@ class PublicFunnelController extends Controller
             'template_key' => $content['template_key'],
             'content' => $content['content'] ?? [],
             'speakers' => $speakers,
+            'funnel_id' => $funnel->id,
         ]);
     }
 }

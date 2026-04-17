@@ -5,10 +5,12 @@ const BASE = process.env.LARAVEL_API_URL ?? 'http://localhost:8000';
 export interface DraftPayload extends PublishedContent {
   speakers: Speaker[];
   status: string;
+  funnel_id: string;
 }
 
 export interface PublicPayload extends PublishedContent {
   speakers: Speaker[];
+  funnel_id: string;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {

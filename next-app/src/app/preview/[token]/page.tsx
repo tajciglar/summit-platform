@@ -36,5 +36,5 @@ export default async function PreviewPage({
 
   const speakers = speakersById(draft.speakers);
   const Component = template.Component;
-  return <Component content={parsed.data} speakers={speakers} />;
+  return <Component content={parsed.data} speakers={speakers} funnelId={draft.funnel_id} />;
 }

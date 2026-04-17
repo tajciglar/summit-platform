@@ -1,12 +1,17 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Fraunces / Source Serif 4 / Inter) must be
 // loaded by the page — see Task 19/20 (preview/public routes) for wiring.
+import { OptinModal } from '@/components/OptinModal';
 import type { OpusV1Content } from './opus-v1.schema';
 import type { Speaker } from './types';
 
 type Props = {
   content: OpusV1Content;
   speakers: Record<string, Speaker>;
+};
+
+type RootProps = Props & {
+  funnelId: string;
 };
 
 type HeroPortrait = {
@@ -735,7 +740,7 @@ function Footer({ content }: { content: OpusV1Content }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function OpusV1({ content, speakers }: Props) {
+export function OpusV1({ content, speakers, funnelId }: RootProps) {
   return (
     <div className="opus-v1-root opus-v1-body antialiased">
       <a href="#main" className="skip-nav">
@@ -763,6 +768,8 @@ export function OpusV1({ content, speakers }: Props) {
       </main>
 
       <Footer content={content} />
+
+      <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
     </div>
   );
 }

@@ -1,12 +1,17 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Inter / JetBrains Mono) must be loaded by
 // the page — see Task 19/20 (preview/public routes) for wiring.
+import { OptinModal } from '@/components/OptinModal';
 import type { OpusV2Content } from './opus-v2.schema';
 import type { Speaker } from './types';
 
 type Props = {
   content: OpusV2Content;
   speakers: Record<string, Speaker>;
+};
+
+type RootProps = Props & {
+  funnelId: string;
 };
 
 // Deterministic sparkline heights keyed by trend label. Keeps the AI-fillable
@@ -1272,7 +1277,7 @@ function Footer({ content }: { content: OpusV2Content }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function OpusV2({ content, speakers }: Props) {
+export function OpusV2({ content, speakers, funnelId }: RootProps) {
   return (
     <div className="opus-v2-root opus-v2-body antialiased">
       <a href="#main" className="opus-v2-skip-nav">
@@ -1300,6 +1305,8 @@ export function OpusV2({ content, speakers }: Props) {
       </main>
 
       <Footer content={content} />
+
+      <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
     </div>
   );
 }

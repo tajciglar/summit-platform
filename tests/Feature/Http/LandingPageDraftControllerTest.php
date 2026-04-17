@@ -24,6 +24,7 @@ it('returns draft content by preview token', function () {
     $response->assertJsonPath('content.summit.name', 'Preview');
     $response->assertJsonStructure(['speakers']);
     $response->assertJsonPath('status', 'ready');
+    $response->assertJsonPath('funnel_id', $funnel->id);
 });
 
 it('returns 404 for unknown preview token', function () {

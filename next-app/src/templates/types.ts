@@ -42,8 +42,8 @@ export interface TemplateDefinition<TContent = unknown> {
   thumbnail: string;
   /** Zod schema that validates TContent */
   schema: z.ZodType<TContent>;
-  /** component accepting { content, speakers } */
-  Component: ComponentType<{ content: TContent; speakers: Record<string, Speaker> }>;
+  /** component accepting { content, speakers, funnelId } */
+  Component: ComponentType<{ content: TContent; speakers: Record<string, Speaker>; funnelId: string }>;
   /** descriptive tags for filtering */
   tags: readonly TemplateTag[];
 }

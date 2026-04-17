@@ -22,6 +22,7 @@ it('returns the published page_content for an optin step', function () {
     $response->assertJsonPath('template_key', 'opus-v1');
     $response->assertJsonPath('content.summit.name', 'Test');
     $response->assertJsonStructure(['speakers']);
+    $response->assertJsonPath('funnel_id', $funnel->id);
 });
 
 it('returns 404 when funnel has no optin step with content', function () {
