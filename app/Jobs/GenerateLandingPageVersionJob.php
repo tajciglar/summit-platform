@@ -45,13 +45,19 @@ class GenerateLandingPageVersionJob implements ShouldQueue
     {
         $batch = LandingPageBatch::findOrFail($this->batchId);
 
-        $draft = LandingPageDraft::create([
-            'batch_id' => $batch->id,
-            'version_number' => $this->versionNumber,
-            'template_key' => $this->templateKey,
-            'status' => 'generating',
-            'preview_token' => Str::random(40),
-        ]);
+        // Use firstOrCreate so retries don't trip the unique (batch_id, version_number)
+        // constraint — the draft row from the first attempt is still there.
+        $draft = LandingPageDraft::firstOrCreate(
+            [
+                'batch_id' => $batch->id,
+                'version_number' => $this->versionNumber,
+            ],
+            [
+                'template_key' => $this->templateKey,
+                'status' => 'generating',
+                'preview_token' => Str::random(40),
+            ]
+        );
 
         $start = microtime(true);
         try {
