@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, HasUuid, Notifiable;
+    use HasFactory, HasRoles, HasUuid, Notifiable;
 
     protected $fillable = [
         'email',
