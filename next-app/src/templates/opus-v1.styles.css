@@ -1,13 +1,35 @@
 /* Opus V1 — template-scoped styles.
- * Ported verbatim from next-app/public/opus-v1.html <style> block.
- * Kept as custom CSS rather than Tailwind utilities because these escape-hatch
- * classes are what give the template its editorial character (drop caps,
- * deckle edges, pull-marks, FAQ details styling, marquee, etc.).
+ * Ported from the opus-v1.html <style> block and rewritten in Phase 3a-1 to
+ * read from the universal 8-token palette vocabulary (`--primary`, `--ink`,
+ * `--paper`, etc.). The template's layout injects the palette as inline CSS
+ * custom properties on `.opus-v1-root`; the fallback block below mirrors
+ * `AudiencePalettes::NEUTRAL` in app/Services/Templates/AudiencePalettes.php
+ * so the template still renders when no palette is supplied.
  */
 
-.opus-v1-root { scroll-behavior: smooth; }
+.opus-v1-root {
+  /* Fallback palette — mirrors AudiencePalettes::NEUTRAL. Overridden by the
+   * inline style={paletteStyle(palette)} on the layout root whenever the
+   * API response includes a palette. */
+  --primary: #C9812A;
+  --primary-contrast: #F5F1EA;
+  --ink: #2A0F17;
+  --paper: #F5F1EA;
+  --paper-alt: #EDE7DD;
+  --muted: #6B5B4E;
+  --accent: #D9963F;
+  --border: #DDD2C3;
+
+  scroll-behavior: smooth;
+}
+
 .opus-v1-root body,
-.opus-v1-body { font-family: 'Source Serif 4', 'Georgia', serif; background: #F9F4EC; color: #2A0F17; font-feature-settings: "kern", "liga", "ss01"; }
+.opus-v1-body {
+  font-family: 'Source Serif 4', 'Georgia', serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-feature-settings: "kern", "liga", "ss01";
+}
 
 .opus-v1-body h1,
 .opus-v1-body h2,
@@ -16,44 +38,51 @@
 .opus-v1-body .font-display { font-family: 'Fraunces', 'serif'; letter-spacing: -0.01em; font-optical-sizing: auto; }
 
 .opus-v1-body .eyebrow { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 600; font-size: 0.7rem; }
-.opus-v1-body .dropcap::first-letter { font-family: 'Fraunces', 'serif'; font-weight: 900; font-size: 4.5rem; float: left; line-height: 0.88; padding: 0.3rem 0.6rem 0 0; color: #4A1F2D; font-style: normal; }
-.opus-v1-body .rule { border-top: 1px solid #E8DFD0; }
-.opus-v1-body .figure-label { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.65rem; color: #8A7A6C; font-weight: 600; }
+.opus-v1-body .dropcap::first-letter { font-family: 'Fraunces', 'serif'; font-weight: 900; font-size: 4.5rem; float: left; line-height: 0.88; padding: 0.3rem 0.6rem 0 0; color: var(--ink); font-style: normal; }
+.opus-v1-body .rule { border-top: 1px solid var(--border); }
+.opus-v1-body .figure-label { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.65rem; color: var(--muted); font-weight: 600; }
 .opus-v1-body .portrait { border-radius: 2px; overflow: hidden; position: relative; }
+/* Portrait inner shadow uses a semi-transparent hardcoded ink-tint — keeping
+ * literal rgba because CSS cannot derive alpha-channel variants from a hex
+ * custom property. The visual weight is intentionally constant across
+ * palettes (a thin vignette on speaker portraits). */
 .opus-v1-body .portrait::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(74, 31, 45, 0.15); pointer-events: none; }
-.opus-v1-body .pullmark { font-family: 'Fraunces', 'serif'; font-size: 8rem; line-height: 0.75; color: #C9812A; font-weight: 900; }
-.opus-v1-body .roman { font-family: 'Fraunces', 'serif'; font-weight: 500; font-style: italic; color: #C9812A; }
-.opus-v1-body .deckle { border-image: repeating-linear-gradient(90deg, #E8DFD0 0 4px, transparent 4px 8px) 1; border-style: solid; border-width: 0 0 1px 0; }
+.opus-v1-body .pullmark { font-family: 'Fraunces', 'serif'; font-size: 8rem; line-height: 0.75; color: var(--primary); font-weight: 900; }
+.opus-v1-body .roman { font-family: 'Fraunces', 'serif'; font-weight: 500; font-style: italic; color: var(--primary); }
+.opus-v1-body .deckle { border-image: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px) 1; border-style: solid; border-width: 0 0 1px 0; }
 
 /* Marquee */
 .opus-v1-body .marquee-wrap { overflow: hidden; position: relative; }
 .opus-v1-body .marquee-wrap::before,
 .opus-v1-body .marquee-wrap::after { content: ''; position: absolute; top: 0; height: 100%; width: 100px; z-index: 2; pointer-events: none; }
-.opus-v1-body .marquee-wrap::before { left: 0; background: linear-gradient(90deg, #F9F4EC, transparent); }
-.opus-v1-body .marquee-wrap::after { right: 0; background: linear-gradient(-90deg, #F9F4EC, transparent); }
+.opus-v1-body .marquee-wrap::before { left: 0; background: linear-gradient(90deg, var(--paper), transparent); }
+.opus-v1-body .marquee-wrap::after { right: 0; background: linear-gradient(-90deg, var(--paper), transparent); }
 .opus-v1-body .marquee-track { display: flex; width: max-content; animation: opus-v1-marq 38s linear infinite; }
-.opus-v1-body .marquee-item { padding: 0 2rem; white-space: nowrap; color: #6B5B4E; font-family: 'Fraunces', 'serif'; font-style: italic; font-weight: 500; }
+.opus-v1-body .marquee-item { padding: 0 2rem; white-space: nowrap; color: var(--muted); font-family: 'Fraunces', 'serif'; font-style: italic; font-weight: 500; }
 @keyframes opus-v1-marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 /* FAQ */
-.opus-v1-body details { border-bottom: 1px solid #E8DFD0; }
-.opus-v1-body details summary { cursor: pointer; list-style: none; padding: 1.5rem 0; font-family: 'Fraunces', 'serif'; font-weight: 700; font-size: 1.2rem; color: #2A0F17; }
+.opus-v1-body details { border-bottom: 1px solid var(--border); }
+.opus-v1-body details summary { cursor: pointer; list-style: none; padding: 1.5rem 0; font-family: 'Fraunces', 'serif'; font-weight: 700; font-size: 1.2rem; color: var(--ink); }
 .opus-v1-body details summary::-webkit-details-marker { display: none; }
-.opus-v1-body details summary::after { content: '+'; float: right; font-family: 'Fraunces', 'serif'; font-weight: 500; font-size: 1.6rem; line-height: 1; color: #C9812A; transition: transform 0.2s; }
+.opus-v1-body details summary::after { content: '+'; float: right; font-family: 'Fraunces', 'serif'; font-weight: 500; font-size: 1.6rem; line-height: 1; color: var(--primary); transition: transform 0.2s; }
 .opus-v1-body details[open] summary::after { content: '—'; }
 
 /* Modal */
+/* Backdrop uses semi-transparent ink overlay — kept as hardcoded rgba for the
+ * same reason as the portrait shadow (alpha channel can't be derived from a
+ * hex custom property). */
 .opus-v1-body .modal-backdrop { position: fixed; inset: 0; background: rgba(42, 15, 23, 0.65); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
 .opus-v1-body .modal-backdrop.open { display: flex; }
-.opus-v1-body .modal-card { background: #FDFBF5; max-width: 560px; width: 100%; border-radius: 4px; box-shadow: 0 40px 80px -20px rgba(42, 15, 23, 0.4); border: 1px solid #E8DFD0; }
+.opus-v1-body .modal-card { background: var(--paper); max-width: 560px; width: 100%; border-radius: 4px; box-shadow: 0 40px 80px -20px rgba(42, 15, 23, 0.4); border: 1px solid var(--border); }
 .opus-v1-body.modal-open { overflow: hidden; }
 
 /* Focus */
-.opus-v1-body :focus-visible { outline: 2px solid #C9812A; outline-offset: 3px; }
+.opus-v1-body :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 
 /* Skip nav */
 .opus-v1-body .skip-nav { position: absolute; left: -9999px; }
-.opus-v1-body .skip-nav:focus { position: fixed; top: 1rem; left: 1rem; background: #2A0F17; color: #FDFBF5; padding: 0.75rem 1.25rem; z-index: 200; font-family: 'Inter', sans-serif; font-weight: 600; }
+.opus-v1-body .skip-nav:focus { position: fixed; top: 1rem; left: 1rem; background: var(--ink); color: var(--primary-contrast); padding: 0.75rem 1.25rem; z-index: 200; font-family: 'Inter', sans-serif; font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   .opus-v1-body .marquee-track { animation: none !important; }

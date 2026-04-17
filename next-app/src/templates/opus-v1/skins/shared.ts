@@ -1,5 +1,15 @@
 import type { Speaker } from '../../types';
 
+/*
+ * Portrait placeholder gradients are decorative (speaker avatar backgrounds
+ * shown before real images load, and the abstract initials avatars). They
+ * intentionally do NOT follow the audience palette — Phase 3a-1 deliberately
+ * keeps them hardcoded to avoid jarring color shifts across the page when
+ * the palette changes, and because these earth-tone gradients play a purely
+ * neutral "portrait background" role regardless of the summit audience.
+ * A future phase may swap this for palette-derived gradients once we design
+ * a strategy that doesn't compromise contrast against speaker initials.
+ */
 export const PORTRAIT_GRADIENTS = [
   'linear-gradient(160deg,#8A4E5D,#4A1F2D)',
   'linear-gradient(160deg,#C9812A,#A6691F)',
