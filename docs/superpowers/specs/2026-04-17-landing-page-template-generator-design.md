@@ -1,8 +1,12 @@
 # Landing Page Template Generator — Design
 
 **Date:** 2026-04-17
-**Status:** Approved design, awaiting parallel DB + Filament refactor before implementation
-**Supersedes:** 2026-04-16-landing-page-generation-v3-design.md (AI block-composition pipeline) and deprecates `CopywriterPhase` / `BlockDesignPhase` / `design-prompt.ts` / polish stage / block skeletons
+**Status:** Approved design, V2 rebuild complete — ready for implementation plan
+**Supersedes:** 2026-04-16-landing-page-generation-v3-design.md (AI block-composition pipeline, now fully deleted in V2 rebuild)
+
+## Revision 1 (2026-04-17, after V2 rebuild)
+
+Parallel V2 rebuild deleted all of `app/Services/`, `app/Jobs/`, customer-facing controllers, and the entire `FunnelGenerator` AI pipeline. `LandingPageBatch` + `LandingPageDraft` models and migrations survived. Speaker schema simplified (no pivot, `Speaker.summit_id` direct, `goes_live_at` datetime replaces `presentation_day`). Filament pattern is dedicated pages only — no modals, no slideovers, all actions navigate via `->url(...)`. This revision updates "Reuse vs new", "Schema delta", "Speaker resolution", "Filament wiring", and "Prerequisites" sections to match. Design itself unchanged.
 
 ---
 
@@ -66,33 +70,31 @@ Registry is source of truth. AI, admin form, and renderer all read the same sche
 
 ### Reuse vs new
 
-**Reuse (unchanged):**
-- `LandingPageBatch` model + migration
-- `LandingPageDraft` model + migration (schema delta below)
-- `GenerateLandingPageBatchJob`, `GenerateLandingPageVersionJob`
-- `/preview/{token}` Next.js route
-- `AnthropicClient` in `app/Services/FunnelGenerator/`
-- Queue infrastructure (database driver)
+**Reuse (already present in V2):**
+- `landing_page_batches` + `landing_page_drafts` tables (schema delta below)
+- `LandingPageBatch` + `LandingPageDraft` Eloquent models (minor field additions)
+- `preview_token` generation on draft create
+- `funnel_steps.page_content` JSONB column as the publish target
+- Queue infrastructure (database driver, `php artisan queue:work`)
+- Filament admin panel shell (Indigo/Slate palette, navigation groups)
 
-**Repurposed:**
-- `ArchitectPhase` → becomes "template selector" — given a summit + template pool + variant count, picks N distinct `template_key` values. Much smaller responsibility than block-sequence generation.
+**Build fresh (V2 rebuild deleted the originals):**
+- `app/Services/Templates/TemplateRegistry.php` — PHP mirror of the Next.js registry
+- `app/Services/Templates/TemplateFiller.php` — schema-driven Anthropic call per variant
+- `app/Services/Templates/TemplateSelector.php` — picks N distinct template_keys from a pool (replaces the old `ArchitectPhase` with a much smaller surface)
+- `app/Services/AnthropicClient.php` — thin wrapper around the Anthropic SDK (was deleted with old `FunnelGenerator/`)
+- `app/Jobs/GenerateLandingPageBatchJob.php` — creates per-version jobs
+- `app/Jobs/GenerateLandingPageVersionJob.php` — calls TemplateFiller, writes draft
+- `app/Http/Controllers/Api/PublicFunnelController.php` — `GET /api/funnels/{id}/published-content`
+- Filament generate page on Funnel resource (dedicated `GenerateLandingPagesPage`, not a modal action)
+- Filament card-grid page (dedicated `LandingPageDraftsPage` on the Funnel)
+- Filament draft edit page (phase 1.5 — dedicated `EditLandingPageDraftPage`)
 
-**New:**
-- `app/Services/TemplateFiller.php`
-- `app/Services/Templates/TemplateRegistry.php` (PHP-side mirror of Next.js registry, used to know which templates exist and their schemas)
-- `next-app/src/templates/` directory with 8 components + 8 schemas + registry
-- `next-app/src/templates/registry.test.ts` integrity tests
-- Filament card-grid page on Funnel resource
-- Filament edit form component (phase 1.5)
-- `app/Http/Controllers/Api/PublicFunnelController.php` (`GET /api/funnel/{domain}/optin`)
-
-**Deprecated (remove after templates prove out, ~2 weeks post-launch):**
-- `CopywriterPhase`
-- `BlockDesignPhase`
-- `design-prompt.ts`
-- `polish-stage.ts`
-- `next-app/src/lib/skeletons/`
-- Block catalog generation path
+**New in Next.js app:**
+- `next-app/src/templates/` — 8 components + 8 Zod schemas + registry
+- `next-app/src/templates/registry.test.ts` — integrity tests
+- `next-app/src/app/preview/[token]/page.tsx` — preview route (fetches draft via Laravel API, renders via registry)
+- `next-app/src/app/f/[funnel]/optin/page.tsx` (or similar) — public landing page route
 
 ---
 
@@ -278,9 +280,12 @@ published → archived                 (another draft published)
 
 ### Speaker resolution
 
-- **Generate:** AI sees speakers list with `presentation_day`, groups into `speakersByDay` by referencing `speakerIds` only.
-- **Edit:** Operator reassigns IDs, reorders within day, excludes. Only IDs change.
-- **Render:** Template component receives `speakers: Record<uuid, Speaker>`, joins at render. Speaker edits in Filament appear on live page immediately.
+Schema note: V2 `Speaker` belongs to `Summit` directly via `summit_id` (no pivot). Day is derived from `speakers.goes_live_at` (datetime — the exact moment content goes live and the free-access window opens).
+
+- **Generate:** AI receives `Speaker::where('summit_id', $id)->whereNotNull('goes_live_at')->orderBy('goes_live_at')->orderBy('sort_order')->get()`, grouped by `$speaker->goes_live_at->toDateString()`. Returns `speakersByDay` with only `speakerIds` per group.
+- **Speakers with `goes_live_at = null`** are excluded from `speakersByDay` (not yet scheduled). They remain selectable manually in edit mode.
+- **Edit (phase 1.5):** Operator reassigns IDs between day buckets, reorders within a day, or excludes. Only IDs change — no copy duplicated.
+- **Render:** Template component receives `speakers: Record<uuid, Speaker>` keyed by ID, joins at render. Speaker edits in Filament (bio, photo, masterclass title) appear on live page immediately; the draft doesn't need regenerating.
 
 ---
 
@@ -363,56 +368,98 @@ published → archived                 (another draft published)
 
 ---
 
-## Schema delta (depends on parallel DB refactor)
+## Schema delta
 
-Target table: `landing_page_drafts`.
+V2 schema is in place (migrations `2026_04_17_100011_create_landing_page_tables.php`). Delta below is a single follow-up migration.
+
+### `landing_page_drafts` (V2 shape today)
+
+Current columns: `id`, `batch_id`, `version_number`, `blocks` jsonb, `sections` jsonb, `published_html` text, `published_hydration_manifest` jsonb, `status`, `preview_token`, `error_message`.
 
 | Change | Type | Default |
 |---|---|---|
 | Add `template_key` | `varchar(64)` not null | — |
-| Add `status` enum values | `shortlisted`, `rejected`, `archived`, `failed` (existing: `queued`, `generating`, `ready`, `published`) | `queued` |
-| Add `error_message` | `text` nullable | `null` |
 | Add `token_count` | `int` nullable | `null` |
 | Add `generation_ms` | `int` nullable | `null` |
+| Widen `status` valid values | string (no enum constraint now) → accept: `queued`, `generating`, `ready`, `shortlisted`, `rejected`, `published`, `archived`, `failed` | `queued` |
 
-Target table: `landing_page_batches`.
+**Reuse of existing columns:**
+- `sections` (jsonb) — repurposed as the template-slot content store. Matches the template's Zod schema for its `template_key`.
+- `blocks`, `published_html`, `published_hydration_manifest` — legacy from deleted pipeline. Leave untouched for this migration; drop in a cleanup migration after templates prove out (phase 2).
+- `preview_token` — kept as-is.
+- `error_message` — kept as-is.
+
+### `landing_page_batches` (V2 shape today)
+
+Current columns: `id`, `summit_id`, `funnel_id`, `funnel_step_id`, `version_count`, `status`, `notes`, `style_reference_url`, `override_url`, `allowed_types` jsonb, `completed_at`.
 
 | Change | Type | Default |
 |---|---|---|
 | Add `template_pool` | `jsonb` nullable (array of template_keys, `null` = all) | `null` |
 
-New table: `funnel_step_revisions` (for publish audit log).
+**Reuse of existing columns:**
+- `style_reference_url`, `notes` — used by `TemplateFiller`.
+- `funnel_step_id` — already present; points to the target funnel step (optin) the batch will publish to.
+- `allowed_types` — legacy from deleted pipeline (was for block-type filtering). Leave untouched; drop in phase 2 cleanup. Do **not** reuse it for `template_pool` — semantics differ.
+- `override_url` — legacy, same treatment.
+
+### New table: `funnel_step_revisions` (publish audit log)
 
 | Column | Type |
 |---|---|
-| `id` | uuid pk |
-| `funnel_step_id` | uuid fk |
-| `content_snapshot` | jsonb |
-| `published_at` | timestamp |
-| `published_by` | uuid fk users |
+| `id` | uuid pk (`gen_random_uuid()`) |
+| `funnel_step_id` | uuid fk `funnel_steps(id)` on delete cascade |
+| `page_content_snapshot` | jsonb not null |
+| `published_at` | timestamptz not null |
+| `published_by` | uuid fk `users(id)` nullable |
+| `created_at` | timestamptz default now() |
 
-This delta should be merged into the parallel DB refactor rather than applied as a separate migration.
+Snapshot is taken just before `FunnelStep::page_content` is overwritten on publish.
 
 ---
 
-## Filament wiring (depends on parallel Filament refactor)
+## Filament wiring
 
-Target resource: Funnel.
+Convention (established by the V2 rebuild): **dedicated pages only — no `->slideOver()`, no modal form actions**. All actions navigate via `->url(PageClass::getUrl([...]))`.
 
-- Add header action `GenerateLandingPagesAction` (move from Summit resource → Funnel resource).
-- Add relation manager or page: "Landing Pages" card grid.
-- Add draft edit page (phase 1.5).
+Resource: `app/Filament/Resources/Funnels/FunnelResource.php`.
 
-When the parallel Filament refactor settles, wire these into whatever the new resource structure is. The action + page logic is framework-agnostic — only mount points change.
+New pages to add under `app/Filament/Resources/Funnels/Pages/`:
+
+1. **`GenerateLandingPagesPage`** (extends `Page`, not a record page) — URL: `/admin/funnels/{record}/generate-landing-pages`.
+   - Full-page form: variant count, template pool multi-select (defaults "all"), notes textarea, style reference URL.
+   - Submit → create `LandingPageBatch` + dispatch `GenerateLandingPageBatchJob` → redirect to `LandingPageDraftsPage` with the batch ID.
+   - Registered in `FunnelResource::getPages()`.
+
+2. **`LandingPageDraftsPage`** (extends `Page`) — URL: `/admin/funnels/{record}/landing-pages`.
+   - Card grid (Livewire component or Blade partial inside the Filament page).
+   - Per card: template thumbnail, label, status badge, actions (Preview, Approve, Reject, Publish, Edit-phase-1.5).
+   - Poll every 3s for status updates (cheap; only while any draft is in `queued`/`generating`).
+   - Action dispatched via Livewire actions, not modal forms.
+
+3. **`EditLandingPageDraftPage`** (phase 1.5, extends `EditRecord`-style page) — URL: `/admin/funnels/{record}/landing-pages/{draft}/edit`.
+   - Form auto-generated from the draft's template schema (Zod → Filament via a mapper service in `app/Services/Templates/FilamentSchemaMapper.php`).
+
+Action entry point on `FunnelResource` list or view:
+```php
+Action::make('generateLandingPages')
+    ->label('Generate Landing Pages')
+    ->icon('heroicon-o-sparkles')
+    ->url(fn (Funnel $record) =>
+        GenerateLandingPagesPage::getUrl(['record' => $record]))
+```
+
+Card grid is reachable from `FunnelResource` ViewRecord page via a header link or nav sub-item — no modal, no slide-over.
 
 ---
 
 ## Prerequisites before implementation
 
-1. DB refactor (other session) merged, so we know the final `landing_page_drafts` / `landing_page_batches` shape to apply the delta against.
-2. Filament refactor (other session) merged, so we know where to mount the Generate action and card-grid page.
-3. Inertia removal status confirmed — if still in progress, coordinate so public rendering switches to Next.js cleanly.
-4. Template conversion can start in parallel with the above (work in `next-app/src/templates/` only) because it touches no shared surface.
+All blockers cleared as of 2026-04-17 (V2 rebuild complete — 22 tasks, 17 migrations, 17 models, 9 Filament resources). Remaining coordination:
+
+1. **Inertia removal status.** `HandleInertiaRequests` middleware is still present. Customer-facing controllers are deleted per V2 rebuild notes, to be rebuilt with the V2 checkout flow. This spec assumes public rendering is done by Next.js — the rebuilt public controllers should return JSON via `/api/funnels/{id}/published-content` (or equivalent) rather than `Inertia::render`. Coordinate with whoever rebuilds checkout so the pattern is consistent.
+2. **Anthropic API key.** `ANTHROPIC_API_KEY` must be present in `.env` (was used by the deleted pipeline — verify it survived the rebuild).
+3. **Queue worker running.** `QUEUE_CONNECTION=database` and `php artisan queue:work` (supervised in prod, manual in dev).
 
 ---
 
