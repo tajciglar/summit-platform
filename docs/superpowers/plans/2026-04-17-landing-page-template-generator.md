@@ -529,12 +529,12 @@ export const opusV1Fixture: OpusV1Content = {
     {
       dayLabel: 'Day 1 — Diagnosis & Foundations',
       dayDate: '2026-04-22',
-      speakerIds: ['11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'],
+      speakerIds: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'],
     },
     {
       dayLabel: 'Day 2 — Routines That Stick',
       dayDate: '2026-04-23',
-      speakerIds: ['33333333-3333-3333-3333-333333333333'],
+      speakerIds: ['33333333-3333-4333-8333-333333333333'],
     },
   ],
   bonusStack: [
