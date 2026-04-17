@@ -81,10 +81,8 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                // Roles are a global concept. Tenancy opt-out for Shield's
-                // RoleResource is applied in AppServiceProvider::boot()
-                // (the correct method lives on the Resource, not the plugin).
-                FilamentShieldPlugin::make(),
+                // Roles are a global concept — don't scope them to the current summit.
+                FilamentShieldPlugin::make()->scopeToTenant(false),
             ])
             ->authMiddleware([
                 Authenticate::class,

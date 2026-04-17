@@ -26,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Shield's RoleResource must opt out of Summit tenancy. Roles are global;
+        // they have no `summit` relationship. Without this, Filament's
+        // BelongsToTenant trait 500s the admin panel on every page render.
+        if (class_exists(\BezhanSalleh\FilamentShield\Resources\Roles\RoleResource::class)) {
+            \BezhanSalleh\FilamentShield\Resources\Roles\RoleResource::scopeToTenant(false);
+        }
     }
 }
