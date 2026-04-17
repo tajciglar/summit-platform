@@ -35,6 +35,8 @@ class LandingPageDraftController extends Controller
             'template_key' => $draft->template_key,
             'content' => $draft->sections ?? [],
             'enabled_sections' => $draft->enabled_sections,
+            'audience' => $draft->audience?->value,
+            'palette' => $draft->palette,
             'speakers' => $speakers,
             'status' => $draft->status,
             'funnel_id' => $draft->batch->funnel_id,

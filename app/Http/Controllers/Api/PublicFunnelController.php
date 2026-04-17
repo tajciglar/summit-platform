@@ -42,6 +42,8 @@ class PublicFunnelController extends Controller
             'template_key' => $content['template_key'],
             'content' => $content['content'] ?? [],
             'enabled_sections' => $content['enabled_sections'] ?? null,
+            'audience' => $content['audience'] ?? null,
+            'palette' => $content['palette'] ?? null,
             'speakers' => $speakers,
             'funnel_id' => $funnel->id,
         ]);
