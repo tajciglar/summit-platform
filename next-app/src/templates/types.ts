@@ -1,6 +1,14 @@
 import type { ComponentType } from 'react';
 import type { z } from 'zod';
 
+export type TemplateTag =
+  | 'editorial'
+  | 'serif'
+  | 'warm'
+  | 'modern'
+  | 'mono'
+  | 'dark';
+
 /**
  * Speaker as returned by the V2 Laravel API (Task 16 endpoint).
  *
@@ -37,7 +45,7 @@ export interface TemplateDefinition<TContent = unknown> {
   /** component accepting { content, speakers } */
   Component: ComponentType<{ content: TContent; speakers: Record<string, Speaker> }>;
   /** descriptive tags for filtering */
-  tags: readonly string[];
+  tags: readonly TemplateTag[];
 }
 
 export interface PublishedContent {
