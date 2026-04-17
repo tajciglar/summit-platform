@@ -19,7 +19,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 3;
+    public int $tries = 4;
 
     public int $timeout = 180;
 
@@ -28,6 +28,18 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         public string $templateKey,
         public int $versionNumber,
     ) {}
+
+    /**
+     * Backoff schedule (seconds) for retries triggered by transient errors
+     * like Anthropic 429 rate-limit responses. Lets the rolling-minute
+     * output-token budget clear before we try again.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [60, 120, 180];
+    }
 
     public function handle(TemplateFiller $filler, TemplateRegistry $registry, AudienceResolver $audienceResolver): void
     {
@@ -76,6 +88,16 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 'status' => 'ready',
             ]);
         } catch (\Throwable $e) {
+            if ($this->isRateLimitError($e) && $this->attempts() < $this->tries) {
+                // Keep the draft in generating state and let Laravel retry
+                // after the backoff() window — the rolling-minute output
+                // token budget will have cleared by then.
+                $draft->update([
+                    'generation_ms' => (int) ((microtime(true) - $start) * 1000),
+                ]);
+                throw $e;
+            }
+
             $draft->update([
                 'status' => 'failed',
                 'error_message' => substr($e->getMessage(), 0, 500),
@@ -83,5 +105,12 @@ class GenerateLandingPageVersionJob implements ShouldQueue
             ]);
             report($e);
         }
+    }
+
+    private function isRateLimitError(\Throwable $e): bool
+    {
+        $m = $e->getMessage();
+
+        return str_contains($m, '429') || str_contains($m, 'rate_limit_error');
     }
 }

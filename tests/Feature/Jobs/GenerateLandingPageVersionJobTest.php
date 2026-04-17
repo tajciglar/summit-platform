@@ -61,6 +61,59 @@ it('marks draft as failed when filler throws', function () {
     expect($draft->error_message)->toContain('oops');
 });
 
+it('re-throws 429 rate-limit errors and keeps draft in generating state for retry', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->andThrow(
+            new RuntimeException('Anthropic API returned 429: rate_limit_error blah')
+        );
+    });
+
+    expect(fn () => GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1))
+        ->toThrow(RuntimeException::class);
+
+    $draft = LandingPageDraft::first();
+    expect($draft->status)->toBe('generating');
+    expect($draft->error_message)->toBeNull();
+});
+
+it('marks draft as failed on final 429 after all retries exhausted', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->andThrow(
+            new RuntimeException('Anthropic API returned 429: rate_limit_error blah')
+        );
+    });
+
+    // Simulate being on the final attempt — the job's attempts() returns 4
+    // via job->release() accounting, but for dispatchSync we trigger the
+    // post-tries branch by maxing out tries to 1.
+    $job = new GenerateLandingPageVersionJob($batch->id, 'opus-v1', 1);
+    $job->tries = 1;
+
+    dispatch_sync($job);
+
+    $draft = LandingPageDraft::first();
+    expect($draft->status)->toBe('failed');
+    expect($draft->error_message)->toContain('429');
+});
+
 it('seeds enabled_sections from defaultEnabledSections for opus-v1', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
