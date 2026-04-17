@@ -16,6 +16,7 @@ use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -69,9 +70,13 @@ class SummitResource extends Resource
                     TextInput::make('topic')
                         ->maxLength(255)
                         ->helperText('e.g. ADHD parenting, productivity, mindset'),
-                    TextInput::make('hero_image_url')
-                        ->url()
-                        ->maxLength(1000)
+                    SpatieMediaLibraryFileUpload::make('hero')
+                        ->collection('hero')
+                        ->image()
+                        ->imageEditor()
+                        ->imageCropAspectRatio('16:9')
+                        ->maxSize(8192)
+                        ->helperText('Recommended 1920×1080. JPEG / PNG / WebP / AVIF.')
                         ->columnSpanFull(),
                     Textarea::make('description')
                         ->rows(3)

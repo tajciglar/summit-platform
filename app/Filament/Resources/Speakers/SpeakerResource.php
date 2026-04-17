@@ -13,6 +13,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -21,7 +22,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -79,7 +80,14 @@ class SpeakerResource extends Resource
             Section::make('Media & bio')
                 ->columns(2)
                 ->components([
-                    TextInput::make('photo_url')->url()->maxLength(1000)->columnSpanFull(),
+                    SpatieMediaLibraryFileUpload::make('photo')
+                        ->collection('photo')
+                        ->image()
+                        ->imageEditor()
+                        ->imageCropAspectRatio('3:4')
+                        ->circleCropper(false)
+                        ->maxSize(5120)
+                        ->columnSpanFull(),
                     TextInput::make('website_url')->url()->maxLength(1000)->columnSpanFull(),
                     Textarea::make('short_bio')->rows(3)->columnSpanFull(),
                     Textarea::make('long_bio')->rows(6)->columnSpanFull(),
@@ -122,7 +130,12 @@ class SpeakerResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('photo_url')->label('')->circular()->size(40),
+                SpatieMediaLibraryImageColumn::make('photo')
+                    ->collection('photo')
+                    ->conversion('thumb')
+                    ->label('')
+                    ->circular()
+                    ->size(40),
                 TextColumn::make('last_name')
                     ->label('Name')
                     ->formatStateUsing(fn (Speaker $record): string => $record->fullName())
