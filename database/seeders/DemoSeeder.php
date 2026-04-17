@@ -122,9 +122,10 @@ class DemoSeeder extends Seeder
             'price_post_summit_cents' => 12700,
         ]);
 
-        $funnel = Funnel::factory()->create([
+        // Primary opt-in funnel: aps (ADHD Parenting Summit initials).
+        $optinFunnel = Funnel::factory()->create([
             'summit_id' => $summit->id,
-            'slug' => 'main-optin',
+            'slug' => 'aps',
             'name' => 'Main Opt-in Funnel',
             'target_phase' => 'pre',
         ]);
@@ -136,7 +137,64 @@ class DemoSeeder extends Seeder
             ['step_type' => 'thank_you', 'name' => 'Confirmation', 'slug' => 'confirmation', 'sort_order' => 3],
         ] as $step) {
             FunnelStep::factory()->create([
-                'funnel_id' => $funnel->id,
+                'funnel_id' => $optinFunnel->id,
+                ...$step,
+                'page_content' => [],
+            ]);
+        }
+
+        // Sales page funnel for the VIP pass — late-pre pushes the urgency angle.
+        $salesFunnel = Funnel::factory()->create([
+            'summit_id' => $summit->id,
+            'slug' => 'aps-sales',
+            'name' => 'VIP Sales Page',
+            'target_phase' => 'late_pre',
+        ]);
+        foreach ([
+            ['step_type' => 'sales_page', 'name' => 'VIP Pitch', 'slug' => 'vip', 'sort_order' => 0, 'product_id' => $vipPass->id],
+            ['step_type' => 'checkout', 'name' => 'Checkout', 'slug' => 'checkout', 'sort_order' => 1, 'product_id' => $vipPass->id],
+            ['step_type' => 'thank_you', 'name' => 'Thank You', 'slug' => 'thank-you', 'sort_order' => 2],
+        ] as $step) {
+            FunnelStep::factory()->create([
+                'funnel_id' => $salesFunnel->id,
+                ...$step,
+                'page_content' => [],
+            ]);
+        }
+
+        // Recordings upsell funnel, runs during & post summit.
+        $recordingsFunnel = Funnel::factory()->create([
+            'summit_id' => $summit->id,
+            'slug' => 'aps-recordings',
+            'name' => 'Recordings Offer',
+            'target_phase' => 'during',
+        ]);
+        foreach ([
+            ['step_type' => 'sales_page', 'name' => 'Recordings Pitch', 'slug' => 'pitch', 'sort_order' => 0, 'product_id' => $recordings->id],
+            ['step_type' => 'checkout', 'name' => 'Checkout', 'slug' => 'checkout', 'sort_order' => 1, 'product_id' => $recordings->id],
+            ['step_type' => 'thank_you', 'name' => 'Thank You', 'slug' => 'thank-you', 'sort_order' => 2],
+        ] as $step) {
+            FunnelStep::factory()->create([
+                'funnel_id' => $recordingsFunnel->id,
+                ...$step,
+                'page_content' => [],
+            ]);
+        }
+
+        // Post-summit last-chance funnel — late buyers, replay window.
+        $lastChanceFunnel = Funnel::factory()->create([
+            'summit_id' => $summit->id,
+            'slug' => 'aps-last-chance',
+            'name' => 'Last Chance Offer',
+            'target_phase' => 'post',
+        ]);
+        foreach ([
+            ['step_type' => 'sales_page', 'name' => 'Last Chance', 'slug' => 'last-chance', 'sort_order' => 0, 'product_id' => $vipPass->id],
+            ['step_type' => 'checkout', 'name' => 'Checkout', 'slug' => 'checkout', 'sort_order' => 1, 'product_id' => $vipPass->id],
+            ['step_type' => 'thank_you', 'name' => 'Thank You', 'slug' => 'thank-you', 'sort_order' => 2],
+        ] as $step) {
+            FunnelStep::factory()->create([
+                'funnel_id' => $lastChanceFunnel->id,
                 ...$step,
                 'page_content' => [],
             ]);
