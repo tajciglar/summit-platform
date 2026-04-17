@@ -15,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(StripeClient::class, function () {
             return new StripeClient(config('services.stripe.secret'));
         });
+
+        $this->app->singleton(\App\Services\Templates\TemplateRegistry::class);
     }
 
     /**
