@@ -10,7 +10,9 @@
 
 Each summit operator needs a **different set of sections** on their landing page. Some summits need sponsors; some need pricing tiers; some are paid events that need a bonus stack; some need a marquee of press logos; some don't. Today, our 8 templates each render a fixed set of sections baked into the component — no variance beyond field values.
 
-Operators want to **select which sections to include** at generate time, and have the AI fill only those. Visual coherence must be preserved: a chosen section should look like it belongs to the chosen template, not be a generic Frankenstein.
+Operators need to curate which sections appear on a given summit's page without having to anticipate every section up-front. Visual coherence must be preserved: a chosen section should look like it belongs to the chosen template, not be a generic Frankenstein.
+
+**Approach:** AI fills every section the template supports in one pass. Each template declares a *default-enabled* subset that renders out of the box. Operator curates in the edit page by toggling sections on/off — content is already there, so toggles are instant. No regeneration needed to explore different section mixes.
 
 ## Constraints
 
@@ -23,9 +25,11 @@ Operators want to **select which sections to include** at generate time, and hav
 
 | Decision | Choice | Why |
 |---|---|---|
+| When sections are selected | **AI fills every supported section at generate; operator toggles in edit** | Simpler generate UX; instant iteration; no regenerate to change mix |
+| Default-enabled set | Each template declares `defaultEnabledSections` | Baseline page out of the box; operator expands from there |
 | Section order customization | Fixed per template in Phase 2; reorder in edit later | Simpler; template author owns aesthetic flow |
-| Template missing an optional section skin | Operator can't enable it (greyed/hidden in UI) | Prevents fallback ugliness |
-| Core section skinning | Every template must skin every core section (enforced at build) | Guarantees any selected template can render the baseline |
+| Template missing an optional section skin | That template doesn't include the section in its supported set | No fallback ugliness |
+| Core section skinning | Every template must skin every core section (enforced at build) | Guarantees any template can render the baseline |
 | Enabled-sections storage | `drafts.enabled_sections` JSON array column | Keeps render decision separate from content |
 | Catalog schema versioning | None | We own every consumer; Phase 2 is greenfield |
 | Section schema sharing across templates | Shape shared, skin per template | Clarity in catalog; flexibility in style |
@@ -139,6 +143,15 @@ export const opusV1SectionOrder: string[] = [
   'faq',
   'footer',
 ];
+
+// Subset rendered out of the box; operator can enable the rest in edit.
+export const opusV1DefaultEnabledSections: string[] = [
+  'hero',
+  'summit-overview',
+  'speakers-by-day',
+  'faq',
+  'footer',
+];
 ```
 
 A skin signature:
@@ -193,22 +206,17 @@ Disabling a section at edit time removes the key from `enabled_sections` but lea
 
 ### Generate flow
 
-1. Operator opens Generate Landing Pages form. Template grid as today.
-2. Operator picks template.
-3. Form reveals section checklist:
-   - **Core** rows pre-checked, disabled (operator can't uncheck).
-   - **Optional** rows initially unchecked. Rows for sections the template doesn't skin are hidden.
-4. Operator ticks desired optional sections and submits.
-5. `GenerateLandingPagesAction`:
+1. Operator opens Generate Landing Pages form. Picks template(s) from the pool and how many variants.
+2. Submits. **No section checklist** — the form is just the template picker.
+3. `GenerateLandingPagesAction`:
    - Reads `template-manifest.json`.
-   - For each selected template key (multi-variant still supported), builds the **effective JSON Schema** by merging schemas of (core sections ∪ operator-selected optional sections), scoped to `pageTypes: ['landing']`.
-   - Dispatches one `GenerateLandingPageVersionJob` per version. Each job calls `TemplateFiller::fill($template, $effectiveSchema, $summitContext, $selectedOptionalKeys)`.
-6. `TemplateFiller` sends the effective schema to Claude; receives one JSON blob shaped as `{ hero: {...}, marquee: {...}, ... }`.
-7. Job stores:
-   - `sections` = the filled JSON blob.
-   - `enabled_sections` = core keys + selected optional keys, ordered per template's `sectionOrder`.
+   - Dispatches one `GenerateLandingPageVersionJob` per version. Each job calls `TemplateFiller::fill($template, $summitContext)`.
+4. `TemplateFiller` builds the effective JSON Schema = the full union of all `supportedSections` schemas for the chosen template. Sends to Claude; receives one JSON blob shaped as `{ hero: {...}, marquee: {...}, faq: {...}, … }` covering every section the template supports.
+5. Job stores:
+   - `sections` = the filled JSON blob (every supported section has content).
+   - `enabled_sections` = the template's `defaultEnabledSections`, ordered per template's `sectionOrder`.
 
-Nothing about the LLM contract changes. We just change what schema we build.
+Nothing about the LLM contract changes. We just call it with the template's full supported-sections schema.
 
 ### Render flow (Next.js)
 
@@ -217,15 +225,17 @@ Nothing about the LLM contract changes. We just change what schema we build.
 3. Renders `<OpusV1 sections={draft.sections} enabledSections={draft.enabled_sections} speakers={speakers} funnelId={funnelId} />`.
 4. Layout filters template order by enabled set and renders each skin.
 
-### Edit flow
+### Edit flow (primary curation surface)
 
-`EditLandingPageDraftPage` (Phase 1.5 Task C2) gets extended:
+`EditLandingPageDraftPage` (Phase 1.5 Task C2) gets extended. Since generation always fills every supported section, the edit page is where the operator curates the page:
 
-1. Form shows one fieldset per entry in `enabled_sections`, in template order.
+1. Form shows one fieldset per entry in the template's `supportedSections`, in template order — every section filled by AI is editable.
 2. Each fieldset has:
-   - A toggle "Include on page" (default on; unchecking removes from `enabled_sections`).
+   - A toggle "Include on page" (initial state = `enabled_sections` contains this key).
    - All schema fields, rendered via the existing `FilamentSchemaMapper` over that section's JSON Schema.
-3. Optional sections the operator didn't originally select can be added from an "Add section" picker (adds default/empty content and appends to `enabled_sections`).
+   - Visual treatment: enabled fieldsets render at full opacity; disabled ones render dimmed/collapsed (content preserved but visually subordinate).
+3. Saving persists `sections` (content) and `enabled_sections` (the ordered list of currently-on keys, matching template `sectionOrder`).
+4. No "add section" picker needed — every supported section is already there; the operator just flips toggles.
 
 Phase 3+ adds per-section copy regeneration via Claude. Not in this spec.
 
@@ -244,8 +254,9 @@ Phase 3+ adds per-section copy regeneration via Claude. Not in this spec.
     {
       "key": "opus-v1",
       "label": "Opus V1 — Editorial Serif",
-      "supportedSections": ["hero", "marquee", "summit-overview", ...],
-      "sectionOrder":      ["countdown-timer", "hero", "marquee", ...]
+      "supportedSections":       ["hero", "marquee", "summit-overview", ...],
+      "sectionOrder":            ["countdown-timer", "hero", "marquee", ...],
+      "defaultEnabledSections":  ["hero", "summit-overview", "speakers-by-day", "faq", "footer"]
     },
     // ...
   ]
@@ -259,47 +270,53 @@ Laravel reads the same file. The `ManifestIntegrityTest` from Phase 1.5 Task A4 
 
 ## Operator UX
 
+### Generate form (simple — no section checklist)
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │ Generate Landing Pages                                         │
 │                                                                │
 │ Summit: Parenting Adhd Summit 2026                             │
+│ Variants per template: [3]                                     │
 │                                                                │
-│ Template pool (pick one or more, AI generates a variant each): │
+│ Template pool (pick one or more, AI generates variants each):  │
 │  ▣ Opus V1 — Editorial Serif                                   │
 │  ▣ Opus V2 — Modernist Sans                                    │
 │  ▢ Opus V3 — Magazine                                          │
 │  ▢ Opus V4 — Vibrant Display                                   │
 │  ...                                                            │
 │                                                                │
-│ Sections on the page (template: Opus V1):                      │
-│  ▣ Hero                              (core)                    │
-│  ▣ Summit overview                   (core)                    │
-│  ▣ Speakers by day                   (core)                    │
-│  ▣ Meet the host                     (core)                    │
-│  ▣ FAQ                               (core)                    │
-│  ▣ Footer                            (core)                    │
-│  ──────────────────────────────────                            │
-│  ▢ Press marquee                     (optional)                │
-│  ▢ What you'll get (value prop)      (optional)                │
-│  ▢ Reasons to attend                 (optional)                │
-│  ▢ Who this is for                   (optional)                │
-│  ▢ Attendee testimonials             (optional)                │
-│  ▢ Video testimonials                (optional)                │
-│  ▢ Social-proof stats                (optional)                │
-│  ▢ Problem-space facts               (optional)                │
-│  ▢ Why this matters                  (optional)                │
-│  ▢ Bonus stack                       (optional)                │
-│  ▢ Social follower proof             (optional)                │
-│  ▢ References                        (optional)                │
-│  ▢ Countdown timer                   (optional)                │
-│  ▢ Event status banner               (optional)                │
-│                                                                │
 │ [Cancel]                                          [Generate]   │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-Multi-template selection rule: when the operator picks several templates (multi-variant generation), the checklist shows the **union** of their supported optional sections. If a chosen template doesn't skin a ticked section, the row shows a small warning "Not included for: Opus V1" and that variant simply omits the section from its render. Core sections are always rendered by every template by contract.
+AI fills **every** section the chosen template supports. What renders out of the box is the template's `defaultEnabledSections`. Curation happens in edit.
+
+### Edit page (where operator curates)
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ Edit Landing Page Draft                   [Preview] [Publish]  │
+│                                                                │
+│ Template: Opus V1 — Editorial Serif                            │
+│                                                                │
+│ ┌─ Hero ─────────────────────── [■] ON  [edit fields ▸] ──┐   │
+│ └─────────────────────────────────────────────────────────┘   │
+│ ┌─ Summit overview ───────────── [■] ON  [edit fields ▸] ──┐  │
+│ └─────────────────────────────────────────────────────────┘   │
+│ ┌─ Press marquee (dim) ──────── [□] OFF [edit fields ▸] ──┐   │
+│ │  (content filled by AI, not rendering on live page)      │   │
+│ └─────────────────────────────────────────────────────────┘   │
+│ ┌─ Speakers by day ───────────── [■] ON  [edit fields ▸] ──┐  │
+│ └─────────────────────────────────────────────────────────┘   │
+│ ┌─ Value prop (dim) ───────────  [□] OFF [edit fields ▸] ──┐  │
+│ └─────────────────────────────────────────────────────────┘   │
+│ ...                                                            │
+│                                           [Save draft]         │
+└────────────────────────────────────────────────────────────────┘
+```
+
+Every supported section is listed in template order. Toggle switches enable/disable; dimmed rows indicate disabled sections whose content is kept if the operator changes their mind.
 
 ## Section catalog — initial keys
 
@@ -364,22 +381,23 @@ One template per commit means 8 commits, each shippable on its own because old d
 | Phase 1.5 | Phase 2 |
 |---|---|
 | Template = one Zod schema, one component | Template = layout shell + N skin components, composed from catalog |
-| Generate = fill one schema | Generate = fill merged subset schema |
-| Edit = one form from one schema | Edit = one fieldset per enabled section + toggle + add-section picker |
-| Manifest lists templates | Manifest lists templates + catalog |
-| `drafts.sections` = full content | `drafts.sections` = keyed content; `drafts.enabled_sections` = render list |
+| Generate = fill one schema | Generate = fill union of template's `supportedSections` schemas |
+| Generate form has no section choices | Still no section choices — UX doesn't regress |
+| Edit = one form from one schema | Edit = one fieldset per supported section + on/off toggle (curation lives here) |
+| Manifest lists templates | Manifest lists templates (+ `defaultEnabledSections`) + catalog |
+| `drafts.sections` = full content | `drafts.sections` = keyed content; `drafts.enabled_sections` = render list, seeded from `defaultEnabledSections` |
 
 ## Phase 2 task outline (pre-plan)
 
 These become the skeleton of the implementation plan in the next step.
 
 1. Extract shared section schemas from opus-v1 into `src/sections/` (canonical set).
-2. Refactor opus-v1 into layout shell + skins.
-3. Build catalog export in `build:templates`.
+2. Refactor opus-v1 into layout shell + skins + declare `defaultEnabledSections`.
+3. Build catalog + `defaultEnabledSections` export in `build:templates`.
 4. Add `enabled_sections` migration + backfill.
-5. Update `TemplateFiller` to build the effective schema + pass it to Claude.
-6. Update generate Filament form with section checklist.
-7. Update edit Filament page with per-section fieldsets + add/remove pickers.
+5. Update `TemplateFiller` to build the effective schema from template's supported set + pass to Claude.
+6. Update `GenerateLandingPageVersionJob` to seed `enabled_sections` from `defaultEnabledSections`.
+7. Update edit Filament page with per-section fieldsets + on/off toggles.
 8. Refactor opus-v2.
 9. Refactor opus-v3.
 10. Refactor opus-v4.
@@ -388,9 +406,9 @@ These become the skeleton of the implementation plan in the next step.
 13. Refactor variant-3.
 14. Refactor adhd-summit.
 15. Extend `ManifestIntegrityTest` with catalog + skin coverage asserts.
-16. End-to-end smoke (browser): generate + edit with mixed section sets.
+16. End-to-end smoke (browser): generate + toggle sections in edit + publish.
 
-One commit per task.
+One commit per task. No generate-form changes — the form stays template-pool-only.
 
 ## Open items for plan step
 
