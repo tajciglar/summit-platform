@@ -18,6 +18,7 @@ class LandingPageDraft extends Model
         'template_key',
         'blocks',
         'sections',
+        'enabled_sections',
         'published_html',
         'published_hydration_manifest',
         'status',
@@ -32,6 +33,7 @@ class LandingPageDraft extends Model
         return [
             'blocks' => 'array',
             'sections' => 'array',
+            'enabled_sections' => 'array',
             'published_hydration_manifest' => 'array',
             'token_count' => 'integer',
             'generation_ms' => 'integer',
