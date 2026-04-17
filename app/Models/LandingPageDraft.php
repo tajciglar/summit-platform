@@ -15,6 +15,7 @@ class LandingPageDraft extends Model
     protected $fillable = [
         'batch_id',
         'version_number',
+        'template_key',
         'blocks',
         'sections',
         'published_html',
@@ -22,6 +23,8 @@ class LandingPageDraft extends Model
         'status',
         'preview_token',
         'error_message',
+        'token_count',
+        'generation_ms',
     ];
 
     protected function casts(): array
@@ -30,6 +33,8 @@ class LandingPageDraft extends Model
             'blocks' => 'array',
             'sections' => 'array',
             'published_hydration_manifest' => 'array',
+            'token_count' => 'integer',
+            'generation_ms' => 'integer',
         ];
     }
 

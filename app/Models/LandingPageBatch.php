@@ -22,6 +22,7 @@ class LandingPageBatch extends Model
         'style_reference_url',
         'override_url',
         'allowed_types',
+        'template_pool',
         'completed_at',
     ];
 
@@ -29,6 +30,7 @@ class LandingPageBatch extends Model
     {
         return [
             'allowed_types' => 'array',
+            'template_pool' => 'array',
             'completed_at' => 'datetime',
         ];
     }

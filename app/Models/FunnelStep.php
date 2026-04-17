@@ -51,4 +51,9 @@ class FunnelStep extends Model
     {
         return $this->hasMany(LandingPageBatch::class);
     }
+
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(FunnelStepRevision::class)->orderBy('created_at', 'desc');
+    }
 }
