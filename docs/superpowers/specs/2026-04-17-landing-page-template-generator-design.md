@@ -408,13 +408,17 @@ Current columns: `id`, `summit_id`, `funnel_id`, `funnel_step_id`, `version_coun
 | Column | Type |
 |---|---|
 | `id` | uuid pk (`gen_random_uuid()`) |
-| `funnel_step_id` | uuid fk `funnel_steps(id)` on delete cascade |
+| `funnel_step_id` | uuid fk `funnel_steps(id)` **on delete set null, nullable** |
 | `page_content_snapshot` | jsonb not null |
 | `published_at` | timestamptz not null |
-| `published_by` | uuid fk `users(id)` nullable |
+| `published_by` | uuid fk `users(id)` on delete set null, nullable |
 | `created_at` | timestamptz default now() |
 
 Snapshot is taken just before `FunnelStep::page_content` is overwritten on publish.
+
+**Audit-log design notes:**
+- Both FKs use `on delete set null` so revision rows survive deletion of the referenced step or user. Deleting a funnel_step must not wipe its publish history.
+- Secondary index is composite `(funnel_step_id, published_at DESC)` — serves the dominant query "show revisions for this step, most-recent-first" in one index scan (no post-filter sort).
 
 ---
 

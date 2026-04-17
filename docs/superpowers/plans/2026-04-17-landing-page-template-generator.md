@@ -159,14 +159,14 @@ return new class extends Migration
         DB::statement("
             CREATE TABLE funnel_step_revisions (
                 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                funnel_step_id UUID NOT NULL REFERENCES funnel_steps(id) ON DELETE CASCADE,
+                funnel_step_id UUID REFERENCES funnel_steps(id) ON DELETE SET NULL,
                 page_content_snapshot JSONB NOT NULL,
                 published_at TIMESTAMPTZ NOT NULL,
                 published_by UUID REFERENCES users(id) ON DELETE SET NULL,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
         ");
-        DB::statement('CREATE INDEX funnel_step_revisions_step_id_idx ON funnel_step_revisions(funnel_step_id)');
+        DB::statement('CREATE INDEX funnel_step_revisions_step_id_published_at_idx ON funnel_step_revisions(funnel_step_id, published_at DESC)');
     }
 
     public function down(): void
@@ -175,6 +175,8 @@ return new class extends Migration
     }
 };
 ```
+
+**Audit-log design:** both FKs use `ON DELETE SET NULL` so revision history survives deletion of the referenced step or user. Index is composite `(funnel_step_id, published_at DESC)` for the dominant "recent revisions of this step" query.
 
 - [ ] **Step 2: Run + verify**
 
