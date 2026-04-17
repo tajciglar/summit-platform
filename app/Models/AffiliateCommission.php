@@ -11,17 +11,22 @@ class AffiliateCommission extends Model
     use HasUuid;
 
     protected $fillable = [
-        'affiliate_id', 'order_id', 'order_item_id',
-        'commission_rate', 'order_amount_cents', 'commission_cents',
-        'status', 'paid_at',
+        'affiliate_id',
+        'order_id',
+        'commission_rate',
+        'order_amount_cents',
+        'commission_cents',
+        'status',
+        'paid_at',
     ];
 
-    protected $casts = [
-        'commission_rate' => 'decimal:4',
-        'order_amount_cents' => 'integer',
-        'commission_cents' => 'integer',
-        'paid_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'commission_rate' => 'decimal:4',
+            'paid_at' => 'datetime',
+        ];
+    }
 
     public function affiliate(): BelongsTo
     {
@@ -31,10 +36,5 @@ class AffiliateCommission extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
-    }
-
-    public function orderItem(): BelongsTo
-    {
-        return $this->belongsTo(OrderItem::class);
     }
 }

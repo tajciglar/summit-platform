@@ -13,17 +13,20 @@ class Funnel extends Model
     use HasFactory, HasUuid;
 
     protected $fillable = [
-        'summit_id', 'slug', 'name', 'description',
-        'target_phase', 'is_active', 'theme',
-        'style_brief_override', 'last_section_selection',
+        'summit_id',
+        'slug',
+        'name',
+        'description',
+        'target_phase',
+        'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'theme' => 'array',
-        'style_brief_override' => 'array',
-        'last_section_selection' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 
     public function summit(): BelongsTo
     {

@@ -15,19 +15,21 @@ class LandingPageBatch extends Model
     protected $fillable = [
         'summit_id',
         'funnel_id',
+        'funnel_step_id',
         'version_count',
         'status',
         'notes',
+        'style_reference_url',
+        'override_url',
         'allowed_types',
-        'style_override_url',
         'completed_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'completed_at' => 'datetime',
             'allowed_types' => 'array',
+            'completed_at' => 'datetime',
         ];
     }
 
@@ -41,8 +43,13 @@ class LandingPageBatch extends Model
         return $this->belongsTo(Funnel::class);
     }
 
+    public function funnelStep(): BelongsTo
+    {
+        return $this->belongsTo(FunnelStep::class);
+    }
+
     public function drafts(): HasMany
     {
-        return $this->hasMany(LandingPageDraft::class, 'batch_id')->orderBy('version_number');
+        return $this->hasMany(LandingPageDraft::class, 'batch_id');
     }
 }

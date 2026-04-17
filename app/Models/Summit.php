@@ -6,38 +6,47 @@ use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Summit extends Model
 {
     use HasFactory, HasUuid;
 
     protected $fillable = [
-        'slug', 'title', 'description', 'topic', 'hero_image_url',
-        'status', 'current_phase', 'timezone', 'starts_at', 'ends_at',
-        'summit_type',
-        'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
+        'slug',
+        'title',
+        'description',
+        'topic',
+        'hero_image_url',
+        'status',
+        'current_phase',
+        'timezone',
+        'pre_summit_starts_at',
+        'late_pre_summit_starts_at',
+        'during_summit_starts_at',
+        'post_summit_starts_at',
+        'ends_at',
     ];
 
-    protected $casts = [
-        'starts_at' => 'datetime',
-        'ends_at' => 'datetime',
-        'style_brief' => 'array',
-        'style_brief_built_at' => 'datetime',
-    ];
-
-    public function phaseSchedules(): HasMany
+    protected function casts(): array
     {
-        return $this->hasMany(SummitPhaseSchedule::class);
+        return [
+            'pre_summit_starts_at' => 'datetime',
+            'late_pre_summit_starts_at' => 'datetime',
+            'during_summit_starts_at' => 'datetime',
+            'post_summit_starts_at' => 'datetime',
+            'ends_at' => 'datetime',
+        ];
     }
 
     public function pages(): HasMany
     {
-        return $this->hasMany(SummitPage::class)->orderBy('sort_order');
+        return $this->hasMany(SummitPage::class);
     }
 
-    public function summitSpeakers(): HasMany
+    public function speakers(): HasMany
     {
-        return $this->hasMany(SummitSpeaker::class)->orderBy('sort_order');
+        return $this->hasMany(Speaker::class);
     }
 
     public function products(): HasMany
@@ -55,49 +64,27 @@ class Summit extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function optins(): HasMany
+    /**
+     * Compare NOW() against inline phase dates and return the current phase.
+     * Returns null when no phase dates are set (unpublished summit).
+     */
+    public function computePhase(?Carbon $now = null): ?string
     {
-        return $this->hasMany(Optin::class);
-    }
+        $now ??= now();
 
-    public function campaignActivities(): HasMany
-    {
-        return $this->hasMany(SummitCampaignActivity::class)->orderBy('starts_at');
-    }
-
-    public function dailyReports(): HasMany
-    {
-        return $this->hasMany(SummitDailyReport::class)->orderBy('report_date');
-    }
-
-    public function checklistItems(): HasMany
-    {
-        return $this->hasMany(SummitChecklistItem::class)->orderBy('sort_order');
-    }
-
-    public function buildSummitContext(): array
-    {
-        $speakers = [];
-        try {
-            $this->loadMissing('summitSpeakers.speaker');
-            foreach ($this->summitSpeakers as $link) {
-                $speakers[] = [
-                    'name'  => $link->speaker?->full_name ?? '',
-                    'photo' => $link->speaker?->photo_url ?? null,
-                ];
-            }
-        } catch (\Throwable) {
-            $speakers = [];
+        if ($this->post_summit_starts_at && $now->gte($this->post_summit_starts_at)) {
+            return 'post';
+        }
+        if ($this->during_summit_starts_at && $now->gte($this->during_summit_starts_at)) {
+            return 'during';
+        }
+        if ($this->late_pre_summit_starts_at && $now->gte($this->late_pre_summit_starts_at)) {
+            return 'late_pre';
+        }
+        if ($this->pre_summit_starts_at && $now->gte($this->pre_summit_starts_at)) {
+            return 'pre';
         }
 
-        return [
-            'name'        => $this->title,
-            'date'        => $this->starts_at?->toDateString() ?? '',
-            'brandColors' => [],
-            'mode'        => 'light',
-            'speakers'    => $speakers,
-            'toneBrief'   => '',
-            'product'     => null,
-        ];
+        return null;
     }
 }

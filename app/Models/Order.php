@@ -12,20 +12,40 @@ class Order extends Model
     use HasUuid;
 
     protected $fillable = [
-        'order_number', 'user_id', 'summit_id', 'funnel_id', 'funnel_step_id',
-        'summit_phase_at_purchase', 'status', 'subtotal_cents', 'discount_cents',
-        'total_cents', 'currency', 'coupon_id', 'stripe_payment_intent_id',
-        'stripe_checkout_session_id', 'affiliate_id', 'ip_address', 'user_agent',
-        'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+        'order_number',
+        'user_id',
+        'summit_id',
+        'visitor_session_id',
+        'funnel_id',
+        'funnel_step_id',
+        'phase_at_purchase',
+        'status',
+        'subtotal_cents',
+        'discount_cents',
+        'tax_cents',
+        'total_cents',
+        'currency',
+        'items',
+        'coupon_id',
+        'affiliate_id',
+        'stripe_payment_intent_id',
+        'stripe_checkout_session_id',
+        'stripe_subscription_id',
+        'subscription_status',
+        'subscription_period_end',
+        'subscription_canceled_at',
         'completed_at',
     ];
 
-    protected $casts = [
-        'subtotal_cents' => 'integer',
-        'discount_cents' => 'integer',
-        'total_cents' => 'integer',
-        'completed_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'items' => 'array',
+            'completed_at' => 'datetime',
+            'subscription_period_end' => 'datetime',
+            'subscription_canceled_at' => 'datetime',
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -35,6 +55,11 @@ class Order extends Model
     public function summit(): BelongsTo
     {
         return $this->belongsTo(Summit::class);
+    }
+
+    public function visitorSession(): BelongsTo
+    {
+        return $this->belongsTo(VisitorSession::class);
     }
 
     public function funnel(): BelongsTo
@@ -57,13 +82,18 @@ class Order extends Model
         return $this->belongsTo(Affiliate::class);
     }
 
-    public function items(): HasMany
+    public function paymentEvents(): HasMany
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(PaymentEvent::class);
     }
 
     public function refunds(): HasMany
     {
         return $this->hasMany(Refund::class);
+    }
+
+    public function isSubscription(): bool
+    {
+        return $this->stripe_subscription_id !== null;
     }
 }

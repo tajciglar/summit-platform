@@ -6,7 +6,7 @@ use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Refund extends Model
+class PaymentEvent extends Model
 {
     use HasUuid;
 
@@ -14,16 +14,17 @@ class Refund extends Model
 
     protected $fillable = [
         'order_id',
-        'amount_cents',
-        'reason',
-        'reason_detail',
-        'stripe_refund_id',
-        'refunded_by',
+        'event_type',
+        'stripe_event_id',
+        'payload',
+        'processed_at',
     ];
 
     protected function casts(): array
     {
         return [
+            'payload' => 'array',
+            'processed_at' => 'datetime',
             'created_at' => 'datetime',
         ];
     }
@@ -31,10 +32,5 @@ class Refund extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
-    }
-
-    public function refundedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'refunded_by');
     }
 }

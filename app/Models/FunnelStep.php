@@ -13,15 +13,24 @@ class FunnelStep extends Model
     use HasFactory, HasUuid;
 
     protected $fillable = [
-        'funnel_id', 'step_type', 'template', 'slug', 'name',
-        'content', 'sort_order', 'product_id', 'is_published',
+        'funnel_id',
+        'step_type',
+        'slug',
+        'name',
+        'page_content',
+        'sort_order',
+        'product_id',
+        'is_published',
     ];
 
-    protected $casts = [
-        'content' => 'array',
-        'is_published' => 'boolean',
-        'sort_order' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'page_content' => 'array',
+            'is_published' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
 
     public function funnel(): BelongsTo
     {
@@ -38,13 +47,8 @@ class FunnelStep extends Model
         return $this->hasMany(FunnelStepBump::class)->orderBy('sort_order');
     }
 
-    /** Get the next published step in the same funnel. */
-    public function nextPublishedStep(): ?self
+    public function landingPageBatches(): HasMany
     {
-        return static::where('funnel_id', $this->funnel_id)
-            ->where('sort_order', '>', $this->sort_order)
-            ->where('is_published', true)
-            ->orderBy('sort_order')
-            ->first();
+        return $this->hasMany(LandingPageBatch::class);
     }
 }

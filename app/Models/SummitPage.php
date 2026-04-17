@@ -10,12 +10,22 @@ class SummitPage extends Model
 {
     use HasUuid;
 
-    protected $fillable = ['summit_id', 'slug', 'title', 'content', 'sort_order', 'is_published'];
-
-    protected $casts = [
-        'is_published' => 'boolean',
-        'sort_order' => 'integer',
+    protected $fillable = [
+        'summit_id',
+        'slug',
+        'title',
+        'content',
+        'sort_order',
+        'is_published',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'content' => 'array',
+            'is_published' => 'boolean',
+        ];
+    }
 
     public function summit(): BelongsTo
     {

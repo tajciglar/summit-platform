@@ -7,43 +7,37 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Affiliate extends Model
+class VisitorSession extends Model
 {
     use HasUuid;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'user_id',
-        'code',
-        'first_name',
-        'last_name',
-        'email',
-        'company',
-        'commission_rate',
-        'payment_email',
-        'is_active',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_content',
+        'utm_term',
+        'landing_url',
+        'referrer_url',
+        'ip_address',
+        'user_agent',
+        'country_code',
+        'device_type',
     ];
 
     protected function casts(): array
     {
         return [
-            'commission_rate' => 'decimal:4',
-            'is_active' => 'boolean',
+            'created_at' => 'datetime',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function referrals(): HasMany
-    {
-        return $this->hasMany(AffiliateReferral::class);
-    }
-
-    public function commissions(): HasMany
-    {
-        return $this->hasMany(AffiliateCommission::class);
     }
 
     public function orders(): HasMany

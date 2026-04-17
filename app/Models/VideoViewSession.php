@@ -13,22 +13,34 @@ class VideoViewSession extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'summit_speaker_id', 'started_at', 'expires_at', 'last_heartbeat_at',
+        'user_id',
+        'speaker_id',
+        'started_at',
+        'expires_at',
+        'last_heartbeat_at',
     ];
 
-    protected $casts = [
-        'started_at' => 'datetime',
-        'expires_at' => 'datetime',
-        'last_heartbeat_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'last_heartbeat_at' => 'datetime',
+        ];
+    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function summitSpeaker(): BelongsTo
+    public function speaker(): BelongsTo
     {
-        return $this->belongsTo(SummitSpeaker::class);
+        return $this->belongsTo(Speaker::class);
+    }
+
+    public function hasExpired(): bool
+    {
+        return now()->gte($this->expires_at);
     }
 }

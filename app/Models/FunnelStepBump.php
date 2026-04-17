@@ -10,18 +10,26 @@ class FunnelStepBump extends Model
 {
     use HasUuid;
 
-    public $timestamps = false;
-
     protected $fillable = [
-        'funnel_step_id', 'product_id', 'headline', 'description',
-        'bullets', 'checkbox_label', 'image_url', 'sort_order', 'is_active',
+        'funnel_step_id',
+        'product_id',
+        'headline',
+        'description',
+        'bullets',
+        'checkbox_label',
+        'image_url',
+        'sort_order',
+        'is_active',
     ];
 
-    protected $casts = [
-        'bullets' => 'array',
-        'is_active' => 'boolean',
-        'sort_order' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'bullets' => 'array',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
 
     public function funnelStep(): BelongsTo
     {

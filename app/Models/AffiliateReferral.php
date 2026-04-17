@@ -13,12 +13,30 @@ class AffiliateReferral extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'affiliate_id', 'session_id', 'landing_url',
-        'ip_address', 'user_agent', 'utm_source', 'utm_medium', 'utm_campaign',
+        'affiliate_id',
+        'visitor_session_id',
+        'landing_url',
+        'ip_address',
+        'user_agent',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
 
     public function affiliate(): BelongsTo
     {
         return $this->belongsTo(Affiliate::class);
+    }
+
+    public function visitorSession(): BelongsTo
+    {
+        return $this->belongsTo(VisitorSession::class);
     }
 }
