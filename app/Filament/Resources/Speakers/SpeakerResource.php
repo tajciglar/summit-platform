@@ -2,14 +2,16 @@
 
 namespace App\Filament\Resources\Speakers;
 
-use App\Filament\Resources\Speakers\Pages;
+use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Speaker;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -31,7 +33,7 @@ use Illuminate\Support\Str;
 
 class SpeakerResource extends Resource
 {
-    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+    use ScopesTenantViaSummitDomains;
 
     protected static ?string $model = Speaker::class;
 
@@ -56,7 +58,21 @@ class SpeakerResource extends Resource
                 ->components([
                     Select::make('summit_id')
                         ->label('Summit')
-                        ->relationship('summit', 'title')
+                        ->relationship(
+                            'summit',
+                            'title',
+                            modifyQueryUsing: function ($query) {
+                                $domain = Filament::getTenant();
+                                if ($domain) {
+                                    $query->whereHas(
+                                        'domains',
+                                        fn ($q) => $q->whereKey($domain->getKey()),
+                                    );
+                                }
+                            },
+                        )
+                        ->default(fn () => CurrentSummit::getId())
+                        ->hidden(fn (): bool => CurrentSummit::getId() !== null)
                         ->required()
                         ->searchable()
                         ->preload(),

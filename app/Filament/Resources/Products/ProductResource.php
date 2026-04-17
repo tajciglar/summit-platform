@@ -2,14 +2,16 @@
 
 namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\Products\Pages;
+use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Product;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -19,7 +21,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\HtmlString;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -27,11 +28,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
-    use \App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
+    use ScopesTenantViaSummitDomains;
 
     protected static ?string $model = Product::class;
 
@@ -56,7 +58,21 @@ class ProductResource extends Resource
                 ->components([
                     Select::make('summit_id')
                         ->label('Summit')
-                        ->relationship('summit', 'title')
+                        ->relationship(
+                            'summit',
+                            'title',
+                            modifyQueryUsing: function ($query) {
+                                $domain = Filament::getTenant();
+                                if ($domain) {
+                                    $query->whereHas(
+                                        'domains',
+                                        fn ($q) => $q->whereKey($domain->getKey()),
+                                    );
+                                }
+                            },
+                        )
+                        ->default(fn () => CurrentSummit::getId())
+                        ->hidden(fn (): bool => CurrentSummit::getId() !== null)
                         ->searchable()
                         ->preload()
                         ->placeholder('Cross-summit product')
@@ -112,7 +128,7 @@ class ProductResource extends Resource
                         ->columnSpanFull()
                         ->visible(fn (callable $get): bool => $get('kind') === 'combo')
                         ->options(function () {
-                            return \App\Models\Product::query()
+                            return Product::query()
                                 ->where('kind', '!=', 'combo')
                                 ->orderBy('name')
                                 ->pluck('name', 'id')
@@ -136,7 +152,7 @@ class ProductResource extends Resource
                             if (empty($ids)) {
                                 return new HtmlString('<span class="text-sm text-gray-500 italic">Pick products to see live totals per phase.</span>');
                             }
-                            $children = \App\Models\Product::query()->whereIn('id', $ids)->get();
+                            $children = Product::query()->whereIn('id', $ids)->get();
                             $discount = (int) ($get('combo_discount_cents') ?? 0);
                             $phases = ['pre' => 'Pre-summit', 'late_pre' => 'Late pre', 'during' => 'During', 'post' => 'Post-summit'];
 

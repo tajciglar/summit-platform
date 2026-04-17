@@ -4,12 +4,15 @@ namespace App\Filament\Resources\Funnels;
 
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Funnel;
+use App\Models\Summit;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -47,7 +50,21 @@ class FunnelResource extends Resource
                 ->components([
                     Select::make('summit_id')
                         ->label('Summit')
-                        ->relationship('summit', 'title')
+                        ->relationship(
+                            'summit',
+                            'title',
+                            modifyQueryUsing: function ($query) {
+                                $domain = Filament::getTenant();
+                                if ($domain) {
+                                    $query->whereHas(
+                                        'domains',
+                                        fn ($q) => $q->whereKey($domain->getKey()),
+                                    );
+                                }
+                            },
+                        )
+                        ->default(fn () => CurrentSummit::getId())
+                        ->hidden(fn (): bool => CurrentSummit::getId() !== null)
                         ->required()
                         ->searchable()
                         ->preload(),
@@ -64,12 +81,18 @@ class FunnelResource extends Resource
                     TextInput::make('name')
                         ->required()->maxLength(500)
                         ->live(onBlur: true)
-                        ->afterStateUpdated(function (string $operation, $state, callable $set): void {
-                            if ($operation === 'create') {
-                                $set('slug', Str::slug((string) $state));
+                        ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get): void {
+                            if ($operation !== 'create') {
+                                return;
                             }
+                            $summitId = $get('summit_id') ?: CurrentSummit::getId();
+                            $initials = $summitId
+                                ? (Summit::withoutGlobalScopes()->find($summitId)?->initials ?? '')
+                                : '';
+                            $set('slug', self::composeFunnelSlug($initials, (string) $state));
                         }),
-                    TextInput::make('slug')->required()->maxLength(255),
+                    TextInput::make('slug')->required()->maxLength(255)
+                        ->helperText('Auto-fills from summit initials + funnel purpose. Edit freely.'),
                     Textarea::make('description')->rows(3)->columnSpanFull(),
                     Toggle::make('is_active')->default(true),
                 ]),
@@ -127,6 +150,31 @@ class FunnelResource extends Resource
                 ]),
             ])
             ->defaultSort('name');
+    }
+
+    /**
+     * Build a funnel slug like `aps` (opt-in) or `aps-checkout`.
+     * Detects common funnel types from the name and prefixes with the
+     * summit's initials so URLs stay short and predictable across a summit.
+     */
+    private static function composeFunnelSlug(string $initials, string $name): string
+    {
+        $lower = strtolower($name);
+        $suffix = match (true) {
+            str_contains($lower, 'opt-in') || str_contains($lower, 'optin') => '',
+            str_contains($lower, 'checkout') => 'checkout',
+            str_contains($lower, 'sales') => 'sales',
+            str_contains($lower, 'upsell') => 'upsell',
+            str_contains($lower, 'thank') => 'thanks',
+            str_contains($lower, 'vip') => 'vip',
+            default => Str::slug($name),
+        };
+
+        if ($initials === '') {
+            return $suffix !== '' ? $suffix : Str::slug($name);
+        }
+
+        return $suffix !== '' ? "{$initials}-{$suffix}" : $initials;
     }
 
     public static function getPages(): array
