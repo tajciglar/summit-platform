@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFunnelStep extends CreateRecord
 {
     protected static string $resource = FunnelStepResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('view', ['record' => $this->record]);
+    }
 }

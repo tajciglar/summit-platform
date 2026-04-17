@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\FunnelSteps\Pages;
 
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
-use App\Models\FunnelStep;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditFunnelStep extends EditRecord
@@ -15,25 +14,13 @@ class EditFunnelStep extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('openBuilder')
-                ->label('Open Builder')
-                ->icon('heroicon-o-paint-brush')
-                ->color('info')
-                ->url(fn () => url("/admin/builder/{$this->getRecord()->id}"))
-                ->openUrlInNewTab(),
-            Action::make('preview')
-                ->label('Preview')
-                ->icon('heroicon-o-eye')
-                ->url(function (): string {
-                    /** @var FunnelStep $step */
-                    $step = $this->getRecord();
-                    $step->loadMissing('funnel.summit');
-                    $summit = $step->funnel->summit;
-
-                    return url("/{$summit->slug}/{$step->funnel->slug}/{$step->slug}?preview=1");
-                })
-                ->openUrlInNewTab(),
+            ViewAction::make()->url(fn () => FunnelStepResource::getUrl('view', ['record' => $this->record])),
             DeleteAction::make(),
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('view', ['record' => $this->record]);
     }
 }

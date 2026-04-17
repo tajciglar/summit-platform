@@ -3,67 +3,103 @@
 namespace App\Filament\Resources\Summits\RelationManagers;
 
 use App\Filament\Resources\Funnels\FunnelResource;
+use App\Models\Funnel;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class FunnelsRelationManager extends RelationManager
 {
     protected static string $relationship = 'funnels';
 
-    public static function getBadge(Model $ownerRecord, string $pageClass): ?string
-    {
-        return (string) $ownerRecord->funnels()->count();
-    }
+    protected static ?string $title = 'Funnels';
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('name')->required()->maxLength(500),
-                TextInput::make('slug')->required()->maxLength(255),
-                Select::make('target_phase')
-                    ->label('Target Phase')
-                    ->options([
-                        'pre_summit' => 'Pre-Summit',
-                        'late_pre_summit' => 'Late Pre-Summit',
-                        'during_summit' => 'During Summit',
-                        'post_summit' => 'Post-Summit',
-                    ])
-                    ->placeholder('All phases'),
-                Toggle::make('is_active')->default(true),
-            ]);
+        // Never used — the New action below routes to the full FunnelResource create page.
+        return $schema->components([]);
     }
 
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderByDesc('is_active')->orderBy('name'))
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('slug'),
+                IconColumn::make('is_active')
+                    ->label('Live')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-bolt')
+                    ->falseIcon('heroicon-o-pause-circle')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->weight('bold'),
+                TextColumn::make('slug')
+                    ->color('gray')
+                    ->toggleable(),
                 TextColumn::make('target_phase')
+                    ->label('Phase')
                     ->badge()
-                    ->formatStateUsing(fn (?string $state): string => $state ? str_replace('_', ' ', ucfirst($state)) : 'All'),
-                IconColumn::make('is_active')->boolean(),
-                TextColumn::make('steps_count')->counts('steps')->label('Steps'),
+                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : 'all')
+                    ->color(fn (?string $state): string => match ($state) {
+                        'during' => 'success',
+                        'late_pre' => 'warning',
+                        'pre' => 'info',
+                        'post' => 'gray',
+                        default => 'primary',
+                    }),
+                TextColumn::make('steps_count')
+                    ->counts('steps')
+                    ->label('Steps')
+                    ->alignCenter(),
+                TextColumn::make('created_at')
+                    ->label('Created')
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->headerActions([CreateAction::make()])
+            ->filters([
+                TernaryFilter::make('is_active')->label('Live'),
+                SelectFilter::make('target_phase')->options([
+                    'pre' => 'Pre-summit',
+                    'late_pre' => 'Late pre-summit',
+                    'during' => 'During summit',
+                    'post' => 'Post-summit',
+                ]),
+            ])
+            ->headerActions([
+                Action::make('new')
+                    ->label('New funnel')
+                    ->icon('heroicon-o-plus')
+                    ->url(fn (): string => FunnelResource::getUrl('create')),
+            ])
             ->recordActions([
-                EditAction::make()
-                    ->url(fn ($record) => FunnelResource::getUrl('edit', ['record' => $record])),
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
+                Action::make('edit')
+                    ->label('Edit')
+                    ->icon('heroicon-o-pencil-square')
+                    ->url(fn (Funnel $record): string => FunnelResource::getUrl('edit', ['record' => $record])),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([DeleteBulkAction::make()]),
-            ]);
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ])
+            ->emptyStateHeading('No funnels yet')
+            ->emptyStateDescription('Create a funnel to start routing visitors into this summit.')
+            ->emptyStateIcon('heroicon-o-funnel');
     }
 }
