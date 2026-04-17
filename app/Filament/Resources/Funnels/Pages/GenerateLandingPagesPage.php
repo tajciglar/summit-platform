@@ -92,8 +92,10 @@ class GenerateLandingPagesPage extends Page implements HasForms
 
         GenerateLandingPageBatchJob::dispatch($batch->id);
 
-        // Task 22 will introduce LandingPageDraftsPage; for now redirect back to ViewFunnel.
-        $this->redirect(ViewFunnel::getUrl(['record' => $this->funnel->id]));
+        $this->redirect(LandingPageDraftsPage::getUrl([
+            'record' => $this->funnel->id,
+            'batch' => $batch->id,
+        ]));
     }
 
     protected function getHeaderActions(): array

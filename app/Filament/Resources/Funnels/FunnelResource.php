@@ -135,6 +135,7 @@ class FunnelResource extends Resource
             'view' => Pages\ViewFunnel::route('/{record}'),
             'edit' => Pages\EditFunnel::route('/{record}/edit'),
             'generate-landing-pages' => Pages\GenerateLandingPagesPage::route('/{record}/generate-landing-pages'),
+            'landing-pages' => Pages\LandingPageDraftsPage::route('/{record}/landing-pages'),
         ];
     }
 }
