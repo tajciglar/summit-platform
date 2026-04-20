@@ -15,3 +15,5 @@ Route::post('/admin/catalog/refresh', CatalogRefreshController::class)
 // shareable preview links. Throttled at 120 req/min to limit token-enumeration risk.
 Route::get('/landing-page-drafts/{token}', \App\Http\Controllers\Api\LandingPageDraftController::class)
     ->middleware('throttle:120,1');
+
+Route::post('/optins', [\App\Http\Controllers\Api\OptinController::class, 'store'])->middleware('throttle:5,1');
