@@ -1,16 +1,21 @@
 <?php
 
 use App\Enums\LandingPageDraftStatus;
+use App\Enums\SummitAudience;
 use App\Filament\Resources\Funnels\Pages\EditFunnel;
 use App\Filament\Resources\Funnels\RelationManagers\LandingPageDraftsRelationManager;
+use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Domain;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
 use App\Models\User;
+use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 
 use function Pest\Livewire\livewire;
 
@@ -79,4 +84,38 @@ it('publish action is hidden when status is not publishable', function () {
     ])
         ->assertTableActionHidden('publish', $draft);
 
+});
+
+it('generate action creates batch and dispatches job', function () {
+    Queue::fake();
+
+    $summit = Summit::factory()->create([
+        'audience' => SummitAudience::AdhdParenting,
+    ]);
+    $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
+
+    // Mount the action, then set state + call to work around Filament Repeater
+    // UUID-key mismatch in callAction(data: ...) when using nested Select fields.
+    $uuid1 = (string) Str::uuid();
+    $uuid2 = (string) Str::uuid();
+
+    livewire(LandingPageDraftsRelationManager::class, [
+        'ownerRecord' => $funnel,
+        'pageClass' => EditFunnel::class,
+    ])
+        ->mountAction(TestAction::make('generate')->table())
+        ->set('mountedActions.0.data.audience_override', SummitAudience::AdhdParenting->value)
+        ->set('mountedActions.0.data.style_reference_url', 'https://parenting-summits.com')
+        ->set('mountedActions.0.data.template_selections', [
+            $uuid1 => ['template_key' => 'opus-v1', 'count' => '2'],
+            $uuid2 => ['template_key' => 'opus-v2', 'count' => '1'],
+        ])
+        ->callMountedAction()
+        ->assertHasNoActionErrors();
+
+    $batch = LandingPageBatch::where('funnel_id', $funnel->id)->first();
+    expect($batch)->not->toBeNull();
+    expect($batch->versions_per_template)->toBe(['opus-v1' => 2, 'opus-v2' => 1]);
+    expect($batch->style_reference_url)->toBe('https://parenting-summits.com');
+    Queue::assertPushed(GenerateLandingPageBatchJob::class);
 });

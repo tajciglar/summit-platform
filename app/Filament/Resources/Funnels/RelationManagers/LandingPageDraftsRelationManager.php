@@ -6,10 +6,16 @@ use App\Enums\LandingPageDraftStatus;
 use App\Enums\SummitAudience;
 use App\Filament\Concerns\ManagesLandingPageDrafts;
 use App\Filament\Resources\Funnels\Pages\EditLandingPageDraftPage;
+use App\Jobs\GenerateLandingPageBatchJob;
+use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -96,7 +102,80 @@ class LandingPageDraftsRelationManager extends RelationManager
                         ->all()),
             ])
             ->headerActions([
-                // Generate variants action will be added in Task 4.
+                Action::make('generate')
+                    ->label('Generate variants')
+                    ->icon('heroicon-o-sparkles')
+                    ->color('primary')
+                    ->modalWidth('2xl')
+                    ->schema([
+                        Select::make('audience_override')
+                            ->label('Audience')
+                            ->options(
+                                collect(SummitAudience::cases())
+                                    ->mapWithKeys(fn (SummitAudience $s): array => [$s->value => $s->label()])
+                                    ->all()
+                            )
+                            ->default(fn (): ?string => $this->ownerRecord->summit?->audience?->value)
+                            ->required()
+                            ->helperText('Determines copy tone and resolved palette tokens.'),
+
+                        Repeater::make('template_selections')
+                            ->label('Templates')
+                            ->helperText('Pick the templates to generate from, and how many variants each.')
+                            ->minItems(1)
+                            ->defaultItems(1)
+                            ->addActionLabel('Add template')
+                            ->schema([
+                                Select::make('template_key')
+                                    ->label('Template')
+                                    ->options(fn () => collect($registry->allKeys())
+                                        ->mapWithKeys(fn (string $key): array => [
+                                            $key => $registry->exists($key) ? ($registry->get($key)['label'] ?? $key) : $key,
+                                        ])
+                                        ->all())
+                                    ->required()
+                                    ->searchable(),
+
+                                TextInput::make('count')
+                                    ->label('Variants')
+                                    ->numeric()
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->maxValue(5)
+                                    ->default(1)
+                                    ->required(),
+                            ])
+                            ->columns(2),
+
+                        TextInput::make('style_reference_url')
+                            ->label('Style reference URL')
+                            ->url()
+                            ->helperText('Optional. AI will mirror its typography, spacing, and layout rhythm.'),
+                    ])
+                    ->action(function (array $data): void {
+                        $countsMap = collect($data['template_selections'])
+                            ->mapWithKeys(fn (array $row): array => [$row['template_key'] => (int) $row['count']])
+                            ->all();
+
+                        $batch = LandingPageBatch::create([
+                            'summit_id' => $this->ownerRecord->summit_id,
+                            'funnel_id' => $this->ownerRecord->id,
+                            'status' => 'queued',
+                            'audience_override' => $data['audience_override'],
+                            'template_pool' => array_keys($countsMap),
+                            'versions_per_template' => $countsMap,
+                            'version_count' => array_sum($countsMap),
+                            'style_reference_url' => $data['style_reference_url'] ?? null,
+                        ]);
+
+                        GenerateLandingPageBatchJob::dispatch($batch->id);
+
+                        Notification::make()
+                            ->title('Generation started')
+                            ->body('Generating '.array_sum($countsMap).' variants across '.count($countsMap).' templates.')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->recordActions([
                 Action::make('view')

@@ -24,6 +24,7 @@ class LandingPageBatch extends Model
         'override_url',
         'allowed_types',
         'template_pool',
+        'versions_per_template',
         'completed_at',
         'audience_override',
     ];
@@ -33,6 +34,7 @@ class LandingPageBatch extends Model
         return [
             'allowed_types' => 'array',
             'template_pool' => 'array',
+            'versions_per_template' => 'array',
             'completed_at' => 'datetime',
             'audience_override' => SummitAudience::class,
         ];
