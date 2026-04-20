@@ -16,11 +16,3 @@ export const Default: Story = { args: blockMeta.exampleProps as Props }
 export const NoSecondaryCta: Story = {
   args: { ...(blockMeta.exampleProps as Props), secondaryCtaLabel: undefined },
 }
-
-export const ImageBackground: Story = {
-  args: {
-    ...(blockMeta.exampleProps as Props),
-    backgroundStyle: 'image',
-    bannerImageUrl: 'https://placehold.co/2000x1200/302070/ffffff.jpg',
-  },
-}
