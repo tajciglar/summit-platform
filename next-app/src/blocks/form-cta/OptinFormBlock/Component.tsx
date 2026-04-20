@@ -1,37 +1,57 @@
 'use client'
 import { useState, type FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/cn'
+import { useFunnel } from '@/lib/funnel-context'
 import type { Props } from './schema'
 
 const API_BASE = process.env.NEXT_PUBLIC_LARAVEL_API_URL || 'http://localhost:8000'
 
 export function OptinFormBlock(props: Props) {
+  const router = useRouter()
+  const { funnelId } = useFunnel()
   const [state, setState] = useState({ name: '', email: '' })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     setSubmitting(true)
     setError(null)
+
+    const params = new URLSearchParams(window.location.search)
+    const utmFields: Record<string, string> = {}
+    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+      const val = params.get(key)
+      if (val) utmFields[key] = val
+    }
+
     try {
-      const res = await fetch(`${API_BASE}/api/optin`, {
+      const res = await fetch(`${API_BASE}/api/optins`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(state),
+        body: JSON.stringify({
+          first_name: state.name,
+          email: state.email,
+          funnel_id: funnelId,
+          ...utmFields,
+        }),
       })
+
       if (!res.ok) {
-        const body = await res.text()
-        throw new Error(body || `Request failed (${res.status})`)
+        const body = await res.json().catch(() => ({}))
+        const message = body?.message || `Request failed (${res.status})`
+        throw new Error(message)
       }
-      setSuccess(true)
+
+      const body = await res.json().catch(() => ({}))
+      if (!body?.redirect) throw new Error('Invalid response from server')
+      router.push(body.redirect)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
-    } finally {
       setSubmitting(false)
     }
   }
@@ -43,19 +63,6 @@ export function OptinFormBlock(props: Props) {
   }[props.backgroundStyle]
 
   const onDark = props.backgroundStyle !== 'light'
-
-  if (success) {
-    return (
-      <section className={cn('py-20 text-center', bg)}>
-        <div className="mx-auto max-w-[520px] px-6">
-          <h2 className="text-3xl font-bold md:text-4xl">Check your email!</h2>
-          <p className={cn('mt-4', onDark ? 'text-white/90' : 'text-gray-600')}>
-            We just sent a confirmation. Click the link to lock in your seat.
-          </p>
-        </div>
-      </section>
-    )
-  }
 
   return (
     <section className={cn('py-20', bg)}>
@@ -109,12 +116,7 @@ export function OptinFormBlock(props: Props) {
             {submitting ? 'Submitting…' : props.submitLabel}
           </Button>
           {props.secondaryText && (
-            <p
-              className={cn(
-                'text-center text-sm',
-                onDark ? 'text-white/80' : 'text-gray-600',
-              )}
-            >
+            <p className={cn('text-center text-sm', onDark ? 'text-white/80' : 'text-gray-600')}>
               {props.secondaryText}
             </p>
           )}
@@ -124,12 +126,7 @@ export function OptinFormBlock(props: Props) {
             </p>
           )}
           {props.privacyText && (
-            <p
-              className={cn(
-                'text-center text-xs',
-                onDark ? 'text-white/60' : 'text-gray-500',
-              )}
-            >
+            <p className={cn('text-center text-xs', onDark ? 'text-white/60' : 'text-gray-500')}>
               {props.privacyText}
             </p>
           )}

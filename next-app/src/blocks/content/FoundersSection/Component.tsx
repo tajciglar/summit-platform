@@ -1,7 +1,24 @@
+'use client'
+import { Suspense } from 'react'
 import { cn } from '@/lib/cn'
+import { useCheckoutUrl } from '@/hooks/useCheckoutUrl'
 import type { Props } from './schema'
 
+function Inner(props: Props) {
+  const dynamicUrl = useCheckoutUrl()
+  const href = dynamicUrl !== '#' ? dynamicUrl : (props.ctaUrl || '#')
+  return <View {...props} href={href} />
+}
+
 export function FoundersSection(props: Props) {
+  return (
+    <Suspense fallback={<View {...props} href={props.ctaUrl || '#'} />}>
+      <Inner {...props} />
+    </Suspense>
+  )
+}
+
+function View(props: Props & { href: string }) {
   const paragraphs = props.bodyRich.split(/\n{2,}/).filter(Boolean)
   const multiple = props.founders.length > 1
 
@@ -45,21 +62,12 @@ export function FoundersSection(props: Props) {
           </div>
           {props.ctaLabel && (
             <div className="mt-8">
-              {props.ctaUrl ? (
-                <a
-                  href={props.ctaUrl}
-                  className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-                >
-                  {props.ctaLabel}
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-                >
-                  {props.ctaLabel}
-                </button>
-              )}
+              <a
+                href={props.href}
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
+              >
+                {props.ctaLabel}
+              </a>
             </div>
           )}
         </div>

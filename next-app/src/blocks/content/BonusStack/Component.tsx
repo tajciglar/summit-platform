@@ -1,7 +1,24 @@
+'use client'
+import { Suspense } from 'react'
 import { Gift } from 'lucide-react'
+import { useCheckoutUrl } from '@/hooks/useCheckoutUrl'
 import type { Props } from './schema'
 
+function Inner(props: Props) {
+  const dynamicUrl = useCheckoutUrl()
+  const href = dynamicUrl !== '#' ? dynamicUrl : (props.ctaUrl || '#')
+  return <View {...props} href={href} />
+}
+
 export function BonusStack(props: Props) {
+  return (
+    <Suspense fallback={<View {...props} href={props.ctaUrl || '#'} />}>
+      <Inner {...props} />
+    </Suspense>
+  )
+}
+
+function View(props: Props & { href: string }) {
   return (
     <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-20">
       <div className="mx-auto max-w-[1200px] px-6">
@@ -51,21 +68,12 @@ export function BonusStack(props: Props) {
           ))}
         </div>
         <div className="mt-10 text-center">
-          {props.ctaUrl ? (
-            <a
-              href={props.ctaUrl}
-              className="inline-flex h-12 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-8 text-base font-bold text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-            >
-              {props.ctaLabel}
-            </a>
-          ) : (
-            <button
-              type="button"
-              className="inline-flex h-12 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-8 text-base font-bold text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-            >
-              {props.ctaLabel}
-            </button>
-          )}
+          <a
+            href={props.href}
+            className="inline-flex h-12 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-8 text-base font-bold text-white transition hover:bg-[rgb(var(--color-accent))]/90"
+          >
+            {props.ctaLabel}
+          </a>
         </div>
       </div>
     </section>

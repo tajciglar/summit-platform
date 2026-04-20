@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADHD Parenting Summit 2026 — Design variants</title>
+  <meta name="description" content="Landing-page design variants for the ADHD Parenting Summit 2026. Pick one to deploy." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* --rose is OKLCH equivalent ~66% 0.15 20; saturation ≤ 80% of sRGB gamut */
+    :root { --ink:#1a1713; --ink-2:#3a3530; --paper:#faf8f4; --cream:#f1ebde; --rose:#b1344a; --line:#e6e0d3; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Geist',ui-sans-serif,system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+    .font-mono { font-family:'Geist Mono',ui-monospace,monospace; }
+    .serif-accent { font-family:'Instrument Serif',Georgia,serif; font-style:italic; color:var(--rose); }
+
+    .t-ease { transition:all .3s cubic-bezier(.16,1,.3,1); }
+    .tactile:active { transform: translateY(1px) scale(.99); }
+
+    .grain::before { content:""; position:fixed; inset:0; z-index:50; pointer-events:none; background-image: radial-gradient(rgba(26,23,19,.03) 1px, transparent 1px); background-size:3px 3px; mix-blend-mode: multiply; }
+
+    /* Variant card */
+    .card { background:#fff; border:1px solid var(--line); border-radius:1.75rem; overflow:hidden; transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s cubic-bezier(.16,1,.3,1), box-shadow .4s cubic-bezier(.16,1,.3,1); position:relative; display:flex; flex-direction:column; }
+    .card:hover { transform: translateY(-3px); border-color: var(--ink-2); box-shadow: 0 24px 48px -28px rgba(26,23,19,.2); }
+    :focus-visible { outline:2px solid var(--rose); outline-offset:3px; border-radius:6px; }
+
+    .skip-nav { position:absolute; left:-9999px; }
+    .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--ink); color:var(--paper); padding:.75rem 1.25rem; z-index:200; font-family:'Geist Mono',ui-monospace,monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; border-radius:.5rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      .card { transition:none; }
+      .card:hover { transform:none; }
+    }
+    .card .thumb { aspect-ratio: 5/3; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
+    .card .body { padding:1.5rem 1.75rem; display:flex; flex-direction:column; gap:.6rem; flex:1; }
+    .card .meta { display:flex; align-items:center; justify-content:space-between; padding:0 1.75rem 1.5rem; font-size:.8rem; color:var(--ink-2); font-family:'Geist Mono',monospace; text-transform:uppercase; letter-spacing:.06em; }
+    .badge { display:inline-block; padding:.2rem .55rem; border:1px solid var(--line); border-radius:999px; font-family:'Geist Mono',monospace; text-transform:uppercase; letter-spacing:.06em; font-size:.68rem; color:var(--ink-2); background:var(--cream); }
+    .badge-ok { background:#e8f0e4; color:#2d5a26; border-color:#c4dec0; }
+    .badge-warn { background:#fbe8ea; color:#8a1e30; border-color:#f0c6cc; }
+  </style>
+</head>
+<body class="antialiased grain">
+
+  <a href="#main-content" class="skip-nav">Skip to content</a>
+
+  <header class="py-10 border-b" style="border-color:var(--line)">
+    <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex items-center justify-between">
+      <div class="flex items-center gap-3 font-medium tracking-tight">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 L8 11 L12 15 L16 9 L21 13"/><circle cx="21" cy="13" r="1.6" fill="currentColor"/></svg>
+        <span>ADHD Parenting Summit</span>
+        <span class="font-mono text-xs text-[var(--ink-2)] pl-3 tracking-[0.08em] uppercase">Design variants</span>
+      </div>
+      <div class="text-[13px] font-mono uppercase tracking-[0.08em] text-[var(--ink-2)]">2026 · Feb 10 – 14</div>
+    </div>
+  </header>
+
+  <main id="main-content" class="py-16 md:py-24">
+    <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+
+      <div class="max-w-3xl mb-16">
+        <h1 class="text-4xl md:text-6xl tracking-tighter leading-[0.98]">
+          WeCreateCourses <span class="serif-accent">Landing Pages</span> versions
+        </h1>
+      </div>
+
+      <!-- GOLDEN TEMPLATE — audience-replica, production-ready -->
+      <div class="mb-16">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8 pb-4 border-b" style="border-color:var(--line)">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.12em] px-2.5 py-1 rounded-full" style="background:#fff5d6;color:#8a6b00;border:1px solid #f0dd8a">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Golden template
+              </span>
+              <span class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)]">Reference build · 1:1 audience replica</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl tracking-tight mb-1">APS · ADHD Parenting</h2>
+            <p class="text-sm text-[var(--ink-2)] max-w-2xl">Full 20-section replica of <span class="font-mono">parenting-summits.com</span> — lavender + yellow palette, Poppins + Cormorant Garamond, Lucide icon system, 5-day speaker catalogue, social-proof strip, 11-item FAQ, optin modal, mobile-sticky CTA.</p>
+          </div>
+        </div>
+
+        <a href="/aps-parenting.html" class="card tactile block" style="border-color:#e0cfa2; box-shadow:0 20px 60px -30px rgba(138,107,0,.25)">
+          <div class="thumb" style="background:linear-gradient(180deg,#DDD2F0 0%,#C5B5E4 100%); aspect-ratio: 16/6;">
+            <div class="absolute top-4 left-0 right-0 text-center" style="color:#fff; font-family:'Geist Mono',monospace; font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700">World's Largest · ADHD Parenting Summit</div>
+            <div class="text-center px-6">
+              <span style="display:inline-block;background:#dc2626;color:#fff;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.2em;padding:.25rem .75rem;border-radius:9999px;text-transform:uppercase;font-weight:700;margin-bottom:.75rem">● Event Ended</span>
+              <div style="font-family:'Instrument Serif',serif; font-size:3.4rem; line-height:0.95; letter-spacing:-0.02em; color:#1B132C">Discover The Secrets</div>
+              <div style="font-family:'Instrument Serif',serif; font-style:italic; font-size:3.4rem; line-height:0.95; letter-spacing:-0.02em; color:#5A4589">The ADHD Parenting Summit 2026</div>
+              <div style="display:inline-flex;align-items:center;gap:.5rem;background:#FFD93D;color:#1B132C;font-weight:700;font-size:.8rem;padding:.6rem 1.25rem;border-radius:9999px;margin-top:1rem;box-shadow:0 6px 18px -4px rgba(233,182,12,.55);text-transform:uppercase;letter-spacing:.05em">Get Instant Access →</div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="badge badge-ok">Golden</span>
+              <span class="badge">Lavender + Sun</span>
+              <span class="badge">Poppins · Cormorant</span>
+              <span class="badge">Lucide icons</span>
+              <span class="badge">Mobile-first</span>
+              <span class="badge">20 sections</span>
+            </div>
+            <h3 class="text-xl tracking-tight font-medium">ADHD Parenting Summit · APS</h3>
+            <p class="text-sm text-[var(--ink-2)] leading-relaxed">The production reference. Hero w/ speaker collage, 5-day expert catalogue (30 speakers), press-logo marquee, Mastery Collection bonus stack, 6 parent testimonials, social-proof strip (IG / FB / Trustpilot), 11-item FAQ accordion, modal optin and mobile-sticky CTA. Built to match <span class="font-mono">parenting-summits.com</span> 1:1.</p>
+          </div>
+          <div class="meta"><span>aps-parenting.html</span><span>Poppins · Cormorant Garamond</span></div>
+        </a>
+      </div>
+
+      <!-- FEATURED — audit-passed, impeccable-standard -->
+      <div class="mb-16">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8 pb-4 border-b" style="border-color:var(--line)">
+          <div>
+            <h2 class="text-2xl md:text-3xl tracking-tight mb-1">Featured · audit-passed</h2>
+            <p class="text-sm text-[var(--ink-2)]">Designed against the design-taste-frontend skill with a `.impeccable.md` context pass, then audited on accessibility, performance, theming, responsive, and anti-patterns. Both score 17–19 / 20.</p>
+          </div>
+          <span class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)]">Shortlist</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <a href="/opus-broadsheet.html" class="card tactile">
+            <div class="thumb relative" style="background:#faf7ee; border-color:#d8cfb8">
+              <div class="absolute top-4 left-5 right-5 flex justify-between items-center" style="color:#3b372f; font-family:'Geist Mono',monospace; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase">
+                <span>The Register · Vol. VII</span>
+                <span>10 → 14 · ii · mmxxvi</span>
+              </div>
+              <div class="text-center">
+                <div style="font-family:'Instrument Serif',serif; font-size:5.5rem; line-height:0.85; letter-spacing:-0.02em; color:#14130e">A five-evening</div>
+                <div style="font-family:'Instrument Serif',serif; font-style:italic; font-size:5.5rem; line-height:0.85; letter-spacing:-0.02em; color:#9c2b42">intensive</div>
+              </div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">17/20</span><span class="badge">Rose + paper</span><span class="badge">Serif-led</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Broadsheet</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Editorial magazine cover. Folio strip, § section markers, page numbers, pull-quote with hanging quote mark. Indexed contributor register with one-sentence teaser per speaker.</p>
+            </div>
+            <div class="meta"><span>opus-broadsheet.html</span><span>Instrument · Geist</span></div>
+          </a>
+
+          <a href="/opus-fieldnotes.html" class="card tactile">
+            <div class="thumb relative" style="background-color:#faf4e6; background-image:linear-gradient(rgba(26,22,18,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,22,18,.06) 1px,transparent 1px); background-size:24px 24px;">
+              <div class="absolute top-4 left-5" style="display:inline-flex; align-items:center; gap:.45rem; border:1.5px solid #a04e1d; color:#a04e1d; font-family:'JetBrains Mono',monospace; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; padding:.3rem .55rem; transform:rotate(-1.2deg)">
+                <span>Entry · 2026.02.10</span>
+              </div>
+              <div class="text-center">
+                <div style="font-family:'Fraunces',serif; font-size:4.2rem; line-height:0.94; letter-spacing:-0.02em; color:#1a1612">Five evenings</div>
+                <div style="font-family:'Fraunces',serif; font-style:italic; font-size:4.2rem; line-height:0.94; letter-spacing:-0.02em; color:#a04e1d">of field notes</div>
+              </div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">19/20</span><span class="badge">Rust + cream</span><span class="badge">Journal</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Field Notes</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Scientific field journal. Graph-paper section backgrounds, rotated stamps, date-stamped entries, observation-style stats, marginalia annotations, ledger-style date chip.</p>
+            </div>
+            <div class="meta"><span>opus-fieldnotes.html</span><span>Outfit · Fraunces</span></div>
+          </a>
+        </div>
+
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8 pb-4 border-b" style="border-color:var(--line)">
+          <div>
+            <h2 class="text-2xl md:text-3xl tracking-tight mb-1">Opus series · photo-free</h2>
+            <p class="text-sm text-[var(--ink-2)]">Earlier iterations. Light palettes, monogram speaker tiles, ADHD-tuned motion. Kept for comparison.</p>
+          </div>
+          <span class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)]">Archive</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- opus-v9 Editorial Cream -->
+          <a href="/opus-v9.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4 0%,#f1ebde 100%)">
+              <div class="text-center"><div class="serif-accent" style="font-size:5rem; line-height:1">5</div><div class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)] mt-1">evenings · editorial</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span><span class="badge">Rose accent</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Editorial Cream</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Warm cream + deep rose. List-dominant. "Week in five sentences" takeaway. <br/>Best for a quiet, authoritative tone.</p>
+            </div>
+            <div class="meta"><span>opus-v9.html</span><span>Geist · Instrument</span></div>
+          </a>
+
+          <!-- opus-v10 Warm Rust -->
+          <a href="/opus-v10.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf6ed 0%,#eadfc6 100%)">
+              <div class="flex gap-4 items-center"><div class="w-20 h-20 rounded-2xl flex items-center justify-center" style="background:#a84e2a; color:#faf6ed; font-family:'Instrument Serif',serif; font-style:italic; font-size:2rem">41</div><div class="text-left"><div class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)]">speakers</div><div class="text-sm mt-1" style="color:#1a1410">bento · rust</div></div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span><span class="badge">Rust accent</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Warm Rust</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Paper + terracotta. Bento-style hero. "This week's kitchen" before/after copy section. Warm and editorial.</p>
+            </div>
+            <div class="meta"><span>opus-v10.html</span><span>Outfit · Fraunces</span></div>
+          </a>
+
+          <!-- V6 Gentle Sage -->
+          <a href="/V6.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf9f4 0%,#c5d1bb 100%)">
+              <div class="text-center"><div style="font-family:'Fraunces',serif; font-size:4.5rem; font-style:italic; color:#4a5d44; line-height:1">brain</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span><span class="badge">Sage + terracotta</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Gentle Sage</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Muted sage + terracotta accent. Centered editorial hero. Community-warm feel.</p>
+            </div>
+            <div class="meta"><span>V6.html</span><span>Outfit · Fraunces</span></div>
+          </a>
+
+          <!-- V7 Editorial Parchment -->
+          <a href="/V7.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#f4ecd9 0%,#e8ddc1 100%)">
+              <div class="text-center"><div style="font-family:'Cabinet Grotesk',sans-serif; font-weight:500; font-size:5.5rem; color:#9a6a14; line-height:0.9">5</div><div class="font-mono text-[10px] uppercase tracking-[0.1em] mt-2" style="color:#5a4f3b">Vol. VII · MMXXVI</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span><span class="badge">Parchment + butter</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Editorial Parchment</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Warm parchment + butter yellow. Magazine-indexed. Publication-schedule timeline. Numbered speaker register.</p>
+            </div>
+            <div class="meta"><span>V7.html</span><span>Cabinet Grotesk</span></div>
+          </a>
+
+          <!-- V8 Free Virtual Summit -->
+          <a href="/V8.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#f1ebde)">
+              <div class="text-center"><div class="font-mono text-3xl tracking-tighter" style="color:#b1344a">V8</div><div class="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-2)] mt-1">free virtual summit</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span><span class="badge">Photos</span></div>
+              <h3 class="text-xl tracking-tight font-medium">Free Virtual Summit</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Pre-existing light variant. Speaker carousel with photos.</p>
+            </div>
+            <div class="meta"><span>V8.html</span><span>—</span></div>
+          </a>
+
+          <!-- V9 -->
+          <a href="/V9.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#e6e0d3)">
+              <div class="text-center"><div class="font-mono text-3xl tracking-tighter text-[var(--ink)]">V9</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span></div>
+              <h3 class="text-xl tracking-tight font-medium">V9</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Alternate layout variant.</p>
+            </div>
+            <div class="meta"><span>V9.html</span><span>—</span></div>
+          </a>
+
+          <!-- V10 -->
+          <a href="/V10.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#e6e0d3)">
+              <div class="text-center"><div class="font-mono text-3xl tracking-tighter text-[var(--ink)]">V10</div></div>
+            </div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span></div>
+              <h3 class="text-xl tracking-tight font-medium">V10</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Alternate layout variant.</p>
+            </div>
+            <div class="meta"><span>V10.html</span><span>—</span></div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- ORIGINAL OPUS SERIES -->
+      <div class="mb-16">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8 pb-4 border-b" style="border-color:var(--line)">
+          <div>
+            <h2 class="text-2xl md:text-3xl tracking-tight mb-1">Original series · with photos</h2>
+            <p class="text-sm text-[var(--ink-2)]">Earlier iterations. Include speaker photos; mixed palettes.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <a href="/V1.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#e6e0d3)"><div class="font-mono text-5xl tracking-tighter text-[var(--ink)]">V1</div></div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span></div>
+              <h3 class="text-lg tracking-tight font-medium">An Editorial Series</h3>
+            </div>
+            <div class="meta"><span>V1.html</span></div>
+          </a>
+
+          <a href="/V2.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#fafafa,#e4e4e7)"><div class="text-center"><div class="font-mono text-5xl tracking-tighter" style="color:#4F46E5">V2</div><div class="font-mono text-[10px] uppercase tracking-[0.1em] mt-1" style="color:#71717A">lime + indigo · patched light</div></div></div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light (patched)</span></div>
+              <h3 class="text-lg tracking-tight font-medium">System Editorial</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Hero flipped from dark to light. Grid-bg motif, indigo accent.</p>
+            </div>
+            <div class="meta"><span>V2.html</span></div>
+          </a>
+
+          <a href="/V3.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#e6e0d3)"><div class="font-mono text-5xl tracking-tighter text-[var(--ink)]">V3</div></div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-ok">Light</span></div>
+              <h3 class="text-lg tracking-tight font-medium">Softer Way</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Softer palette, bright-busy-mind copy.</p>
+            </div>
+            <div class="meta"><span>V3.html</span></div>
+          </a>
+
+          <a href="/V4.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#F3F0FE,#FFD347)"><div class="text-center"><div class="font-mono text-3xl tracking-tighter" style="color:#4A2FB8">V4</div><div class="text-[11px] mt-1" style="color:#544B75">violet + sun</div></div></div>
+            <div class="body">
+              <div class="flex items-center gap-2"><span class="badge badge-warn">Violet-heavy</span></div>
+              <h3 class="text-lg tracking-tight font-medium">Rewire (original)</h3>
+              <p class="text-sm text-[var(--ink-2)] leading-relaxed">Violet + sun yellow. Original Rewire layout with speaker collage.</p>
+            </div>
+            <div class="meta"><span>V4.html</span></div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- STITCH / OTHER -->
+      <div class="mb-16">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8 pb-4 border-b" style="border-color:var(--line)">
+          <div>
+            <h2 class="text-2xl md:text-3xl tracking-tight mb-1">Stitch &amp; other experiments</h2>
+            <p class="text-sm text-[var(--ink-2)]">Earlier experiments, kept for reference.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <a href="/stitch-v1.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#f3f0fe,#c5b8f7)"><div class="font-mono text-3xl tracking-tighter text-[var(--ink)]">stitch-v1</div></div>
+            <div class="body"><h3 class="text-lg tracking-tight font-medium">Stitch V1</h3></div>
+            <div class="meta"><span>stitch-v1.html</span></div>
+          </a>
+
+          <a href="/stitch-v2.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#f3f0fe,#c5b8f7)"><div class="font-mono text-3xl tracking-tighter text-[var(--ink)]">stitch-v2</div></div>
+            <div class="body"><h3 class="text-lg tracking-tight font-medium">Stitch V2</h3></div>
+            <div class="meta"><span>stitch-v2.html</span></div>
+          </a>
+
+          <a href="/stitch-v3.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#f3f0fe,#c5b8f7)"><div class="font-mono text-3xl tracking-tighter text-[var(--ink)]">stitch-v3</div></div>
+            <div class="body"><h3 class="text-lg tracking-tight font-medium">Stitch V3</h3></div>
+            <div class="meta"><span>stitch-v3.html</span></div>
+          </a>
+
+          <a href="/adhd-summit.html" class="card tactile">
+            <div class="thumb" style="background:linear-gradient(135deg,#faf8f4,#e6e0d3)"><div class="font-mono text-xl tracking-tight text-[var(--ink)]">adhd-summit</div></div>
+            <div class="body"><h3 class="text-lg tracking-tight font-medium">ADHD Summit (original)</h3></div>
+            <div class="meta"><span>adhd-summit.html</span></div>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-t mt-20 py-10" style="border-color:var(--line)">
+    <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex flex-wrap gap-4 items-center justify-between text-xs text-[var(--ink-2)] font-mono uppercase tracking-[0.08em]">
+      <div>© 2026 Althea Academy · ADHD Parenting Summit · Design variants</div>
+      <div>Generated 2026-04-17</div>
+    </div>
+  </footer>
+
+</body>
+</html>

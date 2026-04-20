@@ -6,5 +6,15 @@ use App\Http\Controllers\Api\PublicFunnelController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/funnels/{funnelId}/published-content', [PublicFunnelController::class, 'show']);
-Route::get('/landing-page-drafts/{token}', [LandingPageDraftController::class, 'showByToken']);
-Route::post('/optins', [OptinController::class, 'store']);
+
+Route::get('/funnels/resolve', \App\Http\Controllers\Api\FunnelResolveController::class)
+    ->middleware('throttle:60,1');
+
+Route::post('/admin/catalog/refresh', \App\Http\Controllers\Api\CatalogRefreshController::class)
+    ->middleware('throttle:10,1');
+
+// Preview token is the only access control — intentionally no session/bearer auth.
+Route::get('/landing-page-drafts/{token}', [LandingPageDraftController::class, 'showByToken'])
+    ->middleware('throttle:120,1');
+
+Route::post('/optins', [OptinController::class, 'store'])->middleware('throttle:5,1');

@@ -56,30 +56,21 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
 
     public function getFilamentName(): string
     {
-        return trim(($this->first_name ?? '').' '.($this->last_name ?? '')) ?: $this->email;
+        $full = trim(($this->first_name ?? '').' '.($this->last_name ?? ''));
+
+        return $full !== '' ? $full : (string) $this->email;
     }
 
-    /**
-     * Summits this admin can directly access (legacy — tenancy is Domain
-     * now; kept for back-compat where other code still expects it).
-     */
     public function summits(): BelongsToMany
     {
         return $this->belongsToMany(Summit::class, 'summit_user')->withPivot('created_at');
     }
 
-    /**
-     * Domains this admin can operate on. Filament tenancy driver.
-     */
     public function domains(): BelongsToMany
     {
         return $this->belongsToMany(Domain::class, 'domain_user')->withPivot('created_at');
     }
 
-    /**
-     * Filament tenancy: which tenants (Domains) this user can access.
-     * Super admins see every domain automatically.
-     */
     public function getTenants(Panel $panel): Collection
     {
         if ($this->hasRole('super_admin')) {

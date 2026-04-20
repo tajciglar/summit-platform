@@ -24,10 +24,6 @@ class Summit extends Model implements HasMedia, HasName
         return $this->title ?? 'Untitled summit';
     }
 
-    /**
-     * Lowercase initials from each alphabetic word in the summit title,
-     * used as the prefix for funnel slugs (e.g. "ADHD Parenting Summit" → "aps").
-     */
     public function getInitialsAttribute(): string
     {
         return collect(preg_split('/\s+/', (string) $this->title))
@@ -38,47 +34,35 @@ class Summit extends Model implements HasMedia, HasName
     }
 
     protected $fillable = [
-        'slug',
-        'title',
-        'description',
-        'topic',
+        'slug', 'title', 'description', 'topic', 'hero_image_url',
+        'status', 'current_phase', 'timezone',
+        'pre_summit_starts_at', 'late_pre_summit_starts_at',
+        'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
         'audience',
-        'hero_image_url',
-        'status',
-        'current_phase',
-        'timezone',
-        'pre_summit_starts_at',
-        'late_pre_summit_starts_at',
-        'during_summit_starts_at',
-        'post_summit_starts_at',
-        'ends_at',
+        'summit_type',
+        'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
     ];
 
     protected function casts(): array
     {
         return [
             'audience' => SummitAudience::class,
+            'starts_at' => 'datetime',
             'pre_summit_starts_at' => 'datetime',
             'late_pre_summit_starts_at' => 'datetime',
             'during_summit_starts_at' => 'datetime',
             'post_summit_starts_at' => 'datetime',
             'ends_at' => 'datetime',
+            'style_brief' => 'array',
+            'style_brief_built_at' => 'datetime',
         ];
     }
 
-    /**
-     * Admins who can operate on this summit (legacy — tenancy is Domain-based
-     * now; kept for back-compat with existing seeders).
-     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'summit_user')->withPivot('created_at');
     }
 
-    /**
-     * Domains (brand hosts) this summit lives on. A summit can be hosted on
-     * multiple domains simultaneously.
-     */
     public function domains(): BelongsToMany
     {
         return $this->belongsToMany(Domain::class, 'domain_summit')->withPivot('created_at');
@@ -92,6 +76,11 @@ class Summit extends Model implements HasMedia, HasName
     public function speakers(): HasMany
     {
         return $this->hasMany(Speaker::class);
+    }
+
+    public function summitSpeakers(): HasMany
+    {
+        return $this->hasMany(SummitSpeaker::class)->orderBy('sort_order');
     }
 
     public function products(): HasMany
@@ -109,6 +98,16 @@ class Summit extends Model implements HasMedia, HasName
         return $this->hasMany(Order::class);
     }
 
+    public function optins(): HasMany
+    {
+        return $this->hasMany(Optin::class);
+    }
+
+    public function checklistItems(): HasMany
+    {
+        return $this->hasMany(SummitChecklistItem::class)->orderBy('sort_order');
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('hero')
@@ -123,10 +122,6 @@ class Summit extends Model implements HasMedia, HasName
             ->nonQueued();
     }
 
-    /**
-     * Compare NOW() against inline phase dates and return the current phase.
-     * Returns null when no phase dates are set (unpublished summit).
-     */
     public function computePhase(?Carbon $now = null): ?string
     {
         $now ??= now();
@@ -145,5 +140,31 @@ class Summit extends Model implements HasMedia, HasName
         }
 
         return null;
+    }
+
+    public function buildSummitContext(): array
+    {
+        $speakers = [];
+        try {
+            $this->loadMissing('summitSpeakers.speaker');
+            foreach ($this->summitSpeakers as $link) {
+                $speakers[] = [
+                    'name' => $link->speaker?->full_name ?? '',
+                    'photo' => $link->speaker?->photo_url ?? null,
+                ];
+            }
+        } catch (\Throwable) {
+            $speakers = [];
+        }
+
+        return [
+            'name' => $this->title,
+            'date' => $this->pre_summit_starts_at?->toDateString() ?? '',
+            'brandColors' => [],
+            'mode' => 'light',
+            'speakers' => $speakers,
+            'toneBrief' => '',
+            'product' => null,
+        ];
     }
 }
