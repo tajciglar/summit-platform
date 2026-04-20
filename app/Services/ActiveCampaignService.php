@@ -20,12 +20,12 @@ class ActiveCampaignService
     /**
      * Find or create a contact by email, then apply tags.
      */
-    public function syncContactWithTags(string $email, string $name, array $tagIds): void
+    public function syncContactWithTags(string $email, string $name, array $tagIds): string
     {
         if (! $this->baseUrl || ! $this->apiKey) {
             Log::warning('ActiveCampaign not configured — skipping sync.');
 
-            return;
+            return '';
         }
 
         try {
@@ -36,8 +36,12 @@ class ActiveCampaignService
             }
 
             Log::info('ActiveCampaign contact synced', ['email' => $email, 'tags' => $tagIds]);
+
+            return (string) $contactId;
         } catch (\Throwable $e) {
             Log::error('ActiveCampaign sync failed', ['email' => $email, 'error' => $e->getMessage()]);
+
+            return '';
         }
     }
 

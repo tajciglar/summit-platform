@@ -25,13 +25,19 @@ class SyncOptinToActiveCampaign implements ShouldQueue
     {
         $tagId = config('services.activecampaign.optin_tag_id');
 
-        $ac->syncContactWithTags(
+        $acContactId = $ac->syncContactWithTags(
             $this->optin->email,
             $this->optin->first_name ?? $this->optin->email,
             $tagId ? [$tagId] : [],
         );
 
         $this->optin->update(['activecampaign_synced' => true]);
+
+        if ($acContactId && $this->optin->contact_id) {
+            \App\Models\Contact::where('id', $this->optin->contact_id)
+                ->whereNull('ac_contact_id')
+                ->update(['ac_contact_id' => $acContactId]);
+        }
     }
 
     public function failed(\Throwable $exception): void
