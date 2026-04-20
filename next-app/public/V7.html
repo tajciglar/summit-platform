@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADHD Parenting Summit 2026 — Editorial Parchment</title>
+
+  <!-- Fonts: three pairings preloaded -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+
+  <!-- Pairing 1: Cabinet Grotesk (Fontshare) + Geist + Geist Mono + Fraunces -->
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet">
+  <!-- Pairing 2: Instrument Serif + Inter + IBM Plex Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Pairing 3: Fraunces + DM Sans + DM Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper:   '#f4ecd9',
+            paper2:  '#e8ddc1',
+            cream:   '#fbf6ea',
+            butter:  '#9a6a14',
+            butter2: '#c2941c',
+            line:    '#d5c8a7',
+            muted:   '#4d422e',
+            ink:     '#14120f'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --paper:    #f4ecd9;
+      --paper-2:  #e8ddc1;
+      --cream:    #fbf6ea;
+      --butter:   #9a6a14;
+      --butter-2: #c2941c;
+      --line:     #d5c8a7;
+      --muted:    #4d422e;
+      --ink:      #14120f;
+
+      /* Dynamic font pairings (overridden by toggle) */
+      --font-display: 'Cabinet Grotesk', 'Georgia', serif;
+      --font-body:    'Geist', system-ui, sans-serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+      --font-serif:   'Fraunces', 'Georgia', serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+    .font-serif   { font-family: var(--font-serif); }
+    .font-mono    { font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+    /* Grain overlay */
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .55;
+      background-image:
+        radial-gradient(rgba(20,18,15,.08) 1px, transparent 1px),
+        radial-gradient(rgba(20,18,15,.06) 1px, transparent 1px);
+      background-size: 3px 3px, 7px 7px;
+      background-position: 0 0, 1px 2px;
+      mix-blend-mode: multiply;
+    }
+
+    /* Mono tiles */
+    .mono-tile {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 0;
+      padding: 1.25rem 1.25rem;
+    }
+    .mono-frame { border: 1px solid var(--line); background: var(--cream); }
+    .mono-rule  { border-top: 1px solid var(--line); }
+    .mono-rule-b{ border-bottom: 1px solid var(--line); }
+    .mono-label {
+      font-family: var(--font-mono); font-size: .68rem; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--butter);
+    }
+    .mono-number {
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .18em;
+      color: var(--muted);
+    }
+
+    /* Date chip */
+    .date-chip {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .55rem 1rem;
+      border: 1px solid var(--butter);
+      background: var(--cream);
+      color: var(--butter);
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      border-radius: 0;
+    }
+    .date-chip .dot { width:.42rem; height:.42rem; background:var(--butter-2); border-radius:9999px; display:inline-block; }
+
+    /* Buttons */
+    .btn-ink {
+      display:inline-flex; align-items:center; gap:.75rem;
+      padding: 1rem 1.75rem;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--font-mono); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+      border: 1px solid var(--ink);
+      transition: background .2s ease, color .2s ease, transform .15s ease;
+    }
+    .btn-ink:hover { background: var(--butter); border-color: var(--butter); color: var(--cream); transform: translateY(-1px); }
+    .btn-ghost {
+      display:inline-flex; align-items:center; gap:.75rem;
+      padding: 1rem 1.75rem;
+      background: transparent; color: var(--ink);
+      border: 1px solid var(--ink);
+      font-family: var(--font-mono); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+      transition: background .2s ease, color .2s ease;
+    }
+    .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+
+    /* Serif italic accent */
+    .accent-italic { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+
+    /* Drop cap */
+    .dropcap::first-letter {
+      font-family: var(--font-serif); font-style: italic; font-weight: 500;
+      float: left; font-size: 4.2rem; line-height: .9;
+      padding: .35rem .6rem 0 0; color: var(--butter);
+    }
+
+    /* Marquee */
+    .marq-wrap { overflow: hidden; position: relative; }
+    .marq-wrap::before, .marq-wrap::after {
+      content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+    }
+    .marq-wrap::before { left:0;  background: linear-gradient(90deg, var(--paper), transparent); }
+    .marq-wrap::after  { right:0; background: linear-gradient(-90deg, var(--paper), transparent); }
+    .marq-track { display:flex; width:max-content; align-items:center; gap:3.5rem; animation: marq 55s linear infinite; }
+    .marq-track span {
+      font-family: var(--font-serif); font-style: italic; font-weight: 400;
+      font-size: 1.6rem; color: var(--muted); white-space: nowrap; letter-spacing: .01em;
+    }
+    .marq-track .sep { color: var(--butter-2); font-family: var(--font-mono); font-style: normal; font-size: .9rem; letter-spacing: .3em; }
+    @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* Section eyebrow */
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--butter);
+      display: inline-flex; align-items: center; gap: .6rem;
+    }
+    .eyebrow .bar { width: 28px; height: 1px; background: var(--butter); display:inline-block; }
+
+    /* Section heading */
+    .h-display {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+
+    /* Disclosure icon — pm-icon */
+    details.pm-icon { border-top: 1px solid var(--line); }
+    details.pm-icon summary {
+      list-style: none; cursor: pointer; padding: 1.1rem 0;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 1.25rem;
+    }
+    details.pm-icon summary::-webkit-details-marker { display:none; }
+    details.pm-icon summary .pm-plus {
+      position: relative; width: 16px; height: 16px; flex-shrink: 0; margin-top: .4rem;
+      color: var(--butter);
+    }
+    details.pm-icon summary .pm-plus::before,
+    details.pm-icon summary .pm-plus::after {
+      content:''; position: absolute; background: currentColor;
+    }
+    details.pm-icon summary .pm-plus::before { left:0; right:0; top:50%; height:1px; transform: translateY(-.5px); }
+    details.pm-icon summary .pm-plus::after  { top:0; bottom:0; left:50%; width:1px; transform: translateX(-.5px); transition: transform .2s; }
+    details.pm-icon[open] summary .pm-plus::after { transform: translateX(-.5px) scaleY(0); }
+    details.pm-icon .pm-body { padding: 0 0 1.25rem 0; color: var(--muted); font-size: .95rem; line-height: 1.6; }
+
+    /* Speaker card */
+    details.spk {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 1.5rem 1.25rem 1.25rem;
+      display: flex; flex-direction: column;
+      position: relative;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    details.spk:hover { transform: translateY(-2px); border-color: var(--butter); }
+    details.spk summary { list-style: none; cursor: pointer; display: flex; flex-direction: column; gap: .5rem; }
+    details.spk summary::-webkit-details-marker { display:none; }
+    details.spk .spk-mono {
+      width: 88px; height: 88px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      display: grid; place-items: center;
+      font-family: var(--font-mono); font-size: .68rem; letter-spacing: .2em; color: var(--butter);
+      margin-bottom: .25rem;
+    }
+    details.spk .spk-mono .initials {
+      font-family: var(--font-display); font-size: 1.65rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em;
+    }
+    details.spk .spk-num { position: absolute; top: .7rem; right: .9rem; }
+    details.spk .spk-name { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; line-height: 1.15; color: var(--ink); letter-spacing: -.015em; }
+    details.spk .spk-cred { font-size: .78rem; color: var(--muted); line-height: 1.4; margin-top: .15rem; }
+    details.spk .spk-quote { font-family: var(--font-serif); font-style: italic; color: var(--butter); font-size: .9rem; line-height: 1.45; margin-top: .6rem; padding-top: .6rem; border-top: 1px dashed var(--line); }
+    details.spk .spk-more { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--butter); margin-top: .75rem; padding-top: .6rem; border-top: 1px solid var(--line); display: inline-flex; align-items: center; gap: .35rem; }
+    details.spk[open] .spk-more::before { content: '−'; }
+    details.spk:not([open]) .spk-more::before { content: '+'; }
+    details.spk .spk-body { color: var(--muted); font-size: .85rem; line-height: 1.55; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+
+    /* Bullet with serif number */
+    .bullet-num {
+      font-family: var(--font-serif); font-style: italic; color: var(--butter);
+      font-size: 1.85rem; line-height: 1; min-width: 2.5rem; display: inline-block;
+    }
+
+    /* Fact card */
+    .fact {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 1.1rem 1.15rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .fact .fact-num {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 1.9rem; color: var(--butter); line-height: 1;
+      border-right: 1px solid var(--line); padding-right: 1rem;
+    }
+
+    /* Testimonial card */
+    .testi {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 1.75rem 1.5rem 1.5rem;
+      position: relative;
+    }
+    .testi .testi-qmark {
+      font-family: var(--font-serif); font-style: italic; font-weight: 500;
+      font-size: 3rem; color: var(--butter-2); line-height: 1;
+      position: absolute; top: .75rem; left: 1.1rem;
+    }
+    .testi p { padding-top: 1.25rem; font-size: .9rem; line-height: 1.6; color: var(--ink); }
+    .testi .testi-name { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--butter); margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+
+    /* Plus pill (More Joy) */
+    .plus-pill {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: .6rem 1.1rem;
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--ink);
+    }
+    .plus-pill .plus { color: var(--butter); font-weight: 500; }
+
+    /* Header */
+    .hdr-link {
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hdr-link:hover { color: var(--butter); }
+
+    /* Sticky mobile bar */
+    .stick-mobile {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+      padding: .6rem 1rem;
+      background: var(--ink); color: var(--cream);
+      display: none; justify-content: center;
+      border-top: 1px solid var(--butter);
+    }
+    @media (max-width: 767px) { .stick-mobile { display: flex; } body { padding-bottom: 5rem; } }
+
+    /* Focus */
+    :focus-visible { outline: 2px solid var(--butter); outline-offset: 3px; border-radius: 0; }
+
+    /* Container constraint */
+    .wrap { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem; }
+    @media (min-width: 768px) { .wrap { padding-left: 2.5rem; padding-right: 2.5rem; } }
+
+    /* Font toggle */
+    .font-toggle {
+      position: fixed; top: 4.5rem; right: 1rem; z-index: 45;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: .45rem;
+      display: flex; gap: .3rem;
+      box-shadow: 0 8px 24px -12px rgba(20,18,15,.25);
+    }
+    .font-toggle button {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      font-size: 1rem; font-weight: 700;
+      background: transparent; color: var(--ink);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .font-toggle button:hover { border-color: var(--line); }
+    .font-toggle button.active { background: var(--butter); color: var(--cream); border-color: var(--butter); }
+    .font-toggle .ft-1 { font-family: 'Cabinet Grotesk','Georgia',serif; }
+    .font-toggle .ft-2 { font-family: 'Instrument Serif','Georgia',serif; font-style: italic; }
+    .font-toggle .ft-3 { font-family: 'Fraunces','Georgia',serif; }
+
+    /* Star glyphs */
+    .stars { display: inline-flex; gap: .12rem; color: var(--butter-2); font-size: 1rem; }
+
+    /* Day-pill */
+    .day-pill {
+      display: inline-block;
+      padding: .35rem .85rem;
+      border: 1px solid var(--butter);
+      color: var(--butter);
+      font-family: var(--font-mono); font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
+      background: transparent;
+    }
+
+    /* FREE GIFT pill */
+    .gift-pill {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--cream);
+      border: 1px solid var(--butter);
+      padding: .5rem .9rem;
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--butter);
+    }
+
+    /* Stat band number */
+    .stat-num {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -.04em;
+    }
+
+    /* Video placeholder */
+    .video-tile {
+      aspect-ratio: 9/16;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      position: relative;
+      display: grid; place-items: center;
+      overflow: hidden;
+    }
+    .video-tile .vt-label {
+      position: absolute; top: .9rem; left: .9rem;
+      font-family: var(--font-mono); font-size: .65rem; letter-spacing: .22em; color: var(--butter);
+    }
+    .video-tile .vt-name {
+      position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
+      font-family: var(--font-display); font-weight: 700; color: var(--ink); font-size: 1rem; line-height: 1.2;
+    }
+    .video-tile .vt-play {
+      width: 60px; height: 60px;
+      border: 1px solid var(--ink); background: var(--cream);
+      display: grid; place-items: center;
+    }
+    .video-tile .vt-play::before {
+      content: ''; border-style: solid;
+      border-width: 10px 0 10px 16px;
+      border-color: transparent transparent transparent var(--ink);
+    }
+
+    /* Mono tile collage numbers */
+    .portrait-mono {
+      aspect-ratio: 1/1;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      display: grid; place-items: center;
+      position: relative;
+    }
+    .portrait-mono .pm-label {
+      position: absolute; top: .65rem; left: .75rem;
+      font-family: var(--font-mono); font-size: .6rem; letter-spacing: .18em; color: var(--butter);
+    }
+    .portrait-mono .pm-initials {
+      font-family: var(--font-display); font-weight: 800; font-size: 2.4rem; color: var(--ink); letter-spacing: -.02em;
+    }
+
+    /* Content width for prose */
+    .prose-col { max-width: 36rem; }
+    .prose-col p { font-size: 1.02rem; line-height: 1.75; color: var(--ink); margin-bottom: 1.1rem; }
+    .prose-col em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--butter); }
+
+    /* Mastery video card */
+    .master-frame {
+      aspect-ratio: 16/10;
+      background: var(--ink);
+      border: 1px solid var(--line);
+      position: relative;
+      display: grid; place-items: center;
+      color: var(--cream);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      /* Marquee still animates per project rule, but everything else stops */
+      html { scroll-behavior: auto; }
+    }
+
+    /* Bonus card */
+    .bonus-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    .bonus-thumb {
+      width: 110px; height: 140px;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      display: grid; place-items: center;
+      font-family: var(--font-mono); font-size: .65rem; letter-spacing: .2em; color: var(--butter);
+      text-align: center; padding: .5rem;
+    }
+
+    /* Social strip icon */
+    .soc-icon {
+      width: 28px; height: 28px; border: 1px solid var(--line); display: grid; place-items: center;
+      font-family: var(--font-mono); font-size: .7rem; color: var(--butter); background: var(--cream);
+    }
+
+    /* Reason row */
+    .reason-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .reason-row:last-child { border-bottom: 1px solid var(--line); }
+    .reason-num {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 2.4rem; color: var(--butter); line-height: 1;
+      letter-spacing: -.02em;
+    }
+
+    /* Nav */
+    header.nav {
+      position: relative; z-index: 20;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- SECTION: TOP ANNOUNCEMENT STRIP -->
+<div class="w-full text-center py-2.5 mono-label" style="background:var(--ink); color:var(--cream); border-bottom:1px solid var(--butter);">
+  <span style="color:var(--butter-2)">WORLD&rsquo;S LARGEST</span> &nbsp;·&nbsp; ADHD PARENTING SUMMIT &nbsp;·&nbsp; <span style="color:var(--butter-2)">MARCH 9 — 13, 2026</span>
+</div>
+
+<!-- SECTION: HEADER / NAV -->
+<header class="nav">
+  <div class="wrap flex items-center justify-between py-5">
+    <a href="#" class="flex items-center gap-2">
+      <span class="font-display text-xl md:text-2xl font-extrabold tracking-tight">APS</span>
+      <span class="mono-label hidden md:inline">/ 2026</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#speakers" class="hdr-link">Speakers</a>
+      <a href="#programme" class="hdr-link">Programme</a>
+      <a href="#bonuses" class="hdr-link">Bonuses</a>
+      <a href="#faq" class="hdr-link">FAQ</a>
+    </nav>
+    <a href="#register" class="btn-ink hidden md:inline-flex" onclick="openOptin();return false;">
+      Register
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+</header>
+
+<!-- SECTION: FONT TOGGLE -->
+<div class="font-toggle" role="group" aria-label="Font pairing">
+  <button class="ft-1 active" data-pair="1" aria-label="Cabinet Grotesk pairing">Aa</button>
+  <button class="ft-2"        data-pair="2" aria-label="Instrument Serif pairing">Aa</button>
+  <button class="ft-3"        data-pair="3" aria-label="Fraunces pairing">Aa</button>
+</div>
+
+<!-- SECTION: HERO -->
+<section class="relative" style="background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);">
+  <div class="wrap pt-12 md:pt-20 pb-16 md:pb-24 grid md:grid-cols-12 gap-10 md:gap-14 items-center">
+
+    <!-- Left copy -->
+    <div class="md:col-span-7 relative">
+      <div class="mono-rule-b pb-3 mb-6 flex items-center justify-between">
+        <span class="mono-label">Vol. 26 &nbsp;·&nbsp; Issue 01</span>
+        <span class="mono-number">N&deg; 40+ EXPERTS</span>
+      </div>
+
+      <span class="date-chip mb-6"><span class="dot"></span>March 9 — 13, 2026 · Online</span>
+
+      <p class="font-serif italic text-xl md:text-2xl mb-3" style="color:var(--butter);">Become an Empowered Parent In 5 Days:</p>
+
+      <h1 class="font-display text-[2.3rem] sm:text-[2.7rem] md:text-[3.4rem] lg:text-[4rem] leading-[1.02] font-extrabold mb-7">
+        Discover The Secrets To Help Your Child Reach Their Full Potential At
+        <span class="accent-italic" style="color:var(--butter);">The ADHD Parenting Summit 2026</span>
+      </h1>
+
+      <p class="text-base md:text-lg mb-8 max-w-xl" style="color:var(--muted);">
+        <strong style="color:var(--ink);">40+ Leading Experts</strong> on improving focus, managing impulsivity, handling outbursts, screen management, and schoolwork.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mb-7">
+        <a href="#register" class="btn-ink" onclick="openOptin();return false;">
+          Get Instant Access <span aria-hidden="true">&rarr;</span>
+        </a>
+        <span class="gift-pill">
+          <span aria-hidden="true">◇</span>
+          Free Gift: Mastery Collection
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-5 mt-6">
+        <div class="flex items-center gap-2">
+          <span class="stars" aria-label="5 out of 5 stars">★★★★★</span>
+          <span class="mono-number" style="color:var(--ink);">Loved by 73,124 parents</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right mono-tile collage -->
+    <div class="md:col-span-5 relative">
+      <div class="mono-frame p-5 md:p-6">
+        <div class="flex items-center justify-between mb-5">
+          <span class="mono-label">Cover · APS/2026</span>
+          <span class="mono-number">5 DAYS</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="portrait-mono col-span-2 row-span-2 aspect-square">
+            <span class="pm-label">No. 01</span>
+            <span class="pm-initials">EP</span>
+          </div>
+          <div class="portrait-mono">
+            <span class="pm-label">No. 02</span>
+            <span class="pm-initials">AP</span>
+          </div>
+          <div class="portrait-mono">
+            <span class="pm-label">No. 03</span>
+            <span class="pm-initials">HR</span>
+          </div>
+          <div class="portrait-mono">
+            <span class="pm-label">No. 04</span>
+            <span class="pm-initials">KM</span>
+          </div>
+          <div class="portrait-mono">
+            <span class="pm-label">No. 05</span>
+            <span class="pm-initials">DC</span>
+          </div>
+          <div class="portrait-mono">
+            <span class="pm-label">No. 06</span>
+            <span class="pm-initials">JF</span>
+          </div>
+        </div>
+
+        <div class="mono-rule mt-5 pt-4 flex items-center justify-between">
+          <span class="mono-label">An editorial programme</span>
+          <span class="mono-number">APS · 26</span>
+        </div>
+      </div>
+
+      <div class="absolute -bottom-4 -left-4 date-chip" style="background:var(--ink); color:var(--cream); border-color:var(--ink);">
+        <span class="dot" style="background:var(--butter-2);"></span>73,124 Parents
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: PRESS MARQUEE -->
+<section class="py-10" style="background: var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap text-center mb-5">
+    <span class="eyebrow"><span class="bar"></span>Speakers featured in<span class="bar"></span></span>
+  </div>
+  <div class="marq-wrap">
+    <div class="marq-track">
+      <span>The Atlantic</span><span class="sep">◆</span>
+      <span>Scientific American</span><span class="sep">◆</span>
+      <span>The Guardian</span><span class="sep">◆</span>
+      <span>HuffPost</span><span class="sep">◆</span>
+      <span>BBC</span><span class="sep">◆</span>
+      <span>The Washington Post</span><span class="sep">◆</span>
+      <span>TIME</span><span class="sep">◆</span>
+      <span>TED</span><span class="sep">◆</span>
+      <span>The New York Times</span><span class="sep">◆</span>
+      <span>USA Today</span><span class="sep">◆</span>
+      <span>ADDitude</span><span class="sep">◆</span>
+      <span>Today Show</span><span class="sep">◆</span>
+      <!-- duplicate for seamless loop -->
+      <span>The Atlantic</span><span class="sep">◆</span>
+      <span>Scientific American</span><span class="sep">◆</span>
+      <span>The Guardian</span><span class="sep">◆</span>
+      <span>HuffPost</span><span class="sep">◆</span>
+      <span>BBC</span><span class="sep">◆</span>
+      <span>The Washington Post</span><span class="sep">◆</span>
+      <span>TIME</span><span class="sep">◆</span>
+      <span>TED</span><span class="sep">◆</span>
+      <span>The New York Times</span><span class="sep">◆</span>
+      <span>USA Today</span><span class="sep">◆</span>
+      <span>ADDitude</span><span class="sep">◆</span>
+      <span>Today Show</span><span class="sep">◆</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: STATS BAND -->
+<section class="py-16 md:py-20" style="background: var(--cream);">
+  <div class="wrap grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-0 text-center">
+    <div class="py-4 md:py-2 px-6 md:border-r" style="border-color: var(--line);">
+      <p class="mono-label mb-3">Duration</p>
+      <p class="stat-num">5<span class="accent-italic" style="color:var(--butter); font-size:.48em; margin-left:.1em;">days</span></p>
+      <p class="mono-number mt-3" style="color:var(--muted);">March 9 — 13</p>
+    </div>
+    <div class="py-4 md:py-2 px-6 md:border-r" style="border-color: var(--line);">
+      <p class="mono-label mb-3">Experts</p>
+      <p class="stat-num">40<span style="color:var(--butter);">+</span></p>
+      <p class="mono-number mt-3" style="color:var(--muted);">World-leading authorities</p>
+    </div>
+    <div class="py-4 md:py-2 px-6">
+      <p class="mono-label mb-3">Attendees</p>
+      <p class="stat-num">50,000<span style="color:var(--butter);">+</span></p>
+      <p class="mono-number mt-3" style="color:var(--muted);">Parents · Educators · Coaches</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: WHAT IS -->
+<section class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap grid md:grid-cols-12 gap-10 md:gap-16 items-start">
+    <div class="md:col-span-5">
+      <div class="mono-frame p-6">
+        <div class="flex items-center justify-between mono-rule-b pb-3 mb-5">
+          <span class="mono-label">Editorial Note</span>
+          <span class="mono-number">§ 01</span>
+        </div>
+        <div class="portrait-mono aspect-[4/5]">
+          <span class="pm-label">Dossier</span>
+          <span class="pm-initials">APS·26</span>
+        </div>
+        <div class="mono-rule mt-5 pt-4 flex items-center justify-between">
+          <span class="mono-label">What is</span>
+          <span class="mono-number">Ed. 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-7">
+      <span class="eyebrow mb-4"><span class="bar"></span>What is</span>
+      <h2 class="h-display mb-8">ADHD Parenting Summit <span class="accent-italic" style="color:var(--butter);">2026?</span></h2>
+      <div class="prose-col">
+        <p class="dropcap">For too long, our children with ADHD have been labeled <em>&ldquo;lazy&rdquo;, &ldquo;problematic&rdquo;, and &ldquo;difficult&rdquo;.</em></p>
+        <p><strong>It&rsquo;s time to rewrite the parenting playbook.</strong> Join our <em>ADHD parenting revolution</em> and discover how to <strong>unlock your child&rsquo;s full potential.</strong></p>
+        <p>For our <strong>brand new &amp; improved</strong> ADHD Parenting Summit 2026, we&rsquo;re bringing together <strong>40+ leading ADHD experts.</strong></p>
+        <p>This means a <strong>deeper</strong> understanding of your child&rsquo;s ADHD, <strong>more</strong> practical parenting strategies, and <strong>more</strong> time to absorb it all — with sessions spread across <strong>5 full days</strong> instead of crammed into just 3.</p>
+        <p class="accent-italic" style="color:var(--butter); font-size: 1.2rem;">All so you can help your child thrive with ADHD.</p>
+      </div>
+      <div class="mt-8">
+        <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: 5-DAY SPEAKER PROGRAMME -->
+<section id="programme" class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap">
+    <div class="text-center mb-14 md:mb-20">
+      <span class="eyebrow mb-4"><span class="bar"></span>Learn from these<span class="bar"></span></span>
+      <h2 class="h-display">40+ World-Leading Experts <br><span class="accent-italic" style="color:var(--butter);">and Authorities</span></h2>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="mb-20" id="speakers">
+      <div class="mono-rule-b pb-4 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <span class="day-pill mb-3">Day 01</span>
+          <h3 class="font-display text-2xl md:text-3xl font-extrabold mt-3">The Butterfly Mind</h3>
+          <p class="accent-italic text-lg" style="color:var(--butter);">Boost your child&rsquo;s focus &amp; attention</p>
+        </div>
+        <span class="mono-number">Monday · March 9 · 9 AM ET</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">SC</span></div>
+            <span class="spk-num mono-number">01/06</span>
+            <p class="spk-name">Dr. Stephen Cowan</p>
+            <p class="spk-cred">Clinical Assistant Professor at NY Medical College &amp; Board-Certified Pediatrician with 35+ years experience.</p>
+            <p class="spk-quote">&ldquo;ADHD finally makes sense when you see your child through the Five Phase Model.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Holistic pediatrician and author with an integrative approach. Blends Eastern and Western medicine to support children&rsquo;s health and development.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">PS</span></div>
+            <span class="spk-num mono-number">02/06</span>
+            <p class="spk-name">Pippa Simou</p>
+            <p class="spk-cred">Coaching Psychologist &amp; Founder of &lsquo;The ADD-vantage&rsquo; with 20+ years teaching experience.</p>
+            <p class="spk-quote">&ldquo;ADHD isn&rsquo;t always hyper boys. Sometimes it&rsquo;s quiet girls burning out.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Neurodiversity advocate and educator. Creates inclusive environments for all children.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">PD</span></div>
+            <span class="spk-num mono-number">03/06</span>
+            <p class="spk-name">Dr. Peg Dawson</p>
+            <p class="spk-cred">Lifetime Achievement Award Winner &amp; Co-Author of bestselling &lsquo;Smart but Scattered&rsquo; series.</p>
+            <p class="spk-quote">&ldquo;What shapes your kids isn&rsquo;t your advice — it&rsquo;s how you handle your urge to control.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Psychologist and internationally recognized expert in executive skills.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">RG</span></div>
+            <span class="spk-num mono-number">04/06</span>
+            <p class="spk-name">Dr. Richard Guare</p>
+            <p class="spk-cred">Neuropsychologist, Board-Certified Behavior Analyst.</p>
+            <p class="spk-quote">&ldquo;Some kids don&rsquo;t grow in straight lines. And you can&rsquo;t shame them into blooming.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Co-author of the Smart but Scattered book series.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">SM</span></div>
+            <span class="spk-num mono-number">05/06</span>
+            <p class="spk-name">Dr. Salif Mahamane</p>
+            <p class="spk-cred">TEDx Speaker with 3 million views &amp; Psychology Professor.</p>
+            <p class="spk-quote">&ldquo;Some people brainstorm on paper, but my ADHD brain pops ideas like hot popcorn.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Cognitive and environmental psychologist advocating for neurodiversity.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">SH</span></div>
+            <span class="spk-num mono-number">06/06</span>
+            <p class="spk-name">Dr. Stephen P. Hinshaw</p>
+            <p class="spk-cred">Harvard-Educated Distinguished Professor &amp; Author of 11 books.</p>
+            <p class="spk-quote">&ldquo;What kind of parent are you when no one&rsquo;s watching?&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">UC Berkeley professor &amp; leading ADHD researcher.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="mb-20">
+      <div class="mono-rule-b pb-4 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <span class="day-pill mb-3">Day 02</span>
+          <h3 class="font-display text-2xl md:text-3xl font-extrabold mt-3">From Storm to Calm</h3>
+          <p class="accent-italic text-lg" style="color:var(--butter);">Manage your child&rsquo;s emotional regulation &amp; impulse control</p>
+        </div>
+        <span class="mono-number">Tuesday · March 10 · 9 AM ET</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">TA</span></div>
+            <span class="spk-num mono-number">01/06</span>
+            <p class="spk-name">Dr. Tracy Packiam Alloway</p>
+            <p class="spk-cred">Award-Winning Psychologist, Professor &amp; Consultant for The World Bank.</p>
+            <p class="spk-quote">&ldquo;The devastating reality of ADHD memory gaps and the hidden genius behind them.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Author of 15 books and over 100 scientific articles on the brain and memory.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">LA</span></div>
+            <span class="spk-num mono-number">02/06</span>
+            <p class="spk-name">Dr. Liz Angoff</p>
+            <p class="spk-cred">Licensed Educational Psychologist &amp; Author of &lsquo;Brain Building Books&rsquo;.</p>
+            <p class="spk-quote">&ldquo;It wasn&rsquo;t ADHD that made them feel broken — it was our refusal to explain what it meant.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Helps children understand their learning profiles.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">JF</span></div>
+            <span class="spk-num mono-number">03/06</span>
+            <p class="spk-name">Dr. Jennifer Fraser</p>
+            <p class="spk-cred">Award-Winning Educator &amp; #1 Amazon Bestseller.</p>
+            <p class="spk-quote">&ldquo;The invisible brain damage of bullying is more permanent than any physical scar.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Applies brain science research to bullying and abuse.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">KM</span></div>
+            <span class="spk-num mono-number">04/06</span>
+            <p class="spk-name">Katelyn Mabry</p>
+            <p class="spk-cred">Author, Host of Kids&rsquo; ADHD Podcast &amp; ADHD Life Coach.</p>
+            <p class="spk-quote">&ldquo;Why ADHD kids chase friends who reject them.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">ADHD coach, educator, and host of a children&rsquo;s podcast.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">AR</span></div>
+            <span class="spk-num mono-number">05/06</span>
+            <p class="spk-name">Dr. Anthony Rostain</p>
+            <p class="spk-cred">World-Renowned Psychiatrist &amp; Emeritus Professor.</p>
+            <p class="spk-quote">&ldquo;The college mental health crisis is here.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Chief of Psychiatry and Behavioral Health at Cooper University.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">CG</span></div>
+            <span class="spk-num mono-number">06/06</span>
+            <p class="spk-name">Cindy Goldrich</p>
+            <p class="spk-cred">CHADD Board Member &amp; Founder of ADHD Parent Coach Academy.</p>
+            <p class="spk-quote">&ldquo;Why so many ADHD kids collapse in school.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Parenting coach and ADHD specialist.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="mb-20">
+      <div class="mono-rule-b pb-4 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <span class="day-pill mb-3">Day 03</span>
+          <h3 class="font-display text-2xl md:text-3xl font-extrabold mt-3">Taming the Time Monster</h3>
+          <p class="accent-italic text-lg" style="color:var(--butter);">Create routines that stick</p>
+        </div>
+        <span class="mono-number">Wednesday · March 11 · 9 AM ET</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">CH</span></div>
+            <span class="spk-num mono-number">01/06</span>
+            <p class="spk-name">Dr. Cindy Hovington</p>
+            <p class="spk-cred">Ph.D. Neuroscientist &amp; Creator of &lsquo;Curious Neuron&rsquo; — 180K parents.</p>
+            <p class="spk-quote">&ldquo;The hardest part about raising an ADHD child isn&rsquo;t them losing control, it&rsquo;s you.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Evidence-based tools to help parents and children regulate emotions.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">LP</span></div>
+            <span class="spk-num mono-number">02/06</span>
+            <p class="spk-name">Laura Petix</p>
+            <p class="spk-cred">Pediatric OT &amp; CEO of &lsquo;The OT Butterfly&rsquo; — 231K followers.</p>
+            <p class="spk-quote">&ldquo;The meltdown you see is nothing compared to the exhaustion of holding it all in.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Sensory processing expert known online as &ldquo;The OT Butterfly.&rdquo;</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">AS</span></div>
+            <span class="spk-num mono-number">03/06</span>
+            <p class="spk-name">Allison Solomon</p>
+            <p class="spk-cred">ADDitude Magazine Contributor &amp; ADHD Parent Coach.</p>
+            <p class="spk-quote">&ldquo;Letting ADHD kids fail doesn&rsquo;t build resilience.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Licensed clinical social worker and ADHD coach.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">AL</span></div>
+            <span class="spk-num mono-number">04/06</span>
+            <p class="spk-name">Dr. Ann-Louise Lockhart</p>
+            <p class="spk-cred">Board-Certified Pediatric Psychologist featured by Today Show &amp; NYT.</p>
+            <p class="spk-quote">&ldquo;The most dangerous lie parents tell themselves.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Parent coach supporting families with ADHD and anxiety.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">BK</span></div>
+            <span class="spk-num mono-number">05/06</span>
+            <p class="spk-name">Bryana Kappadakunnel</p>
+            <p class="spk-cred">Penguin Random House Author &amp; &lsquo;Conscious Mommy&rsquo; Creator.</p>
+            <p class="spk-quote">&ldquo;Coaching them through big feelings before they become bigger problems.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Licensed marriage and family therapist and parenting educator.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">EH</span></div>
+            <span class="spk-num mono-number">06/06</span>
+            <p class="spk-name">Dr. Edward Hallowell</p>
+            <p class="spk-cred">World Authority on ADHD, NYT best-selling author.</p>
+            <p class="spk-quote">&ldquo;The gold standard guide for turning your bright kid into a brilliant success.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Renowned psychiatrist and foremost ADHD authority.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="mb-20">
+      <div class="mono-rule-b pb-4 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <span class="day-pill mb-3">Day 04</span>
+          <h3 class="font-display text-2xl md:text-3xl font-extrabold mt-3">School Survival</h3>
+          <p class="accent-italic text-lg" style="color:var(--butter);">Tools &amp; strategies for improving school &amp; academic performance</p>
+        </div>
+        <span class="mono-number">Thursday · March 12 · 9 AM ET</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">EH</span></div>
+            <span class="spk-num mono-number">01/06</span>
+            <p class="spk-name">Eli Harwood</p>
+            <p class="spk-cred">Licensed Therapist with millions of followers.</p>
+            <p class="spk-quote">&ldquo;Why ADHD kids throw away everything you gave them, but hold onto feeling noticed.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Therapist and author blending research with compassion.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">MM</span></div>
+            <span class="spk-num mono-number">02/06</span>
+            <p class="spk-name">Michael McLeod</p>
+            <p class="spk-cred">International Speaker &amp; Founder of GrowNOW.</p>
+            <p class="spk-quote">&ldquo;The no-nonsense &amp; hopeful truth that ADHD independence is possible.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">ADHD and executive function specialist.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">DK</span></div>
+            <span class="spk-num mono-number">03/06</span>
+            <p class="spk-name">Dana Kay</p>
+            <p class="spk-cred">Two-Time International Bestselling Author &amp; ADHD Thrive Institute Founder.</p>
+            <p class="spk-quote">&ldquo;Mislabeling inflammation as &lsquo;bad behavior&rsquo; in ADHD kids.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Holistic health practitioner specializing in ADHD nutrition.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">SH</span></div>
+            <span class="spk-num mono-number">04/06</span>
+            <p class="spk-name">Dr. Sasha Hamdani</p>
+            <p class="spk-cred">White House-Recognized Psychiatrist.</p>
+            <p class="spk-quote">&ldquo;Why forcing focus desperately backfires (and what works instead).&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Psychiatrist and ADHD specialist.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">CL</span></div>
+            <span class="spk-num mono-number">05/06</span>
+            <p class="spk-name">Dr. Carolyn Lentzsch-Parcells</p>
+            <p class="spk-cred">Board-Certified Pediatrician specializing in ADHD.</p>
+            <p class="spk-quote">&ldquo;Parents wait for a perfect pill but the greatest risk to ADHD kids is waiting too long.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">20+ years clinical expertise in pediatric ADHD care.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">JD</span></div>
+            <span class="spk-num mono-number">06/06</span>
+            <p class="spk-name">Jeremy Didier</p>
+            <p class="spk-cred">President of CHADD Board of Directors.</p>
+            <p class="spk-quote">&ldquo;She leads America&rsquo;s biggest ADHD org. Her credentials? Five kids, no help.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">ADHD coach, consultant and long-time advocate for families.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="mb-4">
+      <div class="mono-rule-b pb-4 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <span class="day-pill mb-3">Day 05</span>
+          <h3 class="font-display text-2xl md:text-3xl font-extrabold mt-3">The ADHD Parent Paradox</h3>
+          <p class="accent-italic text-lg" style="color:var(--butter);">How to parent when you have ADHD too</p>
+        </div>
+        <span class="mono-number">Friday · March 13 · 9 AM ET</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">MN</span></div>
+            <span class="spk-num mono-number">01/06</span>
+            <p class="spk-name">Dr. Megan Anna Neff</p>
+            <p class="spk-cred">AuDHD Clinical Psychologist &amp; Founder of &lsquo;Neurodivergent Insights&rsquo;.</p>
+            <p class="spk-quote">&ldquo;They loved you when you did everything. But what happens when the mask comes off?&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Clinical psychologist specializing in neurodivergent adults.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">TN</span></div>
+            <span class="spk-num mono-number">02/06</span>
+            <p class="spk-name">Dr. Tom Nicholson</p>
+            <p class="spk-cred">Assistant Professor of Mental Health Nursing at Northumbria University.</p>
+            <p class="spk-quote">&ldquo;At 11, he didn&rsquo;t want to be here anymore. At 34, he&rsquo;s fighting so no one feels that way again.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Mental Health Nursing academic with lived ADHD experience.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">DA</span></div>
+            <span class="spk-num mono-number">03/06</span>
+            <p class="spk-name">Dayna Abraham</p>
+            <p class="spk-cred">National Board-Certified Educator &amp; Lemon Lime Adventures Founder.</p>
+            <p class="spk-quote">&ldquo;What happens when your child needs you… and you need everyone to leave you alone.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Bestselling author &amp; founder of Calm the Chaos.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">AH</span></div>
+            <span class="spk-num mono-number">04/06</span>
+            <p class="spk-name">Amy Marie Hann</p>
+            <p class="spk-cred">ADHD Mom Coach — 183K followers, 10,000+ families.</p>
+            <p class="spk-quote">&ldquo;The quiet ADHD burnout that builds for years — then explodes on the ones you love most.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Writer, educator and ADHD advocate for women.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">ET</span></div>
+            <span class="spk-num mono-number">05/06</span>
+            <p class="spk-name">Elaine Taylor-Klaus</p>
+            <p class="spk-cred">Co-Founder &amp; CEO of &lsquo;ImpactADHD&rsquo;, Master Certified Coach.</p>
+            <p class="spk-quote">&ldquo;ADHD doesn&rsquo;t break marriages. Couples break when symptoms get confused with character.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Co-founder of ImpactParents supporting thousands of families.</div>
+        </details>
+        <details class="spk">
+          <summary>
+            <div class="spk-mono"><span class="initials">JA</span></div>
+            <span class="spk-num mono-number">06/06</span>
+            <p class="spk-name">Jesse J. Anderson</p>
+            <p class="spk-cred">Viral ADHD Educator — millions of reach.</p>
+            <p class="spk-quote">&ldquo;What looks like inconsistency is often just emotional exhaustion dressed as flakiness.&rdquo;</p>
+            <span class="spk-more"> View more</span>
+          </summary>
+          <div class="spk-body">Author of &ldquo;Extra Focus: The Quick Start Guide to Adult ADHD&rdquo;.</div>
+        </details>
+      </div>
+    </div>
+
+    <div class="text-center mt-14">
+      <a href="#register" class="btn-ink" onclick="openOptin();return false;">Reserve Your Seat <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: WHAT YOU'LL DISCOVER -->
+<section class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap grid md:grid-cols-12 gap-10 md:gap-16 items-start">
+    <div class="md:col-span-6">
+      <span class="eyebrow mb-4"><span class="bar"></span>In the course of 5 days</span>
+      <h2 class="h-display mb-10">You&rsquo;ll discover <span class="accent-italic" style="color:var(--butter);">how to…</span></h2>
+
+      <ul class="space-y-0">
+        <li class="reason-row">
+          <span class="reason-num">01</span>
+          <div><p class="font-display font-bold text-lg mb-1">Improve focus &amp; attention</p><p style="color:var(--muted);">Improve your child&rsquo;s attention and focus so they can keep up with school, conversations, and everyday tasks.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">02</span>
+          <div><p class="font-display font-bold text-lg mb-1">Navigate the digital age</p><p style="color:var(--muted);">Handle the challenges of raising children with ADHD in a world of screens and constant distraction.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">03</span>
+          <div><p class="font-display font-bold text-lg mb-1">Overcome school struggles</p><p style="color:var(--muted);">Boost academic excellence with tools that actually fit the ADHD brain.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">04</span>
+          <div><p class="font-display font-bold text-lg mb-1">Tackle meltdowns &amp; outbursts</p><p style="color:var(--muted);">Handle behavioral challenges without losing your patience — or your connection.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">05</span>
+          <div><p class="font-display font-bold text-lg mb-1">Regulate emotions effectively</p><p style="color:var(--muted);">Help your child manage big feelings and develop lifelong self-regulation skills.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">06</span>
+          <div><p class="font-display font-bold text-lg mb-1">Create routines that last</p><p style="color:var(--muted);">Maintain routines that support your child&rsquo;s brain development and wellbeing.</p></div>
+        </li>
+      </ul>
+
+      <p class="mt-8 accent-italic text-lg" style="color:var(--butter);">This essential information often isn&rsquo;t found in books and courses — because so much is new.</p>
+
+      <div class="mt-8">
+        <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="md:col-span-6 md:sticky md:top-24">
+      <div class="mono-frame p-6">
+        <div class="mono-rule-b pb-3 mb-5 flex items-center justify-between">
+          <span class="mono-label">Curriculum</span>
+          <span class="mono-number">§ 02</span>
+        </div>
+        <div class="portrait-mono aspect-[4/5] mb-5">
+          <span class="pm-label">Index</span>
+          <span class="pm-initials">5 · DAYS</span>
+        </div>
+        <div class="mono-rule pt-4 grid grid-cols-2 gap-4">
+          <div>
+            <p class="mono-label mb-1">Live</p>
+            <p class="font-display text-2xl font-extrabold">30+ hrs</p>
+          </div>
+          <div>
+            <p class="mono-label mb-1">Sessions</p>
+            <p class="font-display text-2xl font-extrabold">40+</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: MASTERY COLLECTION -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap grid md:grid-cols-12 gap-10 md:gap-16 items-center">
+    <div class="md:col-span-6">
+      <div class="mono-frame p-4">
+        <div class="master-frame">
+          <div class="text-center">
+            <p class="mono-label mb-3" style="color:var(--butter-2);">3 Exclusive</p>
+            <p class="font-display text-3xl md:text-4xl font-extrabold">Masterclass Sessions</p>
+            <p class="accent-italic text-lg mt-2" style="color:var(--butter-2);">the collection</p>
+          </div>
+          <div class="absolute top-3 left-3 flex gap-1">
+            <span class="w-2 h-2 bg-white/30"></span>
+            <span class="w-2 h-2 bg-white/30"></span>
+            <span class="w-2 h-2 bg-white/30"></span>
+          </div>
+        </div>
+        <div class="mono-rule mt-4 pt-3 flex justify-between items-center">
+          <span class="mono-label">Bonus Vault</span>
+          <span class="mono-number">APS · BNS · 01</span>
+        </div>
+      </div>
+    </div>
+    <div class="md:col-span-6">
+      <span class="eyebrow mb-4"><span class="bar"></span>Register today &amp; receive exclusive access</span>
+      <h2 class="h-display mb-6">The ADHD Parenting <br><span class="accent-italic" style="color:var(--butter);">Mastery Collection</span></h2>
+      <p class="mb-6" style="color:var(--muted);">Get instant access to the 3 most-viewed masterclass sessions from our previous ADHD Parenting Summit:</p>
+      <ul class="space-y-0">
+        <li class="reason-row">
+          <span class="reason-num">I</span>
+          <div><p class="font-display font-bold text-base mb-1">Dr. Edward Hallowell</p><p style="color:var(--muted); font-size: .92rem;">How to turn your bright kid into a brilliant success in school and life.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">II</span>
+          <div><p class="font-display font-bold text-base mb-1">Dr. Emily W. King</p><p style="color:var(--muted); font-size: .92rem;">Often overlooked ways to empower your kid to break through school barriers.</p></div>
+        </li>
+        <li class="reason-row">
+          <span class="reason-num">III</span>
+          <div><p class="font-display font-bold text-base mb-1">Dr. Robert Brooks</p><p style="color:var(--muted); font-size: .92rem;">The winning psychology of confident ADHD parents &amp; how to become one yourself.</p></div>
+        </li>
+      </ul>
+      <div class="mt-8">
+        <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+        <p class="mono-number mt-4" style="color:var(--muted);">Register today for early access to the collection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: SOCIAL PROOF STRIP -->
+<section class="py-12" style="background: var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 items-center text-center">
+    <div class="flex flex-col items-center gap-2">
+      <div class="soc-icon">IG</div>
+      <p class="font-display text-xl font-extrabold">Instagram</p>
+      <p class="mono-number" style="color:var(--muted);">+107,000 followers</p>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <div class="soc-icon">F</div>
+      <p class="font-display text-xl font-extrabold">Facebook</p>
+      <p class="mono-number" style="color:var(--muted);">+124,000 followers</p>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <div class="soc-icon">★</div>
+      <p class="font-display text-xl font-extrabold">Trustpilot</p>
+      <p class="stars">★★★★★</p>
+    </div>
+    <div class="flex flex-col items-center gap-1 text-center">
+      <p class="font-display text-2xl font-extrabold" style="color:var(--butter);">+300,000</p>
+      <p class="mono-number" style="color:var(--muted);">Community members</p>
+      <p class="font-display text-2xl font-extrabold mt-2" style="color:var(--butter);">+190,000</p>
+      <p class="mono-number" style="color:var(--muted);">Satisfied customers</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: HOSTS / FOUNDERS -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>We&rsquo;re changing the way<span class="bar"></span></span>
+      <h2 class="h-display">Kids With ADHD <br><span class="accent-italic" style="color:var(--butter);">Are Raised</span></h2>
+    </div>
+
+    <div class="mono-frame max-w-3xl mx-auto p-8 md:p-12">
+      <div class="flex flex-wrap justify-center gap-10 mb-8">
+        <div class="text-center">
+          <div class="portrait-mono w-28 h-28 mx-auto"><span class="pm-initials" style="font-size:1.5rem;">SR</span></div>
+          <p class="font-display font-bold mt-3">Spela Repovs</p>
+          <p class="mono-number mt-1" style="color:var(--muted); max-width: 180px;">Host &amp; Producer of the ADHD Parenting Summit</p>
+        </div>
+        <div class="text-center">
+          <div class="portrait-mono w-28 h-28 mx-auto"><span class="pm-initials" style="font-size:1.5rem;">ET</span></div>
+          <p class="font-display font-bold mt-3">Elaine Taylor-Klaus</p>
+          <p class="mono-number mt-1" style="color:var(--muted); max-width: 180px;">Master Certified ADHD Coach &amp; Summit&rsquo;s Co-Host</p>
+        </div>
+      </div>
+      <div class="prose-col mx-auto">
+        <p>At <strong>ADHD Parenting</strong>, we firmly believe that <strong>kids with ADHD have great potential.</strong> They just need a different kind of support.</p>
+        <p>Last year, we organized the biggest virtual ADHD Parenting Summit. We&rsquo;ve helped <strong>253,788 families</strong> manage the unique parenting challenges that come with raising kids with ADHD.</p>
+        <p>That&rsquo;s why this year, we&rsquo;re back <em>bigger and better</em>: 5 days, 40+ leading ADHD experts, and practical solutions for the real challenges you&rsquo;re facing.</p>
+        <p class="accent-italic" style="color:var(--butter); font-size:1.15rem;">Let&rsquo;s unlock your child&rsquo;s incredible potential — together.</p>
+      </div>
+      <div class="text-center mt-6">
+        <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: EXPERT VIDEO TESTIMONIALS -->
+<section class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>Hear from experts</span>
+      <h2 class="h-display">Why <span class="accent-italic" style="color:var(--butter);">you</span> should join</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-0">
+      <div class="video-tile">
+        <span class="vt-label">REEL 01</span>
+        <span class="vt-play"></span>
+        <p class="vt-name">Dr. Edward Hallowell</p>
+      </div>
+      <div class="video-tile">
+        <span class="vt-label">REEL 02</span>
+        <span class="vt-play"></span>
+        <p class="vt-name">Dr. Tracy Packiam Alloway</p>
+      </div>
+      <div class="video-tile">
+        <span class="vt-label">REEL 03</span>
+        <span class="vt-play"></span>
+        <p class="vt-name">Dr. Stephen Cowan</p>
+      </div>
+      <div class="video-tile">
+        <span class="vt-label">REEL 04</span>
+        <span class="vt-play"></span>
+        <p class="vt-name">Dr. Sasha Hamdani</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: PARENT TESTIMONIALS -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>See what parents are saying<span class="bar"></span></span>
+      <h2 class="h-display">About The <span class="accent-italic" style="color:var(--butter);">ADHD Parenting Summit</span></h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-0">
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p><strong>That was awesome, crying at the end.</strong> Not sure if it was pure relief but felt good either way to have that release. I&rsquo;ve known my son had sensory issues from his early years yet only diagnosed last week. <strong>Thanks for your beautiful energy and caring nature!</strong></p>
+        <p class="testi-name">Sarah M. · Parent</p>
+      </div>
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p>Thank you so much for compiling such timeless information. <strong>So grateful and feel so blessed to have been part of this ADHD Parenting Summit</strong> and now I have the opportunity to be part of the community forever. Thank you again!</p>
+        <p class="testi-name">Jenna K. · Mother of two</p>
+      </div>
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p><strong>There are 4 people in my house with ADHD.</strong> I&rsquo;ve been the chaos coordinator for more than 25 years. There were still so many strategies brought up yesterday that I thought; <strong>where has this been in our lives?!</strong></p>
+        <p class="testi-name">Maria L. · 25-year parent</p>
+      </div>
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p>I had the privilege of attending the ADHD Parenting Summit, and it was an incredible experience. As a mother of three, including one with ADHD, <strong>I was seeking practical, real-world advice</strong> — and I found exactly that. I left feeling empowered, informed, and more confident.</p>
+        <p class="testi-name">Amy R. · Mother of three</p>
+      </div>
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p>I am a parent with an ADHD child who has gone through a lot (bullying and abuse by teachers and friends). <strong>I learnt a lot on how to empower him, how to understand him</strong>, and how to communicate instructions to him.</p>
+        <p class="testi-name">Priya S. · Parent advocate</p>
+      </div>
+      <div class="testi">
+        <span class="testi-qmark">&ldquo;</span>
+        <p><strong>The different topics, the amount of different approaches and the really good and professional speakers…</strong> I liked it a lot and it pushed my motivation to work on my relationship and communication with my neurospicy kid :-)</p>
+        <p class="testi-name">Lena V. · Mother</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: BONUSES -->
+<section id="bonuses" class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>You&rsquo;re also getting</span>
+      <h2 class="h-display">These bonuses <span class="accent-italic" style="color:var(--butter);">free</span></h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-0">
+      <div class="bonus-card">
+        <div>
+          <span class="mono-label mb-2 block" style="color:var(--butter);">Bonus · 01</span>
+          <h3 class="font-display text-xl font-extrabold mb-2">&ldquo;Raising Children With ADHD&rdquo; Checklist</h3>
+          <p class="text-sm mb-3" style="color:var(--muted);">A set of checklists to help you prevent outbursts, teach self-regulation, and calm after outburst.</p>
+          <p class="mono-number"><span style="text-decoration: line-through; opacity: .6;">Value: $19</span> &nbsp;·&nbsp; <span style="color:var(--butter);">FREE</span></p>
+        </div>
+        <div class="bonus-thumb">CHECKLIST<br>PDF</div>
+      </div>
+      <div class="bonus-card">
+        <div>
+          <span class="mono-label mb-2 block" style="color:var(--butter);">Bonus · 02</span>
+          <h3 class="font-display text-xl font-extrabold mb-2">Swap Negative Reactions for Positive Responses</h3>
+          <p class="text-sm mb-3" style="color:var(--muted);">Know exactly what positive things to say to your child in different situations.</p>
+          <p class="mono-number"><span style="text-decoration: line-through; opacity: .6;">Value: $27</span> &nbsp;·&nbsp; <span style="color:var(--butter);">FREE</span></p>
+        </div>
+        <div class="bonus-thumb">GUIDE<br>PDF</div>
+      </div>
+      <div class="bonus-card">
+        <div>
+          <span class="mono-label mb-2 block" style="color:var(--butter);">Bonus · 03</span>
+          <h3 class="font-display text-xl font-extrabold mb-2">Weekly Routine Chart</h3>
+          <p class="text-sm mb-3" style="color:var(--muted);">Printable chart providing structure and stability to help manage impulsiveness and reduce anxiety.</p>
+          <p class="mono-number"><span style="text-decoration: line-through; opacity: .6;">Value: $9</span> &nbsp;·&nbsp; <span style="color:var(--butter);">FREE</span></p>
+        </div>
+        <div class="bonus-thumb">CHART<br>PDF</div>
+      </div>
+      <div class="bonus-card">
+        <div>
+          <span class="mono-label mb-2 block" style="color:var(--butter);">Bonus · 04</span>
+          <h3 class="font-display text-xl font-extrabold mb-2">School Schedule</h3>
+          <p class="text-sm mb-3" style="color:var(--muted);">Say goodbye to confusion. Easy-to-use printable schedule that keeps kids on track.</p>
+          <p class="mono-number"><span style="text-decoration: line-through; opacity: .6;">Value: $9</span> &nbsp;·&nbsp; <span style="color:var(--butter);">FREE</span></p>
+        </div>
+        <div class="bonus-thumb">SCHEDULE<br>PDF</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="#register" class="btn-ink" onclick="openOptin();return false;">Claim These Bonuses <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: STATS / WHY THIS MATTERS -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap max-w-4xl">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>Why this is more important</span>
+      <h2 class="h-display">Than <span class="accent-italic" style="color:var(--butter);">Ever Before</span></h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-0">
+      <div class="fact">
+        <span class="fact-num">01</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">ADHD is the top mental or developmental condition among children. <sup style="color:var(--butter);">[1]</sup></p>
+        </div>
+      </div>
+      <div class="fact">
+        <span class="fact-num">02</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">Every 3rd child with ADHD has symptoms that last into adulthood. <sup style="color:var(--butter);">[2]</sup></p>
+        </div>
+      </div>
+      <div class="fact">
+        <span class="fact-num">03</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">A child with ADHD has 1 in 4 chance of having a parent who also has it. <sup style="color:var(--butter);">[3]</sup></p>
+        </div>
+      </div>
+      <div class="fact">
+        <span class="fact-num">04</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">Children with ADHD are 2 — 3× more likely to develop substance abuse. <sup style="color:var(--butter);">[4]</sup></p>
+        </div>
+      </div>
+      <div class="fact">
+        <span class="fact-num">05</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">Children with ADHD are more likely to develop low self-esteem, anxiety, and depression. <sup style="color:var(--butter);">[5]</sup></p>
+        </div>
+      </div>
+      <div class="fact">
+        <span class="fact-num">06</span>
+        <div>
+          <p class="text-sm" style="color:var(--ink);">Children with ADHD earn significantly lower school grades than peers. <sup style="color:var(--butter);">[6]</sup></p>
+        </div>
+      </div>
+    </div>
+    <div class="mono-rule mt-10 pt-6">
+      <p class="accent-italic text-xl mb-2" style="color:var(--butter);">But here&rsquo;s the good news:</p>
+      <p style="color:var(--muted);">The earlier you learn how to support your child who has ADHD, the better your chances of managing their condition and minimizing long-term issues.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: WHY ATTEND — 3x2 ICON CARDS -->
+<section class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>Why should you attend</span>
+      <h2 class="h-display">ADHD Parenting <span class="accent-italic" style="color:var(--butter);">Summit?</span></h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 01</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">World&rsquo;s Leading Experts</h3>
+        <p class="text-sm" style="color:var(--muted);">Discover actionable insights from the world&rsquo;s leading experts.</p>
+      </div>
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 02</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">The Time Is Now</h3>
+        <p class="text-sm" style="color:var(--muted);">ADHD diagnoses are on the rise. There&rsquo;s never been a more crucial time to prioritize your family.</p>
+      </div>
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 03</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">A Proven Path to Results</h3>
+        <p class="text-sm" style="color:var(--muted);">Battle-tested tips coming directly from best-selling authors, speakers, psychologists, and coaches.</p>
+      </div>
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 04</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">Modern Parenting Insights</h3>
+        <p class="text-sm" style="color:var(--muted);">Essential information that isn&rsquo;t often found in parenting books and courses.</p>
+      </div>
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 05</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">Professional Advice Made Simple</h3>
+        <p class="text-sm" style="color:var(--muted);">Practical insights you can use the same day you hear them.</p>
+      </div>
+      <div class="mono-tile">
+        <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+          <span class="mono-label">Reason · 06</span>
+          <span class="mono-number">◆</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold mb-2">Community &amp; Support</h3>
+        <p class="text-sm" style="color:var(--muted);">Join thousands of parents all walking this path alongside you.</p>
+      </div>
+    </div>
+    <div class="text-center mt-12">
+      <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: WHY ATTEND — DETAIL -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap grid md:grid-cols-12 gap-10 md:gap-16 items-start">
+    <div class="md:col-span-5">
+      <span class="eyebrow mb-4"><span class="bar"></span>Why should you attend</span>
+      <h2 class="h-display mb-6">ADHD Parenting <span class="accent-italic" style="color:var(--butter);">Summit?</span></h2>
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <div class="portrait-mono aspect-[4/5]">
+          <span class="pm-label">Fig. A</span>
+          <span class="pm-initials">HOME</span>
+        </div>
+        <div class="portrait-mono aspect-[4/5]">
+          <span class="pm-label">Fig. B</span>
+          <span class="pm-initials">PAR.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-7 space-y-0">
+      <details class="pm-icon" open>
+        <summary>
+          <div>
+            <p class="accent-italic text-sm mb-1" style="color:var(--butter);">Reason the first</p>
+            <p class="font-display text-xl font-extrabold">You want what&rsquo;s best for your ADHD child</p>
+          </div>
+          <span class="pm-plus" aria-hidden="true"></span>
+        </summary>
+        <div class="pm-body">You know your child is bright and capable, but watching them navigate a world that isn&rsquo;t built for their brain type can be heartbreaking. Our summit brings together experts who understand both the science of ADHD and the heart of parenting these unique children.</div>
+      </details>
+      <details class="pm-icon">
+        <summary>
+          <div>
+            <p class="accent-italic text-sm mb-1" style="color:var(--butter);">Reason the second</p>
+            <p class="font-display text-xl font-extrabold">You&rsquo;re looking for actionable tips and strategies</p>
+          </div>
+          <span class="pm-plus" aria-hidden="true"></span>
+        </summary>
+        <div class="pm-body">You&rsquo;ve read books, listened to podcasts, perhaps even joined an online course. With so much information out there, it&rsquo;s easy to feel overwhelmed. Our summit experts share practical insights you can implement immediately.</div>
+      </details>
+      <details class="pm-icon">
+        <summary>
+          <div>
+            <p class="accent-italic text-sm mb-1" style="color:var(--butter);">Reason the third</p>
+            <p class="font-display text-xl font-extrabold">You suspect your child has ADHD…</p>
+          </div>
+          <span class="pm-plus" aria-hidden="true"></span>
+        </summary>
+        <div class="pm-body">But they haven&rsquo;t been officially diagnosed yet. You&rsquo;ve noticed the patterns in their behavior. The evaluation waiting lists seem endless, and you want to support your child now. Our experts can help.</div>
+      </details>
+
+      <div class="mt-10 mono-frame p-6 text-center">
+        <p class="accent-italic text-xl md:text-2xl" style="color:var(--butter);">If anything about that resonated with you and you thought <span class="font-display not-italic font-extrabold" style="color:var(--ink);">&ldquo;wow, that&rsquo;s me&rdquo;</span> — this summit is for you.</p>
+        <a href="#register" class="btn-ink mt-6 inline-flex" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: 5 REASONS YOU CAN'T MISS -->
+<section class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap max-w-4xl">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>5 reasons why…</span>
+      <h2 class="h-display">You <span class="accent-italic" style="color:var(--butter);">can&rsquo;t miss</span> this summit</h2>
+    </div>
+    <div class="mono-frame p-8 md:p-10">
+      <div class="reason-row" style="border-top: none;">
+        <span class="reason-num">01</span>
+        <div>
+          <p class="font-display font-extrabold text-lg mb-1">5 days of everything ADHD</p>
+          <p style="color:var(--muted);">Immerse yourself in a comprehensive experience covering all aspects of ADHD parenting.</p>
+        </div>
+      </div>
+      <div class="reason-row">
+        <span class="reason-num">02</span>
+        <div>
+          <p class="font-display font-extrabold text-lg mb-1">Discover your child&rsquo;s hidden potential</p>
+          <p style="color:var(--muted);">Learn how to empower your child to embrace their ADHD as a gift.</p>
+        </div>
+      </div>
+      <div class="reason-row">
+        <span class="reason-num">03</span>
+        <div>
+          <p class="font-display font-extrabold text-lg mb-1">Learn how to set boundaries</p>
+          <p style="color:var(--muted);">Discover ways to help your child with ADHD respect boundaries without harsh discipline.</p>
+        </div>
+      </div>
+      <div class="reason-row">
+        <span class="reason-num">04</span>
+        <div>
+          <p class="font-display font-extrabold text-lg mb-1">Discover ways to motivate your ADHD teen</p>
+          <p style="color:var(--muted);">Find effective tips to inspire and engage your teen in schoolwork.</p>
+        </div>
+      </div>
+      <div class="reason-row">
+        <span class="reason-num">05</span>
+        <div>
+          <p class="font-display font-extrabold text-lg mb-1">Strategies to handle outbursts</p>
+          <p style="color:var(--muted);">Learn how to approach your child&rsquo;s emotional outbursts without losing your patience.</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-12">
+      <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: MORE JOY PILL ROW -->
+<section class="py-20 md:py-28" style="background: var(--cream);">
+  <div class="wrap max-w-5xl text-center">
+    <span class="eyebrow mb-4"><span class="bar"></span>Whatever your situation, we believe every child is capable of more<span class="bar"></span></span>
+    <h2 class="h-display mb-10">Yes, <span class="accent-italic" style="color:var(--butter);">yours</span> as well</h2>
+    <div class="flex flex-wrap justify-center gap-3 mb-4">
+      <span class="plus-pill"><span class="plus">+</span>More Joy</span>
+      <span class="plus-pill"><span class="plus">+</span>More Attention</span>
+      <span class="plus-pill"><span class="plus">+</span>More Focus</span>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+      <span class="plus-pill"><span class="plus">+</span>More Organization</span>
+      <span class="plus-pill"><span class="plus">+</span>More Creativity</span>
+      <span class="plus-pill"><span class="plus">+</span>More Success</span>
+    </div>
+    <p class="accent-italic text-lg mb-8" style="color:var(--butter);">All you need are ADHD-tailored parenting techniques. Discover them at this summit.</p>
+    <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+  </div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="py-20 md:py-28" style="background: var(--paper);">
+  <div class="wrap max-w-3xl">
+    <div class="text-center mb-12">
+      <span class="eyebrow mb-4"><span class="bar"></span>Frequently asked questions</span>
+      <h2 class="h-display"><span class="accent-italic" style="color:var(--butter);">F</span>AQ</h2>
+    </div>
+
+    <details class="pm-icon" open>
+      <summary>
+        <span class="font-display text-lg font-bold">When is the Summit happening?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">The ADHD Parenting Summit starts on Monday, March 9th and runs for five days, ending Friday, March 13th. Each day&rsquo;s sessions begin at 9 AM ET / 3 PM CEST.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">Is the Summit available in my country?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Yes — it&rsquo;s a free online event, accessible from anywhere in the world. If you can&rsquo;t watch everything live, you can upgrade to a VIP Pass for lifetime access.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">How can I watch the recordings?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">You&rsquo;ll receive links two days before the Summit begins. Sessions unlock automatically at 9 AM ET each day and are free to watch for 24 hours.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">I&rsquo;m busy during the summit. Can I still watch the videos?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Each day&rsquo;s recordings are available for 24 hours. For unlimited lifetime access, upgrade to our VIP Pass.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">Is the Summit a live event?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">No, all sessions are pre-recorded and released at the same time each day. You&rsquo;ll have free access to videos for 24 hours after release.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">How many speakers are featured each day?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Each day features 8–9 sessions, with each session lasting 30–60 minutes. All sessions air simultaneously each day.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">Where can I find the schedule for each speaker?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">All sessions are pre-recorded. During the 24-hour viewing window you can watch any speaker from that day at your own pace.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">I&rsquo;m having technical issues. What should I do?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Try clearing your browser&rsquo;s cache and cookies, update your browser, or try a different device. If the issue persists, please email us.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">I signed up but didn&rsquo;t receive any links.</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Check all inbox folders (spam, junk, promotions). If still no email, please reach out and we&rsquo;ll help.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">What is included in the VIP Pass?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Lifetime access to all 40+ masterclasses, Expert Action Blueprints, audio edition, subtitles, and the Action-Taker&rsquo;s Workbook.</div>
+    </details>
+    <details class="pm-icon">
+      <summary>
+        <span class="font-display text-lg font-bold">Do I get a Certificate of Attendance?</span>
+        <span class="pm-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="pm-body">Yes — please contact us and we&rsquo;ll send you detailed instructions.</div>
+    </details>
+
+    <div class="text-center mt-12">
+      <a href="#register" class="btn-ink" onclick="openOptin();return false;">Get Instant Access <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: REFERENCES -->
+<section class="py-14" style="background: var(--paper);">
+  <div class="wrap max-w-4xl">
+    <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+      <span class="mono-label">References &amp; Citations</span>
+      <span class="mono-number">APS · 2026</span>
+    </div>
+    <p class="font-mono text-xs leading-relaxed" style="color:var(--muted);">
+      [1] Danielson, M. L. et al. (2024). ADHD Prevalence Among U.S. Children and Adolescents. <em class="accent-italic">JCCAP</em>, 53(3), 343-360.<br>
+      [2] Ginsberg Y, Quintero J, Anand E, et al. (2014). Underdiagnosis of ADHD in adult patients. <em class="accent-italic">PCC CNS Disorders</em>, 16(3).<br>
+      [3] Cleveland Clinic. (2024). ADHD.<br>
+      [4] Child Mind Institute. (2024). ADHD and Substance Abuse.<br>
+      [5] Ingeborgrud, C. B. et al. (2023). Anxiety and depression from age 3 to 8. <em class="accent-italic">Scientific Reports</em>, 13.<br>
+      [6] Langberg, J. M. et al. (2011). Patterns of academic achievement. <em class="accent-italic">JCCAP</em>, 40(4).
+    </p>
+  </div>
+</section>
+
+<!-- SECTION: FOOTER -->
+<footer class="py-14" style="background: var(--ink); color: var(--cream); border-top: 1px solid var(--butter);">
+  <div class="wrap text-center">
+    <p class="font-display text-3xl font-extrabold mb-2">APS &nbsp;<span class="accent-italic" style="color:var(--butter-2);">2026</span></p>
+    <p class="mono-label mb-6" style="color:var(--butter-2);">StrategicParenting ADHD</p>
+    <nav class="flex flex-wrap justify-center gap-8 mb-8">
+      <a href="#" class="hdr-link" style="color:var(--paper-2);">Privacy Policy</a>
+      <a href="#" class="hdr-link" style="color:var(--paper-2);">Cookies</a>
+      <a href="#" class="hdr-link" style="color:var(--paper-2);">Terms &amp; Conditions</a>
+    </nav>
+    <p class="mono-number" style="color:var(--paper-2); opacity: .6;">© 2026 APS · All rights reserved · Editorial Parchment Edition</p>
+  </div>
+</footer>
+
+<!-- SECTION: MOBILE STICKY CTA -->
+<a href="#register" class="stick-mobile" onclick="openOptin();return false;">
+  <span class="mono-label" style="color:var(--butter-2);">Register →</span>
+  <span class="ml-2">Get Instant Access</span>
+</a>
+
+<!-- SECTION: OPTIN MODAL -->
+<div id="optin" class="fixed inset-0 z-[100] hidden items-center justify-center p-4" style="background: rgba(20,18,15,.72); backdrop-filter: blur(6px);" onclick="if(event.target===this)closeOptin()">
+  <div class="w-full max-w-md mono-frame p-6 md:p-8 relative" style="background: var(--cream);">
+    <button class="absolute top-3 right-3 w-9 h-9 grid place-items-center" style="border:1px solid var(--line); background: var(--paper); color: var(--ink); font-family: var(--font-mono); font-size: 1rem;" onclick="closeOptin()" aria-label="Close">×</button>
+    <div class="mono-rule-b pb-3 mb-4 flex items-center justify-between">
+      <span class="mono-label">Free Virtual Event</span>
+      <span class="mono-number">APS · 26</span>
+    </div>
+    <h3 class="font-display text-2xl md:text-3xl font-extrabold text-center mb-2">March 9 — 13, <span class="accent-italic" style="color:var(--butter);">2026</span></h3>
+    <p class="text-sm text-center mb-6" style="color:var(--muted);">Submit your information below to save your seat.</p>
+    <form class="space-y-3" onsubmit="event.preventDefault();alert('Registered (demo)');closeOptin()">
+      <input required placeholder="Your name" class="w-full px-4 py-3 outline-none" style="background: var(--paper); border: 1px solid var(--line); font-family: var(--font-body);">
+      <input required type="email" placeholder="Your best email" class="w-full px-4 py-3 outline-none" style="background: var(--paper); border: 1px solid var(--line); font-family: var(--font-body);">
+      <button type="submit" class="btn-ink w-full justify-center">Secure My Free Ticket <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="mono-number text-center mt-5" style="color:var(--muted); font-size:.6rem;">By registering you agree to receive offers and related communications. You can easily unsubscribe at any time.</p>
+  </div>
+</div>
+
+<script>
+  // Optin modal
+  function openOptin(){
+    const m = document.getElementById('optin');
+    m.classList.remove('hidden');
+    m.classList.add('flex');
+    document.body.style.overflow='hidden';
+  }
+  function closeOptin(){
+    const m = document.getElementById('optin');
+    m.classList.add('hidden');
+    m.classList.remove('flex');
+    document.body.style.overflow='';
+  }
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeOptin(); });
+
+  // Font-pair toggle
+  (function(){
+    const pairs = {
+      '1': {
+        display: "'Cabinet Grotesk','Georgia',serif",
+        body:    "'Geist',system-ui,sans-serif",
+        mono:    "'Geist Mono',ui-monospace,monospace",
+        serif:   "'Fraunces','Georgia',serif"
+      },
+      '2': {
+        display: "'Instrument Serif','Georgia',serif",
+        body:    "'Inter',system-ui,sans-serif",
+        mono:    "'IBM Plex Mono',ui-monospace,monospace",
+        serif:   "'Instrument Serif','Georgia',serif"
+      },
+      '3': {
+        display: "'Fraunces','Georgia',serif",
+        body:    "'DM Sans',system-ui,sans-serif",
+        mono:    "'DM Mono',ui-monospace,monospace",
+        serif:   "'Fraunces','Georgia',serif"
+      }
+    };
+    function applyPair(n){
+      const p = pairs[n] || pairs['1'];
+      const r = document.documentElement.style;
+      r.setProperty('--font-display', p.display);
+      r.setProperty('--font-body',    p.body);
+      r.setProperty('--font-mono',    p.mono);
+      r.setProperty('--font-serif',   p.serif);
+      document.querySelectorAll('.font-toggle button').forEach(b => {
+        b.classList.toggle('active', b.dataset.pair === n);
+      });
+      try { localStorage.setItem('v7-font-pair', n); } catch(e) {}
+    }
+    document.querySelectorAll('.font-toggle button').forEach(b => {
+      b.addEventListener('click', () => applyPair(b.dataset.pair));
+    });
+    let saved = '1';
+    try { saved = localStorage.getItem('v7-font-pair') || '1'; } catch(e) {}
+    applyPair(saved);
+  })();
+</script>
+
+</body>
+</html>
