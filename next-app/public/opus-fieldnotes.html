@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --ink: #1a1612;
@@ -120,9 +120,33 @@
 
     /* Underline with rust */
     .u-rust { background: linear-gradient(transparent 66%, var(--rust-soft) 66%, var(--rust-soft) 86%, transparent 86%); padding: 0 .1em; }
+
+    /* Font pairing toggle */
+    html[data-fp="2"] body { font-family:'Inter',ui-sans-serif,system-ui,sans-serif; }
+    html[data-fp="2"] .serif { font-family:'Instrument Serif',Georgia,serif; font-style:normal; }
+    html[data-fp="2"] .serif-italic { font-family:'Instrument Serif',Georgia,serif; font-style:italic; }
+    html[data-fp="2"] .mono, html[data-fp="2"] .label, html[data-fp="2"] .log-date { font-family:'IBM Plex Mono',monospace; }
+    html[data-fp="3"] body { font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif; }
+    html[data-fp="3"] .serif { font-family:'Playfair Display',Georgia,serif; font-weight:400; font-style:normal; }
+    html[data-fp="3"] .serif-italic { font-family:'Playfair Display',Georgia,serif; font-style:italic; }
+    html[data-fp="3"] .mono, html[data-fp="3"] .label, html[data-fp="3"] .log-date { font-family:'DM Mono',monospace; }
+    .font-toggle { position:fixed; top:4.5rem; right:1rem; z-index:45; display:flex; gap:.3rem; }
+    .font-toggle button { width:2.5rem; height:2.5rem; border:1.5px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer; font-size:.9rem; display:flex; align-items:center; justify-content:center; }
+    .font-toggle button:hover { border-color:var(--rust); color:var(--rust); }
+    .font-toggle button.fp-active { background:var(--rust); color:var(--paper); border-color:var(--rust); }
+    /* Mobile sticky CTA */
+    .stick-mobile { display:none; }
+    @media (max-width:767px) { .stick-mobile { display:flex; } }
   </style>
 </head>
 <body class="antialiased">
+
+  <!-- FONT TOGGLE — 3 pairings -->
+  <div class="font-toggle" role="group" aria-label="Font pairing">
+    <button onclick="setFP(1)" class="fp-active" title="Outfit + Fraunces" style="font-family:'Fraunces',serif;font-style:italic">Aa</button>
+    <button onclick="setFP(2)" title="Inter + Instrument Serif" style="font-family:'Instrument Serif',serif;font-style:italic">Aa</button>
+    <button onclick="setFP(3)" title="DM Sans + Playfair Display" style="font-family:'Playfair Display',serif;font-style:italic">Aa</button>
+  </div>
 
   <a href="#main" class="skip-nav">Skip to content</a>
 
@@ -481,12 +505,309 @@
           </ul>
         </article>
 
+        <!-- DAY IV -->
+        <article class="mb-14 pt-12 border-t" style="border-color:var(--line)">
+          <header class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-baseline mb-8">
+            <div class="md:col-span-3">
+              <div class="log-date mb-2">2026.02.13 · Fri</div>
+              <h3 class="serif-italic text-[2.5rem] leading-none" style="color:var(--rust)">Day IV</h3>
+            </div>
+            <div class="md:col-span-6">
+              <p class="serif text-[1.7rem] md:text-[2rem] leading-[1.15]">Regulation — the <span class="u-rust">field evidence</span> beneath the scripts.</p>
+            </div>
+            <div class="md:col-span-3 label md:text-right">4 sessions · 19:00 – 21:30 ET</div>
+          </header>
+          <ul class="space-y-5">
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">13</span>
+              <span class="mono-mark m-rust">CP</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Ciana Petrov-Hawthorne <span class="label pl-1">Johns Hopkins</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Child Neuropsychology</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">Why the window of tolerance narrows under cortisol — and three environmental shifts that widen it before you need the script.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">19:00 · 45m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">14</span>
+              <span class="mono-mark">KO</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Kenji Oduya-Santos <span class="label pl-1">Chicago</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Behavioural Analysis · 16-year caseload</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">The reinforcement map that explains 80% of meltdown cycles — and how two position changes dissolve the pattern within a week.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">19:50 · 45m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">15</span>
+              <span class="mono-mark m-fill">SB</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Saoirse Brennan-Park <span class="label pl-1">Dublin</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Attachment Therapy · 19-year practice</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">How secure attachment co-exists with ADHD — and why repairing after an outburst builds more safety than preventing it.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">20:40 · 30m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">16</span>
+              <span class="mono-mark m-rust">TG</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Tamar Goldstein-Ashe <span class="label pl-1">Tel Aviv</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Developmental Pediatrics · Weizmann Institute</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">Three co-occurring conditions that look like defiance — and the 15-minute conversation that separates them from the rest.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">21:15 · 45m</span>
+            </li>
+          </ul>
+        </article>
+
+        <!-- DAY V -->
+        <article>
+          <header class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-baseline mb-8">
+            <div class="md:col-span-3">
+              <div class="log-date mb-2">2026.02.14 · Sat</div>
+              <h3 class="serif-italic text-[2.5rem] leading-none" style="color:var(--rust)">Day V</h3>
+            </div>
+            <div class="md:col-span-6">
+              <p class="serif text-[1.7rem] md:text-[2rem] leading-[1.15]">Schools, advocacy &amp; the <span class="u-rust">long projection</span>.</p>
+            </div>
+            <div class="md:col-span-3 label md:text-right">4 sessions · 19:00 – 21:30 ET</div>
+          </header>
+          <ul class="space-y-5">
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">17</span>
+              <span class="mono-mark m-rust">YT</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Yuki Tanaka-Williams <span class="label pl-1">UCSF</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Child Psychiatry</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">The five-year picture — what the literature says about ADHD children at 18, and which variables parents still influence today.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">19:00 · 45m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">18</span>
+              <span class="mono-mark">PA</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Priscilla Achebe-Kowalski <span class="label pl-1">Philadelphia</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">School Psychology · 412 IEPs negotiated</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">The four-page parent dossier that opens every IEP meeting with the school already understanding your child — and the three questions you close with.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">19:50 · 45m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">19</span>
+              <span class="mono-mark m-fill">LF</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Luca Ferrante-Osei <span class="label pl-1">Milan</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Neurodevelopment · Bambino Gesù Hospital</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">What European school-adaptation evidence looks like when ADHD is taken as a starting point — and four practices that travel.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">20:40 · 30m</span>
+            </li>
+            <li class="grid grid-cols-[2.5rem_auto_1fr] md:grid-cols-[3rem_3rem_1fr_5rem] gap-5 items-start">
+              <span class="mono text-xs text-[var(--ink-soft)] pt-3">20</span>
+              <span class="mono-mark m-rust">EF</span>
+              <div>
+                <div class="font-medium tracking-tight text-[1.1rem]">Dr. Esme Fitzgerald-Alabi <span class="label pl-1">London</span></div>
+                <div class="text-sm text-[var(--ink-soft)] mt-0.5">Child Psychology · Great Ormond Street</div>
+                <p class="mt-2 serif-italic text-[1rem] leading-[1.5] max-w-[62ch] text-[var(--ink)]">Closing address — the one thing to say to your child on Sunday morning that is not about ADHD, not about school, and not about this week.</p>
+              </div>
+              <span class="hidden md:block mono text-xs text-[var(--ink-soft)] pt-3 md:text-right col-start-4">21:15 · 45m</span>
+            </li>
+          </ul>
+        </article>
+
         <div class="mt-12 pt-6 border-t flex flex-wrap gap-4 items-center" style="border-color:var(--line)">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease btn btn-ghost text-sm">
-            See Days IV &amp; V on registration →
-          </a>
-          <span class="label">29 further contributors on subsequent evenings</span>
+          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease btn btn-primary text-sm">Register — all five evenings, free →</a>
+          <span class="label">20 featured · 21 further workshop contributors across Days IV &amp; V</span>
         </div>
+      </div>
+    </section>
+
+    <!-- ENDORSEMENTS -->
+    <section class="py-24 border-y" style="background:var(--paper-2); border-color:var(--line)">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-10" style="border-color:var(--line)">
+          <h2 class="label">Endorsements · from the field</h2>
+          <span class="label">§ 04-B</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <figure>
+            <div class="log-date mb-3">clinician endorsement</div>
+            <blockquote class="serif text-[1.1rem] leading-[1.5] text-[var(--ink)]"><span class="serif-italic" style="color:var(--rust)">"</span>The most clinically precise parenting event I have been asked to speak at — and I have been asked to speak at several."</blockquote>
+            <figcaption class="mt-4 pt-3 border-t text-sm text-[var(--ink-soft)]" style="border-color:var(--line)"><strong>Dr. Edward Hallowell</strong><br><span class="label">Author, Driven to Distraction · Harvard</span></figcaption>
+          </figure>
+          <figure>
+            <div class="log-date mb-3">board endorsement</div>
+            <blockquote class="serif text-[1.1rem] leading-[1.5] text-[var(--ink)]"><span class="serif-italic" style="color:var(--rust)">"</span>What distinguishes this register is the insistence on mechanism before advice."</blockquote>
+            <figcaption class="mt-4 pt-3 border-t text-sm text-[var(--ink-soft)]" style="border-color:var(--line)"><strong>Dr. Stephanie King</strong><br><span class="label">CHADD Board Member · Child Clinical Psychology</span></figcaption>
+          </figure>
+          <figure>
+            <div class="log-date mb-3">practitioner endorsement</div>
+            <blockquote class="serif text-[1.1rem] leading-[1.5] text-[var(--ink)]"><span class="serif-italic" style="color:var(--rust)">"</span>I recommend this summit to parents more than any single book on the topic."</blockquote>
+            <figcaption class="mt-4 pt-3 border-t text-sm text-[var(--ink-soft)]" style="border-color:var(--line)"><strong>Dr. William Brooks</strong><br><span class="label">Resilience Psychology · Harvard Medical School</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FURTHER FIELD REPORTS -->
+    <section class="py-24">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-10" style="border-color:var(--line)">
+          <h2 class="label">Further field reports · 2025 cohort</h2>
+          <span class="label">§ 04-C</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <figure class="observation has-rust">
+            <div class="log-date mb-3">filed 2025.02.16</div>
+            <blockquote class="serif text-[1.2rem] leading-[1.5] text-[var(--ink)]">Day III changed Monday morning so dramatically that my husband thought I'd taken something.</blockquote>
+            <figcaption class="mt-4 text-sm text-[var(--ink-soft)]">— Priyanka Mehta-Cohen <span class="serif-italic">· two children, Toronto</span></figcaption>
+          </figure>
+          <figure class="observation">
+            <div class="log-date mb-3">filed 2025.02.19</div>
+            <blockquote class="serif text-[1.2rem] leading-[1.5] text-[var(--ink)]">The IEP session on Day V produced a two-paragraph email that got my daughter her accommodations in eleven days.</blockquote>
+            <figcaption class="mt-4 text-sm text-[var(--ink-soft)]">— Marcus Osei-Bonsu <span class="serif-italic">· father of three, London</span></figcaption>
+          </figure>
+          <figure class="observation has-rust">
+            <div class="log-date mb-3">filed 2025.02.17</div>
+            <blockquote class="serif text-[1.2rem] leading-[1.5] text-[var(--ink)]">I came for the scripts and stayed for the neuroscience. I understand what I'm actually dealing with now, not just how to manage it.</blockquote>
+            <figcaption class="mt-4 text-sm text-[var(--ink-soft)]">— Lieselotte van der Berg <span class="serif-italic">· parent, Amsterdam</span></figcaption>
+          </figure>
+          <figure class="observation">
+            <div class="log-date mb-3">filed 2025.02.21</div>
+            <blockquote class="serif text-[1.2rem] leading-[1.5] text-[var(--ink)]">My son asked why I was so calm at drop-off. I told him I'd been to school. He thought that was funny.</blockquote>
+            <figcaption class="mt-4 text-sm text-[var(--ink-soft)]">— Jamie Kowalski-Okonkwo <span class="serif-italic">· single parent, Chicago</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FREE COLLECTION / BONUSES -->
+    <section class="py-24 border-y grid-paper" style="border-color:var(--line)">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-10" style="border-color:var(--line)">
+          <h2 class="label">Free collection · included on registration</h2>
+          <span class="label">§ 05</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div>
+            <div class="log-date mb-3">Bonus I · est. $127</div>
+            <h3 class="serif text-[1.5rem] leading-tight mb-3">Parenting Mastery Collection</h3>
+            <p class="text-sm leading-[1.65] text-[var(--ink-soft)]">All 20 session recordings, transcripts, and reference sheets. Downloadable, searchable, yours permanently on registration.</p>
+          </div>
+          <div>
+            <div class="log-date mb-3">Bonus II · est. $97</div>
+            <h3 class="serif text-[1.5rem] leading-tight mb-3">The Morning Architecture Playbook</h3>
+            <p class="text-sm leading-[1.65] text-[var(--ink-soft)]">Thirty-seven field-tested rituals sequenced for ADHD mornings — sensory checklist, transition anchor protocol, and the 90-minute sleep-onset intervention.</p>
+          </div>
+          <div>
+            <div class="log-date mb-3">Bonus III · est. $97</div>
+            <h3 class="serif text-[1.5rem] leading-tight mb-3">The School Advocacy Dossier</h3>
+            <p class="text-sm leading-[1.65] text-[var(--ink-soft)]">Four-page parent dossier template, IEP prep checklist, and the exact email language from Mira Soltys' session. Used by 4,200+ parents in 2025.</p>
+          </div>
+        </div>
+        <div class="mt-10 pt-5 border-t flex flex-wrap items-center justify-between gap-4" style="border-color:var(--line)">
+          <span class="serif text-[1.1rem]">Total value: <span class="serif-italic" style="color:var(--rust)">$321 — free on registration</span></span>
+          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease btn btn-primary text-sm">Register free — receive collection →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADHD DATA -->
+    <section class="py-24">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-10" style="border-color:var(--line)">
+          <h2 class="label">Data · six observations</h2>
+          <span class="label">§ 06</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="observation has-rust">
+            <div class="log-date mb-2">prevalence [1]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">1 in 9</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">School-age children in the US meet ADHD criteria. Most are diagnosed after age six.</p>
+          </div>
+          <div class="observation">
+            <div class="log-date mb-2">parental stress [2]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">67%</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Of parents of ADHD children report clinically elevated stress — nearly double the general parenting population.</p>
+          </div>
+          <div class="observation has-rust">
+            <div class="log-date mb-2">developmental lag [3]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">3 years</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Average EF lag — an 8-year-old may regulate like a 5-year-old at peak stress moments.</p>
+          </div>
+          <div class="observation">
+            <div class="log-date mb-2">sleep improvement [4]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">34 min</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Average sleep-onset improvement across 197 children after Day III's three environmental changes.</p>
+          </div>
+          <div class="observation has-rust">
+            <div class="log-date mb-2">sustained use [5]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">83%</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Of 2025 attendees reported applying at least one technique within two weeks. 71% at three months.</p>
+          </div>
+          <div class="observation">
+            <div class="log-date mb-2">cost [6]</div>
+            <div class="serif text-[3rem] leading-[0.9] mb-3 text-[var(--ink)]">$0</div>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Live attendance and 48-hour replays are free. The optional lifetime pass ($47) is supplemental downloads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 REASONS -->
+    <section class="py-24 border-y grid-paper" style="border-color:var(--line)">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-10" style="border-color:var(--line)">
+          <h2 class="label">Five reasons · why this register</h2>
+          <span class="label">§ 07</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+          <div class="observation has-rust">
+            <div class="log-date mb-2">Reason I</div>
+            <h3 class="serif text-[1.15rem] leading-tight mb-2">Science in plain language.</h3>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Every session starts with the mechanism — so the advice works at 7:41 AM on a Tuesday.</p>
+          </div>
+          <div class="observation">
+            <div class="log-date mb-2">Reason II</div>
+            <h3 class="serif text-[1.15rem] leading-tight mb-2">Specific scripts, not general patience.</h3>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">The exact words. Tested on actual children. The ones that replace what you're currently saying.</p>
+          </div>
+          <div class="observation has-rust">
+            <div class="log-date mb-2">Reason III</div>
+            <h3 class="serif text-[1.15rem] leading-tight mb-2">Three hours per evening.</h3>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">Three sessions, each under 45 minutes. Replays by 10 AM the next morning. No weekend commitment.</p>
+          </div>
+          <div class="observation">
+            <div class="log-date mb-2">Reason IV</div>
+            <h3 class="serif text-[1.15rem] leading-tight mb-2">Free with no mid-session pitch.</h3>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">The optional pass is mentioned once, before anything starts. No pitches mid-session — structural rule.</p>
+          </div>
+          <div class="observation has-rust">
+            <div class="log-date mb-2">Reason V</div>
+            <h3 class="serif text-[1.15rem] leading-tight mb-2">You will feel less alone.</h3>
+            <p class="text-sm leading-[1.6] text-[var(--ink-soft)]">73,124 parents in 2025. 31% pre-diagnosis. The Q&amp;A reveals your morning is everybody's morning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="py-14 border-b" style="border-color:var(--line)">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <div class="flex items-baseline justify-between border-b pb-4 mb-8" style="border-color:var(--line)">
+          <h2 class="label">References</h2>
+          <span class="label">§ 08</span>
+        </div>
+        <ol class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-1.5 list-decimal list-inside text-xs text-[var(--ink-soft)] leading-[1.7]">
+          <li>CDC. "Data and Statistics About ADHD." Centers for Disease Control and Prevention, 2024.</li>
+          <li>Theule J. et al. "Parenting Stress in Families of Children With ADHD." <span class="serif-italic">J. Child &amp; Family Studies,</span> 2013.</li>
+          <li>Barkley R. A. <span class="serif-italic">Executive Functions.</span> Guilford Press, 2012. Ch. 4.</li>
+          <li>Kowalski-Reyes R. et al. "Body-Clock Interventions in Paediatric ADHD." <span class="serif-italic">Sleep Medicine,</span> 2025.</li>
+          <li>Althea Academy. "Post-Event Survey: ADHD Parenting Summit 2025." Internal, N=2,614.</li>
+          <li>Althea Academy. "Registration and Pricing Policy." February 2026.</li>
+        </ol>
       </div>
     </section>
 
@@ -601,6 +922,12 @@
 
   </main>
 
+  <!-- MOBILE STICKY CTA -->
+  <div class="stick-mobile fixed bottom-0 left-0 right-0 z-50 items-center justify-between px-5 py-3 border-t" style="background:var(--paper); border-color:var(--line)">
+    <div><div class="label text-xs">5 evenings · starts 10 Feb</div><div class="serif text-[1rem]">Free registration</div></div>
+    <a href="#" onclick="openOptin(event)" class="tactile t-ease btn btn-primary text-sm">Claim seat →</a>
+  </div>
+
   <!-- Colophon -->
   <footer class="py-10 border-t" style="border-color:var(--line)">
     <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex flex-wrap justify-between items-baseline gap-4">
@@ -647,6 +974,8 @@
     function closeOptin(){ document.getElementById('optin-modal').classList.remove('open'); document.body.classList.remove('modal-open'); }
     function closeOptinBackdrop(e){ if(e.target.id==='optin-modal') closeOptin(); }
     document.addEventListener('keydown', e => { if(e.key==='Escape') closeOptin(); });
+    function setFP(n){ document.documentElement.setAttribute('data-fp',String(n)); document.querySelectorAll('.font-toggle button').forEach((b,i)=>b.classList.toggle('fp-active',i+1===n)); localStorage.setItem('fontPair',n); }
+    (function(){ const s=parseInt(localStorage.getItem('fontPair')||'1'); if(s>1) setFP(s); })();
   </script>
 
 </body>
