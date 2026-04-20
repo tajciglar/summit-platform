@@ -4,7 +4,6 @@ namespace App\Filament\Widgets;
 
 use App\Models\Optin;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\PageView;
 use App\Models\Summit;
 use Filament\Widgets\ChartWidget;
@@ -39,8 +38,12 @@ class FunnelConversionWidget extends ChartWidget
             $orders = Order::where('summit_id', $summit->id)->where('status', 'completed');
             $checkouts = Order::where('summit_id', $summit->id)->count(); // all attempts
             $purchases = (clone $orders)->count();
-            $upsells = OrderItem::whereHas('order', fn ($q) => $q->where('summit_id', $summit->id)->where('status', 'completed'))
-                ->where('item_type', 'upsell')
+
+            // Order items live inside the orders.items JSON column (there is no
+            // separate order_items table). Count completed orders that contain
+            // at least one upsell line item.
+            $upsells = (clone $orders)
+                ->whereRaw('items::jsonb @> ?::jsonb', ['[{"item_type":"upsell"}]'])
                 ->count();
 
             $datasets[] = [
