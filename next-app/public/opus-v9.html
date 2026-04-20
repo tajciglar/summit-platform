@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <style>
     /* Muted uses #4d422e on #faf8f4 (~7.8:1 AAA). Accent rose #a7263c slightly desaturated. */
     :root { --ink:#1a1713; --muted:#4d422e; --paper:#faf8f4; --cream:#f1ebde; --rose:#a7263c; --line:#d9d0bd; }
@@ -68,31 +68,9 @@
       .skip-nav, .t-ease, .lift, .pm-icon { transition:none !important; }
       * { animation:none !important; }
     }
-
-    /* Font pairing toggle */
-    html[data-fp="2"] body { font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif; }
-    html[data-fp="2"] .font-serif, html[data-fp="2"] .serif-accent { font-family:'Fraunces',Georgia,serif; }
-    html[data-fp="2"] .font-mono { font-family:'JetBrains Mono',monospace; }
-    html[data-fp="3"] body { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:.94em; }
-    html[data-fp="3"] .font-serif, html[data-fp="3"] .serif-accent { font-family:'Playfair Display',Georgia,serif; }
-    html[data-fp="3"] .font-mono { font-family:'IBM Plex Mono',monospace; }
-    .font-toggle { position:fixed; top:4.5rem; right:1rem; z-index:45; display:flex; gap:.3rem; }
-    .font-toggle button { width:2.5rem; height:2.5rem; border:1px solid var(--line); background:var(--paper); color:var(--muted); cursor:pointer; font-size:.9rem; display:flex; align-items:center; justify-content:center; border-radius:.25rem; }
-    .font-toggle button:hover { border-color:var(--rose); color:var(--rose); }
-    .font-toggle button.fp-active { background:var(--rose); color:var(--paper); border-color:var(--rose); }
-    /* Mobile sticky CTA */
-    .stick-mobile { display:none; }
-    @media (max-width:767px) { .stick-mobile { display:flex; } }
   </style>
 </head>
 <body class="antialiased grain">
-
-  <!-- FONT TOGGLE — 3 pairings -->
-  <div class="font-toggle" role="group" aria-label="Font pairing">
-    <button onclick="setFP(1)" class="fp-active" title="Geist + Instrument Serif" style="font-family:'Instrument Serif',serif;font-style:italic">Aa</button>
-    <button onclick="setFP(2)" title="DM Sans + Fraunces" style="font-family:'Fraunces',serif;font-style:italic">Aa</button>
-    <button onclick="setFP(3)" title="IBM Plex Mono + Playfair" style="font-family:'Playfair Display',serif;font-style:italic">Aa</button>
-  </div>
 
   <a href="#main-content" class="skip-nav">Skip to content</a>
 
@@ -251,167 +229,11 @@
           </ul>
         </div>
 
-        <!-- DAY 04 -->
-        <div class="mb-12 pt-10 border-t" style="border-color:var(--line)">
-          <div class="flex items-end justify-between flex-wrap gap-3 mb-6 pb-4 border-b" style="border-color:var(--line)">
-            <div class="flex items-baseline gap-4">
-              <span class="font-serif italic text-4xl" style="color:var(--rose)">Day 04</span>
-              <span class="text-lg tracking-tight">Emotional regulation — building what holds</span>
-            </div>
-            <span class="text-[12px] font-mono uppercase tracking-[0.06em] text-[#4d422e]">Fri 13 Feb · 7:00 – 9:30 PM ET</span>
-          </div>
-          <ul class="divide-y" style="border-color:var(--line)">
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">13</span><span class="mono mono-rose shrink-0">CP</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Ciana Petrov-Hawthorne</div><div class="text-sm text-[#4d422e] mt-0.5">Child Neuropsychology · Johns Hopkins</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">7:00 PM · 45m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">14</span><span class="mono mono-ink shrink-0">KO</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Kenji Oduya-Santos</div><div class="text-sm text-[#4d422e] mt-0.5">Behavioural Analysis · Chicago · 16-yr caseload</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">7:50 PM · 45m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">15</span><span class="mono mono-cream shrink-0">SB</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Saoirse Brennan-Park</div><div class="text-sm text-[#4d422e] mt-0.5">Attachment Therapy · Dublin · 19-yr practice</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">8:40 PM · 30m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">16</span><span class="mono mono-rose shrink-0">TG</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Tamar Goldstein-Ashe</div><div class="text-sm text-[#4d422e] mt-0.5">Developmental Pediatrics · Weizmann · Tel Aviv</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">9:15 PM · 45m</div></li>
-          </ul>
-        </div>
-
-        <!-- DAY 05 -->
-        <div class="mb-10">
-          <div class="flex items-end justify-between flex-wrap gap-3 mb-6 pb-4 border-b" style="border-color:var(--line)">
-            <div class="flex items-baseline gap-4">
-              <span class="font-serif italic text-4xl" style="color:var(--rose)">Day 05</span>
-              <span class="text-lg tracking-tight">School systems &amp; the long view</span>
-            </div>
-            <span class="text-[12px] font-mono uppercase tracking-[0.06em] text-[#4d422e]">Sat 14 Feb · 7:00 – 9:30 PM ET</span>
-          </div>
-          <ul class="divide-y" style="border-color:var(--line)">
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">17</span><span class="mono mono-rose shrink-0">YT</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Yuki Tanaka-Williams</div><div class="text-sm text-[#4d422e] mt-0.5">Child Psychiatry · UCSF</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">7:00 PM · 45m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">18</span><span class="mono mono-ink shrink-0">PA</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Priscilla Achebe-Kowalski</div><div class="text-sm text-[#4d422e] mt-0.5">School Psychology · Philadelphia · 412 IEPs</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">7:50 PM · 45m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">19</span><span class="mono mono-cream shrink-0">LF</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Luca Ferrante-Osei</div><div class="text-sm text-[#4d422e] mt-0.5">Neurodevelopment · Bambino Gesù · Milan</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">8:40 PM · 30m</div></li>
-            <li class="flex items-center gap-5 py-5"><span class="font-mono text-xs shrink-0 w-6 text-[#4d422e]">20</span><span class="mono mono-rose shrink-0">EF</span><div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Esme Fitzgerald-Alabi</div><div class="text-sm text-[#4d422e] mt-0.5">Child Psychology · Great Ormond Street · London</div></div><div class="hidden md:block text-right font-mono text-[12px] tracking-tight text-[#4d422e] shrink-0">9:15 PM · 45m</div></li>
-          </ul>
-        </div>
-
         <div class="text-center">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium" style="background:var(--rose); color:var(--paper)">
-            Register free — all five evenings
+          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3 rounded-full border bg-white text-sm lift" style="border-color:var(--line)">
+            See Day 04 &amp; 05 on registration
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ENDORSEMENTS -->
-    <section class="py-24 md:py-28">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] text-[#4d422e] inline-block mb-4">What clinicians say</span>
-          <h2 class="text-3xl md:text-4xl tracking-tighter leading-[1.04]">From the field.</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <figure>
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color:var(--rose);opacity:.6"><path d="M0 30V20C0 9 6 2 16 0L17 4C11 6 8 10 8 14H16V30H0ZM22 30V20C22 9 28 2 38 0L39 4C33 6 30 10 30 14H38V30H22Z" fill="currentColor"/></svg>
-            <blockquote class="text-[1.05rem] leading-[1.5] tracking-tight">The most clinically precise parenting event I've been asked to speak at.</blockquote>
-            <figcaption class="mt-4 pt-4 border-t text-xs text-[#4d422e]" style="border-color:var(--line)"><strong>Dr. Edward Hallowell</strong> · Author, Driven to Distraction · Harvard</figcaption>
-          </figure>
-          <figure>
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color:var(--rose);opacity:.6"><path d="M0 30V20C0 9 6 2 16 0L17 4C11 6 8 10 8 14H16V30H0ZM22 30V20C22 9 28 2 38 0L39 4C33 6 30 10 30 14H38V30H22Z" fill="currentColor"/></svg>
-            <blockquote class="text-[1.05rem] leading-[1.5] tracking-tight">What distinguishes this register is the insistence on mechanism before advice.</blockquote>
-            <figcaption class="mt-4 pt-4 border-t text-xs text-[#4d422e]" style="border-color:var(--line)"><strong>Dr. Stephanie King</strong> · CHADD Board Member · Child Clinical Psychology</figcaption>
-          </figure>
-          <figure>
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color:var(--rose);opacity:.6"><path d="M0 30V20C0 9 6 2 16 0L17 4C11 6 8 10 8 14H16V30H0ZM22 30V20C22 9 28 2 38 0L39 4C33 6 30 10 30 14H38V30H22Z" fill="currentColor"/></svg>
-            <blockquote class="text-[1.05rem] leading-[1.5] tracking-tight">I recommend this summit to more parents than any single book on the topic.</blockquote>
-            <figcaption class="mt-4 pt-4 border-t text-xs text-[#4d422e]" style="border-color:var(--line)"><strong>Dr. William Brooks</strong> · Resilience Psychology · Harvard Medical School</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- MORE TESTIMONIALS -->
-    <section class="py-24 border-y" style="background:var(--cream); border-color:var(--line)">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] text-[#4d422e] inline-block mb-4">More from attendees</span>
-          <h2 class="text-3xl md:text-4xl tracking-tighter leading-[1.04]">What Thursday morning felt like.</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <figure class="p-7 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <blockquote class="text-[1.05rem] leading-relaxed">Day III changed Monday morning so dramatically that my husband thought I'd taken something.</blockquote>
-            <figcaption class="mt-5 pt-4 border-t text-sm" style="border-color:var(--line)"><strong>Priyanka Mehta-Cohen</strong><div class="text-xs text-[#4d422e] mt-0.5">Two children · Toronto · attended 2025</div></figcaption>
-          </figure>
-          <figure class="p-7 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <blockquote class="text-[1.05rem] leading-relaxed">The IEP session on Day V produced a two-paragraph email that got my daughter her accommodations in eleven days.</blockquote>
-            <figcaption class="mt-5 pt-4 border-t text-sm" style="border-color:var(--line)"><strong>Marcus Osei-Bonsu</strong><div class="text-xs text-[#4d422e] mt-0.5">Father of three · London · attended 2025</div></figcaption>
-          </figure>
-          <figure class="p-7 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <blockquote class="text-[1.05rem] leading-relaxed">I came for the scripts and stayed for the neuroscience. I understand what I'm actually dealing with now.</blockquote>
-            <figcaption class="mt-5 pt-4 border-t text-sm" style="border-color:var(--line)"><strong>Lieselotte van der Berg</strong><div class="text-xs text-[#4d422e] mt-0.5">Parent · Amsterdam · attended 2025</div></figcaption>
-          </figure>
-          <figure class="p-7 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <blockquote class="text-[1.05rem] leading-relaxed">My son asked why I was so calm at drop-off. I told him I'd been to school. He thought that was funny.</blockquote>
-            <figcaption class="mt-5 pt-4 border-t text-sm" style="border-color:var(--line)"><strong>Jamie Kowalski-Okonkwo</strong><div class="text-xs text-[#4d422e] mt-0.5">Single parent · Chicago · attended 2025</div></figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- BONUSES -->
-    <section class="py-24 md:py-28">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] text-[#4d422e] inline-block mb-4">Free collection</span>
-          <h2 class="text-3xl md:text-4xl tracking-tighter leading-[1.04]">Included on registration.</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="p-7 rounded-md border" style="border-color:var(--line)">
-            <div class="text-[12px] font-mono uppercase tracking-[0.06em] mb-3" style="color:var(--rose)">Bonus I · $127</div>
-            <h3 class="text-xl tracking-tight mb-3">Parenting Mastery Collection</h3>
-            <p class="text-sm text-[#4d422e] leading-relaxed">All 20 session recordings, transcripts, and reference sheets. Downloadable, searchable, permanently yours.</p>
-          </div>
-          <div class="p-7 rounded-md border" style="border-color:var(--line)">
-            <div class="text-[12px] font-mono uppercase tracking-[0.06em] mb-3" style="color:var(--rose)">Bonus II · $97</div>
-            <h3 class="text-xl tracking-tight mb-3">Morning Architecture Playbook</h3>
-            <p class="text-sm text-[#4d422e] leading-relaxed">Thirty-seven field-tested rituals — the sensory checklist, transition anchor protocol, and 90-minute sleep intervention.</p>
-          </div>
-          <div class="p-7 rounded-md border" style="border-color:var(--line)">
-            <div class="text-[12px] font-mono uppercase tracking-[0.06em] mb-3" style="color:var(--rose)">Bonus III · $97</div>
-            <h3 class="text-xl tracking-tight mb-3">School Advocacy Dossier</h3>
-            <p class="text-sm text-[#4d422e] leading-relaxed">Four-page parent dossier template, IEP prep checklist, and the exact email language that gets accommodations approved.</p>
-          </div>
-        </div>
-        <div class="mt-10 text-center">
-          <p class="text-[#4d422e] mb-5">Total value $321 — included free</p>
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm font-medium" style="background:var(--rose); color:var(--paper)">Register free — receive everything<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ADHD STATS -->
-    <section class="py-24 border-y" style="background:var(--cream); border-color:var(--line)">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] text-[#4d422e] inline-block mb-4">The data</span>
-          <h2 class="text-3xl md:text-4xl tracking-tighter leading-[1.04]">Six numbers worth knowing.</h2>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">1 in 9</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">School-age children in the US meet ADHD criteria — most diagnosed after age six. <span class="font-mono text-[10px]">[1]</span></p>
-          </div>
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">67%</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">Of ADHD parents report clinically elevated stress — nearly double the general parenting average. <span class="font-mono text-[10px]">[2]</span></p>
-          </div>
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">3 yrs</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">Average executive-function lag — an 8-year-old may regulate like a 5-year-old at peak stress. <span class="font-mono text-[10px]">[3]</span></p>
-          </div>
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">34 min</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">Average sleep-onset improvement across 197 children after Day III's three changes. <span class="font-mono text-[10px]">[4]</span></p>
-          </div>
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">83%</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">Of 2025 attendees applied at least one technique within two weeks; 71% at three months. <span class="font-mono text-[10px]">[5]</span></p>
-          </div>
-          <div class="p-6 rounded-md border" style="background:var(--paper); border-color:var(--line)">
-            <div class="font-serif italic text-4xl md:text-5xl leading-none mb-3" style="color:var(--rose)">$0</div>
-            <p class="text-xs text-[#4d422e] leading-relaxed">Live attendance and 48-hour replays. The optional lifetime pass ($47) is supplemental. <span class="font-mono text-[10px]">[6]</span></p>
-          </div>
         </div>
       </div>
     </section>
@@ -529,12 +351,6 @@
 
   </main>
 
-  <!-- MOBILE STICKY CTA -->
-  <div class="stick-mobile fixed bottom-0 left-0 right-0 z-50 items-center justify-between px-5 py-3 border-t" style="background:var(--paper); border-color:var(--line)">
-    <div><div class="font-mono text-[11px] uppercase tracking-[0.08em] text-[#4d422e]">5 evenings · starts 10 Feb</div><div class="text-base font-medium tracking-tight">Free registration</div></div>
-    <a href="#" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium" style="background:var(--rose); color:var(--paper)">Claim seat →</a>
-  </div>
-
   <footer class="border-t py-10" style="border-color:var(--line)">
     <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex flex-wrap gap-4 items-center justify-between text-xs text-[#4d422e] font-mono uppercase tracking-[0.08em]">
       <div>© 2026 Althea Academy · ADHD Parenting Summit</div>
@@ -577,8 +393,6 @@
       setTimeout(()=>{ btn.disabled=false; btn.textContent='Send me the link'; form.reset(); closeOptin(); },400);
     }
     document.addEventListener('keydown', e => { if(e.key==='Escape') closeOptin(); });
-    function setFP(n){ document.documentElement.setAttribute('data-fp',String(n)); document.querySelectorAll('.font-toggle button').forEach((b,i)=>b.classList.toggle('fp-active',i+1===n)); localStorage.setItem('fontPair',n); }
-    (function(){ const s=parseInt(localStorage.getItem('fontPair')||'1'); if(s>1) setFP(s); })();
   </script>
 
 </body>

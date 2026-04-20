@@ -7,22 +7,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Three pairings preloaded -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --ink:#14231c; --paper:#faf9f4; --sage:#dce4d4; --sage-2:#c5d1bb;
-      --moss:#3d4f39; --terra:#c96f4a; --line:#dbe0d1; --muted:#34432f;
-      /* Font pairing tokens (swappable) */
-      --font-display: 'Fraunces', Georgia, serif;
-      --font-body:    'Outfit', ui-sans-serif, system-ui, sans-serif;
-      --font-mono:    'JetBrains Mono', ui-monospace, monospace;
-    }
+    :root { --ink:#14231c; --paper:#faf9f4; --sage:#dce4d4; --sage-2:#c5d1bb; --moss:#3d4f39; --terra:#c96f4a; --line:#dbe0d1; --muted:#34432f; }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); background:var(--paper); color:var(--ink); }
-    .font-mono { font-family: var(--font-mono); }
-    .serif-accent { font-family: var(--font-display); font-style:italic; font-weight:400; color:var(--terra); letter-spacing:-0.01em; }
-    .font-serif { font-family: var(--font-display); font-weight:400; letter-spacing:-0.015em; }
+    body { font-family:'Outfit',ui-sans-serif,system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+    .font-mono { font-family:'JetBrains Mono',ui-monospace,monospace; }
+    .serif-accent { font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:400; color:var(--terra); letter-spacing:-0.01em; }
+    .font-serif { font-family:'Fraunces',Georgia,serif; font-weight:400; letter-spacing:-0.015em; }
 
     .t-ease { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .tactile:active { transform: translateY(1px) scale(0.99); }
@@ -40,7 +32,7 @@
     .marquee-wrap::before { left:0; background: linear-gradient(90deg, var(--paper), transparent); }
     .marquee-wrap::after  { right:0; background: linear-gradient(-90deg, var(--paper), transparent); }
     .marquee-track { display:flex; width:max-content; animation: marq 44s linear infinite; }
-    .marquee-item { padding:0 2.25rem; white-space:nowrap; color:var(--moss); font-weight:500; font-size:1rem; font-family: var(--font-display); font-style:italic; }
+    .marquee-item { padding:0 2.25rem; white-space:nowrap; color:var(--moss); font-weight:500; font-size:1rem; font-family:'Fraunces',serif; font-style:italic; }
     @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
     details { background:#fff; border-radius:20px; margin-bottom:.6rem; border:1px solid var(--line); overflow:hidden; }
@@ -61,93 +53,23 @@
     .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--ink); color:var(--paper); padding:.75rem 1.25rem; z-index:200; font-weight:500; border-radius:12px; }
 
     /* Monogram tiles — replace stock portraits */
-    .mono { display:inline-flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight:500; line-height:1; letter-spacing:0; }
+    .mono { display:inline-flex; align-items:center; justify-content:center; font-family:'Fraunces',Georgia,serif; font-weight:500; line-height:1; letter-spacing:0; }
     .mono-hero { width:100%; aspect-ratio:16/10; border-radius:2.5rem; font-size:6rem; }
     .mono-sm { width:2.75rem; height:2.75rem; border-radius:999px; font-size:.85rem; border:2px solid var(--paper); }
     .mono-md { width:4rem; height:4rem; border-radius:1rem; font-size:1.1rem; }
-    .mono-lg { width:5.5rem; height:5.5rem; border-radius:1.25rem; font-size:1.5rem; }
     .mono-moss { background:var(--moss); color:var(--paper); }
     .mono-terra { background:var(--terra); color:var(--paper); }
     .mono-sage { background:var(--sage-2); color:var(--ink); }
     .mono-ink { background:var(--ink); color:var(--paper); }
     .mono-cream { background:#fff; color:var(--ink); border:1px solid var(--line); }
 
-    /* Top announcement bar */
-    .topbar {
-      background: var(--ink); color: var(--paper);
-      text-align:center; padding:.6rem 1rem;
-      font-family: var(--font-mono);
-      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-    }
-    .topbar .dot { color: var(--terra); margin: 0 .5rem; }
-
-    /* Plus pill (joy pill row) */
-    .plus-pill {
-      display:inline-flex; align-items:center; gap:.5rem;
-      background:#fff; border:1px solid var(--line);
-      padding:.65rem 1.25rem; border-radius:9999px;
-      font-weight:500; color:var(--ink);
-      transition: border-color .3s ease;
-    }
-    .plus-pill:hover { border-color: var(--moss); }
-    .plus-pill .plus { color:var(--terra); font-weight:700; }
-
-    /* Mobile sticky CTA */
-    .stick-mobile {
-      position:fixed; left:0; right:0; bottom:0; z-index:45;
-      padding:.75rem 1rem; background: rgba(20,35,28,.95);
-      backdrop-filter: blur(8px);
-      display:none; justify-content:center;
-    }
-    @media (max-width: 767px) {
-      .stick-mobile { display:flex; }
-      body { padding-bottom: 5rem; }
-    }
-
-    /* Font toggle widget */
-    .fp-widget {
-      position: fixed; top: 5rem; right: 1rem; z-index: 45;
-      background: #fff; border: 1px solid var(--line);
-      border-radius: 1rem; padding: .6rem .75rem .65rem;
-      box-shadow: 0 12px 30px -16px rgba(20,35,28,.25);
-      display:flex; flex-direction:column; align-items:center; gap:.4rem;
-    }
-    .fp-widget .fp-label {
-      font-family: var(--font-mono);
-      font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--moss);
-    }
-    .fp-buttons { display:flex; gap:.3rem; }
-    .fp-btn {
-      width: 2rem; height: 2rem; border-radius: .55rem;
-      border: 1px solid var(--line); background: var(--paper);
-      color: var(--ink);
-      display:grid; place-items:center;
-      font-weight: 600; font-size: .85rem;
-      cursor: pointer; transition: all .25s ease;
-    }
-    .fp-btn:hover { border-color: var(--moss); }
-    .fp-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-    .fp-btn[data-pair="0"] { font-family: 'Fraunces', serif; }
-    .fp-btn[data-pair="1"] { font-family: 'Instrument Serif', serif; }
-    .fp-btn[data-pair="2"] { font-family: 'Playfair Display', serif; }
-    @media (max-width: 640px) {
-      .fp-widget { top: auto; bottom: 5.5rem; right: .75rem; padding: .5rem .6rem; }
-    }
-
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+    @media (prefers-reduced-motion: reduce) { .marquee-track { animation:none !important; } html { scroll-behavior:auto; } }
   </style>
 </head>
 <body class="antialiased grain">
 
   <a href="#main-content" class="skip-nav">Skip to content</a>
 
-  <!-- SECTION: TOP ANNOUNCEMENT BAR -->
-  <div class="topbar" role="banner" aria-label="Event announcement">
-    World&rsquo;s Largest<span class="dot">·</span>ADHD Parenting Summit
-  </div>
-
-  <!-- SECTION: HEADER / NAV -->
   <header class="sticky top-0 z-40 backdrop-blur-md border-b" style="background: rgba(250,249,244,.85); border-color: var(--line)">
     <div class="max-w-[1280px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
       <a href="#" class="flex items-center gap-2.5 font-medium tracking-tight">
@@ -158,1138 +80,101 @@
         <a href="#what" class="t-ease hover:text-[var(--ink)]">What</a>
         <a href="#speakers" class="t-ease hover:text-[var(--ink)]">Speakers</a>
         <a href="#agenda" class="t-ease hover:text-[var(--ink)]">Agenda</a>
-        <a href="#bonuses" class="t-ease hover:text-[var(--ink)]">Bonuses</a>
         <a href="#faq" class="t-ease hover:text-[var(--ink)]">Questions</a>
       </nav>
       <a href="#optin" onclick="openOptin(event)" class="tactile t-ease text-sm px-4 py-2 rounded-full" style="background: var(--ink); color: var(--paper)">Claim your seat</a>
     </div>
   </header>
 
-  <!-- SECTION: FONT TOGGLE WIDGET -->
-  <div class="fp-widget" aria-label="Font pairing selector">
-    <span class="fp-label">Font</span>
-    <div class="fp-buttons" role="group" aria-label="Font pair">
-      <button type="button" class="fp-btn active" data-pair="0" aria-label="Pairing 1: Fraunces + Outfit">Aa</button>
-      <button type="button" class="fp-btn" data-pair="1" aria-label="Pairing 2: Instrument Serif + Inter">Aa</button>
-      <button type="button" class="fp-btn" data-pair="2" aria-label="Pairing 3: Playfair + DM Sans">Aa</button>
-    </div>
-  </div>
-
   <main id="main-content">
 
-    <!-- SECTION: HERO -->
-    <section class="pt-20 md:pt-24 pb-16 relative overflow-hidden">
+    <!-- HERO — centered, gentle, one portrait beneath (ADHD-friendly: single focal face) -->
+    <section class="pt-20 md:pt-28 pb-16 relative overflow-hidden">
       <div class="absolute inset-0 -z-10" style="background: radial-gradient(ellipse 60% 45% at 50% 0%, var(--sage), transparent 70%)"></div>
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10 text-center">
-        <div class="inline-flex items-center gap-2 text-[13px] font-mono uppercase tracking-[0.08em] mb-8" style="color: var(--moss)">
+      <div class="max-w-[1000px] mx-auto px-6 md:px-10 text-center">
+        <div class="inline-flex items-center gap-2 text-[13px] font-mono uppercase tracking-[0.08em] mb-10" style="color: var(--moss)">
           <span class="w-1.5 h-1.5 rounded-full" style="background: var(--terra)"></span>
-          <span>Seventh annual &middot; Mon 9 Mar → Fri 13 Mar 2026</span>
+          <span>Seventh annual · Tue 10 Feb → Sat 14 Feb 2026</span>
         </div>
 
-        <p class="font-mono text-sm md:text-base uppercase tracking-[0.14em] mb-5" style="color: var(--moss)">
-          Become an empowered parent in 5 days
-        </p>
-
-        <h1 class="font-serif text-5xl md:text-7xl lg:text-[5.25rem] tracking-tight leading-[0.98] mb-7">
-          Help your child <span class="serif-accent">reach</span><br />
-          their full potential at the<br />
-          ADHD Parenting Summit.
+        <h1 class="font-serif text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight leading-[0.96] mb-8">
+          <span class="serif-accent">Rewire</span> the way<br />
+          your family handles<br />
+          hard moments.
         </h1>
 
-        <p class="text-lg md:text-xl leading-relaxed max-w-[62ch] mx-auto mb-10" style="color: var(--moss)">
-          <strong>40+ leading experts</strong> on focus, impulsivity, outbursts, screen management, and schoolwork &mdash; five evenings, one living room, evidence your therapist follows on background.
+        <p class="text-lg md:text-xl leading-relaxed max-w-[56ch] mx-auto mb-10" style="color: var(--moss)">
+          Five evenings with 41 clinicians, neuroscientists, and educators — the ones your therapist follows on background. Real scripts, real calm, a recognisably different Friday.
         </p>
 
         <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-6 py-4 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
           Claim your free seat
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <p class="mt-3 text-sm" style="color: var(--moss)">Free ticket &middot; grab your seat before it&rsquo;s gone.</p>
 
-        <!-- Hero visual — V6-style grid of monogram tiles instead of stock collage -->
-        <div class="mt-14 max-w-[640px] mx-auto">
+        <div class="mt-16 max-w-[640px] mx-auto">
           <figure class="relative rounded-[2.5rem] overflow-hidden border shadow-[0_40px_80px_-30px_rgba(20,35,28,0.3)]" style="border-color: var(--line); background: var(--sage)">
-            <div class="grid grid-cols-6 gap-3 p-6 md:p-8" aria-hidden="true">
-              <div class="mono mono-moss col-span-3 row-span-2 rounded-[1.25rem] text-5xl md:text-6xl" style="aspect-ratio:1/1">SC</div>
-              <div class="mono mono-terra col-span-3 rounded-[1rem] text-3xl" style="aspect-ratio:2/1">PS</div>
-              <div class="mono mono-cream col-span-3 rounded-[1rem] text-3xl" style="aspect-ratio:2/1">PD</div>
-              <div class="mono mono-ink col-span-2 rounded-[1rem] text-2xl" style="aspect-ratio:1/1">EH</div>
-              <div class="mono mono-sage col-span-2 rounded-[1rem] text-2xl" style="aspect-ratio:1/1">TA</div>
-              <div class="mono mono-moss col-span-2 rounded-[1rem] text-2xl" style="aspect-ratio:1/1">CH</div>
-            </div>
+            <div class="mono mono-hero mono-moss" aria-hidden="true" style="border-radius:0">NO</div>
             <figcaption class="absolute inset-x-0 bottom-0 p-6 md:p-7 text-left text-white" style="background: linear-gradient(180deg, transparent 0%, rgba(20,35,28,0.88) 100%)">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: #e8b89e">Headliner faculty</div>
-              <div class="text-xl md:text-2xl font-medium tracking-tight">40+ world-leading ADHD experts</div>
-              <div class="text-white/75 text-sm mt-1.5">Psychiatrists &middot; neuroscientists &middot; educators &middot; coaches</div>
+              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: #e8b89e">Headliner · Day 01</div>
+              <div class="text-xl md:text-2xl font-medium tracking-tight">Dr. Nerea Okafor-Mattsson</div>
+              <div class="text-white/75 text-sm mt-1.5">Pediatric Neuropsychology · NYU Child Study</div>
             </figcaption>
           </figure>
         </div>
 
-        <div class="flex flex-col md:flex-row items-center gap-4 mt-10 justify-center">
-          <div class="flex items-center gap-4">
-            <div class="flex -space-x-2.5" aria-hidden="true">
-              <span class="mono mono-sm mono-moss">DK</span>
-              <span class="mono mono-sm mono-terra">AB</span>
-              <span class="mono mono-sm mono-sage">SM</span>
-              <span class="mono mono-sm mono-ink">JH</span>
-            </div>
-            <div class="text-sm text-left">
-              <div class="flex items-center gap-1.5" aria-label="5 out of 5 stars" style="color: var(--terra)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <div class="mt-0.5" style="color: var(--moss)">Loved by <strong>73,124</strong> committed parents</div>
-            </div>
+        <div class="flex items-center gap-4 mt-10 justify-center">
+          <div class="flex -space-x-2.5" aria-hidden="true">
+            <span class="mono mono-sm mono-moss">FO</span>
+            <span class="mono mono-sm mono-terra">TI</span>
+            <span class="mono mono-sm mono-sage">IQ</span>
+            <span class="mono mono-sm mono-ink">AB</span>
+          </div>
+          <div class="text-sm text-left">
+            <div class="font-mono text-[12px] tracking-tight">4.87 / 5 · 2,614 reviews</div>
+            <div class="mt-0.5" style="color: var(--moss)">73,124 parents attended in '25.</div>
           </div>
         </div>
-
-        <!-- Free gift pill -->
-        <p class="mt-7">
-          <span class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium border" style="background:#fff; border-color: var(--line); color: var(--moss)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-            Register now for a <strong>FREE GIFT</strong>: the ADHD Parenting Mastery Collection
-          </span>
-        </p>
       </div>
     </section>
 
-    <!-- SECTION: PRESS MARQUEE -->
+    <!-- PRESS -->
     <section class="py-10 border-y" style="border-color: var(--line)">
       <div class="max-w-[1280px] mx-auto px-6 md:px-10">
         <p class="text-[13px] font-mono uppercase tracking-[0.08em] text-center mb-6" style="color: var(--moss)">Our speakers have appeared in</p>
         <div class="marquee-wrap">
           <div class="marquee-track">
-            <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span><span class="marquee-item">HuffPost</span><span class="marquee-item">USA Today</span>
-            <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span><span class="marquee-item">HuffPost</span><span class="marquee-item">USA Today</span>
+            <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span>
+            <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION: STAT PILLS / BY THE NUMBERS -->
+    <!-- STATS -->
     <section class="py-24" style="background: var(--sage)">
       <div class="max-w-[1100px] mx-auto px-6 md:px-10">
         <p class="text-[13px] font-mono uppercase tracking-[0.08em] text-center mb-12" style="color: var(--moss)">By the numbers</p>
         <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x" style="border-color: var(--sage-2)">
-          <div class="md:px-8 py-8 md:py-0 text-center">
-            <div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">5</div>
-            <p class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Duration</p>
-            <p class="text-sm max-w-[24ch] mx-auto" style="color: var(--moss)">evenings of live, high-signal sessions</p>
-          </div>
-          <div class="md:px-8 py-8 md:py-0 text-center">
-            <div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">40<span style="color: var(--terra)">+</span></div>
-            <p class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Experts</p>
-            <p class="text-sm max-w-[26ch] mx-auto" style="color: var(--moss)">neuroscientists, therapists, educators</p>
-          </div>
-          <div class="md:px-8 py-8 md:py-0 text-center">
-            <div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">50,000<span style="color: var(--terra)">+</span></div>
-            <p class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Attendees</p>
-            <p class="text-sm max-w-[26ch] mx-auto" style="color: var(--moss)">parents joined the community in 2025</p>
-          </div>
+          <div class="md:px-8 py-8 md:py-0 text-center"><div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">5</div><p class="text-sm max-w-[24ch] mx-auto" style="color: var(--moss)">evenings of live, high-signal sessions</p></div>
+          <div class="md:px-8 py-8 md:py-0 text-center"><div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">41</div><p class="text-sm max-w-[26ch] mx-auto" style="color: var(--moss)">neuroscientists, therapists, educators</p></div>
+          <div class="md:px-8 py-8 md:py-0 text-center"><div class="font-serif text-7xl md:text-8xl leading-none tracking-tight mb-3">73,124</div><p class="text-sm max-w-[26ch] mx-auto" style="color: var(--moss)">parents who attended in 2025</p></div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION: WHAT IS THIS (two column) -->
+    <!-- WHAT IS THIS -->
     <section id="what" class="py-24 md:py-32">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-        <!-- Left: V6-style mono tile collage (no stock photo) -->
-        <div class="relative order-2 md:order-1">
-          <div class="rounded-[2rem] border overflow-hidden" style="border-color: var(--line); background:#fff">
-            <div class="grid grid-cols-4 gap-2 p-6">
-              <div class="mono mono-moss col-span-2 row-span-2 rounded-[1rem] text-4xl" style="aspect-ratio:1/1">re</div>
-              <div class="mono mono-sage col-span-2 rounded-[.75rem] text-lg" style="aspect-ratio:2/1">rewrite</div>
-              <div class="mono mono-terra col-span-2 rounded-[.75rem] text-lg" style="aspect-ratio:2/1">the</div>
-              <div class="mono mono-cream col-span-4 rounded-[1rem] text-2xl py-6" style="aspect-ratio:auto">parenting playbook</div>
-            </div>
-            <div class="border-t px-6 py-4 flex items-center justify-between" style="border-color: var(--line)">
-              <span class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--moss)">Revised edition</span>
-              <span class="text-[11px] font-mono" style="color: var(--terra)">2026</span>
-            </div>
-          </div>
-        </div>
-        <!-- Right: copy -->
-        <div class="order-1 md:order-2">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">What is this</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05] mb-7">
-            The <span class="serif-accent">ADHD Parenting Summit</span> 2026.
-          </h2>
-          <div class="space-y-4 text-[17px] leading-relaxed" style="color: var(--moss)">
-            <p>For too long, our children with ADHD have been labeled <em>&ldquo;lazy,&rdquo; &ldquo;problematic,&rdquo; &ldquo;difficult.&rdquo;</em></p>
-            <p><strong style="color: var(--ink)">It&rsquo;s time to rewrite the parenting playbook.</strong></p>
-            <p>Join the ADHD parenting revolution and discover how to unlock your child&rsquo;s full potential. For our brand-new 2026 edition, we&rsquo;re gathering 40+ leading ADHD experts &mdash; a deeper understanding of your child&rsquo;s brain, more practical strategies, and more time to absorb it all across five full evenings instead of three crammed days.</p>
-            <p class="italic" style="color: var(--ink)">All so your child can thrive with ADHD.</p>
-          </div>
-          <div class="mt-8">
-            <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-              Claim your free seat
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: 5-DAY SPEAKER GRID -->
-    <section id="speakers" class="py-24 md:py-32 border-y" style="background: var(--sage); border-color: var(--line)">
-      <div class="max-w-[1000px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-16">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Learn from these</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">40+ world-leading <span class="serif-accent">experts</span>.</h2>
-        </div>
-
-        <!-- DAY 1 -->
-        <div class="mb-14">
-          <div class="text-center mb-8">
-            <span class="text-[11px] font-mono uppercase tracking-[0.14em] inline-block mb-2" style="color: var(--terra)">Day 01 &middot; The butterfly mind</span>
-            <h3 class="font-serif text-2xl md:text-3xl tracking-tight">Boost your child&rsquo;s focus &amp; attention.</h3>
-          </div>
-          <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">SC</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Stephen Cowan</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Pediatrician &middot; NY Medical College &middot; 35+ yrs</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;ADHD finally makes sense when you see your child through the Five Phase Model.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Holistic pediatrician blending Eastern and Western medicine for children&rsquo;s development.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">PS</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Pippa Simou</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Coaching psychologist &middot; ADD-vantage</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;ADHD isn&rsquo;t always hyper boys. Sometimes it&rsquo;s quiet girls burning out.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Neurodiversity advocate and educator building inclusive classrooms.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">PD</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Peg Dawson</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Smart but scattered &middot; lifetime achievement</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;What shapes your kids isn&rsquo;t your advice &mdash; it&rsquo;s how you handle your urge to control.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Psychologist and internationally recognized expert in executive skills.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">RG</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Richard Guare</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Neuropsychologist &middot; BCBA</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Some kids don&rsquo;t grow in straight lines &mdash; and you can&rsquo;t shame them into blooming.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Co-author of the Smart but Scattered series.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">SM</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Salif Mahamane</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">TEDx speaker &middot; 3M views &middot; psych professor</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Some people brainstorm on paper &mdash; my ADHD brain pops ideas like hot popcorn.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Cognitive and environmental psychologist advocating for neurodiversity.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">SH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Stephen P. Hinshaw</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Harvard &middot; UC Berkeley &middot; 11 books</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;What kind of parent are you when no one&rsquo;s watching?&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">UC Berkeley professor and leading ADHD researcher.</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- DAY 2 -->
-        <div class="mb-14">
-          <div class="text-center mb-8">
-            <span class="text-[11px] font-mono uppercase tracking-[0.14em] inline-block mb-2" style="color: var(--terra)">Day 02 &middot; From storm to calm</span>
-            <h3 class="font-serif text-2xl md:text-3xl tracking-tight">Emotional regulation &amp; impulse control.</h3>
-          </div>
-          <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">TA</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Tracy Packiam Alloway</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Award-winning psychologist &middot; World Bank consultant</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The devastating reality of ADHD memory gaps and the hidden genius behind them.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Author of 15 books on the brain and working memory.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">LA</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Liz Angoff</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Licensed educational psychologist</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;It wasn&rsquo;t ADHD that made them feel broken &mdash; it was our refusal to explain what it meant.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Author of the Brain Building Books series.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">JF</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Jennifer Fraser</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Award-winning educator &middot; #1 Amazon bestseller</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The invisible brain damage of bullying is more permanent than any physical scar.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Applies brain-science research to bullying and abuse.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">KM</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Katelyn Mabry</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Author &middot; Kids&rsquo; ADHD Podcast &middot; ADHD life coach</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Why ADHD kids chase friends who reject them.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Host of a children&rsquo;s podcast and parent educator.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">AR</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Anthony Rostain</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Psychiatry chief &middot; Cooper University</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The college mental health crisis is here.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">World-renowned psychiatrist and emeritus professor.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">CG</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Cindy Goldrich</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">CHADD board &middot; ADHD Parent Coach Academy</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Why so many ADHD kids collapse in school.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Parenting coach and ADHD specialist.</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- DAY 3 -->
-        <div class="mb-14">
-          <div class="text-center mb-8">
-            <span class="text-[11px] font-mono uppercase tracking-[0.14em] inline-block mb-2" style="color: var(--terra)">Day 03 &middot; Taming the time monster</span>
-            <h3 class="font-serif text-2xl md:text-3xl tracking-tight">Create routines that stick.</h3>
-          </div>
-          <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">CH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Cindy Hovington</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Neuroscientist &middot; Curious Neuron &middot; 180K</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The hardest part about raising an ADHD child isn&rsquo;t them losing control &mdash; it&rsquo;s you.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Evidence-based tools to help parents and children regulate emotions.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">LP</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Laura Petix</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Pediatric OT &middot; The OT Butterfly &middot; 231K</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The meltdown you see is nothing compared to the exhaustion of holding it all in.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Sensory-processing expert known as &ldquo;The OT Butterfly.&rdquo;</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">AS</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Allison Solomon</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">ADDitude contributor &middot; ADHD parent coach</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Letting ADHD kids fail doesn&rsquo;t build resilience.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Licensed clinical social worker and ADHD coach.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">AL</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Ann-Louise Lockhart</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Pediatric psychologist &middot; Today Show &middot; NYT</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The most dangerous lie parents tell themselves.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Parent coach supporting families with ADHD and anxiety.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">BK</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Bryana Kappadakunnel</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Penguin Random House author &middot; Conscious Mommy</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Coaching them through big feelings&hellip;&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Licensed marriage and family therapist; parenting educator.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">EH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Edward Hallowell</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">World authority on ADHD &middot; NYT bestseller</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The gold-standard guide for turning your bright kid into a brilliant success.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Renowned psychiatrist and foremost ADHD authority.</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- DAY 4 -->
-        <div class="mb-14">
-          <div class="text-center mb-8">
-            <span class="text-[11px] font-mono uppercase tracking-[0.14em] inline-block mb-2" style="color: var(--terra)">Day 04 &middot; School survival</span>
-            <h3 class="font-serif text-2xl md:text-3xl tracking-tight">Improving school &amp; academic performance.</h3>
-          </div>
-          <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">EH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Eli Harwood</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Licensed therapist &middot; millions of followers</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Why ADHD kids throw away everything you gave them, but hold onto feeling noticed.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Therapist and author blending research with compassion.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">MM</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Michael McLeod</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">International speaker &middot; GrowNOW founder</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The no-nonsense, hopeful truth that ADHD independence is possible.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">ADHD and executive-function specialist.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">DK</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dana Kay</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">2x intl. bestseller &middot; ADHD Thrive Institute</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Mislabeling inflammation as &lsquo;bad behavior&rsquo; in ADHD kids.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Holistic health practitioner specializing in ADHD nutrition.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">SH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Sasha Hamdani</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">White-House-recognized psychiatrist</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Why forcing focus desperately backfires (and what works instead).&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Psychiatrist and ADHD specialist.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">CL</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Carolyn Lentzsch-Parcells</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Board-certified pediatrician, ADHD focus</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;Parents wait for a perfect pill &mdash; but the greatest risk to ADHD kids is waiting too long.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">20+ years clinical expertise in pediatric ADHD care.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">JD</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Jeremy Didier</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">President &middot; CHADD board of directors</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;She leads America&rsquo;s biggest ADHD org. Her credentials? Five kids, no help.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">ADHD coach, consultant, and long-time advocate for families.</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- DAY 5 -->
-        <div class="mb-4">
-          <div class="text-center mb-8">
-            <span class="text-[11px] font-mono uppercase tracking-[0.14em] inline-block mb-2" style="color: var(--terra)">Day 05 &middot; The ADHD parent paradox</span>
-            <h3 class="font-serif text-2xl md:text-3xl tracking-tight">Parenting when you have ADHD too.</h3>
-          </div>
-          <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">MN</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Megan Anna Neff</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">AuDHD clinical psychologist &middot; Neurodivergent Insights</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;They loved you when you did everything. But what happens when the mask comes off?&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Clinical psychologist specializing in neurodivergent adults.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">TN</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dr. Tom Nicholson</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Professor &middot; Northumbria University</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;At 11 he didn&rsquo;t want to be here anymore. At 34, he&rsquo;s fighting so no one feels that way again.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Mental-health nursing academic with lived ADHD experience.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">DA</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Dayna Abraham</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">NBC educator &middot; Lemon Lime Adventures</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;What happens when your child needs you&hellip; and you need everyone to leave you alone.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Bestselling author and founder of Calm the Chaos.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">AH</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Amy Marie Hann</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">ADHD mom coach &middot; 183K followers</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;The quiet ADHD burnout that builds for years &mdash; then explodes on the ones you love most.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Writer, educator, and ADHD advocate for women.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">ET</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Elaine Taylor-Klaus</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Co-founder &middot; ImpactADHD &middot; MCC</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;ADHD doesn&rsquo;t break marriages. Couples break when symptoms get confused with character.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Master Certified Coach supporting thousands of families.</div>
-              </div>
-            </li>
-            <li class="flex items-start md:items-center gap-5 p-5 md:p-6">
-              <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">JA</span>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium tracking-tight">Jesse J. Anderson</div>
-                <div class="text-xs mt-0.5 font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Viral ADHD educator &middot; millions reach</div>
-                <div class="text-sm italic mt-2 font-serif" style="color: var(--terra)">&ldquo;What looks like inconsistency is often just emotional exhaustion dressed as flakiness.&rdquo;</div>
-                <div class="text-xs mt-2" style="color: var(--moss)">Author of &ldquo;Extra Focus: The Quick Start Guide to Adult ADHD.&rdquo;</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="text-center mt-12">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white text-sm lift border" style="border-color: var(--line)">
-            See all 40+ speakers
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: WHAT YOU'LL DISCOVER (numbered editorial list) -->
-    <section id="agenda" class="py-24 md:py-32">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
-        <div class="max-w-2xl mx-auto text-center mb-14">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">In the course of 5 days</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">What you&rsquo;ll <span class="serif-accent">discover</span>.</h2>
-        </div>
-        <ol class="divide-y max-w-3xl mx-auto" style="border-color: var(--line)">
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">01</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Focus &amp; attention</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Improve your child&rsquo;s attention.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Practical methods from neuroscientists &mdash; what actually rewires focus in an ADHD brain, and what just masks the problem.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">02</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Screens &amp; dopamine</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Parent in the digital age.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Navigate screens, games, and attention economies that are literally designed against regulation.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">03</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">School</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Overcome school struggles.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">IEPs, 504s, and teacher email that gets results &mdash; without parent-teacher-conference dread.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">04</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Meltdowns</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Tackle outbursts and meltdowns.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Scripts, not willpower. Calm responses that work in the kitchen, not just in theory.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">05</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Regulation</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Regulate emotions &amp; behavior.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Regulate &mdash; not suppress. The difference makes or breaks the next decade of their life.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8">
-            <span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">06</span>
-            <div>
-              <div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Routines</div>
-              <h3 class="font-serif text-2xl tracking-tight mb-2">Build routines that stick.</h3>
-              <p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Routines made for real kitchens, not Pinterest &mdash; supporting brain development and well-being.</p>
-            </div>
-          </li>
-        </ol>
-        <p class="mt-10 max-w-2xl mx-auto text-center text-sm" style="color: var(--moss)">
-          <em>Much of this information isn&rsquo;t in existing books or courses &mdash; too much has been discovered in the past few years.</em>
+      <div class="max-w-[1000px] mx-auto px-6 md:px-10 text-center">
+        <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-5" style="color: var(--moss)">What is this</span>
+        <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05] mb-6 max-w-4xl mx-auto">
+          A <span class="serif-accent">5-evening intensive</span> for the parent done winging it.
+        </h2>
+        <p class="text-lg leading-relaxed max-w-[58ch] mx-auto mb-4" style="color: var(--moss)">
+          Free, online, evidence-based. 41 of the field's sharpest clinicians and educators in your living room for one focused week.
         </p>
-        <div class="text-center mt-8">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-            Claim your free seat
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: MASTERY COLLECTION -->
-    <section class="py-24 md:py-32 border-y" style="background: var(--sage); border-color: var(--line)">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-        <!-- Left visual: three masterclass tiles -->
-        <div>
-          <div class="rounded-[2rem] border bg-white overflow-hidden" style="border-color: var(--line)">
-            <div class="p-6 md:p-8 border-b flex items-center justify-between" style="border-color: var(--line)">
-              <span class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--terra)">3 exclusive masterclasses</span>
-              <span class="text-[11px] font-mono" style="color: var(--moss)">$127 value</span>
-            </div>
-            <div class="p-6 md:p-8 grid grid-cols-3 gap-3">
-              <div class="text-center">
-                <div class="mono mono-lg mono-moss mx-auto mb-3" aria-hidden="true" style="width:100%; aspect-ratio:3/4; border-radius:1rem">EH</div>
-                <div class="text-[11px] font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Hallowell</div>
-              </div>
-              <div class="text-center">
-                <div class="mono mono-lg mono-terra mx-auto mb-3" aria-hidden="true" style="width:100%; aspect-ratio:3/4; border-radius:1rem">EK</div>
-                <div class="text-[11px] font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">King</div>
-              </div>
-              <div class="text-center">
-                <div class="mono mono-lg mono-ink mx-auto mb-3" aria-hidden="true" style="width:100%; aspect-ratio:3/4; border-radius:1rem">RB</div>
-                <div class="text-[11px] font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Brooks</div>
-              </div>
-            </div>
-            <div class="px-6 md:px-8 pb-6 md:pb-8 text-center">
-              <p class="font-serif text-xl italic" style="color: var(--ink)">the Mastery Collection</p>
-            </div>
-          </div>
-        </div>
-        <!-- Right copy -->
-        <div>
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Register today &middot; receive exclusive access</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05] mb-5">The ADHD Parenting <span class="serif-accent">Mastery Collection</span>.</h2>
-          <p class="text-[17px] leading-relaxed mb-6" style="color: var(--moss)">
-            Instant access to the three most-viewed masterclass sessions from our previous summit:
-          </p>
-          <ul class="space-y-4 text-[15px]" style="color: var(--ink)">
-            <li class="flex items-start gap-3">
-              <span class="mono mono-sm mono-moss shrink-0" aria-hidden="true">EH</span>
-              <div>
-                <div class="font-medium">Dr. Edward Hallowell</div>
-                <div class="text-sm mt-0.5" style="color: var(--moss)">How to turn your bright kid into a brilliant success in school and life.</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mono mono-sm mono-terra shrink-0" aria-hidden="true">EK</span>
-              <div>
-                <div class="font-medium">Dr. Emily W. King</div>
-                <div class="text-sm mt-0.5" style="color: var(--moss)">Often-overlooked ways to empower your kid to break through school barriers.</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mono mono-sm mono-ink shrink-0" aria-hidden="true">RB</span>
-              <div>
-                <div class="font-medium">Dr. Robert Brooks</div>
-                <div class="text-sm mt-0.5" style="color: var(--moss)">The winning psychology of confident ADHD parents &mdash; and how to become one yourself.</div>
-              </div>
-            </li>
-          </ul>
-          <div class="mt-8">
-            <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-              Claim your free seat
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <p class="mt-3 text-xs font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Register today for early access to the Collection.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: SOCIAL PROOF STRIP -->
-    <section class="py-14">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
-        <p class="text-[13px] font-mono uppercase tracking-[0.08em] text-center mb-8" style="color: var(--moss)">The community around the work</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          <div class="rounded-[1.25rem] border p-5 md:p-6 text-center lift" style="border-color: var(--line); background:#fff">
-            <div class="font-serif text-4xl md:text-5xl tracking-tight mb-1">107K</div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--terra)">Instagram</div>
-            <div class="text-xs mt-1" style="color: var(--moss)">followers</div>
-          </div>
-          <div class="rounded-[1.25rem] border p-5 md:p-6 text-center lift" style="border-color: var(--line); background:#fff">
-            <div class="font-serif text-4xl md:text-5xl tracking-tight mb-1">124K</div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--terra)">Facebook</div>
-            <div class="text-xs mt-1" style="color: var(--moss)">followers</div>
-          </div>
-          <div class="rounded-[1.25rem] border p-5 md:p-6 text-center lift" style="border-color: var(--line); background:#fff">
-            <div class="font-serif text-4xl md:text-5xl tracking-tight mb-1">300K</div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--terra)">Community</div>
-            <div class="text-xs mt-1" style="color: var(--moss)">members</div>
-          </div>
-          <div class="rounded-[1.25rem] border p-5 md:p-6 text-center lift" style="border-color: var(--line); background:#fff">
-            <div class="font-serif text-4xl md:text-5xl tracking-tight mb-1">190K</div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--terra)">Satisfied</div>
-            <div class="text-xs mt-1" style="color: var(--moss)">customers</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: HOSTS — WE'RE CHANGING THE WAY -->
-    <section class="py-24 md:py-32" style="background: var(--sage)">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">We&rsquo;re changing the way</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Kids with ADHD are <span class="serif-accent">raised</span>.</h2>
-        </div>
-        <div class="bg-white rounded-[2rem] border p-8 md:p-12" style="border-color: var(--line)">
-          <div class="flex justify-center gap-10 md:gap-14 mb-10 flex-wrap">
-            <div class="text-center">
-              <span class="mono mono-lg mono-moss mb-3" aria-hidden="true">SR</span>
-              <p class="font-medium mt-3">Spela Repovs</p>
-              <p class="text-xs max-w-[180px] mt-1" style="color: var(--moss)">Host &amp; producer of the ADHD Parenting Summit</p>
-            </div>
-            <div class="text-center">
-              <span class="mono mono-lg mono-terra mb-3" aria-hidden="true">ET</span>
-              <p class="font-medium mt-3">Elaine Taylor-Klaus</p>
-              <p class="text-xs max-w-[180px] mt-1" style="color: var(--moss)">Master Certified ADHD coach &amp; co-host</p>
-            </div>
-          </div>
-          <div class="space-y-4 text-[16px] leading-relaxed" style="color: var(--moss)">
-            <p>At <strong style="color: var(--ink)">ADHD Parenting</strong>, we believe kids with ADHD have real potential &mdash; they just need a different kind of support. And finding that support shouldn&rsquo;t feel impossible for already-overwhelmed parents.</p>
-            <p>Last year, we organized the biggest virtual ADHD Parenting Summit and helped <strong style="color: var(--ink)">253,788 families</strong> manage the unique challenges of raising kids with ADHD.</p>
-            <p>This year, we&rsquo;re back bigger and better:</p>
-            <ul class="space-y-1.5 pl-5" style="list-style:disc">
-              <li>Five full evenings instead of three.</li>
-              <li>40+ leading ADHD experts &amp; speakers.</li>
-              <li>Practical solutions for the real challenges you&rsquo;re facing.</li>
-            </ul>
-            <p>From morning routines that actually work, to building executive-function skills &mdash; we&rsquo;re covering what matters most.</p>
-            <p style="color: var(--ink)"><strong>Let&rsquo;s unlock your child&rsquo;s incredible potential &mdash; together.</strong></p>
-          </div>
-          <div class="text-center mt-8">
-            <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-              Claim your free seat
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: EXPERT VIDEO TESTIMONIALS -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-14">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Hear from experts</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Why you should <span class="serif-accent">join</span>.</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 max-w-[1000px] mx-auto">
-          <figure class="rounded-[1.6rem] border overflow-hidden lift" style="border-color: var(--line); background: var(--sage)">
-            <div class="relative" style="aspect-ratio:9/12">
-              <div class="mono mono-moss absolute inset-0 text-7xl" aria-hidden="true" style="border-radius:0">EH</div>
-              <button type="button" class="absolute inset-0 grid place-items-center group" aria-label="Play testimonial from Dr. Edward Hallowell">
-                <span class="w-16 h-16 rounded-full grid place-items-center border shadow-lg t-ease group-hover:scale-105" style="background: var(--paper); color: var(--ink); border-color: var(--line)">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                </span>
-              </button>
-            </div>
-            <figcaption class="p-5 border-t" style="border-color: var(--line); background:#fff">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Testimonial 01</div>
-              <div class="font-medium tracking-tight">Dr. Edward Hallowell</div>
-              <div class="text-xs mt-0.5" style="color: var(--moss)">World authority on ADHD &middot; NYT bestseller</div>
-            </figcaption>
-          </figure>
-          <figure class="rounded-[1.6rem] border overflow-hidden lift" style="border-color: var(--line); background: var(--sage)">
-            <div class="relative" style="aspect-ratio:9/12">
-              <div class="mono mono-terra absolute inset-0 text-7xl" aria-hidden="true" style="border-radius:0">TA</div>
-              <button type="button" class="absolute inset-0 grid place-items-center group" aria-label="Play testimonial from Dr. Tracy Alloway">
-                <span class="w-16 h-16 rounded-full grid place-items-center border shadow-lg t-ease group-hover:scale-105" style="background: var(--paper); color: var(--ink); border-color: var(--line)">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                </span>
-              </button>
-            </div>
-            <figcaption class="p-5 border-t" style="border-color: var(--line); background:#fff">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Testimonial 02</div>
-              <div class="font-medium tracking-tight">Dr. Tracy Alloway</div>
-              <div class="text-xs mt-0.5" style="color: var(--moss)">Memory &amp; brain researcher &middot; author of 15 books</div>
-            </figcaption>
-          </figure>
-          <figure class="rounded-[1.6rem] border overflow-hidden lift" style="border-color: var(--line); background: var(--sage)">
-            <div class="relative" style="aspect-ratio:9/12">
-              <div class="mono mono-ink absolute inset-0 text-7xl" aria-hidden="true" style="border-radius:0">SH</div>
-              <button type="button" class="absolute inset-0 grid place-items-center group" aria-label="Play testimonial from Dr. Sasha Hamdani">
-                <span class="w-16 h-16 rounded-full grid place-items-center border shadow-lg t-ease group-hover:scale-105" style="background: var(--paper); color: var(--ink); border-color: var(--line)">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                </span>
-              </button>
-            </div>
-            <figcaption class="p-5 border-t" style="border-color: var(--line); background:#fff">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-1" style="color: var(--terra)">Testimonial 03</div>
-              <div class="font-medium tracking-tight">Dr. Sasha Hamdani</div>
-              <div class="text-xs mt-0.5" style="color: var(--moss)">White-House-recognized ADHD psychiatrist</div>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: PARENT TESTIMONIALS -->
-    <section class="py-24 md:py-32 border-y" style="background: var(--sage); border-color: var(--line)">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">See what parents are saying</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">About the <span class="serif-accent">Summit</span>.</h2>
-        </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">That was awesome &mdash; crying at the end. Not sure if it was pure relief but it felt good to have that release. Thanks for your beautiful energy and caring nature.</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-moss" aria-hidden="true">MS</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Maren S.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent of two &middot; attended 2025</div>
-              </div>
-            </figcaption>
-          </figure>
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">Thank you for compiling such timeless information. So grateful to have been part of this Summit and now to be part of the community forever.</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-terra" aria-hidden="true">JD</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Janelle D.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent &middot; Toronto, ON</div>
-              </div>
-            </figcaption>
-          </figure>
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">There are 4 people in my house with ADHD &mdash; I&rsquo;ve been the chaos coordinator for 25 years. So many strategies yesterday made me ask, where has this Summit been in our lives?!</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-ink" aria-hidden="true">LR</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Lauren R.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent of four &middot; Austin, TX</div>
-              </div>
-            </figcaption>
-          </figure>
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">I was seeking practical, real-world advice &mdash; I found exactly that. I left feeling empowered, informed, and more confident in my parenting.</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-sage" aria-hidden="true">PT</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Priya T.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent of three &middot; London, UK</div>
-              </div>
-            </figcaption>
-          </figure>
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">My child has gone through a lot &mdash; bullying, abuse. I learned how to empower him, understand him, and communicate in a way he could hear.</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-moss" aria-hidden="true">AO</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Adesuwa O.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent &middot; Lagos, NG</div>
-              </div>
-            </figcaption>
-          </figure>
-          <figure class="bg-white rounded-[1.6rem] border p-6 md:p-7 lift" style="border-color: var(--line)">
-            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" class="mb-4" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
-            <blockquote class="font-serif text-lg md:text-xl leading-[1.35] tracking-tight mb-5">The different topics and genuinely good speakers pushed my motivation to work on my relationship and communication with my neurospicy kid.</blockquote>
-            <figcaption class="flex items-center gap-3 pt-5 border-t" style="border-color: var(--line)">
-              <span class="mono mono-sm mono-terra" aria-hidden="true">BF</span>
-              <div>
-                <div class="text-sm font-medium tracking-tight">Bjørn F.</div>
-                <div class="text-xs" style="color: var(--moss)">Parent &middot; Oslo, NO</div>
-              </div>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: BONUSES -->
-    <section id="bonuses" class="py-24 md:py-32">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-14">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">You&rsquo;re also getting</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">These bonuses, <span class="serif-accent">free</span>.</h2>
-        </div>
-        <div class="grid md:grid-cols-2 gap-5 md:gap-6">
-          <article class="rounded-[1.6rem] border p-6 md:p-7 flex gap-5 items-start lift" style="border-color: var(--line); background:#fff">
-            <span class="mono mono-md mono-sage shrink-0" aria-hidden="true">01</span>
-            <div class="flex-1">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Bonus 01 &middot; Checklist</div>
-              <h3 class="font-serif text-xl tracking-tight mb-2">&ldquo;Raising Children With ADHD&rdquo; Checklist</h3>
-              <p class="text-sm leading-relaxed mb-4" style="color: var(--moss)">A set of checklists that helps you prevent outbursts, teach self-regulation, and calm down the aftermath.</p>
-              <div class="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.14em]">
-                <span class="line-through" style="color: var(--moss); opacity:.7">$19</span>
-                <span style="color: var(--terra)">Free</span>
-              </div>
-            </div>
-          </article>
-          <article class="rounded-[1.6rem] border p-6 md:p-7 flex gap-5 items-start lift" style="border-color: var(--line); background:#fff">
-            <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">02</span>
-            <div class="flex-1">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Bonus 02 &middot; Script guide</div>
-              <h3 class="font-serif text-xl tracking-tight mb-2">Swap Negative Reactions for Positive Responses</h3>
-              <p class="text-sm leading-relaxed mb-4" style="color: var(--moss)">Know exactly what positive things to say to your child in the hardest, most common situations.</p>
-              <div class="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.14em]">
-                <span class="line-through" style="color: var(--moss); opacity:.7">$27</span>
-                <span style="color: var(--terra)">Free</span>
-              </div>
-            </div>
-          </article>
-          <article class="rounded-[1.6rem] border p-6 md:p-7 flex gap-5 items-start lift" style="border-color: var(--line); background:#fff">
-            <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">03</span>
-            <div class="flex-1">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Bonus 03 &middot; Printable</div>
-              <h3 class="font-serif text-xl tracking-tight mb-2">Weekly Routine Chart</h3>
-              <p class="text-sm leading-relaxed mb-4" style="color: var(--moss)">Printable chart providing the structure and stability that help manage impulsiveness and reduce anxiety.</p>
-              <div class="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.14em]">
-                <span class="line-through" style="color: var(--moss); opacity:.7">$9</span>
-                <span style="color: var(--terra)">Free</span>
-              </div>
-            </div>
-          </article>
-          <article class="rounded-[1.6rem] border p-6 md:p-7 flex gap-5 items-start lift" style="border-color: var(--line); background:#fff">
-            <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">04</span>
-            <div class="flex-1">
-              <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Bonus 04 &middot; Printable</div>
-              <h3 class="font-serif text-xl tracking-tight mb-2">School Schedule</h3>
-              <p class="text-sm leading-relaxed mb-4" style="color: var(--moss)">Easy-to-use printable schedule that keeps kids on track, manages time, and completes assignments without daily drama.</p>
-              <div class="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.14em]">
-                <span class="line-through" style="color: var(--moss); opacity:.7">$9</span>
-                <span style="color: var(--terra)">Free</span>
-              </div>
-            </div>
-          </article>
-        </div>
-        <div class="text-center mt-12">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-            Claim your free seat
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <p class="mt-3 text-xs font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Total bonus value: $64 &middot; yours at no charge</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: STATS / WHY THIS MATTERS MORE -->
-    <section class="py-24 md:py-32 border-y" style="background: var(--sage); border-color: var(--line)">
-      <div class="max-w-[1000px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Why this is more important</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Than ever <span class="serif-accent">before</span>.</h2>
-        </div>
-        <div class="grid md:grid-cols-2 gap-4 md:gap-5">
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-moss shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">01</span>
-            <p class="text-sm leading-relaxed flex-1">ADHD is the top mental or developmental condition among children. <sup style="color: var(--terra)">[1]</sup></p>
-          </div>
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-terra shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">02</span>
-            <p class="text-sm leading-relaxed flex-1">Every 3rd child with ADHD has symptoms that last into adulthood. <sup style="color: var(--terra)">[2]</sup></p>
-          </div>
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-cream shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">03</span>
-            <p class="text-sm leading-relaxed flex-1">A child with ADHD has a 1-in-4 chance of having a parent who also has it. <sup style="color: var(--terra)">[3]</sup></p>
-          </div>
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-ink shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">04</span>
-            <p class="text-sm leading-relaxed flex-1">Children with ADHD are 2&ndash;3&times; more likely to develop substance abuse or addiction. <sup style="color: var(--terra)">[4]</sup></p>
-          </div>
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-sage shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">05</span>
-            <p class="text-sm leading-relaxed flex-1">They are more likely to develop low self-esteem, anxiety, and depression. <sup style="color: var(--terra)">[5]</sup></p>
-          </div>
-          <div class="bg-white rounded-[1.25rem] border p-5 md:p-6 flex gap-4 items-start" style="border-color: var(--line)">
-            <span class="mono mono-md mono-moss shrink-0" aria-hidden="true" style="width:2.5rem; height:2.5rem; font-size:.95rem">06</span>
-            <p class="text-sm leading-relaxed flex-1">Compared to their peers, children with ADHD earn significantly lower school grades. <sup style="color: var(--terra)">[6]</sup></p>
-          </div>
-        </div>
-        <div class="mt-10 max-w-[58ch]">
-          <p class="font-serif text-xl md:text-2xl leading-snug">But here&rsquo;s the good news.</p>
-          <p class="mt-3 text-[17px] leading-relaxed" style="color: var(--moss)">The earlier you learn how to support your child, the better your chances of managing their condition and minimizing long-term issues.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: WHY ATTEND — 3x2 ICON CARDS -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-14">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Why should you attend</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Six reasons this <span class="serif-accent">matters</span>.</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">World&rsquo;s leading experts</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">Actionable insights from the world&rsquo;s foremost ADHD clinicians, researchers, and coaches.</p>
-          </div>
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">The time is now</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">ADHD diagnoses are rising. There&rsquo;s never been a more crucial moment to prioritize your family.</p>
-          </div>
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">A proven path to results</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">Battle-tested tips from best-selling authors, speakers, psychologists, and coaches.</p>
-          </div>
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2z"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">Modern parenting insights</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">Essential information not often found in parenting books or existing courses.</p>
-          </div>
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">Professional advice, simple</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">Practical insights you can actually use the same day you hear them.</p>
-          </div>
-          <div class="rounded-[1.6rem] border p-7 lift" style="border-color: var(--line); background:#fff">
-            <div class="w-12 h-12 rounded-full grid place-items-center mb-5" style="background: var(--sage); color: var(--moss)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>
-            </div>
-            <h3 class="font-serif text-xl tracking-tight mb-2">Community &amp; support</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--moss)">Thousands of parents walking this path alongside you &mdash; not alone at 11pm Googling.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: WHY ATTEND — DETAIL COPY -->
-    <section class="py-24 md:py-32" style="background: var(--sage)">
-      <div class="max-w-[1100px] mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-12 md:gap-16 items-start">
-        <div>
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Why should you attend</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05] mb-8">If any of this sounds like <span class="serif-accent">you</span>.</h2>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="mono mono-moss rounded-[1.25rem] text-3xl" style="aspect-ratio:1/1">&hearts;</div>
-            <div class="mono mono-terra rounded-[1.25rem] text-3xl" style="aspect-ratio:1/1">&#9678;</div>
-            <div class="mono mono-ink rounded-[1.25rem] text-3xl" style="aspect-ratio:1/1">?</div>
-            <div class="mono mono-sage rounded-[1.25rem] text-3xl" style="aspect-ratio:1/1">&#x2713;</div>
-          </div>
-        </div>
-        <div class="space-y-7 text-[16px] leading-relaxed" style="color: var(--moss)">
-          <div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Reason 01</div>
-            <h3 class="font-serif text-xl tracking-tight mb-2" style="color: var(--ink)">You want what&rsquo;s best for your ADHD child.</h3>
-            <p>You know your child is bright and capable &mdash; but watching them navigate a world that wasn&rsquo;t built for their brain can be heartbreaking. This Summit brings together experts who understand both the science of ADHD and the heart of parenting these unique children.</p>
-          </div>
-          <div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Reason 02</div>
-            <h3 class="font-serif text-xl tracking-tight mb-2" style="color: var(--ink)">You&rsquo;re looking for actionable tips.</h3>
-            <p>You&rsquo;ve read books, listened to podcasts, maybe even joined a course. With so much information out there, it&rsquo;s easy to feel overwhelmed. Our experts share practical insights you can implement immediately.</p>
-          </div>
-          <div>
-            <div class="text-[11px] font-mono uppercase tracking-[0.14em] mb-2" style="color: var(--terra)">Reason 03</div>
-            <h3 class="font-serif text-xl tracking-tight mb-2" style="color: var(--ink)">You suspect your child has ADHD.</h3>
-            <p>But they haven&rsquo;t been officially diagnosed yet. You&rsquo;ve noticed the patterns; the evaluation waiting lists are endless; you want to support your child <em>now</em>. Our experts can help.</p>
-          </div>
-          <div class="pt-6 border-t" style="border-color: var(--line)">
-            <p class="font-serif text-xl md:text-2xl leading-snug" style="color: var(--ink)">
-              If any of that resonated and you thought <span class="serif-accent">&ldquo;wow, that&rsquo;s me,&rdquo;</span> then yes &mdash; this Summit is for you.
-            </p>
-            <div class="mt-6">
-              <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-                Claim your free seat
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: 5 REASONS YOU CAN'T MISS -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[800px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Five reasons why</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">You can&rsquo;t miss <span class="serif-accent">this</span>.</h2>
-        </div>
-        <ol class="divide-y" style="border-color: var(--line)">
-          <li class="grid grid-cols-[auto_1fr] gap-6 py-6">
-            <span class="font-serif text-4xl leading-none" style="color: var(--terra)">01</span>
-            <div>
-              <h3 class="font-serif text-xl tracking-tight mb-1">Five days of everything ADHD.</h3>
-              <p class="text-sm leading-relaxed" style="color: var(--moss)">A comprehensive experience covering every facet of ADHD parenting &mdash; nothing skipped.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 py-6">
-            <span class="font-serif text-4xl leading-none" style="color: var(--terra)">02</span>
-            <div>
-              <h3 class="font-serif text-xl tracking-tight mb-1">Discover your child&rsquo;s hidden potential.</h3>
-              <p class="text-sm leading-relaxed" style="color: var(--moss)">Learn how to empower your child to embrace their ADHD as a strength, not a deficit.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 py-6">
-            <span class="font-serif text-4xl leading-none" style="color: var(--terra)">03</span>
-            <div>
-              <h3 class="font-serif text-xl tracking-tight mb-1">Learn how to set boundaries.</h3>
-              <p class="text-sm leading-relaxed" style="color: var(--moss)">Ways to help your child respect boundaries without harsh discipline or power struggles.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 py-6">
-            <span class="font-serif text-4xl leading-none" style="color: var(--terra)">04</span>
-            <div>
-              <h3 class="font-serif text-xl tracking-tight mb-1">Motivate your ADHD teen.</h3>
-              <p class="text-sm leading-relaxed" style="color: var(--moss)">Effective tips to inspire and engage your teen in schoolwork without becoming the enemy.</p>
-            </div>
-          </li>
-          <li class="grid grid-cols-[auto_1fr] gap-6 py-6">
-            <span class="font-serif text-4xl leading-none" style="color: var(--terra)">05</span>
-            <div>
-              <h3 class="font-serif text-xl tracking-tight mb-1">Handle outbursts without losing it.</h3>
-              <p class="text-sm leading-relaxed" style="color: var(--moss)">Approach your child&rsquo;s emotional outbursts without losing your patience &mdash; or your evening.</p>
-            </div>
-          </li>
-        </ol>
-        <div class="text-center mt-10">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-            Claim your free seat
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: MORE JOY PILL ROW -->
-    <section class="py-20" style="background: var(--sage)">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10 text-center">
-        <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Every child is capable of more</span>
-        <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05] mb-10">Yes &mdash; yours <span class="serif-accent">as well</span>.</h2>
-        <div class="flex flex-wrap justify-center gap-3 mb-4">
-          <span class="plus-pill"><span class="plus">+</span>More Joy</span>
-          <span class="plus-pill"><span class="plus">+</span>More Attention</span>
-          <span class="plus-pill"><span class="plus">+</span>More Focus</span>
-        </div>
-        <div class="flex flex-wrap justify-center gap-3 mb-10">
-          <span class="plus-pill"><span class="plus">+</span>More Organization</span>
-          <span class="plus-pill"><span class="plus">+</span>More Creativity</span>
-          <span class="plus-pill"><span class="plus">+</span>More Success</span>
-        </div>
-        <p class="text-[15px] max-w-[48ch] mx-auto mb-7" style="color: var(--moss)">
-          All you need are ADHD-tailored parenting techniques. Discover them at this Summit.
+        <p class="text-lg leading-relaxed max-w-[58ch] mx-auto mb-10" style="color: var(--moss)">
+          Watch live or catch replays within 48 hours. Arrive at Monday morning with specific language your kitchen has never heard before.
         </p>
         <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
           Claim your free seat
@@ -1298,53 +183,118 @@
       </div>
     </section>
 
-    <!-- SECTION: FAQ -->
-    <section id="faq" class="py-24 md:py-32 border-t" style="border-color: var(--line)">
-      <div class="max-w-[800px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Frequently asked</span>
-          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Before you <span class="serif-accent">register</span>.</h2>
+    <!-- SPEAKERS — vertical list -->
+    <section id="speakers" class="py-24 md:py-32 border-y" style="background: var(--sage); border-color: var(--line)">
+      <div class="max-w-[900px] mx-auto px-6 md:px-10">
+        <div class="mb-12 text-center">
+          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Day 01 · Opening Circle</span>
+          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Understanding your child's <span class="serif-accent">brain</span>.</h2>
         </div>
 
-        <details><summary><span>When is the Summit happening?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">The ADHD Parenting Summit runs Monday, March 9 through Friday, March 13, 2026. Each day&rsquo;s sessions begin at 9 AM ET / 3 PM CEST.</div></details>
+        <ul class="divide-y bg-white rounded-[1.6rem] border overflow-hidden" style="border-color: var(--line)">
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">NO</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Nerea Okafor-Mattsson</div><div class="text-sm mt-0.5" style="color: var(--moss)">Pediatric Neuropsychology · NYU Child Study</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Tue · 7:00 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">TI</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Tomás Ishihara</div><div class="text-sm mt-0.5" style="color: var(--moss)">Family Therapy · Seattle Family Institute</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Tue · 7:50 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">FO</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Fern Okonkwo-Lindgren</div><div class="text-sm mt-0.5" style="color: var(--moss)">Education Consultant · Former Greenwich SEN director</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Tue · 8:40 PM ET</div><div style="color: var(--terra)">30 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">AB</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Ambrose Bellerose</div><div class="text-sm mt-0.5" style="color: var(--moss)">Child Psychiatry · Cleveland Clinic</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Tue · 9:15 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-moss shrink-0" aria-hidden="true">IQ</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Inés Quattrocchi</div><div class="text-sm mt-0.5" style="color: var(--moss)">ADHD Coaching · Buenos Aires · 11-year caseload</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Wed · 7:00 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-ink shrink-0" aria-hidden="true">YD</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Yohannes Dankwa</div><div class="text-sm mt-0.5" style="color: var(--moss)">Clinical Psychology · Accra / London</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Wed · 7:50 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-cream shrink-0" aria-hidden="true">MS</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Mira Soltys</div><div class="text-sm mt-0.5" style="color: var(--moss)">Special Ed Advocacy · 412 IEPs negotiated</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Wed · 8:40 PM ET</div><div style="color: var(--terra)">30 min</div></div>
+          </li>
+          <li class="flex items-center gap-5 p-5 md:p-6">
+            <span class="mono mono-md mono-terra shrink-0" aria-hidden="true">ER</span>
+            <div class="flex-1 min-w-0"><div class="font-medium tracking-tight">Dr. Ezekiel Ribeiro-Pascal</div><div class="text-sm mt-0.5" style="color: var(--moss)">Pediatrics · São Paulo · medication &amp; sleep</div></div>
+            <div class="hidden md:block text-right font-mono text-[12px] uppercase tracking-wide shrink-0" style="color: var(--moss)"><div>Wed · 9:15 PM ET</div><div style="color: var(--terra)">45 min</div></div>
+          </li>
+        </ul>
 
-        <details><summary><span>Is the Summit available in my country?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Yes. It&rsquo;s a free online event accessible from anywhere in the world. If you can&rsquo;t watch everything live, you can upgrade to a VIP Pass for lifetime access.</div></details>
-
-        <details><summary><span>How can I watch the recordings?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">You&rsquo;ll receive links two days before the Summit begins. Sessions unlock automatically at 9 AM ET each day and are free to watch for 24 hours.</div></details>
-
-        <details><summary><span>I&rsquo;m busy during the Summit &mdash; can I still watch?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Each day&rsquo;s recordings are free for 24 hours after they go live. For unlimited lifetime access, upgrade to the VIP Pass.</div></details>
-
-        <details><summary><span>Is the Summit a live event?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">All sessions are pre-recorded and released at the same time each day. You&rsquo;ll have free access to videos for 24 hours after release.</div></details>
-
-        <details><summary><span>How many speakers per day?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Each day features 8&ndash;9 sessions; each session is 30&ndash;60 minutes. All sessions air simultaneously each day.</div></details>
-
-        <details><summary><span>Where do I find each speaker&rsquo;s schedule?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">All sessions are pre-recorded. During each 24-hour viewing window you can watch any speaker from that day at your own pace.</div></details>
-
-        <details><summary><span>My child hasn&rsquo;t been diagnosed &mdash; is this still for me?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Absolutely. About 31% of attendees arrive pre-diagnosis. Day 02 directly addresses &ldquo;should we pursue an evaluation?&rdquo;</div></details>
-
-        <details><summary><span>Is any of this medication advice?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">No. We cover the clinical landscape and questions to ask your prescriber &mdash; specific decisions remain with you and your pediatrician.</div></details>
-
-        <details><summary><span>I&rsquo;m having technical issues &mdash; what should I do?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Try clearing your browser cache and cookies, update your browser, or try a different device. If the issue persists, email us and we&rsquo;ll sort it.</div></details>
-
-        <details><summary><span>I signed up but didn&rsquo;t receive any links.</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Check all inbox folders (spam, junk, promotions). If still nothing, reach out and we&rsquo;ll help you get access.</div></details>
-
-        <details><summary><span>What&rsquo;s included in the VIP Pass?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Lifetime access to all 40+ masterclasses, Expert Action Blueprints, the audio edition, subtitles, and the Action-Taker&rsquo;s Workbook.</div></details>
-
-        <details><summary><span>Can I watch with my partner?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Yes &mdash; one registration per household covers the whole home.</div></details>
-
-        <details><summary><span>Do I get a Certificate of Attendance?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Yes. Contact us after attending and we&rsquo;ll send detailed instructions.</div></details>
-
-        <div class="text-center mt-10">
-          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 rounded-full text-sm" style="background: var(--terra); color: var(--paper)">
-            Claim your free seat
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <div class="text-center mt-12">
+          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white text-sm lift border" style="border-color: var(--line)">
+            See all 41 speakers
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- SECTION: FINAL CTA BLOCK (registration) -->
-    <section id="optin-anchor" class="py-24 md:py-32">
+    <!-- LEARN — numbered editorial list -->
+    <section id="agenda" class="py-24 md:py-32">
+      <div class="max-w-[1100px] mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mx-auto text-center mb-14">
+          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Six shifts by Day 5</span>
+          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">What the end of the week <span class="serif-accent">may sound like</span>.</h2>
+        </div>
+        <ol class="divide-y max-w-3xl mx-auto" style="border-color: var(--line)">
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">01</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 1</div><h3 class="font-serif text-2xl tracking-tight mb-2">Understand why they act out.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Neuroscience of behaviour. "Bad child" becomes "dysregulated nervous system."</p></div></li>
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">02</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 2</div><h3 class="font-serif text-2xl tracking-tight mb-2">End the yelling cycle.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Calm responses that work. Scripts, not willpower.</p></div></li>
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">03</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 3</div><h3 class="font-serif text-2xl tracking-tight mb-2">Fix morning chaos.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Routines built for real kitchens, not Pinterest.</p></div></li>
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">04</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 4</div><h3 class="font-serif text-2xl tracking-tight mb-2">Build emotional resilience.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Regulate — not suppress.</p></div></li>
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">05</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 5</div><h3 class="font-serif text-2xl tracking-tight mb-2">Navigate school systems.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">IEPs, 504s, and teacher email that gets results.</p></div></li>
+          <li class="grid grid-cols-[auto_1fr] gap-6 md:gap-10 py-8"><span class="font-serif text-5xl md:text-6xl leading-none" style="color: var(--terra)">06</span><div><div class="text-[11px] font-mono uppercase tracking-[0.08em] mb-2" style="color: var(--moss)">Day 5 · close</div><h3 class="font-serif text-2xl tracking-tight mb-2">Find your people.</h3><p class="leading-relaxed text-sm md:text-base" style="color: var(--moss)">Late-night channel for the questions you don't Google.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="py-28" style="background: var(--sage)">
+      <div class="max-w-[900px] mx-auto px-6 md:px-10">
+        <svg width="36" height="28" viewBox="0 0 40 30" fill="none" class="mb-8" style="color: var(--terra); opacity: 0.65"><path d="M0 30 V20 C0 9 6 2 16 0 L17 4 C11 6 8 10 8 14 H16 V30 H0 Z M22 30 V20 C22 9 28 2 38 0 L39 4 C33 6 30 10 30 14 H38 V30 H22 Z" fill="currentColor"/></svg>
+        <blockquote class="font-serif text-2xl md:text-[2rem] tracking-tight leading-[1.3]">
+          By Wednesday evening something had shifted in my 9-year-old. Not because he'd changed — because I had one sentence I wasn't saying anymore. That's the whole summit, honestly.
+        </blockquote>
+        <div class="flex items-center gap-4 mt-9">
+          <span class="mono mono-sm mono-terra" aria-hidden="true" style="width:2.75rem;height:2.75rem;border:1px solid var(--line)">DK</span>
+          <div>
+            <div class="text-sm font-medium tracking-tight">Dana Kowalski-Reyes</div>
+            <div class="text-xs" style="color: var(--moss)">Parent of two · Portland, OR · attended in 2025</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 md:py-32 border-t" style="border-color: var(--line)">
+      <div class="max-w-[800px] mx-auto px-6 md:px-10">
+        <div class="text-center mb-12">
+          <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-4" style="color: var(--moss)">Questions</span>
+          <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Before you register.</h2>
+        </div>
+        <details><summary><span>Is it really free?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Yes. Live attendance and same-day replays are free. A lifetime-access pass is available for $47 after registering — fully optional.</div></details>
+        <details><summary><span>What time are the sessions?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Live 7:00 – 9:30 PM Eastern, Tuesday through Saturday. Replays stay live for 48 hours.</div></details>
+        <details><summary><span>My child hasn't been diagnosed — is this still for me?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Absolutely. About 31% of attendees arrive pre-diagnosis. Day 02 directly addresses "should we pursue an evaluation."</div></details>
+        <details><summary><span>Is any of this medication advice?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">No. We cover the clinical landscape and questions to ask your prescriber — but specific decisions stay with you and your pediatrician.</div></details>
+        <details><summary><span>Can I watch with my partner?</span><span class="pm-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="px-7 pb-6 leading-relaxed" style="color: var(--moss)">Yes — one registration per household covers the whole home.</div></details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="optin" class="py-24 md:py-32">
       <div class="max-w-[1200px] mx-auto px-6 md:px-10">
         <div class="rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden" style="background: var(--ink); color: var(--paper)">
           <div class="absolute inset-0 opacity-[0.12] pointer-events-none" style="background-image: radial-gradient(circle at 18% 22%, rgba(201,111,74,.9), transparent 42%), radial-gradient(circle at 82% 68%, rgba(220,228,212,.6), transparent 42%);"></div>
@@ -1352,13 +302,13 @@
             <div>
               <span class="text-[13px] font-mono uppercase tracking-[0.08em] inline-block mb-5" style="color: #e8b89e">Registration</span>
               <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.05]">Five evenings from now, your kitchen sounds <span class="serif-accent" style="color: #e8b89e">different</span>.</h2>
-              <p class="text-white/65 leading-relaxed mt-5 max-w-prose">Join 73,124 parents. Free, online, replays for 24h per day. No upsell mid-session &mdash; that&rsquo;s a rule.</p>
+              <p class="text-white/65 leading-relaxed mt-5 max-w-prose">Join 73,124 parents. Free, online, replays for 48h. No upsell mid-session — that's a rule.</p>
             </div>
             <div class="flex flex-col gap-6">
               <ul class="space-y-2.5 text-sm text-white/80">
-                <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24" style="color: var(--terra)"><path d="M4 12l5 5L20 6"/></svg><span>20+ core hours across 5 evenings</span></li>
+                <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24" style="color: var(--terra)"><path d="M4 12l5 5L20 6"/></svg><span>20 core hours across 5 evenings</span></li>
                 <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24" style="color: var(--terra)"><path d="M4 12l5 5L20 6"/></svg><span>Free Parenting Mastery Collection ($127)</span></li>
-                <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24" style="color: var(--terra)"><path d="M4 12l5 5L20 6"/></svg><span>4 bonus playbooks (printables + scripts)</span></li>
+                <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24" style="color: var(--terra)"><path d="M4 12l5 5L20 6"/></svg><span>3 bonus playbooks ($291 value)</span></li>
               </ul>
               <a href="#" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium" style="background: var(--terra); color: var(--paper)">
                 Claim your free seat
@@ -1370,53 +320,23 @@
       </div>
     </section>
 
-    <!-- SECTION: REFERENCES -->
-    <section class="py-10 border-t" style="border-color: var(--line)">
-      <div class="max-w-[900px] mx-auto px-6 md:px-10 text-xs leading-relaxed font-mono" style="color: var(--moss)">
-        <p class="uppercase tracking-[0.14em] mb-3" style="color: var(--ink)">References</p>
-        <p>[1] Danielson, M. L. et al. (2024). ADHD prevalence among U.S. children and adolescents. <em>JCCAP</em>, 53(3), 343&ndash;360.<br>
-        [2] Ginsberg Y., Quintero J., Anand E., et al. (2014). Underdiagnosis of ADHD in adult patients. <em>PCC CNS Disorders</em>, 16(3).<br>
-        [3] Cleveland Clinic. (2024). ADHD clinical overview.<br>
-        [4] Child Mind Institute. (2024). ADHD and substance abuse.<br>
-        [5] Ingeborgrud, C. B. et al. (2023). Anxiety and depression from age 3 to 8. <em>Scientific Reports</em>, 13.<br>
-        [6] Langberg, J. M. et al. (2011). Patterns of academic achievement. <em>JCCAP</em>, 40(4).</p>
-      </div>
-    </section>
-
   </main>
 
-  <!-- SECTION: FOOTER -->
   <footer class="border-t py-10" style="border-color: var(--line)">
     <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex flex-wrap gap-4 items-center justify-between text-[12px] font-mono uppercase tracking-[0.06em]" style="color: var(--moss)">
-      <div>&copy; 2026 StrategicParenting ADHD &middot; ADHD Parenting Summit</div>
-      <div class="flex gap-6">
-        <a href="#" class="hover:text-[var(--ink)] t-ease">Privacy</a>
-        <a href="#" class="hover:text-[var(--ink)] t-ease">Cookies</a>
-        <a href="#" class="hover:text-[var(--ink)] t-ease">Terms</a>
-        <a href="mailto:hello@althea-academy.com" class="hover:text-[var(--ink)] t-ease">hello@althea-academy.com</a>
-      </div>
+      <div>© 2026 Althea Academy · ADHD Parenting Summit</div>
+      <div class="flex gap-6"><a href="#" class="hover:text-[var(--ink)] t-ease">Privacy</a><a href="#" class="hover:text-[var(--ink)] t-ease">Terms</a><a href="mailto:hello@althea-academy.com" class="hover:text-[var(--ink)] t-ease">hello@althea-academy.com</a></div>
     </div>
   </footer>
 
-  <!-- SECTION: MOBILE STICKY CTA -->
-  <div class="stick-mobile">
-    <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-medium w-full max-w-[420px]" style="background: var(--terra); color: var(--paper)">
-      Claim your free seat
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </a>
-  </div>
-
-  <!-- SECTION: OPTIN MODAL -->
   <div id="optin-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="optin-title" aria-describedby="optin-subtitle" onclick="closeOptinBackdrop(event)">
     <div class="modal-card p-8 md:p-10" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between mb-6">
         <span class="text-[13px] font-mono uppercase tracking-[0.08em]" style="color: var(--moss)">Registration</span>
-        <button type="button" onclick="closeOptin()" class="w-11 h-11 rounded-full border flex items-center justify-center t-ease lift" style="border-color: var(--line)" aria-label="Close registration modal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
-        </button>
+        <button type="button" onclick="closeOptin()" class="w-11 h-11 rounded-full border flex items-center justify-center t-ease lift" style="border-color: var(--line)" aria-label="Close registration modal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg></button>
       </div>
       <h3 id="optin-title" class="font-serif text-2xl md:text-3xl tracking-tight leading-tight mb-2">Your <span class="serif-accent">seat</span> is waiting.</h3>
-      <p id="optin-subtitle" class="text-sm leading-relaxed mb-7" style="color: var(--moss)">We&rsquo;ll send your calendar links and the Mastery Collection within 90 seconds.</p>
+      <p id="optin-subtitle" class="text-sm leading-relaxed mb-7" style="color: var(--moss)">We'll send your calendar links and the Collection within 90 seconds.</p>
       <form class="space-y-4" novalidate onsubmit="submitOptin(event)">
         <div class="flex flex-col gap-2">
           <label for="optin-fname" class="text-[11px] font-mono uppercase tracking-[0.14em]" style="color: var(--moss)">First name</label>
@@ -1431,13 +351,11 @@
           <span id="optin-submit-label">Claim your free seat</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <p class="text-[11px] text-center mt-3" style="color: var(--moss)">By registering you agree to receive event and related communications. Unsubscribe any time.</p>
       </form>
     </div>
   </div>
 
   <script>
-    // --- Optin modal ---
     function openOptin(e){ if(e)e.preventDefault(); document.getElementById('optin-modal').classList.add('open'); document.body.classList.add('modal-open'); const f=document.getElementById('optin-fname'); if(f) setTimeout(()=>f.focus(),30); }
     function closeOptin(){ document.getElementById('optin-modal').classList.remove('open'); document.body.classList.remove('modal-open'); }
     function closeOptinBackdrop(e){ if(e.target.id==='optin-modal') closeOptin(); }
@@ -1453,33 +371,6 @@
       setTimeout(()=>{ btn.disabled=false; lbl.textContent='Claim your free seat'; form.reset(); closeOptin(); },400);
     }
     document.addEventListener('keydown', e => { if(e.key==='Escape') closeOptin(); });
-
-    // --- Font-pair toggle ---
-    (function(){
-      const PAIRS = [
-        { display: "'Fraunces', Georgia, serif",            body: "'Outfit', ui-sans-serif, system-ui, sans-serif", mono: "'JetBrains Mono', ui-monospace, monospace" },
-        { display: "'Instrument Serif', Georgia, serif",    body: "'Inter', ui-sans-serif, system-ui, sans-serif",  mono: "'IBM Plex Mono', ui-monospace, monospace" },
-        { display: "'Playfair Display', Georgia, serif",    body: "'DM Sans', ui-sans-serif, system-ui, sans-serif",mono: "'DM Mono', ui-monospace, monospace" }
-      ];
-      const root = document.documentElement;
-      const buttons = document.querySelectorAll('.fp-btn');
-
-      function apply(i){
-        const p = PAIRS[i] || PAIRS[0];
-        root.style.setProperty('--font-display', p.display);
-        root.style.setProperty('--font-body',    p.body);
-        root.style.setProperty('--font-mono',    p.mono);
-        buttons.forEach(b => b.classList.toggle('active', Number(b.dataset.pair) === i));
-        try { localStorage.setItem('fontPair', String(i)); } catch(_) {}
-      }
-
-      buttons.forEach(b => b.addEventListener('click', () => apply(Number(b.dataset.pair))));
-
-      let saved = 0;
-      try { saved = Number(localStorage.getItem('fontPair') || 0); } catch(_) {}
-      if (Number.isNaN(saved) || saved < 0 || saved > 2) saved = 0;
-      apply(saved);
-    })();
   </script>
 
 </body>

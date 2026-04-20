@@ -7,10 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Pairing 1 (default): Fraunces + Source Serif 4 + Outfit -->
-  <!-- Pairing 2: Instrument Serif + Inter -->
-  <!-- Pairing 3: Fraunces (already) + IBM Plex Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Outfit:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -22,9 +19,9 @@
             taupe: { 700:'#4F4238', 600:'#6B5B4E', 500:'#8A7A6C', 400:'#A89887' }
           },
           fontFamily: {
-            display: ['var(--font-display)','serif'],
-            serif:   ['var(--font-body)','Georgia','serif'],
-            ui:      ['var(--font-ui)','system-ui','sans-serif']
+            display: ['Fraunces','serif'],
+            serif:   ['Source Serif 4','Georgia','serif'],
+            ui:      ['Outfit','system-ui','sans-serif']
           }
         }
       }
@@ -44,36 +41,18 @@
       --taupe-600:#6B5B4E;
       --taupe-700:#4F4238;
       --muted:#3D3128; /* AAA-contrast muted on paper */
-
-      /* Pairing 1 — default */
-      --font-display: 'Fraunces', serif;
-      --font-body:    'Source Serif 4', Georgia, serif;
-      --font-ui:      'Outfit', system-ui, sans-serif;
     }
-    /* Pairing 2 — Instrument Serif + Inter */
-    html[data-fonts="2"] {
-      --font-display: 'Instrument Serif', serif;
-      --font-body:    'Inter', system-ui, sans-serif;
-      --font-ui:      'Inter', system-ui, sans-serif;
-    }
-    /* Pairing 3 — Fraunces + IBM Plex Sans */
-    html[data-fonts="3"] {
-      --font-display: 'Fraunces', serif;
-      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
-      --font-ui:      'IBM Plex Sans', system-ui, sans-serif;
-    }
-
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); background:var(--paper-100); color:var(--ink-900); font-feature-settings:"kern","liga","ss01"; }
-    h1,h2,h3,h4,.font-display { font-family: var(--font-display); letter-spacing:-0.01em; font-optical-sizing:auto; }
-    .eyebrow { font-family: var(--font-ui); text-transform:uppercase; letter-spacing:0.22em; font-weight:600; font-size:0.7rem; }
-    .dropcap::first-letter { font-family: var(--font-display); font-weight:900; font-size:4.5rem; float:left; line-height:0.88; padding:0.3rem 0.6rem 0 0; color:#4A1F2D; font-style:normal; }
+    body { font-family:'Source Serif 4','Georgia',serif; background:var(--paper-100); color:var(--ink-900); font-feature-settings:"kern","liga","ss01"; }
+    h1,h2,h3,h4,.font-display { font-family:'Fraunces','serif'; letter-spacing:-0.01em; font-optical-sizing:auto; }
+    .eyebrow { font-family:'Outfit',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.22em; font-weight:600; font-size:0.7rem; }
+    .dropcap::first-letter { font-family:'Fraunces','serif'; font-weight:900; font-size:4.5rem; float:left; line-height:0.88; padding:0.3rem 0.6rem 0 0; color:#4A1F2D; font-style:normal; }
     .rule { border-top:1px solid var(--paper-300); }
-    .figure-label { font-family: var(--font-ui); text-transform:uppercase; letter-spacing:0.2em; font-size:0.72rem; color:var(--muted); font-weight:600; }
+    .figure-label { font-family:'Outfit',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.2em; font-size:0.72rem; color:var(--muted); font-weight:600; }
     .portrait { border-radius:2px; overflow:hidden; position:relative; }
     .portrait::after { content:''; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(74,31,45,0.15); pointer-events:none; }
-    .pullmark { font-family: var(--font-display); font-size:8rem; line-height:0.75; color:#C9812A; font-weight:900; }
-    .roman { font-family: var(--font-display); font-weight:500; font-style:italic; color:#C9812A; }
+    .pullmark { font-family:'Fraunces','serif'; font-size:8rem; line-height:0.75; color:#C9812A; font-weight:900; }
+    .roman { font-family:'Fraunces','serif'; font-weight:500; font-style:italic; color:#C9812A; }
     .deckle { border-image:repeating-linear-gradient(90deg,#E8DFD0 0 4px, transparent 4px 8px) 1; border-style:solid; border-width:0 0 1px 0; }
 
     /* Marquee */
@@ -82,14 +61,14 @@
     .marquee-wrap::before { left:0; background:linear-gradient(90deg,var(--paper-100),transparent); }
     .marquee-wrap::after { right:0; background:linear-gradient(-90deg,var(--paper-100),transparent); }
     .marquee-track { display:flex; width:max-content; animation:marq 38s linear infinite; }
-    .marquee-item { padding:0 2rem; white-space:nowrap; color:#6B5B4E; font-family: var(--font-display); font-style:italic; font-weight:500; }
+    .marquee-item { padding:0 2rem; white-space:nowrap; color:#6B5B4E; font-family:'Fraunces','serif'; font-style:italic; font-weight:500; }
     @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
     /* FAQ */
     details { border-bottom:1px solid #E8DFD0; }
-    details summary { cursor:pointer; list-style:none; padding:1.5rem 0; font-family: var(--font-display); font-weight:700; font-size:1.2rem; color:#2A0F17; }
+    details summary { cursor:pointer; list-style:none; padding:1.5rem 0; font-family:'Fraunces','serif'; font-weight:700; font-size:1.2rem; color:#2A0F17; }
     details summary::-webkit-details-marker { display:none; }
-    details summary::after { content:'+'; float:right; font-family: var(--font-display); font-weight:500; font-size:1.6rem; line-height:1; color:#C9812A; transition:transform 0.2s; }
+    details summary::after { content:'+'; float:right; font-family:'Fraunces','serif'; font-weight:500; font-size:1.6rem; line-height:1; color:#C9812A; transition:transform 0.2s; }
     details[open] summary::after { content:'—'; }
 
     /* Modal */
@@ -104,80 +83,11 @@
 
     /* Skip nav */
     .skip-nav { position:absolute; left:-9999px; }
-    .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--ink-900); color:var(--paper-50); padding:0.75rem 1.25rem; z-index:200; font-family: var(--font-ui); font-weight:600; }
-
-    /* Font toggle — editorial pill */
-    .font-toggle {
-      position: fixed;
-      top: 4.5rem;
-      right: 1rem;
-      z-index: 45;
-      display: inline-flex;
-      align-items: center;
-      gap: 0;
-      background: var(--paper-50);
-      border: 1px solid var(--paper-300);
-      border-radius: 999px;
-      padding: 0.25rem;
-      box-shadow: 0 6px 18px -6px rgba(42,15,23,0.18);
-      font-family: var(--font-ui);
-    }
-    .font-toggle button {
-      width: 2.1rem;
-      height: 2.1rem;
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--ink-700);
-      background: transparent;
-      transition: background 0.15s, color 0.15s;
-      cursor: pointer;
-      line-height: 1;
-    }
-    .font-toggle button:hover { background: var(--paper-200); }
-    .font-toggle button[aria-pressed="true"] {
-      background: var(--ink-900);
-      color: var(--paper-50);
-    }
-    .font-toggle .ft-label {
-      font-family: var(--font-ui);
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--taupe-600);
-      padding: 0 0.6rem 0 0.5rem;
-      font-weight: 600;
-      display: none;
-    }
-    @media (min-width: 640px) { .font-toggle .ft-label { display: inline; } }
+    .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--ink-900); color:var(--paper-50); padding:0.75rem 1.25rem; z-index:200; font-family:'Outfit',system-ui,sans-serif; font-weight:600; }
 
     @media (prefers-reduced-motion: reduce) {
+      .marquee-track { animation:none !important; }
       html { scroll-behavior:auto; }
-    }
-    /* Press marquee always animated per project rule (still honors reduced-motion globally for non-press animations). */
-    .marquee-track { animation:marq 38s linear infinite; }
-
-    /* Pill row (more joy, editorial) */
-    .editorial-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 0.9rem;
-      border: 1px solid var(--paper-300);
-      border-radius: 999px;
-      background: var(--paper-50);
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-style: italic;
-      color: var(--ink-700);
-      font-size: 0.95rem;
-    }
-    .editorial-pill .plus {
-      font-family: var(--font-display);
-      font-weight: 900;
-      color: var(--ochre-600);
-      font-style: normal;
     }
   </style>
 </head>
@@ -199,14 +109,6 @@
     </div>
   </header>
 
-  <!-- ========== FONT TOGGLE (floating) ========== -->
-  <div class="font-toggle" role="group" aria-label="Typography pairing">
-    <span class="ft-label">Type</span>
-    <button type="button" data-ft="1" aria-pressed="true" title="Fraunces + Source Serif 4">Aa</button>
-    <button type="button" data-ft="2" aria-pressed="false" title="Instrument Serif + Inter">Aa</button>
-    <button type="button" data-ft="3" aria-pressed="false" title="Fraunces + IBM Plex Sans">Aa</button>
-  </div>
-
   <main id="main-content">
 
   <!-- ========== I. HERO / COVER ========== -->
@@ -226,10 +128,10 @@
         <div class="md:col-span-7">
           <p class="eyebrow text-ochre-700 mb-5">A Five-Day Editorial Series for Parents</p>
           <h1 class="font-display font-black text-[2.5rem] md:text-6xl lg:text-7xl text-ink-700 leading-[1.02] tracking-[-0.02em] mb-8">
-            Discover the Secrets to Help Your Child Reach Their <span class="italic text-ochre-600">Full Potential</span> at The ADHD Parenting Summit 2026.
+            The Child&nbsp;You Were Told Was<span class="italic text-ochre-600">&nbsp;Too Much</span>&nbsp;Is, In&nbsp;Fact, Right On Time.
           </h1>
           <p class="text-taupe-700 text-lg md:text-xl leading-[1.55] mb-8 max-w-xl">
-            <span class="font-semibold text-ink-700 not-italic">40+ leading experts</span> on improving focus, managing impulsivity, handling outbursts, screen management and schoolwork — gathered for five days to answer the questions you've been asking alone at 2&nbsp;a.m.
+            Forty of the field's most patient minds — neuropsychologists, family therapists, teachers and parents — gather for five days to answer the questions you've been asking alone at 2&nbsp;a.m.
           </p>
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-10">
             <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold px-8 py-4 rounded-full transition">
@@ -237,16 +139,16 @@
               <span class="text-ochre-400 text-xl leading-none" aria-hidden="true">→</span>
             </a>
             <p class="text-taupe-600 text-sm font-serif italic max-w-xs">
-              FREE GIFT enclosed with every seat: <span class="not-italic font-semibold text-ink-700">The ADHD Parenting Mastery Collection.</span>
+              Registration closes Feb 9 at midnight. A complimentary Parenting Collection is enclosed with every seat.
             </p>
           </div>
 
           <div class="flex items-center gap-4 pt-6 border-t border-paper-300">
             <div class="flex -space-x-3">
-              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4A1F2D,#8A4E5D)">SC</div>
-              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#C9812A,#A6691F)">PD</div>
-              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#6B3340,#4A1F2D)">EH</div>
-              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4F4238,#6B5B4E)">SH</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4A1F2D,#8A4E5D)">SJ</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#C9812A,#A6691F)">MC</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#6B3340,#4A1F2D)">EF</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4F4238,#6B5B4E)">JW</div>
             </div>
             <div class="text-sm">
               <p class="text-ochre-600 text-xs tracking-wide">★ ★ ★ ★ ★</p>
@@ -260,45 +162,45 @@
             <figure class="portrait">
               <div class="aspect-[3/4]" style="background:linear-gradient(160deg,#8A4E5D,#4A1F2D)">
                 <div class="w-full h-full flex items-end justify-start p-4">
-                  <span class="font-display font-black text-paper-50/70 text-5xl">SC</span>
+                  <span class="font-display font-black text-paper-50/70 text-5xl">SJ</span>
                 </div>
               </div>
               <figcaption class="pt-2 pb-1">
-                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Stephen Cowan</p>
-                <p class="figure-label">Pediatrics · 35 yrs</p>
+                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Sarah Jensen</p>
+                <p class="figure-label">Neuropsychology</p>
               </figcaption>
             </figure>
             <figure class="portrait mt-8">
               <div class="aspect-[3/4]" style="background:linear-gradient(160deg,#C9812A,#A6691F)">
                 <div class="w-full h-full flex items-end justify-start p-4">
-                  <span class="font-display font-black text-paper-50/70 text-5xl">EH</span>
+                  <span class="font-display font-black text-paper-50/70 text-5xl">EF</span>
                 </div>
               </div>
               <figcaption class="pt-2 pb-1">
-                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Edward Hallowell</p>
-                <p class="figure-label">World Authority on ADHD</p>
+                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Edward Feldman</p>
+                <p class="figure-label">Family Therapy</p>
               </figcaption>
             </figure>
             <figure class="portrait -mt-4">
               <div class="aspect-[3/4]" style="background:linear-gradient(160deg,#6B3340,#8A4E5D)">
                 <div class="w-full h-full flex items-end justify-start p-4">
-                  <span class="font-display font-black text-paper-50/70 text-5xl">PD</span>
+                  <span class="font-display font-black text-paper-50/70 text-5xl">PS</span>
                 </div>
               </div>
               <figcaption class="pt-2 pb-1">
-                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Peg Dawson</p>
-                <p class="figure-label">Executive Skills</p>
+                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Peg Shannon</p>
+                <p class="figure-label">Education</p>
               </figcaption>
             </figure>
             <figure class="portrait mt-4">
               <div class="aspect-[3/4]" style="background:linear-gradient(160deg,#4F4238,#6B5B4E)">
                 <div class="w-full h-full flex items-end justify-start p-4">
-                  <span class="font-display font-black text-paper-50/70 text-5xl">SH</span>
+                  <span class="font-display font-black text-paper-50/70 text-5xl">MT</span>
                 </div>
               </div>
               <figcaption class="pt-2 pb-1">
-                <p class="font-display font-bold text-sm text-ink-700">Dr.&nbsp;Stephen Hinshaw</p>
-                <p class="figure-label">UC Berkeley</p>
+                <p class="font-display font-bold text-sm text-ink-700">Mark Thompson</p>
+                <p class="figure-label">Pediatrics</p>
               </figcaption>
             </figure>
           </div>
@@ -311,7 +213,7 @@
   <!-- ========== AS FEATURED IN ========== -->
   <section class="bg-paper-50 py-10 border-b border-paper-300">
     <div class="max-w-7xl mx-auto px-6">
-      <p class="text-center figure-label mb-6">Speakers Featured In</p>
+      <p class="text-center figure-label mb-6">As Featured In</p>
       <div class="marquee-wrap">
         <div class="marquee-track">
           <span class="marquee-item">The New York Times</span>
@@ -324,8 +226,6 @@
           <span class="marquee-item">TEDx</span>
           <span class="marquee-item">Forbes</span>
           <span class="marquee-item">BBC</span>
-          <span class="marquee-item">HuffPost</span>
-          <span class="marquee-item">USA Today</span>
           <span class="marquee-item">The New York Times</span>
           <span class="marquee-item">The Atlantic</span>
           <span class="marquee-item">The Guardian</span>
@@ -336,8 +236,6 @@
           <span class="marquee-item">TEDx</span>
           <span class="marquee-item">Forbes</span>
           <span class="marquee-item">BBC</span>
-          <span class="marquee-item">HuffPost</span>
-          <span class="marquee-item">USA Today</span>
         </div>
       </div>
     </div>
@@ -373,13 +271,10 @@
           An Unhurried Answer to an Overwhelming Question
         </h2>
         <p class="dropcap text-lg leading-[1.75] text-taupe-700 mb-6">
-          For too long, children with ADHD have been labelled <em>lazy, problematic, difficult</em>. We built the ADHD Parenting Summit because we could not find the thing we needed: a generous, evidence-based conversation that treats ADHD parenting as something other than a problem to be fixed. Across five days, forty of the field's most thoughtful clinicians, educators and writers offer practical guidance — and, just as importantly, the reassurance that you are not alone in the doubt.
+          We built the ADHD Parenting Summit because we could not find the thing we needed: a generous, evidence-based conversation that treats ADHD parenting as something other than a problem to be fixed. Across five days, forty of the field's most thoughtful clinicians, educators and writers offer practical guidance — and, just as importantly, the reassurance that you are not alone in the doubt.
         </p>
-        <p class="text-lg leading-[1.75] text-taupe-700 mb-6">
-          For our brand-new 2026 edition we are spreading the curriculum across <span class="text-ink-700 font-semibold">five full days</span> instead of three — a deeper understanding of your child's ADHD, more practical strategies, and more time to absorb it all. Watch live or catch the replays at your own pace. Bring your partner, your mother, your co-parent.
-        </p>
-        <p class="text-lg leading-[1.75] text-taupe-700 mb-8 italic">
-          All so you can help your child <span class="not-italic font-semibold text-ink-700">thrive</span> with ADHD.
+        <p class="text-lg leading-[1.75] text-taupe-700 mb-8">
+          Watch live or catch the replays at your own pace. Bring your partner, your mother, your co-parent. The sessions are free. The strategies are real. The relief is, we hope, audible.
         </p>
         <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-2 font-ui font-semibold text-ink-700 border-b-2 border-ochre-600 pb-1 hover:text-ochre-700 transition">
           Claim your free seat
@@ -400,7 +295,7 @@
           </div>
           <div class="flex items-start gap-4">
             <span class="font-display font-black text-ochre-600 text-3xl leading-none pt-1">3.</span>
-            <p><span class="font-display font-bold text-ink-700">A complimentary Collection.</span> The ADHD Parenting Mastery Collection — three masterclasses from Hallowell, King and Brooks — sent by email on registration. Yours to keep.</p>
+            <p><span class="font-display font-bold text-ink-700">A complimentary Collection.</span> Scripts, templates, and checklists — sent by email on registration. Yours to keep.</p>
           </div>
         </div>
       </aside>
@@ -414,403 +309,103 @@
         <div>
           <p class="roman mb-2">III.</p>
           <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700">Contributors — Day One</h2>
-          <p class="font-serif italic text-taupe-600 text-lg mt-2">The Butterfly Mind · Boost Your Child's Focus &amp; Attention</p>
         </div>
-        <p class="figure-label hidden md:block">Feb 10 · Monday</p>
+        <p class="figure-label hidden md:block">Understanding Your Child's Brain</p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-        <!-- Cowan -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4A1F2D,#2A0F17)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">SC</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">SJ</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Stephen Cowan</p>
-            <p class="figure-label mt-1">NY Medical College</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"ADHD finally makes sense when you see your child through the Five Phase Model."</p>
+            <p class="font-display font-bold text-ink-700">Dr. Sarah Jensen</p>
+            <p class="font-serif italic text-sm text-taupe-600">Pediatric Neuropsychologist</p>
           </figcaption>
         </figure>
-        <!-- Simou -->
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#C9812A,#A6691F)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">PS</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">MC</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Pippa Simou</p>
-            <p class="figure-label mt-1">Coaching Psychologist</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"ADHD isn't always hyper boys. Sometimes it's quiet girls burning out."</p>
+            <p class="font-display font-bold text-ink-700">Michael Chen</p>
+            <p class="font-serif italic text-sm text-taupe-600">ADHD Coach</p>
           </figcaption>
         </figure>
-        <!-- Dawson -->
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#6B3340)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">PD</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">MR</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Peg Dawson</p>
-            <p class="figure-label mt-1">'Smart but Scattered'</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"What shapes your kids isn't your advice — it's how you handle your urge to control."</p>
+            <p class="font-display font-bold text-ink-700">Maria Rodriguez</p>
+            <p class="font-serif italic text-sm text-taupe-600">Child Development Specialist</p>
           </figcaption>
         </figure>
-        <!-- Guare -->
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4F4238,#2A0F17)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">RG</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">JW</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Richard Guare</p>
-            <p class="figure-label mt-1">Neuropsychologist, BCBA</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Some kids don't grow in straight lines. You can't shame them into blooming."</p>
+            <p class="font-display font-bold text-ink-700">Dr. James Wilson</p>
+            <p class="font-serif italic text-sm text-taupe-600">Psychiatrist</p>
           </figcaption>
         </figure>
-        <!-- Mahamane -->
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#D9963F,#C9812A)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">SM</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">ED</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Salif Mahamane</p>
-            <p class="figure-label mt-1">TEDx · 3M Views</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"My ADHD brain pops ideas like hot popcorn."</p>
+            <p class="font-display font-bold text-ink-700">Emily Davis</p>
+            <p class="font-serif italic text-sm text-taupe-600">Educational Consultant</p>
           </figcaption>
         </figure>
-        <!-- Hinshaw -->
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#6B3340,#4A1F2D)">
             <div class="w-full h-full flex items-end justify-center pb-6">
-              <span class="font-display font-black text-paper-50/70 text-4xl">SH</span>
+              <span class="font-display font-black text-paper-50/70 text-4xl">RL</span>
             </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Stephen P. Hinshaw</p>
-            <p class="figure-label mt-1">UC Berkeley · 11 books</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"What kind of parent are you when no one's watching?"</p>
+            <p class="font-display font-bold text-ink-700">Dr. Robert Lee</p>
+            <p class="font-serif italic text-sm text-taupe-600">Family Therapist</p>
           </figcaption>
         </figure>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========== III-b. CONTRIBUTORS — DAY 2 ========== -->
-  <section class="bg-paper-50 py-20 md:py-28 border-b border-paper-300">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-baseline justify-between mb-10 pb-4 rule">
-        <div>
-          <p class="roman mb-2">III·ii</p>
-          <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700">Contributors — Day Two</h2>
-          <p class="font-serif italic text-taupe-600 text-lg mt-2">From Storm to Calm · Emotional Regulation &amp; Impulse Control</p>
-        </div>
-        <p class="figure-label hidden md:block">Feb 11 · Tuesday</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#A6691F,#6B5B4E)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">TA</span></div>
+            <div class="w-full h-full flex items-end justify-center pb-6">
+              <span class="font-display font-black text-paper-50/70 text-4xl">LT</span>
+            </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Tracy Packiam Alloway</p>
-            <p class="figure-label mt-1">World Bank Consultant · 15 books</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The devastating reality of ADHD memory gaps — and the hidden genius behind them."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4A1F2D,#8A4E5D)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">LA</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Liz Angoff</p>
-            <p class="figure-label mt-1">Educational Psychologist</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"It wasn't ADHD that made them feel broken — it was our refusal to explain what it meant."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#C9812A,#4F4238)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">JF</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Jennifer Fraser</p>
-            <p class="figure-label mt-1">#1 Amazon Bestseller</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The invisible brain damage of bullying is more permanent than any physical scar."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#6B3340,#2A0F17)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">KM</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Katelyn Mabry</p>
-            <p class="figure-label mt-1">Kids' ADHD Podcast Host</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Why ADHD kids chase friends who reject them."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#A6691F)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">AR</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Anthony Rostain</p>
-            <p class="figure-label mt-1">World-Renowned Psychiatrist</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The college mental-health crisis is here."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4F4238,#6B3340)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">CG</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Cindy Goldrich</p>
-            <p class="figure-label mt-1">CHADD Board Member</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Why so many ADHD kids collapse in school."</p>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== III-c. CONTRIBUTORS — DAY 3 ========== -->
-  <section class="bg-paper-100 py-20 md:py-28 border-b border-paper-300">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-baseline justify-between mb-10 pb-4 rule">
-        <div>
-          <p class="roman mb-2">III·iii</p>
-          <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700">Contributors — Day Three</h2>
-          <p class="font-serif italic text-taupe-600 text-lg mt-2">Taming the Time Monster · Create Routines That Stick</p>
-        </div>
-        <p class="figure-label hidden md:block">Feb 12 · Wednesday</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#C9812A,#4A1F2D)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">CH</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Cindy Hovington</p>
-            <p class="figure-label mt-1">Neuroscientist · 'Curious Neuron'</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The hardest part about raising an ADHD child isn't them losing control. It's you."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#2A0F17)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">LP</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Laura Petix</p>
-            <p class="figure-label mt-1">'The OT Butterfly' · 231K</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The meltdown you see is nothing compared to the exhaustion of holding it all in."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#A6691F,#4F4238)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">AS</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Allison Solomon</p>
-            <p class="figure-label mt-1">ADDitude Magazine · LCSW</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Letting ADHD kids fail doesn't build resilience."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4A1F2D,#6B3340)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">AL</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Ann-Louise Lockhart</p>
-            <p class="figure-label mt-1">Today Show · NYT Featured</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The most dangerous lie parents tell themselves."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#D9963F,#8A4E5D)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">BK</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Bryana Kappadakunnel</p>
-            <p class="figure-label mt-1">Penguin Random House Author</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Coaching them through big feelings — without losing yourself."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#6B5B4E,#4A1F2D)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">EH</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Edward Hallowell</p>
-            <p class="figure-label mt-1">World Authority · NYT Bestseller</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The gold-standard guide for turning your bright kid into a brilliant success."</p>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== III-d. CONTRIBUTORS — DAY 4 ========== -->
-  <section class="bg-paper-50 py-20 md:py-28 border-b border-paper-300">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-baseline justify-between mb-10 pb-4 rule">
-        <div>
-          <p class="roman mb-2">III·iv</p>
-          <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700">Contributors — Day Four</h2>
-          <p class="font-serif italic text-taupe-600 text-lg mt-2">School Survival · Tools &amp; Strategies for Academic Performance</p>
-        </div>
-        <p class="figure-label hidden md:block">Feb 13 · Thursday</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#C9812A)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">EH</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Eli Harwood</p>
-            <p class="figure-label mt-1">Licensed Therapist · Millions</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Why ADHD kids throw away everything you gave them, but hold onto feeling noticed."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4F4238,#A6691F)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">MM</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Michael McLeod</p>
-            <p class="figure-label mt-1">GrowNOW Founder</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The no-nonsense, hopeful truth that ADHD independence is possible."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#2A0F17,#6B3340)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">DK</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dana Kay</p>
-            <p class="figure-label mt-1">2× Bestselling Author</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Mislabeling inflammation as 'bad behavior' in ADHD kids."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#C9812A,#6B3340)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">SH</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Sasha Hamdani</p>
-            <p class="figure-label mt-1">White House-Recognized</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Why forcing focus desperately backfires — and what works instead."</p>
+            <p class="font-display font-bold text-ink-700">Linda Thompson</p>
+            <p class="font-serif italic text-sm text-taupe-600">Special Ed. Advocate</p>
           </figcaption>
         </figure>
         <figure>
           <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#4F4238)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">CL</span></div>
+            <div class="w-full h-full flex items-end justify-center pb-6">
+              <span class="font-display font-black text-paper-50/70 text-4xl">AP</span>
+            </div>
           </div>
           <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Carolyn Lentzsch-Parcells</p>
-            <p class="figure-label mt-1">Board-Cert. Pediatrician</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"Parents wait for a perfect pill. The greatest risk is waiting too long."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#A6691F,#2A0F17)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">JD</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Jeremy Didier</p>
-            <p class="figure-label mt-1">President, CHADD Board</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"She leads America's biggest ADHD org. Her credentials? Five kids, no help."</p>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== III-e. CONTRIBUTORS — DAY 5 ========== -->
-  <section class="bg-paper-100 py-20 md:py-28 border-b border-paper-300">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-baseline justify-between mb-10 pb-4 rule">
-        <div>
-          <p class="roman mb-2">III·v</p>
-          <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700">Contributors — Day Five</h2>
-          <p class="font-serif italic text-taupe-600 text-lg mt-2">The ADHD Parent Paradox · Parenting When You Have ADHD Too</p>
-        </div>
-        <p class="figure-label hidden md:block">Feb 14 · Friday</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4A1F2D,#C9812A)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">MN</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Megan Anna Neff</p>
-            <p class="figure-label mt-1">AuDHD Clinical Psychologist</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"They loved you when you did everything. What happens when the mask comes off?"</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#6B3340,#D9963F)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">TN</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dr. Tom Nicholson</p>
-            <p class="figure-label mt-1">Northumbria University</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"At 11 he didn't want to be here. At 34, he's fighting so no one feels that way again."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#C9812A,#2A0F17)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">DA</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Dayna Abraham</p>
-            <p class="figure-label mt-1">Calm the Chaos · Bestseller</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"What happens when your child needs you — and you need everyone to leave you alone."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#8A4E5D,#6B5B4E)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">AH</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Amy Marie Hann</p>
-            <p class="figure-label mt-1">ADHD Mom Coach · 183K</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"The quiet ADHD burnout that builds for years, then explodes on the ones you love most."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#4F4238,#C9812A)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">ET</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Elaine Taylor-Klaus</p>
-            <p class="figure-label mt-1">ImpactADHD Co-Founder</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"ADHD doesn't break marriages. Couples break when symptoms get confused with character."</p>
-          </figcaption>
-        </figure>
-        <figure>
-          <div class="portrait aspect-[4/5]" style="background:linear-gradient(160deg,#A6691F,#8A4E5D)">
-            <div class="w-full h-full flex items-end justify-center pb-6"><span class="font-display font-black text-paper-50/70 text-4xl">JA</span></div>
-          </div>
-          <figcaption class="pt-3">
-            <p class="font-display font-bold text-ink-700">Jesse J. Anderson</p>
-            <p class="figure-label mt-1">Viral ADHD Educator</p>
-            <p class="font-serif italic text-sm text-taupe-600 mt-2">"What looks like inconsistency is often emotional exhaustion dressed as flakiness."</p>
+            <p class="font-display font-bold text-ink-700">Dr. Aisha Patel</p>
+            <p class="font-serif italic text-sm text-taupe-600">Clinical Psychologist</p>
           </figcaption>
         </figure>
       </div>
 
       <div class="mt-12 text-center">
-        <a href="#optin" onclick="openOptin(event)" class="font-ui font-semibold text-ochre-700 hover:text-ochre-600 border-b border-ochre-700 pb-1 text-sm">See all forty contributors &mdash; register free</a>
+        <a href="#optin" onclick="openOptin(event)" class="font-ui font-semibold text-ochre-700 hover:text-ochre-600 border-b border-ochre-700 pb-1 text-sm">See the full forty contributors &mdash; register free</a>
       </div>
     </div>
   </section>
@@ -830,7 +425,7 @@
         <li class="flex gap-6">
           <span class="roman text-4xl leading-none pt-1">I.</span>
           <div>
-            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Improve Attention &amp; Focus</h3>
+            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Understand Why They Act Out</h3>
             <p class="text-taupe-700 leading-relaxed">The neuroscience behind the behavior — so "bad child" becomes "dysregulated nervous system," and the response changes.</p>
           </div>
         </li>
@@ -844,29 +439,29 @@
         <li class="flex gap-6">
           <span class="roman text-4xl leading-none pt-1">III.</span>
           <div>
-            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Navigate the Digital Age</h3>
-            <p class="text-taupe-700 leading-relaxed">Raising an ADHD child around screens without a nightly battle. Practical agreements, not prohibitions.</p>
+            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Fix Morning Chaos</h3>
+            <p class="text-taupe-700 leading-relaxed">A small collection of routines that reduce daily friction. No charts with gold stars. Things that hold up in real kitchens.</p>
           </div>
         </li>
         <li class="flex gap-6">
           <span class="roman text-4xl leading-none pt-1">IV.</span>
           <div>
-            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Regulate Big Emotions</h3>
+            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Build Emotional Resilience</h3>
             <p class="text-taupe-700 leading-relaxed">Help your child regulate big emotions — not suppress them. The difference, over time, changes everything.</p>
           </div>
         </li>
         <li class="flex gap-6">
           <span class="roman text-4xl leading-none pt-1">V.</span>
           <div>
-            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Overcome School Struggles</h3>
+            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Navigate School Systems</h3>
             <p class="text-taupe-700 leading-relaxed">IEPs, 504s, and the quiet art of teacher communication. Language that is firm, warm, and hard to refuse.</p>
           </div>
         </li>
         <li class="flex gap-6">
           <span class="roman text-4xl leading-none pt-1">VI.</span>
           <div>
-            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Build Brain-Healthy Routines</h3>
-            <p class="text-taupe-700 leading-relaxed">Routines that support brain development and well-being. No charts with gold stars — things that hold up in real kitchens.</p>
+            <h3 class="font-display font-bold text-xl text-ink-700 mb-2">Connect With Other Parents</h3>
+            <p class="text-taupe-700 leading-relaxed">A quiet side-channel for those late-night questions. You are not alone in this; most parents in our rooms have felt exactly what you feel.</p>
           </div>
         </li>
       </ol>
@@ -898,20 +493,24 @@
           A Collection, Enclosed.
         </h2>
         <p class="text-lg text-taupe-700 leading-relaxed mb-6">
-          Three exclusive masterclasses — the three most-viewed sessions from last year's Summit — bound with scripts, templates and quiet checklists for the kitchen drawer. Your copy arrives the moment you register.
+          A bound selection of scripts, templates, and quiet checklists — drawn from our contributors' clinical practice and printed for the kitchen drawer. Your copy arrives the moment you register.
         </p>
         <ul class="space-y-3 mb-8">
           <li class="flex items-start gap-3 text-taupe-700 font-serif">
             <span class="text-ochre-600 font-display font-bold shrink-0">§</span>
-            <span><span class="font-semibold text-ink-700">Dr. Edward Hallowell</span> — How to Turn Your Bright Kid Into a Brilliant Success in School and Life.</span>
+            <span>Morning-routine visual schedules, tested in real homes.</span>
           </li>
           <li class="flex items-start gap-3 text-taupe-700 font-serif">
             <span class="text-ochre-600 font-display font-bold shrink-0">§</span>
-            <span><span class="font-semibold text-ink-700">Dr. Emily W. King</span> — Often-Overlooked Ways to Empower Your Kid to Break Through School Barriers.</span>
+            <span>De-escalation scripts for meltdowns — the first sentence matters most.</span>
           </li>
           <li class="flex items-start gap-3 text-taupe-700 font-serif">
             <span class="text-ochre-600 font-display font-bold shrink-0">§</span>
-            <span><span class="font-semibold text-ink-700">Dr. Robert Brooks</span> — The Winning Psychology of Confident ADHD Parents &amp; How to Become One Yourself.</span>
+            <span>IEP &amp; 504 request templates. Firm, warm, hard to refuse.</span>
+          </li>
+          <li class="flex items-start gap-3 text-taupe-700 font-serif">
+            <span class="text-ochre-600 font-display font-bold shrink-0">§</span>
+            <span>A printable calm-down card set for the refrigerator door.</span>
           </li>
         </ul>
         <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold px-7 py-3.5 rounded-full transition">
@@ -928,67 +527,64 @@
       <div class="text-center max-w-2xl mx-auto mb-14">
         <p class="roman mb-2">V.</p>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">Three Sidebars, Three Bonuses.</h2>
-        <p class="font-serif italic text-taupe-600 text-lg">Issued free with every seat.</p>
+        <p class="font-serif italic text-taupe-600 text-lg">Worth $291 in print. Enclosed with every seat.</p>
       </div>
       <ol class="border-t border-paper-300">
         <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
           <div class="md:col-span-2 flex items-baseline gap-4">
             <span class="roman text-5xl md:text-6xl leading-none">I.</span>
-            <span class="figure-label text-taupe-600 md:hidden">$19 Value · FREE</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
           </div>
           <div class="md:col-span-7">
-            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">"Raising Children With ADHD" Checklist</h3>
-            <p class="text-taupe-700 mb-4 leading-relaxed">A set of checklists that help you prevent outbursts, teach self-regulation, and steady the household after the storm.</p>
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">The ADHD Morning Playbook</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">A seven-day system for transforming chaotic mornings into calm, connected starts to the day.</p>
             <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-              <li><span class="text-ochre-600">§</span> Outburst-prevention checklist</li>
-              <li><span class="text-ochre-600">§</span> Self-regulation prompts</li>
-              <li><span class="text-ochre-600">§</span> After-the-storm repair script</li>
+              <li><span class="text-ochre-600">§</span> Visual-schedule templates</li>
+              <li><span class="text-ochre-600">§</span> Transition scripts that work</li>
+              <li><span class="text-ochre-600">§</span> A calm-down toolkit</li>
             </ul>
           </div>
           <div class="md:col-span-3 md:text-right">
             <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
-            <p class="font-display font-black text-3xl text-ochre-600">$19</p>
-            <p class="figure-label text-ink-700 mt-1">Enclosed free</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
           </div>
         </li>
         <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
           <div class="md:col-span-2 flex items-baseline gap-4">
             <span class="roman text-5xl md:text-6xl leading-none">II.</span>
-            <span class="figure-label text-taupe-600 md:hidden">$27 Value · FREE</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
           </div>
           <div class="md:col-span-7">
-            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">Swap Negative Reactions for Positive Responses</h3>
-            <p class="text-taupe-700 mb-4 leading-relaxed">Know exactly what positive things to say to your child in different situations — the first sentence often decides the next hour.</p>
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">Meltdown to Breakthrough</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">A step-by-step de-escalation framework that turns outbursts into growth moments.</p>
             <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-              <li><span class="text-ochre-600">§</span> Redirection scripts</li>
-              <li><span class="text-ochre-600">§</span> Emotional-coaching phrases</li>
+              <li><span class="text-ochre-600">§</span> Five-step de-escalation method</li>
+              <li><span class="text-ochre-600">§</span> Emotional-coaching scripts</li>
               <li><span class="text-ochre-600">§</span> Printable calm-down cards</li>
             </ul>
           </div>
           <div class="md:col-span-3 md:text-right">
             <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
-            <p class="font-display font-black text-3xl text-ochre-600">$27</p>
-            <p class="figure-label text-ink-700 mt-1">Enclosed free</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
           </div>
         </li>
         <li class="py-10 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
           <div class="md:col-span-2 flex items-baseline gap-4">
             <span class="roman text-5xl md:text-6xl leading-none">III.</span>
-            <span class="figure-label text-taupe-600 md:hidden">$18 Value · FREE</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
           </div>
           <div class="md:col-span-7">
-            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">Weekly Routine &amp; School Schedule</h3>
-            <p class="text-taupe-700 mb-4 leading-relaxed">Printable charts that provide structure and stability — reducing impulsivity, anxiety, and the quiet chaos of forgotten homework.</p>
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">School Advocacy Toolkit</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
             <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-              <li><span class="text-ochre-600">§</span> Weekly routine chart</li>
-              <li><span class="text-ochre-600">§</span> School schedule planner</li>
-              <li><span class="text-ochre-600">§</span> Refrigerator-door format</li>
+              <li><span class="text-ochre-600">§</span> IEP/504 request templates</li>
+              <li><span class="text-ochre-600">§</span> Teacher-communication scripts</li>
+              <li><span class="text-ochre-600">§</span> Accommodation checklists</li>
             </ul>
           </div>
           <div class="md:col-span-3 md:text-right">
             <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
-            <p class="font-display font-black text-3xl text-ochre-600">$18</p>
-            <p class="figure-label text-ink-700 mt-1">Enclosed free</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
           </div>
         </li>
       </ol>
@@ -1001,27 +597,26 @@
     </div>
   </section>
 
-  <!-- ========== VI. FROM THE FOUNDERS / HOSTS ========== -->
+  <!-- ========== VI. FROM THE FOUNDERS ========== -->
   <section class="bg-paper-100 py-20 md:py-28 border-b border-paper-300">
     <div class="max-w-5xl mx-auto px-6">
       <p class="roman text-center mb-2">VI.</p>
-      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 text-center mb-4 leading-tight">From the Founders</h2>
-      <p class="font-serif italic text-taupe-600 text-center text-lg mb-14">We're changing the way kids with ADHD are raised.</p>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 text-center mb-14 leading-tight">From the Founders</h2>
       <div class="grid md:grid-cols-2 gap-12 md:gap-16">
         <div class="text-center md:text-left">
-          <div class="w-24 h-24 rounded-full flex items-center justify-center font-display font-black text-2xl text-paper-50 mx-auto md:mx-0 mb-5" style="background:linear-gradient(135deg,#4A1F2D,#2A0F17)">SR</div>
-          <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Spela Repovs</h3>
-          <p class="figure-label mb-5">Host &amp; Producer</p>
+          <div class="w-24 h-24 rounded-full flex items-center justify-center font-display font-black text-2xl text-paper-50 mx-auto md:mx-0 mb-5" style="background:linear-gradient(135deg,#4A1F2D,#2A0F17)">RW</div>
+          <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Roman Wiltman</h3>
+          <p class="figure-label mb-5">Co-Founder</p>
           <blockquote class="font-serif italic text-taupe-700 text-lg leading-relaxed border-l-2 border-ochre-600 pl-5">
-            "Last year we helped 253,788 families manage the unique challenges of raising kids with ADHD. This year we're back bigger — five days, forty experts, and more time for the answers you need."
+            "This work started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to."
           </blockquote>
         </div>
         <div class="text-center md:text-left">
-          <div class="w-24 h-24 rounded-full flex items-center justify-center font-display font-black text-2xl text-paper-50 mx-auto md:mx-0 mb-5" style="background:linear-gradient(135deg,#C9812A,#A6691F)">ET</div>
-          <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Elaine Taylor-Klaus</h3>
-          <p class="figure-label mb-5">Master Certified ADHD Coach · Co-Host</p>
+          <div class="w-24 h-24 rounded-full flex items-center justify-center font-display font-black text-2xl text-paper-50 mx-auto md:mx-0 mb-5" style="background:linear-gradient(135deg,#C9812A,#A6691F)">AS</div>
+          <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Anisah Semen</h3>
+          <p class="figure-label mb-5">Co-Founder</p>
           <blockquote class="font-serif italic text-taupe-700 text-lg leading-relaxed border-l-2 border-ochre-600 pl-5">
-            "Kids with ADHD have great potential — they just need a different kind of support. Finding the right guidance shouldn't feel impossible for overwhelmed parents. Let's unlock your child's potential together."
+            "Every child with ADHD carries strengths that simply need the right light to be seen. Our work is to help parents recognise them, and quietly, to nurture them."
           </blockquote>
         </div>
       </div>
@@ -1041,74 +636,30 @@
           <p class="figure-label text-taupe-600 md:col-span-2">Letter I</p>
           <div class="md:col-span-10">
             <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>That was awesome — crying at the end. Not sure if it was pure relief but it felt good to have that release. I'd known my son had sensory issues from his early years yet only diagnosed last week. Thanks for your beautiful energy and caring nature.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has changed completely.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
             </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Past Summit Attendee</span></p>
+            <p class="font-display font-bold text-sm text-ink-700">— Rachel Berman <span class="font-serif italic font-normal text-taupe-600">· Ohio, USA</span></p>
           </div>
         </li>
         <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
           <p class="figure-label text-taupe-600 md:col-span-2">Letter II</p>
           <div class="md:col-span-10">
             <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>Thank you so much for compiling such timeless information. So grateful and blessed to have been part of the ADHD Parenting Summit — and now to be part of the community forever.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>Finally — someone who understands. The strategies are practical, not theoretical. My daughter's mornings are so much calmer now.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
             </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Past Summit Attendee</span></p>
-          </div>
-        </li>
-        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
-          <p class="figure-label text-taupe-600 md:col-span-2">Letter III</p>
-          <div class="md:col-span-10">
-            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>There are 4 people in my house with ADHD. I've been the chaos coordinator for more than 25 years. There were still so many strategies brought up yesterday that I thought: where has this summit been in our lives?<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
-            </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Chaos Coordinator, 25 yrs</span></p>
-          </div>
-        </li>
-        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
-          <p class="figure-label text-taupe-600 md:col-span-2">Letter IV</p>
-          <div class="md:col-span-10">
-            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>As a mother of three, including one with ADHD, I was seeking practical, real-world advice — and I found exactly that. I left feeling empowered, informed, and more confident in my parenting.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
-            </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Mother of Three</span></p>
-          </div>
-        </li>
-        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
-          <p class="figure-label text-taupe-600 md:col-span-2">Letter V</p>
-          <div class="md:col-span-10">
-            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>I am a parent of an ADHD child who has gone through a lot — bullying and abuse by teachers and friends. I learnt a lot on how to empower him, how to understand him, and how to communicate instructions to him.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
-            </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Parent, Advocate</span></p>
+            <p class="font-display font-bold text-sm text-ink-700">— Kamila Bosco <span class="font-serif italic font-normal text-taupe-600">· London, UK</span></p>
           </div>
         </li>
         <li class="py-10 grid md:grid-cols-12 gap-4 md:gap-10">
-          <p class="figure-label text-taupe-600 md:col-span-2">Letter VI</p>
+          <p class="figure-label text-taupe-600 md:col-span-2">Letter III</p>
           <div class="md:col-span-10">
             <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
-              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>The different topics, the amount of approaches and the really good, professional speakers — I liked it a lot and it pushed my motivation to work on my relationship and communication with my neurospicy kid.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. That alone was worth it.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
             </p>
-            <p class="font-display font-bold text-sm text-ink-700">— A Reader <span class="font-serif italic font-normal text-taupe-600">· Past Summit Attendee</span></p>
+            <p class="font-display font-bold text-sm text-ink-700">— Jennifer Mitchell <span class="font-serif italic font-normal text-taupe-600">· Toronto, CA</span></p>
           </div>
         </li>
       </ul>
-    </div>
-  </section>
-
-  <!-- ========== EXPERT ENDORSEMENT PULL QUOTE ========== -->
-  <section class="bg-paper-100 py-20 md:py-24 border-b border-paper-300">
-    <div class="max-w-4xl mx-auto px-6">
-      <p class="figure-label text-center mb-6">Expert Endorsement</p>
-      <blockquote class="text-center">
-        <p class="font-display font-medium text-2xl md:text-4xl text-ink-700 leading-[1.25] italic mb-8">
-          <span class="text-ochre-600 not-italic" aria-hidden="true">&ldquo;</span>The gold-standard guide for turning your bright kid into a brilliant success in school and life. Every parent raising a child with ADHD should hear what these forty voices have gathered to say.<span class="text-ochre-600 not-italic" aria-hidden="true">&rdquo;</span>
-        </p>
-        <div class="flex flex-col items-center gap-2">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-display font-black text-lg text-paper-50" style="background:linear-gradient(135deg,#6B5B4E,#4A1F2D)" aria-hidden="true">EH</div>
-          <p class="font-display font-bold text-ink-700">Dr. Edward Hallowell</p>
-          <p class="figure-label text-taupe-600">World Authority on ADHD · NYT Best-Selling Author</p>
-        </div>
-      </blockquote>
     </div>
   </section>
 
@@ -1117,11 +668,11 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <span class="pullmark block -mb-4">&ldquo;</span>
       <p class="font-display font-black text-3xl md:text-5xl text-paper-50 leading-[1.15] mb-8 italic">
-        The earlier you learn how to support your child with ADHD, the better your chances of managing their condition and minimising long-term challenges.
+        The earlier you learn how to support your child with ADHD, the better your chances of managing their condition and minimizing long-term challenges.
       </p>
       <div class="inline-flex items-center gap-4">
         <span class="w-12 h-[1px] bg-ochre-500"></span>
-        <p class="figure-label text-ochre-400">From the Editors</p>
+        <p class="figure-label text-ochre-400">Dr. Sarah Jensen · Neuropsychologist</p>
         <span class="w-12 h-[1px] bg-ochre-500"></span>
       </div>
     </div>
@@ -1133,45 +684,42 @@
       <div class="max-w-2xl mb-14">
         <p class="roman mb-2">VIII.</p>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">
-          Why This Is More Important Than Ever
+          The Reality of ADHD in Families Today
         </h2>
-        <p class="font-serif italic text-taupe-600 text-lg">Six figures from clinical research — and from the quiet life of the household.</p>
+        <p class="font-serif italic text-taupe-600 text-lg">Six figures, drawn from clinical research and our 2025 reader survey.</p>
       </div>
       <dl class="border-t border-paper-300">
         <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 1</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">#1</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">ADHD is the top mental or developmental condition among children. <sup class="text-ochre-600">[1]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">1&nbsp;in&nbsp;9</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Children diagnosed with ADHD in the US</dd>
         </div>
         <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 2</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">1&nbsp;in&nbsp;3</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Children with ADHD carry symptoms into adulthood. <sup class="text-ochre-600">[2]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">74%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of parents feel isolated and unsupported</dd>
         </div>
         <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 3</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">1&nbsp;in&nbsp;4</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Chance that a child with ADHD has a parent who also has it. <sup class="text-ochre-600">[3]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">3.2×</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Higher reported stress in ADHD families</dd>
         </div>
         <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 4</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">2–3×</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Higher likelihood of later substance misuse without early support. <sup class="text-ochre-600">[4]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">15+</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Years of clinical research represented</dd>
         </div>
         <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 5</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">73,124</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Parents already reading this year's edition. <sup class="text-ochre-600">[5]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">28%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of school-age children struggle academically</dd>
         </div>
         <div class="py-8 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
           <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 6</dt>
-          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">Lower</dd>
-          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Children with ADHD earn significantly lower school grades than peers. <sup class="text-ochre-600">[6]</sup></dd>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">93%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of past attendees recommend this summit</dd>
         </div>
       </dl>
-      <p class="mt-10 text-taupe-700 text-lg leading-relaxed max-w-3xl">
-        <span class="font-display font-bold text-ink-700">The good news:</span> the earlier you learn how to support your child who has ADHD, the better your chances of managing the condition and minimising long-term issues. That is the entire reason for this summit.
-      </p>
     </div>
   </section>
 
@@ -1179,72 +727,49 @@
   <section class="bg-paper-100 py-20 md:py-28 border-b border-paper-300">
     <div class="max-w-4xl mx-auto px-6">
       <p class="roman mb-2">IX.</p>
-      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">Five Reasons You Can't Miss This Summit</h2>
-      <p class="font-serif italic text-taupe-600 text-lg mb-14">What changes by Day Five.</p>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-14">What Changes by Day Five</h2>
       <div class="space-y-12">
         <article class="flex gap-8 items-start">
           <span class="roman text-5xl leading-none shrink-0 pt-1">01</span>
           <div>
-            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">Five Days of Everything ADHD</h3>
-            <p class="text-taupe-700 text-lg leading-relaxed">An immersive, comprehensive experience covering every angle of raising a child with ADHD — focus, regulation, routines, school, and the paradox of parenting when you have ADHD too.</p>
+            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">From Punishment to Partnership</h3>
+            <p class="text-taupe-700 text-lg leading-relaxed">Move beyond punishment-based parenting to an evidence-backed approach that builds cooperation naturally — without bribes, threats, or the exhausting architecture of either.</p>
           </div>
         </article>
         <article class="flex gap-8 items-start">
           <span class="roman text-5xl leading-none shrink-0 pt-1">02</span>
           <div>
-            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">Discover Your Child's Hidden Potential</h3>
-            <p class="text-taupe-700 text-lg leading-relaxed">Learn how to help your child embrace their ADHD as a gift and a distinct way of seeing the world — not a verdict on their character, nor yours.</p>
+            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">From Reacting to Anticipating</h3>
+            <p class="text-taupe-700 text-lg leading-relaxed">See the meltdown coming twenty minutes out, and redirect the nervous system before the room is on fire.</p>
           </div>
         </article>
         <article class="flex gap-8 items-start">
           <span class="roman text-5xl leading-none shrink-0 pt-1">03</span>
           <div>
-            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">Set Boundaries Without Harshness</h3>
-            <p class="text-taupe-700 text-lg leading-relaxed">Discover how to help your ADHD child respect boundaries without harsh discipline. Language that is firm, warm, and entirely repeatable on a Tuesday night.</p>
+            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">From Isolated to Supported</h3>
+            <p class="text-taupe-700 text-lg leading-relaxed">Join a cohort of parents who have been where you are. The 2 a.m. texts stop being a solo act.</p>
           </div>
         </article>
         <article class="flex gap-8 items-start">
           <span class="roman text-5xl leading-none shrink-0 pt-1">04</span>
           <div>
-            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">Motivate Your ADHD Teen</h3>
-            <p class="text-taupe-700 text-lg leading-relaxed">Effective, research-backed ways to inspire and engage your teen with schoolwork — without bribes, threats, or the exhausting architecture of either.</p>
+            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">From Overwhelmed to Equipped</h3>
+            <p class="text-taupe-700 text-lg leading-relaxed">Trade vague anxiety for specific language and tools. You will know, concretely, what to say on Monday at 7:42 a.m.</p>
           </div>
         </article>
         <article class="flex gap-8 items-start">
           <span class="roman text-5xl leading-none shrink-0 pt-1">05</span>
           <div>
-            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">Handle Outbursts Without Losing Yourself</h3>
-            <p class="text-taupe-700 text-lg leading-relaxed">Receive strategies to approach your child's emotional outbursts without losing your patience — because the first sentence from the adult in the room usually decides the next hour.</p>
+            <h3 class="font-display font-bold text-2xl text-ink-700 mb-3">From Shame to Sovereignty</h3>
+            <p class="text-taupe-700 text-lg leading-relaxed">Your child's neurology is not a verdict on your parenting. This becomes a lived fact — not a mantra you have to repeat.</p>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ========== MORE JOY PILL ROW (EDITORIAL) ========== -->
-  <section class="bg-paper-50 py-20 md:py-24 border-b border-paper-300">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-      <p class="roman mb-2">IX·ii</p>
-      <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">Yes, Yours As Well.</h2>
-      <p class="font-serif italic text-taupe-600 text-lg mb-10">Whatever your situation, we believe every child is capable of more.</p>
-      <div class="flex flex-wrap justify-center gap-3 mb-4">
-        <span class="editorial-pill"><span class="plus">+</span> More Joy</span>
-        <span class="editorial-pill"><span class="plus">+</span> More Attention</span>
-        <span class="editorial-pill"><span class="plus">+</span> More Focus</span>
-      </div>
-      <div class="flex flex-wrap justify-center gap-3 mb-10">
-        <span class="editorial-pill"><span class="plus">+</span> More Organisation</span>
-        <span class="editorial-pill"><span class="plus">+</span> More Creativity</span>
-        <span class="editorial-pill"><span class="plus">+</span> More Success</span>
-      </div>
-      <p class="font-serif italic text-taupe-700 text-lg max-w-xl mx-auto">
-        All you need are ADHD-tailored parenting techniques. You'll find them here.
-      </p>
-    </div>
-  </section>
-
   <!-- ========== X. FAQ ========== -->
-  <section class="bg-paper-100 py-20 md:py-28 border-b border-paper-300">
+  <section class="bg-paper-50 py-20 md:py-28 border-b border-paper-300">
     <div class="max-w-3xl mx-auto px-6">
       <div class="text-center mb-12">
         <p class="roman mb-2">X.</p>
@@ -1252,48 +777,24 @@
       </div>
       <div class="border-t border-paper-300">
         <details>
-          <summary>When is the Summit happening?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">The ADHD Parenting Summit runs Tuesday, February 10 through Saturday, February 14, 2026. Each day's sessions unlock at 9&nbsp;AM ET / 3&nbsp;PM CEST.</div>
-        </details>
-        <details>
           <summary>Is it really free?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Yes, entirely. All 40+ sessions, the Mastery Collection, and the three bonus sidebars. You'll receive upgrade offers later — these are optional and never gate the free content.</div>
+          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Yes, entirely. All forty sessions, the supplement, and the three bonus sidebars. You'll receive upgrade offers later — these are optional and never gate the free content.</div>
         </details>
         <details>
-          <summary>Is the Summit available in my country?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Yes — it's a free online event, accessible from anywhere in the world. If you can't watch everything live, you can upgrade to a VIP Pass for lifetime access.</div>
-        </details>
-        <details>
-          <summary>How can I watch the recordings?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">You'll receive links two days before the Summit begins. Each day's sessions unlock automatically at 9&nbsp;AM ET and are free to watch for 24 hours.</div>
-        </details>
-        <details>
-          <summary>I'm busy during the summit. Can I still watch the videos?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Each day's recordings are available for 24 hours. For unlimited lifetime access, upgrade to our VIP Pass.</div>
+          <summary>What if I miss a live session?</summary>
+          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Each session is recorded and available for 48 hours after it airs. Registered readers with the All-Access Pass keep permanent access to every recording.</div>
         </details>
         <details>
           <summary>Is this suitable if my child isn't formally diagnosed?</summary>
           <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Absolutely. Many of our attendees are observing ADHD traits and deciding whether to pursue assessment. The content is relevant regardless of diagnostic status.</div>
         </details>
         <details>
-          <summary>How many speakers are featured each day?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Each day features 6–9 sessions, with each session lasting 30–60 minutes. All sessions air simultaneously each day.</div>
-        </details>
-        <details>
           <summary>My partner wants to attend too — do they need a separate seat?</summary>
           <div class="pb-5 text-taupe-700 font-serif leading-relaxed">One registration covers your household. Bring your partner, grandparents, co-parent, or an older child if appropriate.</div>
         </details>
         <details>
-          <summary>I signed up but didn't receive any links.</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Check all inbox folders (spam, junk, promotions). If you still can't find the email, please reach out and we'll help.</div>
-        </details>
-        <details>
-          <summary>What is included in the VIP Pass?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Lifetime access to all 40+ masterclasses, Expert Action Blueprints, audio edition, subtitles, and the Action-Taker's Workbook.</div>
-        </details>
-        <details>
-          <summary>Do I get a Certificate of Attendance?</summary>
-          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Yes — please contact us and we'll send detailed instructions.</div>
+          <summary>Is medical advice offered?</summary>
+          <div class="pb-5 text-taupe-700 font-serif leading-relaxed">Our contributors are qualified clinicians, but the summit is educational, not clinical. We'll point you toward where to go for personalized medical guidance.</div>
         </details>
         <details>
           <summary>How do I register?</summary>
@@ -1308,21 +809,6 @@
     </div>
   </section>
 
-  <!-- ========== REFERENCES (FOOTNOTES) ========== -->
-  <section class="bg-paper-50 py-14 border-b border-paper-300">
-    <div class="max-w-4xl mx-auto px-6">
-      <p class="figure-label mb-4">References</p>
-      <ol class="text-xs md:text-sm text-taupe-700 font-serif space-y-1.5 leading-relaxed">
-        <li><span class="text-ochre-600 font-display font-bold">[1]</span> Danielson, M. L. et&nbsp;al. (2024). ADHD Prevalence Among U.S. Children and Adolescents. <em>Journal of Clinical Child &amp; Adolescent Psychology</em>, 53(3), 343–360.</li>
-        <li><span class="text-ochre-600 font-display font-bold">[2]</span> Ginsberg, Y.; Quintero, J.; Anand, E. et&nbsp;al. (2014). Underdiagnosis of ADHD in adult patients. <em>The Primary Care Companion for CNS Disorders</em>, 16(3).</li>
-        <li><span class="text-ochre-600 font-display font-bold">[3]</span> Cleveland Clinic (2024). <em>ADHD: Attention-Deficit/Hyperactivity Disorder.</em></li>
-        <li><span class="text-ochre-600 font-display font-bold">[4]</span> Child Mind Institute (2024). <em>ADHD and Substance Abuse.</em></li>
-        <li><span class="text-ochre-600 font-display font-bold">[5]</span> Internal reader registration, ADHD Parenting Summit, Vol. VII (Feb 2026).</li>
-        <li><span class="text-ochre-600 font-display font-bold">[6]</span> Langberg, J. M. et&nbsp;al. (2011). Patterns of Academic Achievement Among Children With ADHD. <em>JCCAP</em>, 40(4).</li>
-      </ol>
-    </div>
-  </section>
-
   <!-- ========== FINAL CTA BAND ========== -->
   <section class="bg-ink-700 py-24 md:py-32 border-b-8 border-ochre-600" id="final-cta">
     <div class="max-w-4xl mx-auto px-6 text-center">
@@ -1331,7 +817,7 @@
         Your copy of <span class="italic text-ochre-400">Issue VII</span> is ready.
       </h2>
       <p class="font-serif italic text-paper-200 text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
-        Five days. Forty experts. One complimentary Mastery Collection. Yours, free, delivered to your inbox.
+        Five days with forty of the field's most thoughtful minds — yours, free, delivered to your inbox.
       </p>
       <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ochre-600 hover:bg-ochre-500 text-ink-700 font-ui font-bold text-lg px-10 py-5 rounded-full transition">
         Claim your free seat
@@ -1399,7 +885,6 @@
   </div>
 
   <script>
-    // === Modal ===
     function openOptin(ev) {
       if (ev) ev.preventDefault();
       const m = document.getElementById('optinModal');
@@ -1429,28 +914,6 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeOptin();
     });
-
-    // === Font Toggle ===
-    (function () {
-      const KEY = 'v1-font-pairing';
-      const html = document.documentElement;
-      const buttons = document.querySelectorAll('.font-toggle button[data-ft]');
-      function apply(p) {
-        const v = String(p || '1');
-        if (v === '1') { html.removeAttribute('data-fonts'); } else { html.setAttribute('data-fonts', v); }
-        buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.ft === v ? 'true' : 'false'));
-      }
-      let saved = '1';
-      try { saved = localStorage.getItem(KEY) || '1'; } catch (e) { /* localStorage blocked */ }
-      apply(saved);
-      buttons.forEach(b => {
-        b.addEventListener('click', () => {
-          const v = b.dataset.ft;
-          apply(v);
-          try { localStorage.setItem(KEY, v); } catch (e) { /* ignore */ }
-        });
-      });
-    })();
   </script>
 
 </body>
