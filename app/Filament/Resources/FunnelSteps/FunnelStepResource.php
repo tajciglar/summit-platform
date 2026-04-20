@@ -17,8 +17,10 @@ use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ViewField;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -43,8 +45,17 @@ class FunnelStepResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Step')
-                ->columns(2)
+            Section::make('Live landing page')
+                ->description('What visitors see right now')
+                ->visible(fn (Get $get): bool => $get('step_type') === 'optin')
+                ->components([
+                    ViewField::make('live_landing_card')
+                        ->view('filament.components.live-landing-card'),
+                ]),
+
+            Section::make('Step details')
+                ->description('Identity, type, and product link')
+                ->columns(3)
                 ->components([
                     Select::make('funnel_id')
                         ->label('Funnel')
@@ -62,7 +73,8 @@ class FunnelStepResource extends Resource
                             'thank_you' => 'Thank you',
                         ])
                         ->required()
-                        ->native(false),
+                        ->native(false)
+                        ->live(),
                     TextInput::make('name')->required()->maxLength(500),
                     TextInput::make('slug')->required()->maxLength(255),
                     Select::make('product_id')
@@ -75,6 +87,19 @@ class FunnelStepResource extends Resource
                     Toggle::make('is_published')->default(false),
                 ]),
 
+            Section::make('Page content blocks')
+                ->description(fn (Get $get): string => is_array($get('page_content'))
+                    ? count($get('page_content')).' blocks'
+                    : 'empty')
+                ->collapsed()
+                ->components([
+                    Builder::make('page_content')
+                        ->blocks(self::pageContentBlocks())
+                        ->addActionLabel('Add block')
+                        ->collapsible()
+                        ->dehydrateStateUsing(fn ($state) => self::coerceToBuilderState($state))
+                        ->afterStateHydrated(fn ($component, $state) => $component->state(self::coerceToBuilderState($state))),
+                ]),
         ]);
     }
 

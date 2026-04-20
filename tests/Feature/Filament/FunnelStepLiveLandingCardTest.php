@@ -1,0 +1,81 @@
+<?php
+
+use App\Enums\LandingPageDraftStatus;
+use App\Filament\Resources\FunnelSteps\Pages\EditFunnelStep;
+use App\Models\Domain;
+use App\Models\Funnel;
+use App\Models\FunnelStep;
+use App\Models\LandingPageBatch;
+use App\Models\LandingPageDraft;
+use App\Models\Summit;
+use App\Models\User;
+use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Gate;
+
+use function Pest\Livewire\livewire;
+
+beforeEach(function () {
+    Gate::before(fn () => true);
+    $this->actingAs(User::factory()->admin()->create());
+
+    $this->tenant = Domain::create([
+        'name' => 'Test Domain',
+        'hostname' => 'test.localhost',
+        'slug' => 'test-domain',
+        'is_active' => true,
+    ]);
+    Filament::setTenant($this->tenant);
+});
+
+it('shows the live landing card with template key and version for optin step with published draft', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $step = FunnelStep::factory()->create([
+        'funnel_id' => $funnel->id,
+        'slug' => 'optin',
+        'step_type' => 'optin',
+    ]);
+    $batch = LandingPageBatch::factory()->create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+    ]);
+    LandingPageDraft::factory()->create([
+        'batch_id' => $batch->id,
+        'status' => LandingPageDraftStatus::Published,
+        'template_key' => 'opus-v1',
+        'version_number' => 3,
+        'palette' => ['#0f172a', '#f8f1e7', '#d97706', '#475569', '#fef3c7'],
+    ]);
+
+    livewire(EditFunnelStep::class, ['record' => $step->id])
+        ->call('partiallyRenderSchemaComponent', 'form.live_landing_card')
+        ->assertSee('opus-v1')
+        ->assertSee('v3');
+});
+
+it('shows the empty state for an optin step with no published draft', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $step = FunnelStep::factory()->create([
+        'funnel_id' => $funnel->id,
+        'slug' => 'optin',
+        'step_type' => 'optin',
+    ]);
+
+    livewire(EditFunnelStep::class, ['record' => $step->id])
+        ->call('partiallyRenderSchemaComponent', 'form.live_landing_card')
+        ->assertSee('No live landing page yet');
+});
+
+it('does not show the live landing section for non-optin step types', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create();
+    $step = FunnelStep::factory()->create([
+        'funnel_id' => $funnel->id,
+        'slug' => 'upsell',
+        'step_type' => 'upsell',
+    ]);
+
+    livewire(EditFunnelStep::class, ['record' => $step->id])
+        ->assertDontSee('Live landing page');
+});
