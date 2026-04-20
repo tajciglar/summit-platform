@@ -3,6 +3,7 @@ import { resolveFunnel } from '@/lib/api-client'
 import { RenderBlocks } from '@/lib/render-block'
 import { ThemeProvider } from '@/lib/theme-context'
 import { SpeakersProvider } from '@/lib/speakers-context'
+import { FunnelProvider } from '@/lib/funnel-context'
 
 interface PageParams {
   slug?: string[]
@@ -22,9 +23,17 @@ export default async function FunnelPage({ params }: { params: Promise<PageParam
   return (
     <ThemeProvider theme={data.theme}>
       <SpeakersProvider speakers={data.speakers}>
-        <main>
-          <RenderBlocks blocks={data.blocks} />
-        </main>
+        <FunnelProvider
+          value={{
+            funnelId: data.funnel.id,
+            funnelSlug: data.funnel.slug,
+            summitSlug: summitSlug,
+          }}
+        >
+          <main>
+            <RenderBlocks blocks={data.blocks} />
+          </main>
+        </FunnelProvider>
       </SpeakersProvider>
     </ThemeProvider>
   )
