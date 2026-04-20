@@ -177,6 +177,13 @@ class FunnelResource extends Resource
         return $suffix !== '' ? "{$initials}-{$suffix}" : $initials;
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\LandingPageDraftsRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
