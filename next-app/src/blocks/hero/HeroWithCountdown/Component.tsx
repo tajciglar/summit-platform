@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import type { Props } from './schema'
@@ -25,17 +25,19 @@ export function HeroWithCountdown(props: Props) {
             {props.body}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
-            <Button size="lg" asChild>
-              <a href={props.primaryCtaHref}>
-                {props.primaryCtaLabel}
-              </a>
-            </Button>
+            <a href={props.primaryCtaHref} className={cn(buttonVariants({ size: 'lg' }))}>
+              {props.primaryCtaLabel}
+            </a>
             {props.secondaryCtaLabel && props.secondaryCtaHref && (
-              <Button size="lg" variant="outline" className="border-[rgb(var(--color-primary))] text-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/5">
-                <a href={props.secondaryCtaHref}>
-                  {props.secondaryCtaLabel}
-                </a>
-              </Button>
+              <a
+                href={props.secondaryCtaHref}
+                className={cn(
+                  buttonVariants({ size: 'lg', variant: 'outline' }),
+                  'border-[rgb(var(--color-primary))] text-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/5',
+                )}
+              >
+                {props.secondaryCtaLabel}
+              </a>
             )}
           </div>
           {props.footerStat && (
