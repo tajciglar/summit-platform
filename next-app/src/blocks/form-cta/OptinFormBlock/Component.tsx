@@ -47,8 +47,9 @@ export function OptinFormBlock(props: Props) {
         throw new Error(message)
       }
 
-      const { redirect } = await res.json()
-      router.push(redirect)
+      const body = await res.json().catch(() => ({}))
+      if (!body?.redirect) throw new Error('Invalid response from server')
+      router.push(body.redirect)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setSubmitting(false)
