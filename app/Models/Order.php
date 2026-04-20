@@ -12,7 +12,7 @@ class Order extends Model
     use HasUuid;
 
     protected $fillable = [
-        'order_number', 'user_id', 'summit_id', 'funnel_id', 'funnel_step_id',
+        'contact_id', 'order_number', 'user_id', 'summit_id', 'funnel_id', 'funnel_step_id',
         'summit_phase_at_purchase', 'status', 'subtotal_cents', 'discount_cents',
         'total_cents', 'currency', 'coupon_id', 'stripe_payment_intent_id',
         'stripe_checkout_session_id', 'affiliate_id', 'ip_address', 'user_agent',
@@ -65,5 +65,10 @@ class Order extends Model
     public function refunds(): HasMany
     {
         return $this->hasMany(Refund::class);
+    }
+
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class);
     }
 }
