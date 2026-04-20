@@ -29,10 +29,10 @@ return [
     ],
 
     'activecampaign' => [
-        'url' => env('AC_API_URL'),
-        'key' => env('AC_API_KEY'),
-        'optin_tag_id' => env('AC_OPTIN_TAG_ID'),
-        'product_tag_id' => env('AC_PRODUCT_TAG_ID'),
+        'url' => env('ACTIVE_CAMPAIGN_URL'),
+        'key' => env('ACTIVE_CAMPAIGN_KEY'),
+        'optin_tag_id' => env('ACTIVE_CAMPAIGN_OPTIN_TAG_ID'),
+        'product_tag_id' => env('ACTIVE_CAMPAIGN_PRODUCT_TAG_ID'),
     ],
 
     'brevo' => [
