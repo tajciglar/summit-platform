@@ -21,6 +21,8 @@ class ContactResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'email';
 
+    protected static bool $isScopedToTenant = false;
+
     public static function table(Table $table): Table
     {
         return ContactsTable::configure($table);
