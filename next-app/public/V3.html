@@ -30,14 +30,30 @@
     }
   </script>
   <style>
+    :root {
+      --cream-50:#FAF7F2;
+      --cream-100:#F4EDE2;
+      --cream-200:#EEE3D0;
+      --surface:#FFFFFF;
+      --sage-600:#4A6B5D;
+      --sage-700:#3D5A4E;
+      --sage-800:#2F4A40;
+      --clay-600:#C4663D;
+      --clay-700:#A85430;
+      --rose-400:#DEA389;
+      --ink-800:#2A2419;
+      --ink-700:#3A3221;
+      --muted:#4A4130;
+      --line:rgba(74,107,93,0.1);
+    }
     html { scroll-behavior:smooth; }
-    body { font-family:'DM Sans',system-ui,sans-serif; background:#FAF7F2; color:#2A2419; font-feature-settings:"ss01"; font-size:18px; line-height:1.65; }
+    body { font-family:'DM Sans',system-ui,sans-serif; background:var(--cream-50); color:var(--ink-800); font-feature-settings:"ss01"; font-size:18px; line-height:1.65; }
     h1,h2,h3,h4 { font-family:'Fraunces','serif'; font-optical-sizing:auto; letter-spacing:-0.01em; }
     .eyebrow { font-family:'Nunito','DM Sans',sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-weight:700; font-size:0.9rem; }
     .pill { border-radius:999px; }
-    .soft-card { background:#FFFFFF; border-radius:28px; box-shadow:0 20px 60px -25px rgba(74,107,93,0.25); border:1px solid rgba(74,107,93,0.08); transition:transform 0.25s ease, box-shadow 0.25s ease; }
+    .soft-card { background:var(--surface); border-radius:28px; box-shadow:0 20px 60px -25px rgba(74,107,93,0.25); border:1px solid rgba(74,107,93,0.08); transition:transform 0.25s ease, box-shadow 0.25s ease; }
     .soft-card:hover { transform:translateY(-3px); box-shadow:0 30px 70px -25px rgba(74,107,93,0.32); }
-    .cream-card { background:#F4EDE2; border-radius:28px; border:1px solid rgba(74,107,93,0.08); }
+    .cream-card { background:var(--cream-100); border-radius:28px; border:1px solid rgba(74,107,93,0.08); }
     .btn-primary { background:#C4663D; color:#FAF7F2; padding:1.1rem 2.25rem; border-radius:999px; font-weight:700; font-size:1.1rem; display:inline-flex; align-items:center; gap:0.6rem; transition:transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease; box-shadow:0 10px 30px -10px rgba(196,102,61,0.45); }
     .btn-primary:hover { background:#A85430; transform:translateY(-2px); box-shadow:0 16px 36px -8px rgba(196,102,61,0.55); }
     .btn-ghost { background:transparent; color:#2F4A40; padding:1rem 1.9rem; border-radius:999px; font-weight:600; font-size:1.05rem; border:2px solid #7A9283; transition:background 0.2s ease; }
@@ -53,8 +69,8 @@
     /* Marquee */
     .marquee-wrap { overflow:hidden; position:relative; }
     .marquee-wrap::before, .marquee-wrap::after { content:''; position:absolute; top:0; height:100%; width:120px; z-index:2; pointer-events:none; }
-    .marquee-wrap::before { left:0; background:linear-gradient(90deg,#FAF7F2,transparent); }
-    .marquee-wrap::after { right:0; background:linear-gradient(-90deg,#FAF7F2,transparent); }
+    .marquee-wrap::before { left:0; background:linear-gradient(90deg,var(--cream-50),transparent); }
+    .marquee-wrap::after { right:0; background:linear-gradient(-90deg,var(--cream-50),transparent); }
     .marquee-track { display:flex; width:max-content; animation:marq 42s linear infinite; }
     .marquee-item { padding:0 2.2rem; white-space:nowrap; color:#4A6B5D; font-family:'Fraunces','serif'; font-weight:600; font-size:1.45rem; letter-spacing:-0.01em; }
     @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
@@ -70,7 +86,7 @@
     .wave-top { display:block; width:100%; height:40px; }
 
     /* FAQ */
-    details { background:#FFFFFF; border-radius:24px; margin-bottom:1rem; border:1px solid rgba(74,107,93,0.1); overflow:hidden; transition:box-shadow 0.2s; }
+    details { background:var(--surface); border-radius:24px; margin-bottom:1rem; border:1px solid var(--line); overflow:hidden; transition:box-shadow 0.2s; }
     details[open] { box-shadow:0 18px 50px -25px rgba(74,107,93,0.25); }
     details summary { cursor:pointer; list-style:none; padding:1.5rem 1.8rem; font-family:'Fraunces','serif'; font-weight:600; font-size:1.3rem; color:#2A2419; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
     details summary::-webkit-details-marker { display:none; }
@@ -80,15 +96,16 @@
     /* Modal */
     .modal-backdrop { position:fixed; inset:0; background:rgba(42,36,25,0.5); backdrop-filter:blur(5px); z-index:100; display:none; align-items:center; justify-content:center; padding:1.5rem; }
     .modal-backdrop.open { display:flex; }
-    .modal-card { background:#FAF7F2; max-width:540px; width:100%; border-radius:32px; box-shadow:0 40px 80px -20px rgba(74,107,93,0.35); border:1px solid rgba(74,107,93,0.1); }
+    .modal-card { background:var(--cream-50); max-width:540px; width:100%; border-radius:32px; box-shadow:0 40px 80px -20px rgba(74,107,93,0.35); border:1px solid var(--line); }
     body.modal-open { overflow:hidden; }
 
     /* Focus */
     :focus-visible { outline:3px solid rgba(74,107,93,0.6); outline-offset:3px; border-radius:6px; }
+    details summary:focus-visible { outline:3px solid rgba(74,107,93,0.6); outline-offset:-2px; border-radius:22px; }
 
     /* Skip nav */
     .skip-nav { position:absolute; left:-9999px; }
-    .skip-nav:focus { position:fixed; top:1rem; left:1rem; background:#4A6B5D; color:#FAF7F2; padding:0.75rem 1.25rem; z-index:200; font-weight:600; border-radius:24px; }
+    .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--sage-600); color:var(--cream-50); padding:0.75rem 1.25rem; z-index:200; font-weight:600; border-radius:24px; }
 
     @media (prefers-reduced-motion: reduce) {
       .marquee-track { animation:none !important; }
@@ -99,7 +116,7 @@
 </head>
 <body class="antialiased">
 
-  <a href="#main" class="skip-nav">Skip to content</a>
+  <a href="#main-content" class="skip-nav">Skip to content</a>
 
   <!-- ========== TOP BAR ========== -->
   <header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur border-b border-sage-200/40">
@@ -110,12 +127,12 @@
       </div>
       <div class="flex items-center gap-5">
         <span class="hidden md:inline text-sage-800 text-base font-semibold">Feb 10–14, 2026 · Free</span>
-        <a href="#optin" onclick="openOptin(event)" class="btn-primary text-base py-3 px-6">Reserve seat</a>
+        <a href="#optin" onclick="openOptin(event)" class="btn-primary text-base py-3 px-6">Claim your seat</a>
       </div>
     </div>
   </header>
 
-  <main id="main">
+  <main id="main-content">
 
   <!-- ========== HERO ========== -->
   <section class="relative bg-cream-50 overflow-hidden pt-14 md:pt-20 pb-20 md:pb-28">
@@ -139,7 +156,7 @@
           </p>
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
             <a href="#optin" onclick="openOptin(event)" class="btn-primary text-lg">
-              Reserve your free seat
+              Claim your free seat
               <span aria-hidden="true">→</span>
             </a>
             <a href="#what-is-this" class="btn-ghost">Learn more</a>
@@ -274,7 +291,7 @@
           Watch live or catch the replays at your pace. Bring your partner. <strong class="text-sage-800">The sessions are free. The strategies are real.</strong> The relief, we hope, is audible.
         </p>
         <a href="#optin" onclick="openOptin(event)" class="btn-primary">
-          Reserve your seat
+          Claim your free seat
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -376,50 +393,50 @@
         <span class="eyebrow text-clay-600 mb-3 inline-block">Six Shifts by Day Five</span>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">What the end of the week <span class="italic text-sage-600">may sound like</span></h2>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
-            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      <ol class="max-w-4xl mx-auto border-t border-sage-200/50">
+        <li class="py-8 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-rose-500 leading-none">01</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">Understand Why They Act Out</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">The neuroscience behind the behavior. "Bad child" becomes "dysregulated nervous system" — and your response changes.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Understand Why They Act Out</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">The neuroscience behind the behavior. "Bad child" becomes "dysregulated nervous system" — and your response changes.</p>
-        </article>
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
-            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </li>
+        <li class="py-8 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-clay-600 leading-none">02</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">End the Yelling Cycle</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">Calm responses that actually work — because you found a different script, not more willpower.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">End the Yelling Cycle</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">Calm responses that actually work — because you found a different script, not more willpower.</p>
-        </article>
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
-            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </li>
+        <li class="py-8 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-rose-500 leading-none">03</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">Fix Morning Chaos</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">Gentle routines that reduce daily friction. No gold-star charts. Things that hold up in real kitchens.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Fix Morning Chaos</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">Gentle routines that reduce daily friction. No gold-star charts. Things that hold up in real kitchens.</p>
-        </article>
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
-            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </li>
+        <li class="py-8 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-clay-600 leading-none">04</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">Build Emotional Resilience</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">Help your child regulate big emotions — not suppress them. The difference, over time, changes everything.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Build Emotional Resilience</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">Help your child regulate big emotions — not suppress them. The difference, over time, changes everything.</p>
-        </article>
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:#E9EEEA">
-            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </li>
+        <li class="py-8 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-rose-500 leading-none">05</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">Navigate School Systems</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">IEPs, 504s, and teacher communication — firm, warm, and hard to refuse.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Navigate School Systems</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">IEPs, 504s, and teacher communication — firm, warm, and hard to refuse.</p>
-        </article>
-        <article class="soft-card p-8">
-          <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-5" style="background:rgba(232,185,160,0.35)">
-            <svg class="w-8 h-8 text-clay-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </li>
+        <li class="py-8 grid md:grid-cols-12 gap-5 md:gap-8 items-baseline">
+          <span class="md:col-span-2 font-display italic font-bold text-5xl md:text-6xl text-clay-600 leading-none">06</span>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3">Connect With Other Parents</h3>
+            <p class="text-ink-700 text-lg leading-relaxed">A side-channel for those late-night questions. You are not alone in this.</p>
           </div>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3">Connect With Other Parents</h3>
-          <p class="text-ink-700 text-lg leading-relaxed">A side-channel for those late-night questions. You are not alone in this.</p>
-        </article>
-      </div>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -462,7 +479,7 @@
           <li class="flex items-start gap-3 text-ink-700 text-lg"><span class="w-7 h-7 rounded-full bg-sage-50 flex items-center justify-center shrink-0 mt-0.5"><span class="text-sage-700 font-bold">✓</span></span><span>Printable calm-down card set for the refrigerator door</span></li>
         </ul>
         <a href="#optin" onclick="openOptin(event)" class="btn-primary">
-          Claim seat + Collection
+          Claim your free seat
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -476,41 +493,56 @@
         <span class="eyebrow text-clay-600 mb-3 inline-block">Three Gentle Bonuses</span>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight mb-4">Three gifts, <span class="hand-under">worth $291</span>, yours free.</h2>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <article class="soft-card p-8">
-          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">The ADHD Morning Playbook</h3>
-          <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 7-day system for transforming chaotic mornings into calm, connected starts.</p>
-          <ul class="space-y-2 text-base text-ink-700">
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Visual schedule templates</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Transition scripts that work</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Calm-down toolkit</li>
-          </ul>
-        </article>
-        <article class="soft-card p-8">
-          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">Meltdown to Breakthrough</h3>
-          <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 5-step de-escalation framework that turns outbursts into growth moments.</p>
-          <ul class="space-y-2 text-base text-ink-700">
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>5-step de-escalation method</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Emotional coaching scripts</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Printable calm-down cards</li>
-          </ul>
-        </article>
-        <article class="soft-card p-8">
-          <span class="inline-block bg-rose-500 text-cream-50 font-accent font-bold text-sm tracking-wider px-4 py-2 pill mb-5">$97 VALUE</span>
-          <h3 class="font-display font-bold text-2xl text-ink-800 mb-3 leading-tight">School Advocacy Toolkit</h3>
-          <p class="text-ink-700 text-lg mb-5 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
-          <ul class="space-y-2 text-base text-ink-700">
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>IEP/504 request templates</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Teacher communication scripts</li>
-            <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Accommodation checklists</li>
-          </ul>
-        </article>
-      </div>
+      <ol class="max-w-4xl mx-auto border-t border-sage-200/50">
+        <li class="py-10 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8">
+          <div class="md:col-span-2 flex md:flex-col items-start gap-3">
+            <span class="font-display italic font-bold text-5xl md:text-6xl text-rose-500 leading-none">01</span>
+            <span class="eyebrow text-clay-600 md:mt-2">$97 Value</span>
+          </div>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3 leading-tight">The ADHD Morning Playbook</h3>
+            <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 7-day system that turns chaotic mornings into calm, connected starts.</p>
+            <ul class="flex flex-wrap gap-x-6 gap-y-2 text-base text-ink-700">
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Visual schedule templates</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Transition scripts that work</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Calm-down toolkit</li>
+            </ul>
+          </div>
+        </li>
+        <li class="py-10 border-b border-sage-200/50 grid md:grid-cols-12 gap-5 md:gap-8">
+          <div class="md:col-span-2 flex md:flex-col items-start gap-3">
+            <span class="font-display italic font-bold text-5xl md:text-6xl text-clay-600 leading-none">02</span>
+            <span class="eyebrow text-clay-600 md:mt-2">$97 Value</span>
+          </div>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3 leading-tight">Meltdown to Breakthrough</h3>
+            <p class="text-ink-700 text-lg mb-5 leading-relaxed">A 5-step de-escalation framework that turns outbursts into growth moments.</p>
+            <ul class="flex flex-wrap gap-x-6 gap-y-2 text-base text-ink-700">
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>5-step de-escalation method</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Emotional coaching scripts</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Printable calm-down cards</li>
+            </ul>
+          </div>
+        </li>
+        <li class="py-10 grid md:grid-cols-12 gap-5 md:gap-8">
+          <div class="md:col-span-2 flex md:flex-col items-start gap-3">
+            <span class="font-display italic font-bold text-5xl md:text-6xl text-rose-500 leading-none">03</span>
+            <span class="eyebrow text-clay-600 md:mt-2">$97 Value</span>
+          </div>
+          <div class="md:col-span-10">
+            <h3 class="font-display font-bold text-2xl md:text-3xl text-ink-800 mb-3 leading-tight">School Advocacy Toolkit</h3>
+            <p class="text-ink-700 text-lg mb-5 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
+            <ul class="flex flex-wrap gap-x-6 gap-y-2 text-base text-ink-700">
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>IEP/504 request templates</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Teacher communication scripts</li>
+              <li class="flex gap-2"><span class="text-sage-700 font-bold">✓</span>Accommodation checklists</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
       <div class="text-center mt-12">
         <a href="#optin" onclick="openOptin(event)" class="btn-primary">
-          Claim seat + all three bonuses
+          Claim your free seat
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -527,7 +559,7 @@
           <h3 class="font-display font-bold text-2xl text-ink-800">Roman Wiltman</h3>
           <p class="text-sage-700 text-base mb-5 font-semibold">Co-Founder</p>
           <blockquote class="font-display italic text-xl md:text-2xl text-ink-700 leading-relaxed dropcap">
-            Our journey started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to.
+            This work started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to.
           </blockquote>
         </div>
         <div class="text-center md:text-left">
@@ -535,7 +567,7 @@
           <h3 class="font-display font-bold text-2xl text-ink-800">Anisah Semen</h3>
           <p class="text-sage-700 text-base mb-5 font-semibold">Co-Founder</p>
           <blockquote class="font-display italic text-xl md:text-2xl text-ink-700 leading-relaxed dropcap">
-            Every child with ADHD has incredible strengths waiting to be unlocked. Our mission is to help parents see those strengths — and, gently, to nurture them.
+            Every child with ADHD carries strengths that simply need the right light to be seen. Our work is to help parents recognise them — and, gently, to nurture them.
           </blockquote>
         </div>
       </div>
@@ -549,41 +581,38 @@
         <span class="eyebrow text-clay-600 mb-3 inline-block">What Parents Say</span>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">73,124 parents. <span class="italic text-sage-600">One common theme.</span></h2>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <article class="soft-card p-8">
-          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
-          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has <span class="hand-under">completely transformed</span>."</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#D89878,#C4835F)">RB</div>
-            <div>
-              <p class="font-display font-bold text-lg text-sage-800">Rachel Berman</p>
-              <p class="text-soft-600 text-base">Ohio, USA</p>
-            </div>
+      <ul class="max-w-4xl mx-auto border-t border-sage-200/50">
+        <li class="py-10 border-b border-sage-200/50 grid md:grid-cols-12 gap-4 md:gap-8">
+          <div class="md:col-span-2">
+            <p class="eyebrow text-clay-600 mb-2">Letter I</p>
+            <p class="text-clay-600 font-bold tracking-widest">★ ★ ★ ★ ★</p>
           </div>
-        </article>
-        <article class="soft-card p-8">
-          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
-          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"Finally someone who understands. The strategies are <span class="hand-under">practical, not theoretical</span>. My daughter's mornings are so much calmer now."</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#7A9283,#4A6B5D)">KB</div>
-            <div>
-              <p class="font-display font-bold text-lg text-sage-800">Kamila Bosco</p>
-              <p class="text-soft-600 text-base">London, UK</p>
-            </div>
+          <div class="md:col-span-10">
+            <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-[1.55] mb-4">"This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has <span class="hand-under">completely changed</span>."</p>
+            <p class="font-display font-bold text-sage-800">— Rachel Berman <span class="font-normal italic text-soft-600">· Ohio, USA</span></p>
           </div>
-        </article>
-        <article class="soft-card p-8">
-          <p class="text-clay-600 font-bold tracking-widest text-lg mb-3">★ ★ ★ ★ ★</p>
-          <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-relaxed mb-7">"My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. <span class="hand-under">That alone was worth it.</span>"</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-sage-200/40">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center font-accent font-bold text-base text-cream-50" style="background:linear-gradient(135deg,#E8B9A0,#D89878)">JM</div>
-            <div>
-              <p class="font-display font-bold text-lg text-sage-800">Jennifer Mitchell</p>
-              <p class="text-soft-600 text-base">Toronto, CA</p>
-            </div>
+        </li>
+        <li class="py-10 border-b border-sage-200/50 grid md:grid-cols-12 gap-4 md:gap-8">
+          <div class="md:col-span-2">
+            <p class="eyebrow text-clay-600 mb-2">Letter II</p>
+            <p class="text-clay-600 font-bold tracking-widest">★ ★ ★ ★ ★</p>
           </div>
-        </article>
-      </div>
+          <div class="md:col-span-10">
+            <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-[1.55] mb-4">"Finally someone who understands. The strategies are <span class="hand-under">practical, not theoretical</span>. My daughter's mornings are so much calmer now."</p>
+            <p class="font-display font-bold text-sage-800">— Kamila Bosco <span class="font-normal italic text-soft-600">· London, UK</span></p>
+          </div>
+        </li>
+        <li class="py-10 grid md:grid-cols-12 gap-4 md:gap-8">
+          <div class="md:col-span-2">
+            <p class="eyebrow text-clay-600 mb-2">Letter III</p>
+            <p class="text-clay-600 font-bold tracking-widest">★ ★ ★ ★ ★</p>
+          </div>
+          <div class="md:col-span-10">
+            <p class="font-display italic text-xl md:text-2xl text-ink-800 leading-[1.55] mb-4">"My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. <span class="hand-under">That alone was worth it.</span>"</p>
+            <p class="font-display font-bold text-sage-800">— Jennifer Mitchell <span class="font-normal italic text-soft-600">· Toronto, CA</span></p>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -606,32 +635,38 @@
         <span class="eyebrow text-clay-600 mb-3 inline-block">Why This Matters</span>
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-800 leading-tight">The reality of ADHD in families today.</h2>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">1 in 9</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Children diagnosed with ADHD in the US</p>
-        </div>
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-clay-700 mb-3 leading-none">74%</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Of parents feel isolated and unsupported</p>
-        </div>
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">3.2×</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Higher reported stress in ADHD families</p>
-        </div>
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">15+</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Years of clinical research represented</p>
-        </div>
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-clay-700 mb-3 leading-none">28%</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Of school-age children struggle academically</p>
-        </div>
-        <div class="cream-card p-8 text-center">
-          <p class="font-display font-black text-6xl text-sage-700 mb-3 leading-none">93%</p>
-          <p class="text-ink-700 text-base leading-relaxed font-medium">Of past attendees recommend this summit</p>
-        </div>
-      </div>
+      <ol class="max-w-4xl mx-auto border-t border-sage-200/50">
+        <li class="py-7 border-b border-sage-200/50 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">01</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-sage-700 leading-none">1 in 9</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Children diagnosed with ADHD in the US</p>
+        </li>
+        <li class="py-7 border-b border-sage-200/50 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">02</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-clay-700 leading-none">74%</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Of parents feel isolated and unsupported</p>
+        </li>
+        <li class="py-7 border-b border-sage-200/50 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">03</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-sage-700 leading-none">3.2×</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Higher reported stress in ADHD families</p>
+        </li>
+        <li class="py-7 border-b border-sage-200/50 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">04</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-sage-700 leading-none">15+</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Years of clinical research represented</p>
+        </li>
+        <li class="py-7 border-b border-sage-200/50 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">05</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-clay-700 leading-none">28%</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Of school-age children struggle academically</p>
+        </li>
+        <li class="py-7 grid grid-cols-12 gap-4 md:gap-8 items-baseline">
+          <span class="col-span-2 md:col-span-1 eyebrow text-clay-600">06</span>
+          <p class="col-span-10 md:col-span-4 font-display font-black text-4xl md:text-5xl text-sage-700 leading-none">93%</p>
+          <p class="col-span-12 md:col-span-7 text-ink-700 text-lg leading-relaxed font-medium">Of past attendees recommend this summit</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -710,8 +745,8 @@
       <details>
         <summary>How do I register? <span class="pm-icon">+</span></summary>
         <p class="px-7 pb-7 text-ink-700 text-lg leading-relaxed">
-          Hit any "Reserve seat" button — name + email, under 30 seconds.
-          <a href="#optin" onclick="openOptin(event)" class="inline-block mt-3 text-clay-700 font-bold text-lg border-b-2 border-rose-400 pb-0.5">Reserve seat →</a>
+          Hit any "Claim your free seat" button — name + email, under 30 seconds.
+          <a href="#optin" onclick="openOptin(event)" class="inline-block mt-3 text-clay-700 font-bold text-lg border-b-2 border-rose-400 pb-0.5">Claim your free seat <span aria-hidden="true">→</span></a>
         </p>
       </details>
     </div>
@@ -726,13 +761,13 @@
         <span class="font-accent font-bold text-cream-50 text-base">Registration closes Feb 9, 2026</span>
       </div>
       <h2 class="font-display font-black text-5xl md:text-6xl lg:text-7xl text-cream-50 leading-[1.05] mb-8 tracking-tight">
-        Take a deep <span class="italic">breath</span>. <br/>Then reserve your seat.
+        Take a deep <span class="italic">breath</span>. <br/>Then claim your seat.
       </h2>
       <p class="text-cream-50 text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
         Five days with forty of the field's most thoughtful minds — yours, free, delivered to your inbox.
       </p>
       <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-cream-50 hover:bg-cream-100 text-clay-700 font-bold text-xl px-12 py-5 pill transition shadow-2xl">
-        Reserve your free seat
+        Claim your free seat
         <span aria-hidden="true">→</span>
       </a>
       <p class="text-cream-50 font-accent font-semibold text-base mt-8 tracking-wide">Free · No credit card · Unsubscribe anytime</p>
@@ -764,24 +799,24 @@
   </footer>
 
   <!-- ========== OPTIN MODAL ========== -->
-  <div class="modal-backdrop" id="optinModal" role="dialog" aria-modal="true" aria-labelledby="optinTitle">
+  <div class="modal-backdrop" id="optinModal" role="dialog" aria-modal="true" aria-labelledby="optinTitle" aria-describedby="optinSubtitle">
     <div class="modal-card p-8 md:p-10 relative">
-      <button onclick="closeOptin()" aria-label="Close" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-cream-100 hover:bg-cream-200 flex items-center justify-center text-sage-700 text-xl leading-none">×</button>
+      <button type="button" onclick="closeOptin()" aria-label="Close registration modal" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-cream-100 hover:bg-cream-200 flex items-center justify-center text-sage-700 text-xl leading-none">×</button>
       <div id="optinBody">
-        <span class="eyebrow text-clay-600 mb-3 inline-block">Reserve a Seat</span>
+        <span class="eyebrow text-clay-600 mb-3 inline-block">Registration</span>
         <h3 id="optinTitle" class="font-display font-black text-3xl md:text-4xl text-ink-800 leading-tight mb-2">Take your gentle seat.</h3>
-        <p class="text-ink-700 text-lg mb-8">Name and email — we'll send the schedule, the Collection, and your access link to your inbox.</p>
-        <form id="optinForm" onsubmit="return handleOptin(event)" class="space-y-5">
+        <p id="optinSubtitle" class="text-ink-700 text-lg mb-8">Name and email — we'll send the schedule, the Collection, and your access link to your inbox.</p>
+        <form id="optinForm" onsubmit="return handleOptin(event)" class="space-y-5" novalidate>
           <div>
-            <label for="fname" class="eyebrow text-sage-800 block mb-2">Your Name</label>
-            <input id="fname" name="name" type="text" required class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="Sarah Jensen">
+            <label for="fname" class="eyebrow text-sage-800 block mb-2">Your name</label>
+            <input id="fname" name="first_name" type="text" required maxlength="80" autocomplete="given-name" class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="Sarah">
           </div>
           <div>
-            <label for="email" class="eyebrow text-sage-800 block mb-2">Email Address</label>
-            <input id="email" name="email" type="email" required class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="sarah@example.com">
+            <label for="email" class="eyebrow text-sage-800 block mb-2">Email address</label>
+            <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" class="w-full px-5 py-4 bg-white border-2 border-sage-200 rounded-2xl text-ink-800 text-lg focus:border-sage-600 focus:outline-none" placeholder="sarah@example.com">
           </div>
-          <button type="submit" class="btn-primary w-full justify-center mt-3 text-lg py-4">
-            Reserve my seat <span aria-hidden="true">→</span>
+          <button id="optinSubmit" type="submit" class="btn-primary w-full justify-center mt-3 text-lg py-4 disabled:opacity-60 disabled:cursor-not-allowed">
+            Claim your free seat <span aria-hidden="true">→</span>
           </button>
           <p class="text-center text-ink-700 text-base pt-2 font-medium">Free · No credit card · Unsubscribe anytime</p>
         </form>
@@ -809,9 +844,11 @@
     }
     function handleOptin(ev) {
       ev.preventDefault();
-      const name = document.getElementById('fname').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if (!name || !email) return false;
+      const btn = document.getElementById('optinSubmit');
+      if (btn && btn.disabled) return false;
+      const form = ev.target;
+      if (!form.checkValidity()) { form.reportValidity(); return false; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
       document.getElementById('optinBody').hidden = true;
       document.getElementById('optinSuccess').hidden = false;
       return false;

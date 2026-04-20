@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADHD Parenting Summit 2026 — Programme Notes · Vol. VII</title>
+  <meta name="description" content="A five-evening programme for parents of ADHD kids. 41 speakers, 20 core hours, indexed and timed. Free, online, Feb 10–14, 2026." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:#15201e;
+      --bone:#f5f1e8;
+      --bone-2:#ece6d5;
+      --cream:#fbf7ec;
+      --teal:#0f4e4a;
+      --teal-2:#1b6b66;
+      --teal-soft:#d9e7e5;
+      --line:#c9c0ab;
+      --line-2:#ddd4be;
+      --muted:#3b4a47;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Outfit',ui-sans-serif,system-ui,sans-serif; background:var(--bone); color:var(--ink); font-weight:400; }
+    .font-display { font-family:'Outfit',sans-serif; letter-spacing:-0.02em; }
+    .font-serif { font-family:'Fraunces',Georgia,serif; font-weight:400; letter-spacing:-0.02em; }
+    .font-serif-it { font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:400; letter-spacing:-0.01em; }
+    .font-smallcaps { font-family:'Outfit',sans-serif; text-transform:uppercase; letter-spacing:.18em; font-weight:500; }
+    .serif-accent { font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:400; color:var(--teal); }
+
+    .t-ease { transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease; }
+    .tactile:active { transform: translateY(1px); }
+
+    .ruled { border-top:1px solid var(--line); }
+    .ruled-b { border-bottom:1px solid var(--line); }
+    .double-rule { border-top:3px double var(--line); }
+    .double-rule-b { border-bottom:3px double var(--line); }
+
+    /* Programme-style date strip */
+    .date-strip { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
+    .date-strip > div { padding:1rem 1.1rem; }
+    .date-strip > div + div { border-left:1px solid var(--line); }
+    .date-strip .lbl { font-family:'Outfit',sans-serif; font-size:.68rem; text-transform:uppercase; letter-spacing:.22em; color:var(--muted); font-weight:500; }
+    .date-strip .val { font-family:'Fraunces',serif; font-weight:400; font-size:1.15rem; color:var(--ink); margin-top:.35rem; letter-spacing:-.01em; }
+
+    /* Programme numbers */
+    .prog-num { font-family:'Fraunces',serif; font-weight:400; color:var(--teal); }
+
+    .mono { width:2.75rem; height:2.75rem; border-radius:.25rem; display:inline-flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-weight:500; font-size:.82rem; letter-spacing:.03em; line-height:1; flex-shrink:0; }
+    .mono-teal { background:var(--teal); color:var(--cream); }
+    .mono-ink  { background:var(--ink); color:var(--bone); }
+    .mono-soft { background:var(--teal-soft); color:var(--teal); border:1px solid var(--line); }
+    .mono-bone { background:var(--bone-2); color:var(--ink); border:1px solid var(--line); }
+
+    /* Marquee */
+    .marquee-wrap { overflow:hidden; position:relative; }
+    .marquee-wrap::before, .marquee-wrap::after { content:""; position:absolute; top:0; height:100%; width:110px; z-index:2; pointer-events:none; }
+    .marquee-wrap::before { left:0; background:linear-gradient(90deg, var(--bone), transparent); }
+    .marquee-wrap::after  { right:0; background:linear-gradient(-90deg, var(--bone), transparent); }
+    .marquee-track { display:flex; width:max-content; animation: marq 48s linear infinite; }
+    .marquee-item { padding:0 2.5rem; white-space:nowrap; color:var(--muted); font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1.25rem; }
+    @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* Programme table row */
+    .prog-row { display:grid; grid-template-columns: 3.5rem 2.75rem 1fr auto; gap:1rem; align-items:center; padding:1.1rem 0; border-bottom:1px solid var(--line-2); }
+    .prog-row:last-child { border-bottom:none; }
+    .prog-time { font-family:'Fraunces',serif; color:var(--teal); font-size:1.05rem; letter-spacing:-.01em; }
+    .prog-dur { font-family:'Outfit',sans-serif; font-size:.75rem; color:var(--muted); letter-spacing:.08em; }
+
+    /* Movement heading */
+    .mvmt-head { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding-bottom:.9rem; border-bottom:1px solid var(--ink); margin-bottom:.5rem; flex-wrap:wrap; }
+    .mvmt-label { font-family:'Fraunces',serif; font-style:italic; color:var(--teal); font-size:1rem; letter-spacing:-.005em; }
+
+    /* Details */
+    details { border-bottom:1px solid var(--line); }
+    details:first-of-type { border-top:1px solid var(--line); }
+    details summary { cursor:pointer; list-style:none; padding:1.35rem 0; font-weight:500; display:flex; justify-content:space-between; align-items:center; gap:1rem; font-size:1.05rem; }
+    details summary::-webkit-details-marker { display:none; }
+    details[open] summary { color:var(--teal); }
+    .pm-icon { width:26px; height:26px; border-radius:999px; background:var(--teal-soft); color:var(--teal); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition: transform .25s ease; }
+    details[open] .pm-icon { transform: rotate(45deg); background:var(--teal); color:var(--cream); }
+
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(21,32,30,.6); backdrop-filter:blur(6px); z-index:100; display:none; align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-backdrop.open { display:flex; }
+    .modal-card { background:var(--cream); max-width:520px; width:100%; border-radius:.25rem; box-shadow:0 40px 80px -20px rgba(15,78,74,.4); border:1px solid var(--line); }
+    body.modal-open { overflow:hidden; }
+
+    :focus-visible { outline:2px solid var(--teal); outline-offset:3px; border-radius:4px; }
+    details summary:focus-visible { outline:2px solid var(--teal); outline-offset:-2px; }
+    .skip-nav { position:absolute; top:0; left:0; padding:.75rem 1rem; background:var(--ink); color:var(--bone); font-family:'Outfit',sans-serif; font-size:.78rem; text-transform:uppercase; letter-spacing:.18em; transform:translateY(-120%); transition:transform .2s ease; z-index:200; border-radius:0 0 .25rem 0; }
+    .skip-nav:focus-visible { transform:translateY(0); }
+
+    /* Ornament */
+    .orn { display:inline-block; width:2.5rem; height:1px; background:var(--teal); position:relative; }
+    .orn::before { content:""; position:absolute; top:-2px; left:50%; transform:translateX(-50%); width:5px; height:5px; background:var(--teal); border-radius:999px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      .skip-nav, .t-ease, .tactile:active, details .pm-icon { transition:none !important; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <a href="#main-content" class="skip-nav">Skip to content</a>
+
+  <header class="sticky top-0 z-40 backdrop-blur-md ruled-b" style="background:rgba(245,241,232,.9);">
+    <div class="max-w-[1280px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between gap-4">
+      <a href="#" class="flex items-center gap-3 min-w-0">
+        <span class="inline-flex items-center justify-center w-8 h-8" style="background:var(--teal); color:var(--cream); font-family:'Fraunces',serif; font-style:italic; font-size:1rem; border-radius:.2rem;">A</span>
+        <span class="font-display font-medium tracking-tight text-[15px] truncate">ADHD Parenting Summit</span>
+        <span class="font-serif-it text-sm hidden sm:inline" style="color:var(--muted)">/ programme vii</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-sm" style="color:var(--muted)" aria-label="Primary">
+        <a href="#prelude" class="t-ease hover:text-[var(--ink)]">Prelude</a>
+        <a href="#programme" class="t-ease hover:text-[var(--ink)]">Programme</a>
+        <a href="#speakers" class="t-ease hover:text-[var(--ink)]">Speakers</a>
+        <a href="#faq" class="t-ease hover:text-[var(--ink)]">Notes</a>
+      </nav>
+      <a href="#optin" onclick="openOptin(event)" class="tactile t-ease text-sm px-4 py-2 font-medium whitespace-nowrap" style="background:var(--teal); color:var(--cream); border-radius:.25rem;">Claim your free seat</a>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- HERO: title page of the programme -->
+    <section class="pt-14 md:pt-20 pb-16">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <!-- Title page frame -->
+        <div class="double-rule double-rule-b py-10 md:py-16 px-2 md:px-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end">
+            <div class="lg:col-span-8">
+              <div class="flex items-center gap-4 font-smallcaps text-[10.5px] mb-8" style="color:var(--muted)">
+                <span style="color:var(--teal)">Vol. VII</span>
+                <span class="orn" aria-hidden="true"></span>
+                <span>A five-evening programme</span>
+                <span class="hidden md:inline">·</span>
+                <span class="hidden md:inline">MMXXVI</span>
+              </div>
+              <h1 class="font-display font-medium text-[2.75rem] md:text-[4.5rem] lg:text-[5.25rem] leading-[0.96] tracking-[-0.03em] mb-3">
+                A programme of
+                <span class="block">five evenings <span class="font-serif-it" style="color:var(--teal)">for</span></span>
+                <span class="block">parents of</span>
+                <span class="block font-serif-it" style="color:var(--teal)">ADHD kids.</span>
+              </h1>
+              <p class="mt-8 font-serif text-[1.15rem] md:text-[1.35rem] leading-[1.45] max-w-[52ch]" style="color:var(--muted)">
+                Forty-one clinicians, neuroscientists, and educators — indexed, timed, and scored for a working household. Published by Althea Academy.
+              </p>
+            </div>
+            <div class="lg:col-span-4">
+              <div class="pt-8 border-t" style="border-color:var(--ink);">
+                <div class="font-smallcaps text-[10.5px] mb-6" style="color:var(--muted)">Direction &amp; notes</div>
+                <dl class="space-y-3 text-[15px]">
+                  <div class="flex justify-between gap-4"><dt style="color:var(--muted)" class="font-smallcaps text-[10.5px] pt-1">Editor</dt><dd class="font-serif" style="color:var(--ink)">Althea Academy</dd></div>
+                  <div class="flex justify-between gap-4"><dt style="color:var(--muted)" class="font-smallcaps text-[10.5px] pt-1">Season</dt><dd class="font-serif" style="color:var(--ink)">Seventh</dd></div>
+                  <div class="flex justify-between gap-4"><dt style="color:var(--muted)" class="font-smallcaps text-[10.5px] pt-1">Movements</dt><dd class="font-serif" style="color:var(--ink)">Five</dd></div>
+                  <div class="flex justify-between gap-4"><dt style="color:var(--muted)" class="font-smallcaps text-[10.5px] pt-1">Duration</dt><dd class="font-serif" style="color:var(--ink)">20 core hours</dd></div>
+                  <div class="flex justify-between gap-4"><dt style="color:var(--muted)" class="font-smallcaps text-[10.5px] pt-1">Admission</dt><dd class="font-serif" style="color:var(--teal)">Free · per household</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7">
+            <div class="date-strip" aria-label="Summit schedule">
+              <div><div class="lbl">Opens</div><div class="val">Tue · 10 Feb 2026</div></div>
+              <div><div class="lbl">Closes</div><div class="val">Sat · 14 Feb 2026</div></div>
+              <div><div class="lbl">Live</div><div class="val">7:00 – 9:30 PM ET</div></div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 flex flex-wrap items-center gap-3">
+            <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 text-sm font-medium" style="background:var(--ink); color:var(--bone); border-radius:.25rem;">
+              Claim your free seat
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#programme" class="tactile t-ease inline-flex items-center gap-2 px-5 py-3.5 border text-sm" style="border-color:var(--ink); color:var(--ink); border-radius:.25rem;">Read the programme</a>
+          </div>
+        </div>
+
+        <div class="mt-14 pt-6 ruled flex flex-wrap items-center justify-between gap-6 font-smallcaps text-[10.5px]" style="color:var(--muted)">
+          <span><span style="color:var(--teal)">Est. 2019</span> · Althea Academy</span>
+          <span class="hidden md:inline">41 speakers · 20 core hours · $0 · 73,124 households in 2025</span>
+          <span><span style="color:var(--teal)">4.87</span> / 5 · 2,614 reviews</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESS -->
+    <section class="py-10 ruled ruled-b" style="background:var(--bone-2);">
+      <div class="max-w-[1280px] mx-auto px-6 md:px-10">
+        <p class="font-smallcaps text-[10.5px] text-center mb-6" style="color:var(--muted)">Contributors have appeared in</p>
+        <div class="marquee-wrap" aria-hidden="true"><div class="marquee-track">
+          <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span>
+          <span class="marquee-item">The New York Times</span><span class="marquee-item">Psychology Today</span><span class="marquee-item">The Atlantic</span><span class="marquee-item">The Guardian</span><span class="marquee-item">TIME</span><span class="marquee-item">TEDx</span><span class="marquee-item">Scientific American</span><span class="marquee-item">Forbes</span><span class="marquee-item">BBC</span><span class="marquee-item">Washington Post</span>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- PRELUDE / WHAT IT IS -->
+    <section id="prelude" class="py-24 md:py-28">
+      <div class="max-w-[1100px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <div class="sticky top-24">
+            <div class="font-smallcaps text-[10.5px] mb-4" style="color:var(--teal)">Prelude</div>
+            <h2 class="font-display font-medium text-[2.1rem] lg:text-[2.6rem] leading-[1.03] tracking-[-0.02em]">
+              A programme, not a <span class="serif-accent">performance</span>.
+            </h2>
+          </div>
+        </div>
+        <div class="lg:col-span-8 font-serif text-[1.12rem] leading-[1.72]" style="color:var(--muted)">
+          <p class="mb-6 first-letter:font-display first-letter:text-[3.6rem] first-letter:leading-[0.85] first-letter:mr-2 first-letter:float-left first-letter:mt-1.5" style="color:var(--muted)"><span style="color:var(--ink);" class="font-display font-medium not-italic">This is five evenings,</span> not forty. No motivational spine, no before-and-after reels, no one telling you your child is a gift — you already know. Performance calm is not the point.</p>
+          <p class="mb-6"><span class="font-display font-medium not-italic" style="color:var(--ink)">What you get instead</span> is a scored programme: five evenings, four sessions each, timed to the minute. Forty-one contributors speaking directly to parents of ADHD kids ages 5 – 17. Live 7:00 – 9:30 PM Eastern; replays within 48 hours.</p>
+          <p>You will leave with one sentence you weren't saying, one three-minute morning that holds, and one clinician's name for the conversation you've been postponing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRAMME — five movements -->
+    <section id="programme" class="py-24 md:py-32 ruled ruled-b" style="background:var(--cream);">
+      <div class="max-w-[1080px] mx-auto px-6 md:px-10">
+        <div class="text-center mb-14">
+          <div class="font-smallcaps text-[10.5px] mb-4" style="color:var(--teal)">The programme</div>
+          <h2 class="font-display font-medium text-[2.5rem] md:text-[3.5rem] leading-[1.02] tracking-[-0.025em]">
+            Five <span class="serif-accent">movements</span>, each 150 minutes.
+          </h2>
+          <div class="mt-5 flex justify-center"><span class="orn" aria-hidden="true"></span></div>
+        </div>
+
+        <!-- Movement I -->
+        <div class="mb-12">
+          <div class="mvmt-head">
+            <div class="flex items-baseline gap-4">
+              <span class="prog-num text-4xl md:text-5xl">I.</span>
+              <h3 class="font-display font-medium text-xl md:text-2xl tracking-tight">Understanding the ADHD brain</h3>
+            </div>
+            <span class="mvmt-label">allegro moderato · Tue 10 Feb · 7:00 – 9:30 PM ET</span>
+          </div>
+          <div>
+            <div class="prog-row"><span class="prog-time">7:00</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">The executive-function clock</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Nerea Okafor-Mattsson · Pediatric Neuropsychology, NYU</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 1</span></div>
+            <div class="prog-row"><span class="prog-time">7:50</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Dopamine, not willpower</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Tomás Ishihara · Family Therapy, Seattle</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 2</span></div>
+            <div class="prog-row"><span class="prog-time">8:40</span><span class="prog-dur">30m</span><div><div class="font-display font-medium text-[15px] tracking-tight">What teachers see, what we miss</div><div class="text-sm mt-0.5" style="color:var(--muted)">Fern Okonkwo-Lindgren · Former Greenwich SEN</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 3</span></div>
+            <div class="prog-row"><span class="prog-time">9:15</span><span class="prog-dur">15m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Q&amp;A · live</div><div class="text-sm mt-0.5" style="color:var(--muted)">Panel, moderated</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">coda</span></div>
+          </div>
+        </div>
+
+        <!-- Movement II -->
+        <div class="mb-12">
+          <div class="mvmt-head">
+            <div class="flex items-baseline gap-4">
+              <span class="prog-num text-4xl md:text-5xl">II.</span>
+              <h3 class="font-display font-medium text-xl md:text-2xl tracking-tight">Scripts that end the yelling cycle</h3>
+            </div>
+            <span class="mvmt-label">andante · Wed 11 Feb · 7:00 – 9:30 PM ET</span>
+          </div>
+          <div>
+            <div class="prog-row"><span class="prog-time">7:00</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Twelve sentences, printed</div><div class="text-sm mt-0.5" style="color:var(--muted)">Inés Quattrocchi · ADHD Coaching, Buenos Aires</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 4</span></div>
+            <div class="prog-row"><span class="prog-time">7:50</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Co-regulation under five minutes</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Yohannes Dankwa · Clinical Psychology, Accra</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 5</span></div>
+            <div class="prog-row"><span class="prog-time">8:40</span><span class="prog-dur">30m</span><div><div class="font-display font-medium text-[15px] tracking-tight">The sentence you stop saying</div><div class="text-sm mt-0.5" style="color:var(--muted)">Mira Soltys · SEN Advocacy, 412 IEPs</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 6</span></div>
+            <div class="prog-row"><span class="prog-time">9:15</span><span class="prog-dur">15m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Q&amp;A · live</div><div class="text-sm mt-0.5" style="color:var(--muted)">Panel, moderated</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">coda</span></div>
+          </div>
+        </div>
+
+        <!-- Movement III -->
+        <div class="mb-12">
+          <div class="mvmt-head">
+            <div class="flex items-baseline gap-4">
+              <span class="prog-num text-4xl md:text-5xl">III.</span>
+              <h3 class="font-display font-medium text-xl md:text-2xl tracking-tight">The morning architecture</h3>
+            </div>
+            <span class="mvmt-label">scherzo · Thu 12 Feb · 7:00 – 9:30 PM ET</span>
+          </div>
+          <div>
+            <div class="prog-row"><span class="prog-time">7:00</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Three-minute blocks that hold</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Hessa Vasallo-Jamil · Occupational Therapy, Dubai</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 7</span></div>
+            <div class="prog-row"><span class="prog-time">7:50</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Sleep as executive function</div><div class="text-sm mt-0.5" style="color:var(--muted)">Reinhardt Kowalski-Reyes · Sleep Science, Krakow</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 8</span></div>
+            <div class="prog-row"><span class="prog-time">8:40</span><span class="prog-dur">30m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Breakfast, protein, the 47-minute rule</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Bethel Araya-Stokes · Nutrition, Addis Ababa</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 9</span></div>
+            <div class="prog-row"><span class="prog-time">9:15</span><span class="prog-dur">15m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Q&amp;A · live</div><div class="text-sm mt-0.5" style="color:var(--muted)">Panel, moderated</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">coda</span></div>
+          </div>
+        </div>
+
+        <!-- Movement IV -->
+        <div class="mb-12">
+          <div class="mvmt-head">
+            <div class="flex items-baseline gap-4">
+              <span class="prog-num text-4xl md:text-5xl">IV.</span>
+              <h3 class="font-display font-medium text-xl md:text-2xl tracking-tight">Regulation, not suppression</h3>
+            </div>
+            <span class="mvmt-label">adagio · Fri 13 Feb · 7:00 – 9:30 PM ET</span>
+          </div>
+          <div>
+            <div class="prog-row"><span class="prog-time">7:00</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Letting the feeling finish</div><div class="text-sm mt-0.5" style="color:var(--muted)">Persefoni Thorvaldsen · Developmental Research, Reykjavík</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 10</span></div>
+            <div class="prog-row"><span class="prog-time">7:50</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Medication conversations with your prescriber</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Ezekiel Ribeiro-Pascal · Pediatrics, São Paulo</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 11</span></div>
+            <div class="prog-row"><span class="prog-time">8:40</span><span class="prog-dur">30m</span><div><div class="font-display font-medium text-[15px] tracking-tight">When the feeling is yours</div><div class="text-sm mt-0.5" style="color:var(--muted)">Dr. Ambrose Bellerose · Child Psychiatry, Cleveland Clinic</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 12</span></div>
+            <div class="prog-row"><span class="prog-time">9:15</span><span class="prog-dur">15m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Q&amp;A · live</div><div class="text-sm mt-0.5" style="color:var(--muted)">Panel, moderated</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">coda</span></div>
+          </div>
+        </div>
+
+        <!-- Movement V -->
+        <div>
+          <div class="mvmt-head">
+            <div class="flex items-baseline gap-4">
+              <span class="prog-num text-4xl md:text-5xl">V.</span>
+              <h3 class="font-display font-medium text-xl md:text-2xl tracking-tight">School systems and the email that gets a response</h3>
+            </div>
+            <span class="mvmt-label">finale · Sat 14 Feb · 7:00 – 9:30 PM ET</span>
+          </div>
+          <div>
+            <div class="prog-row"><span class="prog-time">7:00</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">The IEP / 504 landscape</div><div class="text-sm mt-0.5" style="color:var(--muted)">Mira Soltys · SEN Advocacy</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 13</span></div>
+            <div class="prog-row"><span class="prog-time">7:50</span><span class="prog-dur">45m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Writing the email that lands</div><div class="text-sm mt-0.5" style="color:var(--muted)">Fern Okonkwo-Lindgren · Education Consultant</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 14</span></div>
+            <div class="prog-row"><span class="prog-time">8:40</span><span class="prog-dur">30m</span><div><div class="font-display font-medium text-[15px] tracking-tight">The one line that changes the meeting</div><div class="text-sm mt-0.5" style="color:var(--muted)">Panel</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">op. 15</span></div>
+            <div class="prog-row"><span class="prog-time">9:10</span><span class="prog-dur">20m</span><div><div class="font-display font-medium text-[15px] tracking-tight">Closing remarks &amp; live Q&amp;A</div><div class="text-sm mt-0.5" style="color:var(--muted)">The editors &amp; full panel</div></div><span class="font-serif-it text-sm" style="color:var(--teal)">finale</span></div>
+          </div>
+        </div>
+
+        <div class="mt-14 pt-6 ruled flex flex-wrap justify-between items-center gap-4 font-smallcaps text-[10.5px]" style="color:var(--muted)">
+          <span>15 sessions listed · 41 contributors across five movements</span>
+          <a href="#optin" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center gap-2 px-4 py-2.5 border" style="border-color:var(--ink); color:var(--ink); border-radius:.25rem; letter-spacing:.18em;">
+            Full programme on registration
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPEAKERS — speaker index -->
+    <section id="speakers" class="py-24 md:py-32">
+      <div class="max-w-[1080px] mx-auto px-6 md:px-10">
+        <div class="mb-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+          <div class="md:col-span-7">
+            <div class="font-smallcaps text-[10.5px] mb-4" style="color:var(--teal)">Speaker index</div>
+            <h2 class="font-display font-medium text-[2.1rem] md:text-[2.75rem] tracking-[-0.02em] leading-[1.03]">Twelve of forty-one, in order of appearance.</h2>
+          </div>
+          <div class="md:col-span-5 md:text-right font-serif-it text-[17px]" style="color:var(--muted)">
+            See the full index on registration.
+          </div>
+        </div>
+
+        <ul role="list">
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-teal">NO</span><div><div class="font-display font-medium tracking-tight">Dr. Nerea Okafor-Mattsson</div><div class="text-sm mt-0.5" style="color:var(--muted)">Pediatric Neuropsychology · NYU</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 1</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Tue · 7:00 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-ink">TI</span><div><div class="font-display font-medium tracking-tight">Dr. Tomás Ishihara</div><div class="text-sm mt-0.5" style="color:var(--muted)">Family Therapy · Seattle Family Institute</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 2</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Tue · 7:50 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-soft">FO</span><div><div class="font-display font-medium tracking-tight">Fern Okonkwo-Lindgren</div><div class="text-sm mt-0.5" style="color:var(--muted)">Education Consultant · Former Greenwich SEN</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 3</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Tue · 8:40 · 30m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-bone">IQ</span><div><div class="font-display font-medium tracking-tight">Inés Quattrocchi</div><div class="text-sm mt-0.5" style="color:var(--muted)">ADHD Coaching · Buenos Aires</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 4</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Wed · 7:00 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-teal">YD</span><div><div class="font-display font-medium tracking-tight">Dr. Yohannes Dankwa</div><div class="text-sm mt-0.5" style="color:var(--muted)">Clinical Psychology · Accra / London</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 5</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Wed · 7:50 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-ink">MS</span><div><div class="font-display font-medium tracking-tight">Mira Soltys</div><div class="text-sm mt-0.5" style="color:var(--muted)">Special-Ed Advocacy · 412 IEPs negotiated</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 6</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Wed · 8:40 · 30m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-soft">HV</span><div><div class="font-display font-medium tracking-tight">Dr. Hessa Vasallo-Jamil</div><div class="text-sm mt-0.5" style="color:var(--muted)">Occupational Therapy · Dubai</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 7</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Thu · 7:00 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-bone">RK</span><div><div class="font-display font-medium tracking-tight">Reinhardt Kowalski-Reyes</div><div class="text-sm mt-0.5" style="color:var(--muted)">Sleep Science · Krakow</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 8</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Thu · 7:50 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-teal">BA</span><div><div class="font-display font-medium tracking-tight">Dr. Bethel Araya-Stokes</div><div class="text-sm mt-0.5" style="color:var(--muted)">Nutrition &amp; executive function · Addis Ababa</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 9</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Thu · 8:40 · 30m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-ink">PT</span><div><div class="font-display font-medium tracking-tight">Persefoni Thorvaldsen</div><div class="text-sm mt-0.5" style="color:var(--muted)">Child Development · Reykjavík</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 10</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Fri · 7:00 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-soft">ER</span><div><div class="font-display font-medium tracking-tight">Dr. Ezekiel Ribeiro-Pascal</div><div class="text-sm mt-0.5" style="color:var(--muted)">Pediatrics · São Paulo</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 11</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Fri · 7:50 · 45m</span></li>
+          <li class="grid grid-cols-[2.75rem_1fr_auto_auto] gap-4 items-center py-5 ruled-b"><span class="mono mono-bone">AB</span><div><div class="font-display font-medium tracking-tight">Dr. Ambrose Bellerose</div><div class="text-sm mt-0.5" style="color:var(--muted)">Child Psychiatry · Cleveland Clinic</div></div><span class="hidden md:inline font-serif-it text-sm" style="color:var(--teal)">op. 12</span><span class="hidden sm:inline font-smallcaps text-[10.5px]" style="color:var(--muted)">Fri · 8:40 · 30m</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="py-24 md:py-28 ruled ruled-b" style="background:var(--cream);">
+      <div class="max-w-[900px] mx-auto px-6 md:px-10">
+        <div class="flex items-center gap-3 mb-8 font-smallcaps text-[10.5px]" style="color:var(--teal)">
+          <span>Programme notes</span>
+          <span class="orn" aria-hidden="true"></span>
+          <span style="color:var(--muted)">Attended evening III · Portland, OR · 02/2025</span>
+        </div>
+        <blockquote class="font-serif text-[1.75rem] md:text-[2.2rem] leading-[1.28] tracking-[-0.01em]">
+          "By Wednesday evening something had shifted in my 9-year-old. Not because he'd changed — because I had one sentence I wasn't saying anymore. That's the whole programme, honestly."
+        </blockquote>
+        <div class="mt-8 pt-5 ruled flex items-center gap-4">
+          <span class="mono mono-teal">DK</span>
+          <div>
+            <div class="font-display font-medium text-[15px] tracking-tight">Dana Kowalski-Reyes</div>
+            <div class="text-[13px] mt-0.5 font-serif-it" style="color:var(--muted)">Parent of two · attended 2025</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ / PROGRAMME NOTES -->
+    <section id="faq" class="py-24 md:py-32">
+      <div class="max-w-[820px] mx-auto px-6 md:px-10">
+        <div class="mb-12">
+          <div class="font-smallcaps text-[10.5px] mb-4" style="color:var(--teal)">Notes &amp; queries</div>
+          <h2 class="font-display font-medium text-[2.1rem] md:text-[2.75rem] tracking-[-0.02em] leading-[1.03]">Before you register.</h2>
+        </div>
+        <details>
+          <summary><span>Is it really free, or is there a catch?</span><span class="pm-icon" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="pb-6 leading-relaxed text-[15px] font-serif" style="color:var(--muted)">Yes, free. Live attendance and 48-hour replays are included. A lifetime-access pass is available for $47 after registering — fully optional; no mid-session upsells.</div>
+        </details>
+        <details>
+          <summary><span>What time are the evenings?</span><span class="pm-icon" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="pb-6 leading-relaxed text-[15px] font-serif" style="color:var(--muted)">Live 7:00 – 9:30 PM Eastern, Tuesday February 10 through Saturday February 14. Replays stay live for 48 hours after each session.</div>
+        </details>
+        <details>
+          <summary><span>My child hasn't been diagnosed. Is this still for me?</span><span class="pm-icon" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="pb-6 leading-relaxed text-[15px] font-serif" style="color:var(--muted)">Yes. About 31% of attendees arrive pre-diagnosis. We cover the clinical landscape and questions to ask your pediatrician — specific decisions stay with you and your prescriber.</div>
+        </details>
+        <details>
+          <summary><span>Can I watch with my partner?</span><span class="pm-icon" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="pb-6 leading-relaxed text-[15px] font-serif" style="color:var(--muted)">Yes. One registration covers the whole household. Most attendees watch with a spouse, co-parent, or grandparent at least one evening.</div>
+        </details>
+        <details>
+          <summary><span>Do you sell or share my email?</span><span class="pm-icon" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="pb-6 leading-relaxed text-[15px] font-serif" style="color:var(--muted)">No. Your address stays with Althea Academy. No partner lists, no cross-promotions. Unsubscribe link in every message.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="optin" class="py-24 md:py-32 ruled">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-10">
+        <div class="double-rule double-rule-b py-14 md:py-20 px-6 md:px-12" style="background:var(--cream); border-radius:.25rem;">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-end">
+            <div>
+              <div class="font-smallcaps text-[10.5px] mb-5" style="color:var(--teal)">Registration · finale</div>
+              <h2 class="font-display font-medium text-[2.1rem] md:text-[3rem] tracking-[-0.02em] leading-[1.03]">
+                Reserve your seat in the <span class="serif-accent">house.</span>
+              </h2>
+              <p class="leading-relaxed mt-5 max-w-[54ch] text-[16px] font-serif" style="color:var(--muted)">73,124 households took a seat last year. Free, online, replays 48h. No upsell mid-session — that's a rule.</p>
+            </div>
+            <div class="flex flex-col gap-6">
+              <ul class="space-y-2.5 text-[15px] ruled pt-5 font-serif">
+                <li class="flex items-start gap-3 py-1"><span class="font-serif-it text-xs pt-1 shrink-0" style="color:var(--teal)">·</span><span>20 core hours across five movements</span></li>
+                <li class="flex items-start gap-3 py-1"><span class="font-serif-it text-xs pt-1 shrink-0" style="color:var(--teal)">·</span><span>Parenting Mastery Collection ($127, included)</span></li>
+                <li class="flex items-start gap-3 py-1"><span class="font-serif-it text-xs pt-1 shrink-0" style="color:var(--teal)">·</span><span>Three bonus playbooks ($291 value)</span></li>
+                <li class="flex items-start gap-3 py-1"><span class="font-serif-it text-xs pt-1 shrink-0" style="color:var(--teal)">·</span><span>Unsubscribe in one click, anytime</span></li>
+              </ul>
+              <a href="#" onclick="openOptin(event)" class="tactile t-ease inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium" style="background:var(--ink); color:var(--cream); border-radius:.25rem;">
+                Claim your free seat
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ruled py-10">
+    <div class="max-w-[1280px] mx-auto px-6 md:px-10 flex flex-wrap gap-4 items-center justify-between text-[11px] font-smallcaps" style="color:var(--muted)">
+      <div>© 2026 Althea Academy · ADHD Parenting Summit · Programme VII</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-[var(--ink)] t-ease">Privacy</a>
+        <a href="#" class="hover:text-[var(--ink)] t-ease">Terms</a>
+        <a href="mailto:hello@althea-academy.com" class="hover:text-[var(--ink)] t-ease">hello@althea-academy.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="optin-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="optin-title" aria-describedby="optin-subtitle" onclick="closeOptinBackdrop(event)">
+    <div class="modal-card p-8 md:p-10" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-6">
+        <span class="font-smallcaps text-[10.5px]" style="color:var(--teal)">Registration · take a seat</span>
+        <button type="button" onclick="closeOptin()" class="w-9 h-9 rounded-sm border flex items-center justify-center t-ease" style="border-color:var(--line); color:var(--ink)" aria-label="Close registration modal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
+        </button>
+      </div>
+      <h3 id="optin-title" class="font-display font-medium text-[1.75rem] md:text-[2rem] tracking-[-0.02em] leading-[1.05] mb-2">Your <span class="serif-accent">seat</span> in the house.</h3>
+      <p id="optin-subtitle" class="text-sm leading-relaxed mb-7 font-serif" style="color:var(--muted)">We'll send your calendar links and the Collection within 90 seconds.</p>
+      <form class="space-y-4" novalidate onsubmit="submitOptin(event)" autocomplete="on">
+        <div class="flex flex-col gap-2 min-w-0">
+          <label for="optin-fname" class="font-smallcaps text-[10.5px]" style="color:var(--muted)">First name</label>
+          <input id="optin-fname" name="first_name" type="text" required maxlength="80" autocomplete="given-name" class="px-4 py-3 rounded-sm border t-ease min-w-0" style="border-color:var(--line); background:var(--bone); color:var(--ink)" placeholder="Dana" />
+        </div>
+        <div class="flex flex-col gap-2 min-w-0">
+          <label for="optin-email" class="font-smallcaps text-[10.5px]" style="color:var(--muted)">Email</label>
+          <input id="optin-email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" aria-describedby="optin-email-hint" class="px-4 py-3 rounded-sm border t-ease min-w-0" style="border-color:var(--line); background:var(--bone); color:var(--ink)" placeholder="you@household.com" />
+          <p id="optin-email-hint" class="text-[11px]" style="color:var(--muted)">No upsells, no partner list. Unsubscribe in one click.</p>
+        </div>
+        <button id="optin-submit" type="submit" class="tactile t-ease w-full mt-3 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed" style="background:var(--ink); color:var(--cream); border-radius:.25rem;">
+          Reserve &amp; send the programme
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openOptin(e){ if(e)e.preventDefault(); const m=document.getElementById('optin-modal'); m.classList.add('open'); document.body.classList.add('modal-open'); const f=document.getElementById('optin-fname'); if(f) setTimeout(()=>f.focus(),30); }
+    function closeOptin(){ document.getElementById('optin-modal').classList.remove('open'); document.body.classList.remove('modal-open'); }
+    function closeOptinBackdrop(e){ if(e.target.id==='optin-modal') closeOptin(); }
+    function submitOptin(e){
+      e.preventDefault();
+      const btn=document.getElementById('optin-submit');
+      if(btn.disabled) return;
+      const form=e.target;
+      if(!form.checkValidity()){ form.reportValidity(); return; }
+      btn.disabled=true;
+      const original=btn.textContent;
+      btn.textContent='Reserving…';
+      setTimeout(()=>{ btn.disabled=false; btn.textContent=original; form.reset(); closeOptin(); },500);
+    }
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeOptin(); });
+  </script>
+
+</body>
+</html>

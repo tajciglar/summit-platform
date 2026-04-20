@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -21,20 +21,34 @@
           fontFamily: {
             display: ['Fraunces','serif'],
             serif:   ['Source Serif 4','Georgia','serif'],
-            ui:      ['Inter','system-ui','sans-serif']
+            ui:      ['Outfit','system-ui','sans-serif']
           }
         }
       }
     }
   </script>
   <style>
+    :root {
+      --paper-50:#FDFBF5;
+      --paper-100:#F9F4EC;
+      --paper-200:#F2EADD;
+      --paper-300:#E8DFD0;
+      --paper-400:#D4C7B2;
+      --ink-700:#4A1F2D;
+      --ink-900:#2A0F17;
+      --ochre-600:#C9812A;
+      --ochre-700:#A6691F;
+      --taupe-600:#6B5B4E;
+      --taupe-700:#4F4238;
+      --muted:#3D3128; /* AAA-contrast muted on paper */
+    }
     html { scroll-behavior: smooth; }
-    body { font-family:'Source Serif 4','Georgia',serif; background:#F9F4EC; color:#2A0F17; font-feature-settings:"kern","liga","ss01"; }
+    body { font-family:'Source Serif 4','Georgia',serif; background:var(--paper-100); color:var(--ink-900); font-feature-settings:"kern","liga","ss01"; }
     h1,h2,h3,h4,.font-display { font-family:'Fraunces','serif'; letter-spacing:-0.01em; font-optical-sizing:auto; }
-    .eyebrow { font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.22em; font-weight:600; font-size:0.7rem; }
+    .eyebrow { font-family:'Outfit',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.22em; font-weight:600; font-size:0.7rem; }
     .dropcap::first-letter { font-family:'Fraunces','serif'; font-weight:900; font-size:4.5rem; float:left; line-height:0.88; padding:0.3rem 0.6rem 0 0; color:#4A1F2D; font-style:normal; }
-    .rule { border-top:1px solid #E8DFD0; }
-    .figure-label { font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.2em; font-size:0.65rem; color:#8A7A6C; font-weight:600; }
+    .rule { border-top:1px solid var(--paper-300); }
+    .figure-label { font-family:'Outfit',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.2em; font-size:0.72rem; color:var(--muted); font-weight:600; }
     .portrait { border-radius:2px; overflow:hidden; position:relative; }
     .portrait::after { content:''; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(74,31,45,0.15); pointer-events:none; }
     .pullmark { font-family:'Fraunces','serif'; font-size:8rem; line-height:0.75; color:#C9812A; font-weight:900; }
@@ -44,8 +58,8 @@
     /* Marquee */
     .marquee-wrap { overflow:hidden; position:relative; }
     .marquee-wrap::before, .marquee-wrap::after { content:''; position:absolute; top:0; height:100%; width:100px; z-index:2; pointer-events:none; }
-    .marquee-wrap::before { left:0; background:linear-gradient(90deg,#F9F4EC,transparent); }
-    .marquee-wrap::after { right:0; background:linear-gradient(-90deg,#F9F4EC,transparent); }
+    .marquee-wrap::before { left:0; background:linear-gradient(90deg,var(--paper-100),transparent); }
+    .marquee-wrap::after { right:0; background:linear-gradient(-90deg,var(--paper-100),transparent); }
     .marquee-track { display:flex; width:max-content; animation:marq 38s linear infinite; }
     .marquee-item { padding:0 2rem; white-space:nowrap; color:#6B5B4E; font-family:'Fraunces','serif'; font-style:italic; font-weight:500; }
     @keyframes marq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
@@ -60,15 +74,16 @@
     /* Modal */
     .modal-backdrop { position:fixed; inset:0; background:rgba(42,15,23,0.65); backdrop-filter:blur(4px); z-index:100; display:none; align-items:center; justify-content:center; padding:1.5rem; }
     .modal-backdrop.open { display:flex; }
-    .modal-card { background:#FDFBF5; max-width:560px; width:100%; border-radius:4px; box-shadow:0 40px 80px -20px rgba(42,15,23,0.4); border:1px solid #E8DFD0; }
+    .modal-card { background:var(--paper-50); max-width:560px; width:100%; border-radius:4px; box-shadow:0 40px 80px -20px rgba(42,15,23,0.4); border:1px solid var(--paper-300); }
     body.modal-open { overflow:hidden; }
 
     /* Focus */
-    :focus-visible { outline:2px solid #C9812A; outline-offset:3px; }
+    :focus-visible { outline:2px solid var(--ochre-600); outline-offset:3px; border-radius:4px; }
+    details summary:focus-visible { outline:2px solid var(--ochre-600); outline-offset:-2px; border-radius:2px; }
 
     /* Skip nav */
     .skip-nav { position:absolute; left:-9999px; }
-    .skip-nav:focus { position:fixed; top:1rem; left:1rem; background:#2A0F17; color:#FDFBF5; padding:0.75rem 1.25rem; z-index:200; font-family:'Inter',sans-serif; font-weight:600; }
+    .skip-nav:focus-visible { position:fixed; top:1rem; left:1rem; background:var(--ink-900); color:var(--paper-50); padding:0.75rem 1.25rem; z-index:200; font-family:'Outfit',system-ui,sans-serif; font-weight:600; }
 
     @media (prefers-reduced-motion: reduce) {
       .marquee-track { animation:none !important; }
@@ -78,7 +93,7 @@
 </head>
 <body class="antialiased">
 
-  <a href="#main" class="skip-nav">Skip to content</a>
+  <a href="#main-content" class="skip-nav">Skip to content</a>
 
   <!-- ========== MASTHEAD ========== -->
   <header class="sticky top-0 z-40 bg-paper-100/95 backdrop-blur border-b border-paper-300">
@@ -89,12 +104,12 @@
       </div>
       <div class="flex items-center gap-6">
         <span class="eyebrow text-taupe-600 hidden md:inline">An Annual Reader</span>
-        <a href="#optin" onclick="openOptin(event)" class="bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold text-sm px-5 py-2.5 rounded-full transition">Reserve a Seat</a>
+        <a href="#optin" onclick="openOptin(event)" class="bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold text-sm px-5 py-2.5 rounded-full transition">Claim your seat</a>
       </div>
     </div>
   </header>
 
-  <main id="main">
+  <main id="main-content">
 
   <!-- ========== I. HERO / COVER ========== -->
   <section class="bg-paper-100 pt-14 md:pt-20 pb-16 md:pb-24 border-b border-paper-300">
@@ -120,8 +135,8 @@
           </p>
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-10">
             <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold px-8 py-4 rounded-full transition">
-              Reserve your seat
-              <span class="text-ochre-400 text-xl leading-none">→</span>
+              Claim your free seat
+              <span class="text-ochre-400 text-xl leading-none" aria-hidden="true">→</span>
             </a>
             <p class="text-taupe-600 text-sm font-serif italic max-w-xs">
               Registration closes Feb 9 at midnight. A complimentary Parenting Collection is enclosed with every seat.
@@ -130,10 +145,10 @@
 
           <div class="flex items-center gap-4 pt-6 border-t border-paper-300">
             <div class="flex -space-x-3">
-              <div class="w-10 h-10 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#4A1F2D,#8A4E5D)">SJ</div>
-              <div class="w-10 h-10 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#C9812A,#A6691F)">MC</div>
-              <div class="w-10 h-10 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#6B3340,#4A1F2D)">EF</div>
-              <div class="w-10 h-10 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#4F4238,#6B5B4E)">JW</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4A1F2D,#8A4E5D)">SJ</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#C9812A,#A6691F)">MC</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#6B3340,#4A1F2D)">EF</div>
+              <div class="w-11 h-11 rounded-full border-2 border-paper-100 flex items-center justify-center font-display font-bold text-xs text-paper-50" aria-hidden="true" style="background:linear-gradient(135deg,#4F4238,#6B5B4E)">JW</div>
             </div>
             <div class="text-sm">
               <p class="text-ochre-600 text-xs tracking-wide">★ ★ ★ ★ ★</p>
@@ -262,8 +277,8 @@
           Watch live or catch the replays at your own pace. Bring your partner, your mother, your co-parent. The sessions are free. The strategies are real. The relief is, we hope, audible.
         </p>
         <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-2 font-ui font-semibold text-ink-700 border-b-2 border-ochre-600 pb-1 hover:text-ochre-700 transition">
-          Claim your seat
-          <span class="text-ochre-600">→</span>
+          Claim your free seat
+          <span class="text-ochre-600" aria-hidden="true">→</span>
         </a>
       </div>
 
@@ -499,8 +514,8 @@
           </li>
         </ul>
         <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold px-7 py-3.5 rounded-full transition">
-          Claim Your Seat &amp; Supplement
-          <span class="text-ochre-400">→</span>
+          Claim your free seat
+          <span class="text-ochre-400" aria-hidden="true">→</span>
         </a>
       </div>
     </div>
@@ -514,51 +529,69 @@
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">Three Sidebars, Three Bonuses.</h2>
         <p class="font-serif italic text-taupe-600 text-lg">Worth $291 in print. Enclosed with every seat.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="flex items-center justify-between mb-5">
-            <span class="figure-label">Sidebar I</span>
-            <span class="bg-ochre-600 text-paper-50 font-display font-bold text-xs px-3 py-1">$97 VALUE</span>
+      <ol class="border-t border-paper-300">
+        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
+          <div class="md:col-span-2 flex items-baseline gap-4">
+            <span class="roman text-5xl md:text-6xl leading-none">I.</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
           </div>
-          <h3 class="font-display font-black text-2xl text-ink-700 mb-3 leading-tight">The ADHD Morning Playbook</h3>
-          <p class="text-taupe-700 mb-5 leading-relaxed">A seven-day system for transforming chaotic mornings into calm, connected starts to the day.</p>
-          <ul class="space-y-2 text-sm font-serif text-taupe-700">
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Visual-schedule templates</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Transition scripts that work</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> A calm-down toolkit</li>
-          </ul>
-        </article>
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="flex items-center justify-between mb-5">
-            <span class="figure-label">Sidebar II</span>
-            <span class="bg-ochre-600 text-paper-50 font-display font-bold text-xs px-3 py-1">$97 VALUE</span>
+          <div class="md:col-span-7">
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">The ADHD Morning Playbook</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">A seven-day system for transforming chaotic mornings into calm, connected starts to the day.</p>
+            <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              <li><span class="text-ochre-600">§</span> Visual-schedule templates</li>
+              <li><span class="text-ochre-600">§</span> Transition scripts that work</li>
+              <li><span class="text-ochre-600">§</span> A calm-down toolkit</li>
+            </ul>
           </div>
-          <h3 class="font-display font-black text-2xl text-ink-700 mb-3 leading-tight">Meltdown to Breakthrough</h3>
-          <p class="text-taupe-700 mb-5 leading-relaxed">A step-by-step de-escalation framework that turns outbursts into growth moments.</p>
-          <ul class="space-y-2 text-sm font-serif text-taupe-700">
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Five-step de-escalation method</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Emotional-coaching scripts</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Printable calm-down cards</li>
-          </ul>
-        </article>
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="flex items-center justify-between mb-5">
-            <span class="figure-label">Sidebar III</span>
-            <span class="bg-ochre-600 text-paper-50 font-display font-bold text-xs px-3 py-1">$97 VALUE</span>
+          <div class="md:col-span-3 md:text-right">
+            <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
           </div>
-          <h3 class="font-display font-black text-2xl text-ink-700 mb-3 leading-tight">School Advocacy Toolkit</h3>
-          <p class="text-taupe-700 mb-5 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
-          <ul class="space-y-2 text-sm font-serif text-taupe-700">
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> IEP/504 request templates</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Teacher-communication scripts</li>
-            <li class="flex items-start gap-2"><span class="text-ochre-600">§</span> Accommodation checklists</li>
-          </ul>
-        </article>
-      </div>
+        </li>
+        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
+          <div class="md:col-span-2 flex items-baseline gap-4">
+            <span class="roman text-5xl md:text-6xl leading-none">II.</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
+          </div>
+          <div class="md:col-span-7">
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">Meltdown to Breakthrough</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">A step-by-step de-escalation framework that turns outbursts into growth moments.</p>
+            <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              <li><span class="text-ochre-600">§</span> Five-step de-escalation method</li>
+              <li><span class="text-ochre-600">§</span> Emotional-coaching scripts</li>
+              <li><span class="text-ochre-600">§</span> Printable calm-down cards</li>
+            </ul>
+          </div>
+          <div class="md:col-span-3 md:text-right">
+            <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
+          </div>
+        </li>
+        <li class="py-10 grid md:grid-cols-12 gap-6 md:gap-10 items-baseline">
+          <div class="md:col-span-2 flex items-baseline gap-4">
+            <span class="roman text-5xl md:text-6xl leading-none">III.</span>
+            <span class="figure-label text-taupe-600 md:hidden">$97 Value</span>
+          </div>
+          <div class="md:col-span-7">
+            <h3 class="font-display font-black text-2xl md:text-3xl text-ink-700 mb-3 leading-tight">School Advocacy Toolkit</h3>
+            <p class="text-taupe-700 mb-4 leading-relaxed">Everything you need to get your child the support they deserve at school.</p>
+            <ul class="font-serif text-taupe-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              <li><span class="text-ochre-600">§</span> IEP/504 request templates</li>
+              <li><span class="text-ochre-600">§</span> Teacher-communication scripts</li>
+              <li><span class="text-ochre-600">§</span> Accommodation checklists</li>
+            </ul>
+          </div>
+          <div class="md:col-span-3 md:text-right">
+            <p class="figure-label text-taupe-600 hidden md:block mb-1">Value</p>
+            <p class="font-display font-black text-3xl text-ochre-600">$97</p>
+          </div>
+        </li>
+      </ol>
       <div class="text-center mt-12">
         <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold px-10 py-4 rounded-full transition">
-          Claim Seat + All Three Sidebars
-          <span class="text-ochre-400">→</span>
+          Claim your free seat
+          <span class="text-ochre-400" aria-hidden="true">→</span>
         </a>
       </div>
     </div>
@@ -575,7 +608,7 @@
           <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Roman Wiltman</h3>
           <p class="figure-label mb-5">Co-Founder</p>
           <blockquote class="font-serif italic text-taupe-700 text-lg leading-relaxed border-l-2 border-ochre-600 pl-5">
-            "Our journey started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to."
+            "This work started when our son was diagnosed at six. We felt lost, overwhelmed, and alone. This summit exists so that no other parent has to."
           </blockquote>
         </div>
         <div class="text-center md:text-left">
@@ -583,7 +616,7 @@
           <h3 class="font-display font-bold text-xl text-ink-700 mb-1">Anisah Semen</h3>
           <p class="figure-label mb-5">Co-Founder</p>
           <blockquote class="font-serif italic text-taupe-700 text-lg leading-relaxed border-l-2 border-ochre-600 pl-5">
-            "Every child with ADHD has incredible strengths waiting to be unlocked. Our mission is to help parents see those strengths — and, gently, to nurture them."
+            "Every child with ADHD carries strengths that simply need the right light to be seen. Our work is to help parents recognise them, and quietly, to nurture them."
           </blockquote>
         </div>
       </div>
@@ -598,41 +631,35 @@
         <h2 class="font-display font-black text-4xl md:text-5xl text-ink-700 leading-tight mb-4">Letters to the Editor</h2>
         <p class="font-serif italic text-taupe-600 text-lg">A sampling from 73,124 past readers.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="text-ochre-600 font-display text-4xl leading-none mb-3">&ldquo;</div>
-          <p class="font-serif italic text-ink-700 text-lg leading-relaxed mb-6">This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has completely transformed.</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-paper-300">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#4A1F2D,#8A4E5D)">RB</div>
-            <div>
-              <p class="font-display font-bold text-sm text-ink-700">Rachel Berman</p>
-              <p class="figure-label">Ohio, USA</p>
-            </div>
+      <ul class="border-t border-paper-300 max-w-4xl mx-auto">
+        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
+          <p class="figure-label text-taupe-600 md:col-span-2">Letter I</p>
+          <div class="md:col-span-10">
+            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>This summit was life-changing. The expert sessions gave me tools I use every single day. My relationship with my son has changed completely.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+            </p>
+            <p class="font-display font-bold text-sm text-ink-700">— Rachel Berman <span class="font-serif italic font-normal text-taupe-600">· Ohio, USA</span></p>
           </div>
-        </article>
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="text-ochre-600 font-display text-4xl leading-none mb-3">&ldquo;</div>
-          <p class="font-serif italic text-ink-700 text-lg leading-relaxed mb-6">Finally — someone who understands. The strategies are practical, not theoretical. My daughter's mornings are so much calmer now.</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-paper-300">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#C9812A,#A6691F)">KB</div>
-            <div>
-              <p class="font-display font-bold text-sm text-ink-700">Kamila Bosco</p>
-              <p class="figure-label">London, UK</p>
-            </div>
+        </li>
+        <li class="py-10 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10">
+          <p class="figure-label text-taupe-600 md:col-span-2">Letter II</p>
+          <div class="md:col-span-10">
+            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>Finally — someone who understands. The strategies are practical, not theoretical. My daughter's mornings are so much calmer now.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+            </p>
+            <p class="font-display font-bold text-sm text-ink-700">— Kamila Bosco <span class="font-serif italic font-normal text-taupe-600">· London, UK</span></p>
           </div>
-        </article>
-        <article class="bg-paper-100 border border-paper-300 p-8">
-          <div class="text-ochre-600 font-display text-4xl leading-none mb-3">&ldquo;</div>
-          <p class="font-serif italic text-ink-700 text-lg leading-relaxed mb-6">My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. That alone was worth it.</p>
-          <div class="flex items-center gap-3 pt-5 border-t border-paper-300">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-xs text-paper-50" style="background:linear-gradient(135deg,#6B3340,#4F4238)">JM</div>
-            <div>
-              <p class="font-display font-bold text-sm text-ink-700">Jennifer Mitchell</p>
-              <p class="figure-label">Toronto, CA</p>
-            </div>
+        </li>
+        <li class="py-10 grid md:grid-cols-12 gap-4 md:gap-10">
+          <p class="figure-label text-taupe-600 md:col-span-2">Letter III</p>
+          <div class="md:col-span-10">
+            <p class="font-serif italic text-ink-700 text-xl md:text-2xl leading-[1.55] mb-4">
+              <span class="text-ochre-600 font-display not-italic" aria-hidden="true">&ldquo;</span>My husband and I watched together. For the first time we're on the same page about how to support our ADHD child. That alone was worth it.<span class="text-ochre-600 font-display not-italic" aria-hidden="true">&rdquo;</span>
+            </p>
+            <p class="font-display font-bold text-sm text-ink-700">— Jennifer Mitchell <span class="font-serif italic font-normal text-taupe-600">· Toronto, CA</span></p>
           </div>
-        </article>
-      </div>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -661,38 +688,38 @@
         </h2>
         <p class="font-serif italic text-taupe-600 text-lg">Six figures, drawn from clinical research and our 2025 reader survey.</p>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-10 gap-y-12">
-        <div>
-          <p class="figure-label mb-2">Fig. 1</p>
-          <p class="font-display font-black text-5xl text-ink-700 mb-2 leading-none">1&nbsp;in&nbsp;9</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Children diagnosed with ADHD in the US</p>
+      <dl class="border-t border-paper-300">
+        <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 1</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">1&nbsp;in&nbsp;9</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Children diagnosed with ADHD in the US</dd>
         </div>
-        <div>
-          <p class="figure-label mb-2">Fig. 2</p>
-          <p class="font-display font-black text-5xl text-ochre-600 mb-2 leading-none">74%</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Of parents feel isolated and unsupported</p>
+        <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 2</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">74%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of parents feel isolated and unsupported</dd>
         </div>
-        <div>
-          <p class="figure-label mb-2">Fig. 3</p>
-          <p class="font-display font-black text-5xl text-ink-700 mb-2 leading-none">3.2×</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Higher reported stress in ADHD families</p>
+        <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 3</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">3.2×</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Higher reported stress in ADHD families</dd>
         </div>
-        <div>
-          <p class="figure-label mb-2">Fig. 4</p>
-          <p class="font-display font-black text-5xl text-ink-700 mb-2 leading-none">15+</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Years of clinical research represented</p>
+        <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 4</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">15+</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Years of clinical research represented</dd>
         </div>
-        <div>
-          <p class="figure-label mb-2">Fig. 5</p>
-          <p class="font-display font-black text-5xl text-ochre-600 mb-2 leading-none">28%</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Of school-age children struggle academically</p>
+        <div class="py-8 border-b border-paper-300 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 5</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ochre-600 leading-none">28%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of school-age children struggle academically</dd>
         </div>
-        <div>
-          <p class="figure-label mb-2">Fig. 6</p>
-          <p class="font-display font-black text-5xl text-ink-700 mb-2 leading-none">93%</p>
-          <p class="text-taupe-700 font-serif leading-relaxed">Of past attendees recommend this summit</p>
+        <div class="py-8 grid md:grid-cols-12 gap-4 md:gap-10 items-baseline">
+          <dt class="md:col-span-2 figure-label text-taupe-600">Fig. 6</dt>
+          <dd class="md:col-span-3 font-display font-black text-4xl md:text-5xl text-ink-700 leading-none">93%</dd>
+          <dd class="md:col-span-7 text-taupe-700 font-serif text-lg leading-relaxed">Of past attendees recommend this summit</dd>
         </div>
-      </div>
+      </dl>
     </div>
   </section>
 
@@ -772,9 +799,9 @@
         <details>
           <summary>How do I register?</summary>
           <div class="pb-5 text-taupe-700 font-serif leading-relaxed">
-            Use the button below (or any "Reserve a Seat" link). It takes under thirty seconds — just your name and email.
+            Use the button below (or any "Claim your free seat" link). It takes under thirty seconds — just your name and email.
             <div class="mt-4">
-              <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-2 font-ui font-semibold text-ochre-700 border-b border-ochre-700 pb-0.5">Reserve a seat →</a>
+              <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-2 font-ui font-semibold text-ochre-700 border-b border-ochre-700 pb-0.5">Claim your free seat <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </details>
@@ -793,8 +820,8 @@
         Five days with forty of the field's most thoughtful minds — yours, free, delivered to your inbox.
       </p>
       <a href="#optin" onclick="openOptin(event)" class="inline-flex items-center gap-3 bg-ochre-600 hover:bg-ochre-500 text-ink-700 font-ui font-bold text-lg px-10 py-5 rounded-full transition">
-        Reserve Your Seat
-        <span class="text-xl">→</span>
+        Claim your free seat
+        <span class="text-xl" aria-hidden="true">→</span>
       </a>
       <p class="figure-label mt-8 text-paper-400">Free · No credit card · Unsubscribe anytime</p>
     </div>
@@ -826,26 +853,26 @@
   </footer>
 
   <!-- ========== OPTIN MODAL (POPUP — per project rule) ========== -->
-  <div class="modal-backdrop" id="optinModal" role="dialog" aria-modal="true" aria-labelledby="optinTitle">
+  <div class="modal-backdrop" id="optinModal" role="dialog" aria-modal="true" aria-labelledby="optinTitle" aria-describedby="optinSubtitle">
     <div class="modal-card p-8 md:p-10 relative">
-      <button onclick="closeOptin()" aria-label="Close" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-paper-100 hover:bg-paper-300 flex items-center justify-center text-ink-700 text-2xl leading-none">×</button>
+      <button type="button" onclick="closeOptin()" aria-label="Close registration modal" class="absolute top-4 right-4 w-11 h-11 rounded-full bg-paper-100 hover:bg-paper-300 flex items-center justify-center text-ink-700 text-2xl leading-none">×</button>
       <div id="optinBody">
         <div class="deckle pb-6 mb-6">
-          <p class="figure-label text-ochre-700 mb-2">Reserve a Seat</p>
+          <p class="figure-label text-ochre-700 mb-2">Registration</p>
           <h3 id="optinTitle" class="font-display font-black text-3xl md:text-4xl text-ink-700 leading-tight">Your seat for Issue VII.</h3>
-          <p class="font-serif italic text-taupe-600 mt-2">We'll send the schedule, the supplement, and your access link to your inbox.</p>
+          <p id="optinSubtitle" class="font-serif italic text-taupe-600 mt-2">We'll send the schedule, the supplement, and your access link to your inbox.</p>
         </div>
-        <form id="optinForm" onsubmit="return handleOptin(event)" class="space-y-4">
+        <form id="optinForm" onsubmit="return handleOptin(event)" class="space-y-4" novalidate>
           <div>
-            <label for="fname" class="figure-label block mb-2">Your Name</label>
-            <input id="fname" name="name" type="text" required class="w-full px-4 py-3 bg-paper-50 border border-paper-300 rounded-sm font-serif text-ink-700 focus:border-ochre-600 focus:outline-none" placeholder="Sarah Jensen">
+            <label for="fname" class="figure-label block mb-2">Your name</label>
+            <input id="fname" name="first_name" type="text" required maxlength="80" autocomplete="given-name" class="w-full px-4 py-3 bg-paper-50 border border-paper-300 rounded-sm font-serif text-ink-700 focus:border-ochre-600 focus:outline-none" placeholder="Sarah">
           </div>
           <div>
-            <label for="email" class="figure-label block mb-2">Email Address</label>
-            <input id="email" name="email" type="email" required class="w-full px-4 py-3 bg-paper-50 border border-paper-300 rounded-sm font-serif text-ink-700 focus:border-ochre-600 focus:outline-none" placeholder="sarah@example.com">
+            <label for="email" class="figure-label block mb-2">Email address</label>
+            <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" class="w-full px-4 py-3 bg-paper-50 border border-paper-300 rounded-sm font-serif text-ink-700 focus:border-ochre-600 focus:outline-none" placeholder="sarah@example.com">
           </div>
-          <button type="submit" class="w-full bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold py-4 rounded-full transition mt-2">
-            Reserve My Seat →
+          <button id="optinSubmit" type="submit" class="w-full bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold py-4 rounded-full transition mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+            Claim your free seat <span aria-hidden="true">→</span>
           </button>
           <p class="figure-label text-center text-taupe-500 pt-2">Free · No credit card · Unsubscribe anytime</p>
         </form>
@@ -871,9 +898,11 @@
     }
     function handleOptin(ev) {
       ev.preventDefault();
-      const name = document.getElementById('fname').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if (!name || !email) return false;
+      const btn = document.getElementById('optinSubmit');
+      if (btn && btn.disabled) return false;
+      const form = ev.target;
+      if (!form.checkValidity()) { form.reportValidity(); return false; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
       document.getElementById('optinForm').hidden = true;
       document.getElementById('optinBody').hidden = true;
       document.getElementById('optinSuccess').hidden = false;
