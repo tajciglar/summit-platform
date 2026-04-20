@@ -1,3 +1,5 @@
+'use client'
+import { Suspense } from 'react'
 import {
   Star,
   Globe,
@@ -8,6 +10,7 @@ import {
   Award,
   type LucideIcon,
 } from 'lucide-react'
+import { useCheckoutUrl } from '@/hooks/useCheckoutUrl'
 import type { Props } from './schema'
 
 const ICON_MAP: Record<Props['benefits'][number]['iconName'], LucideIcon> = {
@@ -20,7 +23,21 @@ const ICON_MAP: Record<Props['benefits'][number]['iconName'], LucideIcon> = {
   award: Award,
 }
 
+function Inner(props: Props) {
+  const dynamicUrl = useCheckoutUrl()
+  const href = dynamicUrl !== '#' ? dynamicUrl : (props.ctaUrl || '#')
+  return <View {...props} href={href} />
+}
+
 export function BenefitsGrid(props: Props) {
+  return (
+    <Suspense fallback={<View {...props} href={props.ctaUrl || '#'} />}>
+      <Inner {...props} />
+    </Suspense>
+  )
+}
+
+function View(props: Props & { href: string }) {
   return (
     <section className="bg-white py-16 md:py-20">
       <div className="mx-auto max-w-[1200px] px-6">
@@ -46,21 +63,12 @@ export function BenefitsGrid(props: Props) {
         </div>
         {props.ctaLabel && (
           <div className="mt-12 text-center">
-            {props.ctaUrl ? (
-              <a
-                href={props.ctaUrl}
-                className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-              >
-                {props.ctaLabel}
-              </a>
-            ) : (
-              <button
-                type="button"
-                className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
-              >
-                {props.ctaLabel}
-              </button>
-            )}
+            <a
+              href={props.href}
+              className="inline-flex h-11 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-6 text-sm font-medium text-white transition hover:bg-[rgb(var(--color-accent))]/90"
+            >
+              {props.ctaLabel}
+            </a>
           </div>
         )}
       </div>

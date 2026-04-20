@@ -1,9 +1,24 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { cn } from '@/lib/cn'
+import { useCheckoutUrl } from '@/hooks/useCheckoutUrl'
 import type { Props } from './schema'
 
+function StickyCountdownBarInner(props: Props) {
+  const dynamicUrl = useCheckoutUrl()
+  const href = dynamicUrl !== '#' ? dynamicUrl : (props.ctaUrl || '#')
+  return <StickyCountdownBarView {...props} resolvedHref={href} />
+}
+
 export function StickyCountdownBar(props: Props) {
+  return (
+    <Suspense fallback={<StickyCountdownBarView {...props} resolvedHref={props.ctaUrl ?? '#'} />}>
+      <StickyCountdownBarInner {...props} />
+    </Suspense>
+  )
+}
+
+function StickyCountdownBarView(props: Props & { resolvedHref: string }) {
   const { timeLeft, expired } = useCountdown(props.countdownTarget)
 
   if (expired && props.hideWhenExpired) return null
@@ -34,7 +49,7 @@ export function StickyCountdownBar(props: Props) {
           <TimerSegments timeLeft={timeLeft} />
         </div>
         <a
-          href={props.ctaUrl ?? '#'}
+          href={props.resolvedHref}
           className="shrink-0 rounded-md bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-[rgb(var(--color-primary))] transition hover:bg-white/90 md:px-5 md:py-2 md:text-sm"
         >
           {props.ctaLabel}

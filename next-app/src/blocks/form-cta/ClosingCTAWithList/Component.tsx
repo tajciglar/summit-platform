@@ -1,8 +1,17 @@
+'use client'
+import { Suspense } from 'react'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/cn'
+import { useCheckoutUrl } from '@/hooks/useCheckoutUrl'
 import type { Props } from './schema'
 
-export function ClosingCTAWithList(props: Props) {
+function Inner(props: Props) {
+  const dynamicUrl = useCheckoutUrl()
+  const href = dynamicUrl !== '#' ? dynamicUrl : (props.ctaUrl || '#')
+  return <View {...props} href={href} />
+}
+
+function View(props: Props & { href: string }) {
   const bg = {
     light: 'bg-gray-50 text-gray-900',
     primary: 'bg-[rgb(var(--color-primary))] text-white',
@@ -50,23 +59,22 @@ export function ClosingCTAWithList(props: Props) {
           ))}
         </ul>
         <div className="mt-10">
-          {props.ctaUrl ? (
-            <a
-              href={props.ctaUrl}
-              className="inline-flex h-14 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-10 text-base font-bold text-white shadow-lg transition hover:bg-[rgb(var(--color-accent))]/90"
-            >
-              {props.ctaLabel}
-            </a>
-          ) : (
-            <button
-              type="button"
-              className="inline-flex h-14 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-10 text-base font-bold text-white shadow-lg transition hover:bg-[rgb(var(--color-accent))]/90"
-            >
-              {props.ctaLabel}
-            </button>
-          )}
+          <a
+            href={props.href}
+            className="inline-flex h-14 items-center justify-center rounded-lg bg-[rgb(var(--color-accent))] px-10 text-base font-bold text-white shadow-lg transition hover:bg-[rgb(var(--color-accent))]/90"
+          >
+            {props.ctaLabel}
+          </a>
         </div>
       </div>
     </section>
+  )
+}
+
+export function ClosingCTAWithList(props: Props) {
+  return (
+    <Suspense fallback={<View {...props} href={props.ctaUrl || '#'} />}>
+      <Inner {...props} />
+    </Suspense>
   )
 }
