@@ -149,7 +149,7 @@ class FunnelResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('name');
+            ->defaultSort('is_active', 'desc');
     }
 
     /**

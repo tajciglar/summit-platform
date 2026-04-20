@@ -10,6 +10,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class RevenueOverview extends BaseWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected function getStats(): array
     {
         $cents = (int) Order::where('status', 'completed')->sum('total_cents');

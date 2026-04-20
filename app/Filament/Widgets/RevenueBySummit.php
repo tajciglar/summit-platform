@@ -13,6 +13,8 @@ use Filament\Widgets\ChartWidget;
  */
 class RevenueBySummit extends ChartWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected ?string $heading = 'Revenue by summit';
 
     protected ?string $description = 'All-time completed orders across summits you can access.';

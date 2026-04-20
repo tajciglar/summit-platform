@@ -14,11 +14,9 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -58,10 +56,6 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Manage domains')
                     ->icon('heroicon-o-globe-alt')
                     ->url(fn (): string => DomainResource::getUrl('index')),
-                MenuItem::make()
-                    ->label('Manage summits')
-                    ->icon('heroicon-o-squares-2x2')
-                    ->url(fn (): string => SummitResource::getUrl('index')),
             ])
             ->navigationGroups([
                 // Summit group goes first; items are injected per-request in
@@ -87,13 +81,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
+            ->pages([])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                AccountWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -150,6 +140,11 @@ class AdminPanelProvider extends PanelProvider
                         ->url(route('admin.current-summit.set', ['summit' => $summit->id]))
                         ->isActiveWhen(fn (): bool => $summitId === CurrentSummit::getId());
                 }
+
+                $items[] = NavigationItem::make('Manage summits')
+                    ->group('Summit')
+                    ->sort(998)
+                    ->url(fn (): string => SummitResource::getUrl('index'));
 
                 // "+ New summit" sits at the bottom of the group. No icon —
                 // Filament errors if group AND item both have icons.

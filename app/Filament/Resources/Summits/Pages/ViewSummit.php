@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\SummitResource;
+use App\Support\CurrentSummit;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
@@ -17,6 +18,12 @@ class ViewSummit extends ViewRecord
 {
     protected static string $resource = SummitResource::class;
 
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+        CurrentSummit::set($this->record);
+    }
+
     /**
      * Relation managers render as tabs alongside the main "Basics" tab,
      * giving the summit page a clear in-page section nav: Basics, Speakers,
@@ -24,7 +31,12 @@ class ViewSummit extends ViewRecord
      */
     public function getContentTabPosition(): ?ContentTabPosition
     {
-        return ContentTabPosition::Before;
+        return ContentTabPosition::After;
+    }
+
+    public function getDefaultActiveRelationManagerTab(): ?string
+    {
+        return 'funnels';
     }
 
     protected function getHeaderActions(): array

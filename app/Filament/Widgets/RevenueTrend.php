@@ -13,6 +13,8 @@ use Illuminate\Support\Carbon;
  */
 class RevenueTrend extends ChartWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected ?string $heading = 'Revenue trend (30 days)';
 
     protected ?string $description = 'Daily completed-order revenue for this summit.';
