@@ -1,0 +1,170 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of ADHD Parenting Summit 2026 ADHD Parenting Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of ADHD Parenting Summit 2026" [ref=e32]
+        - generic [ref=e34]: ADHD Parenting Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Summits" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits
+                  - generic [ref=e69]: Summits
+              - listitem [ref=e70]:
+                - link "Speakers" [ref=e71] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers
+                  - generic [ref=e75]: Speakers
+          - listitem [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - generic [ref=e80]: Funnels
+            - list [ref=e81]:
+              - listitem [ref=e82]:
+                - link "Funnels" [ref=e83] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnels
+                  - generic [ref=e87]: Funnels
+              - listitem [ref=e88]:
+                - link "Funnel Steps" [ref=e89] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-steps
+                  - generic [ref=e93]: Funnel Steps
+          - listitem [ref=e94]:
+            - generic [ref=e95]:
+              - img [ref=e96]
+              - generic [ref=e98]: Sales
+            - list [ref=e99]:
+              - listitem [ref=e100]:
+                - link "Products" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/products
+                  - generic [ref=e105]: Products
+              - listitem [ref=e106]:
+                - link "Orders" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/orders
+                  - generic [ref=e112]: Orders
+              - listitem [ref=e113]:
+                - link "Coupons" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/coupons
+                  - generic [ref=e119]: Coupons
+              - listitem [ref=e120]:
+                - link "Affiliates" [ref=e121] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/affiliates
+                  - generic [ref=e125]: Affiliates
+          - listitem [ref=e126]:
+            - generic [ref=e127]:
+              - img [ref=e128]
+              - generic [ref=e130]: Analytics
+            - list [ref=e131]:
+              - listitem [ref=e132]:
+                - link "Funnel performance" [ref=e133] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-performance
+                  - generic [ref=e137]: Funnel performance
+              - listitem [ref=e138]:
+                - link "UTM attribution" [ref=e139] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/utm-breakdown
+                  - generic [ref=e143]: UTM attribution
+          - listitem [ref=e144]:
+            - generic [ref=e145] [cursor=pointer]:
+              - img [ref=e146]
+              - generic [ref=e149]: Settings
+              - button "Settings" [ref=e150]:
+                - img [ref=e151]
+    - main [ref=e154]:
+      - generic [ref=e156]:
+        - heading "UTM attribution" [level=1] [ref=e159]
+        - generic [ref=e162]:
+          - generic [ref=e163]:
+            - generic [ref=e166]:
+              - generic [ref=e167]: UTM combinations
+              - generic [ref=e168]: "5"
+            - generic [ref=e171]:
+              - generic [ref=e172]: Orders attributed
+              - generic [ref=e173]: "7"
+            - generic [ref=e176]:
+              - generic [ref=e177]: Total revenue
+              - generic [ref=e178]: $979.00
+          - generic [ref=e179]:
+            - heading "Revenue by UTM source × campaign" [level=2] [ref=e182]
+            - table [ref=e185]:
+              - rowgroup [ref=e186]:
+                - row "Source Campaign Orders Revenue Share" [ref=e187]:
+                  - columnheader "Source" [ref=e188]
+                  - columnheader "Campaign" [ref=e189]
+                  - columnheader "Orders" [ref=e190]
+                  - columnheader "Revenue" [ref=e191]
+                  - columnheader "Share" [ref=e192]
+              - rowgroup [ref=e193]:
+                - row "facebook vip-upsell 2 $344.00 35.1%" [ref=e194]:
+                  - cell "facebook" [ref=e195]
+                  - cell "vip-upsell" [ref=e196]
+                  - cell "2" [ref=e197]
+                  - cell "$344.00" [ref=e198]
+                  - cell "35.1%" [ref=e199]:
+                    - generic [ref=e201]: 35.1%
+                - row "google black-friday 2 $294.00 30.0%" [ref=e202]:
+                  - cell "google" [ref=e203]
+                  - cell "black-friday" [ref=e204]
+                  - cell "2" [ref=e205]
+                  - cell "$294.00" [ref=e206]
+                  - cell "30.0%" [ref=e207]:
+                    - generic [ref=e209]: 30.0%
+                - row "(none) (none) 1 $147.00 15.0%" [ref=e210]:
+                  - cell "(none)" [ref=e211]
+                  - cell "(none)" [ref=e212]
+                  - cell "1" [ref=e213]
+                  - cell "$147.00" [ref=e214]
+                  - cell "15.0%" [ref=e215]:
+                    - generic [ref=e217]: 15.0%
+                - row "google early-bird 1 $97.00 9.9%" [ref=e218]:
+                  - cell "google" [ref=e219]
+                  - cell "early-bird" [ref=e220]
+                  - cell "1" [ref=e221]
+                  - cell "$97.00" [ref=e222]
+                  - cell "9.9%" [ref=e223]:
+                    - generic [ref=e225]: 9.9%
+                - row "newsletter launch 1 $97.00 9.9%" [ref=e226]:
+                  - cell "newsletter" [ref=e227]
+                  - cell "launch" [ref=e228]
+                  - cell "1" [ref=e229]
+                  - cell "$97.00" [ref=e230]
+                  - cell "9.9%" [ref=e231]:
+                    - generic [ref=e233]: 9.9%
+  - generic:
+    - status

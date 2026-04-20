@@ -1,0 +1,534 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e6]
+        - generic [ref=e8]:
+          - paragraph [ref=e9]: ADHD Parenting Summit
+          - paragraph [ref=e10]: VIP Pass
+      - link "Upgrade Now" [ref=e11] [cursor=pointer]:
+        - /url: "#purchase"
+        - generic [ref=e12]: Upgrade Now
+        - img [ref=e13]
+  - generic [ref=e16]:
+    - generic [ref=e17]: Special One-Time Offer
+    - heading "You Can Keep The Invaluable Lessons From All 40+ Summit Experts FOREVER" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Watch or re-watch at your own pace, listen on the go, or just read the summaries with your own VIP Pass.
+    - generic [ref=e24]:
+      - paragraph [ref=e25]: Full Access
+      - paragraph [ref=e26]: VIP Pass
+      - paragraph [ref=e27]: ADHD PARENTING SUMMIT 2026
+    - paragraph [ref=e32]: "Total value: $1,117"
+    - link "Upgrade Now — Only $147" [ref=e33] [cursor=pointer]:
+      - /url: "#purchase"
+      - text: Upgrade Now — Only $147
+      - img [ref=e34]
+    - paragraph [ref=e36]:
+      - strong [ref=e37]: This offer is ONLY available on this page.
+      - text: 14-day money-back guarantee.
+  - generic [ref=e39]:
+    - paragraph [ref=e40]: The VIP Pass Is…
+    - heading "Your ADHD Parenting Guide" [level=2] [ref=e41]
+    - paragraph [ref=e42]:
+      - text: With the exclusive VIP Pass, you’ll dive into the content
+      - strong [ref=e43]: on your own schedule
+      - text: ", listen to it"
+      - strong [ref=e44]: on the go
+      - text: ", and stay committed to"
+      - strong [ref=e45]: taking action.
+    - paragraph [ref=e46]:
+      - text: Or even learn the key lessons in minutes by just skimming through the
+      - strong [ref=e47]: session summaries.
+  - generic [ref=e49]:
+    - generic [ref=e50]:
+      - paragraph [ref=e51]: Here’s Everything You’re Getting With
+      - heading "The VIP Pass" [level=2] [ref=e52]
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - text: Unlimited Video Access
+        - generic [ref=e59]:
+          - heading "Unlimited Lifetime Access" [level=3] [ref=e60]
+          - paragraph [ref=e61]: Each summit day is only streaming for 24 hours. But you can get the entire 5-day summit with 40+ masterclasses available for unlimited viewing.
+          - generic [ref=e62]: "Value: $490"
+      - generic [ref=e63]:
+        - generic [ref=e65]:
+          - img [ref=e66]
+          - text: Action Blueprints
+        - generic [ref=e68]:
+          - heading "Expert Action Blueprint for Each Masterclass" [level=3] [ref=e69]
+          - paragraph [ref=e70]: A one-page snapshot of each masterclass — key takeaways and action steps. Print them out or scroll through them on your phone.
+          - generic [ref=e71]: "Value: $75"
+      - generic [ref=e72]:
+        - generic [ref=e74]:
+          - img [ref=e75]
+          - text: On-the-Go Audio
+        - generic [ref=e77]:
+          - heading "“On The Go” Audio Edition" [level=3] [ref=e78]
+          - paragraph [ref=e79]: Downloadable audio recordings of all 40+ full-length interviews. Listen while working out or doing chores. Don’t let your busy schedule get in the way.
+          - generic [ref=e80]: "Value: $240"
+      - generic [ref=e81]:
+        - generic [ref=e83]:
+          - img [ref=e84]
+          - text: Subtitles
+        - generic [ref=e86]:
+          - heading "English Subtitles" [level=3] [ref=e87]
+          - paragraph [ref=e88]: Turn on the subtitles and follow along easily, even if English is not your first language.
+          - generic [ref=e89]: "Value: $45"
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - img [ref=e93]
+          - text: Transcripts
+        - generic [ref=e95]:
+          - heading "Transcript of Each Masterclass" [level=3] [ref=e96]
+          - paragraph [ref=e97]: Skim through for the bits you need most, revisit advice without rewinding, and find the words that resonate with you instantly.
+          - generic [ref=e98]: "Value: $75"
+      - generic [ref=e99]:
+        - generic [ref=e101]:
+          - img [ref=e102]
+          - text: Workbook
+        - generic [ref=e104]:
+          - heading "Summit Workbook" [level=3] [ref=e105]
+          - paragraph [ref=e106]: Don’t just learn — act! Apply your new knowledge with the support and guidance of this beautiful workbook. Make a plan, take action, observe the transformation.
+          - generic [ref=e107]: "Value: $45"
+  - generic [ref=e109]:
+    - generic [ref=e110]:
+      - paragraph [ref=e111]: Plus Four Free Gifts
+      - heading "To Make Your ADHD Parenting Easier TODAY" [level=2] [ref=e112]
+    - generic [ref=e113]:
+      - generic [ref=e114]:
+        - generic [ref=e116]:
+          - img [ref=e117]
+          - text: Digest Emails
+        - generic [ref=e119]:
+          - paragraph [ref=e120]: "Free Gift #1"
+          - heading "Summit Digest Emails" [level=3] [ref=e121]
+          - paragraph [ref=e122]: Bite-sized emails that break down summit content for brains that get overwhelmed by 8-hour learning days.
+          - generic [ref=e123]: "Value: $49"
+      - generic [ref=e124]:
+        - generic [ref=e126]:
+          - img [ref=e127]
+          - text: Same-Page Parenting
+        - generic [ref=e129]:
+          - paragraph [ref=e130]: "Free Gift #2"
+          - heading "Same-Page Parenting Style Guidebook" [level=3] [ref=e131]
+          - paragraph [ref=e132]: Align with your partner and other family members on your ADHD parenting approach.
+          - generic [ref=e133]: "Value: $49"
+      - generic [ref=e134]:
+        - generic [ref=e136]:
+          - img [ref=e137]
+          - text: Reclaim Your Time
+        - generic [ref=e139]:
+          - paragraph [ref=e140]: "Free Gift #3"
+          - heading "Reclaim Your Time Guidebook" [level=3] [ref=e141]
+          - paragraph [ref=e142]: 50 practical, time-saving hacks for busy parents to reclaim up to 14 hours of time per week.
+          - generic [ref=e143]: "Value: $49"
+      - generic [ref=e144]:
+        - generic [ref=e146]:
+          - img [ref=e147]
+          - text: Pocket-Saving Hacks
+        - generic [ref=e149]:
+          - paragraph [ref=e150]: "Free Gift #4"
+          - heading "The Parent’s Pocket-Saving Hacks" [level=3] [ref=e151]
+          - paragraph [ref=e152]: 50 simple tips & tricks to help you save at least $100 every month.
+          - generic [ref=e153]: "Value: $49"
+    - paragraph [ref=e154]: All gifts delivered to your email immediately when the Summit starts.
+  - generic [ref=e156]:
+    - paragraph [ref=e157]: Upgrade To The VIP Pass
+    - heading "Today" [level=2] [ref=e158]
+    - generic [ref=e159]:
+      - paragraph [ref=e160]:
+        - text: Imagine having a comprehensive library of
+        - strong [ref=e161]: expert ADHD parenting advice
+        - text: at your fingertips, ready whenever you need it.
+      - paragraph [ref=e162]: That’s exactly what our VIP Pass offers.
+      - paragraph [ref=e163]:
+        - text: It’s not just about attending The Summit… it’s about
+        - strong [ref=e164]: applying the information in your home.
+      - paragraph [ref=e165]:
+        - text: The lifetime access and all the tools included will help you
+        - strong [ref=e166]: absorb and apply every insight the experts share with you.
+  - generic [ref=e169]:
+    - generic [ref=e170]:
+      - generic [ref=e171]: ★ Save 77% — One-Time Offer
+      - heading "Upgrade to the VIP Pass today" [level=3] [ref=e172]
+      - paragraph [ref=e173]: You won’t see this offer again.
+    - list [ref=e174]:
+      - listitem [ref=e175]:
+        - img [ref=e176]
+        - generic [ref=e178]:
+          - strong [ref=e179]: Unlimited Lifetime Access
+          - text: to the 5-day summit & 40+ masterclasses
+      - listitem [ref=e180]:
+        - img [ref=e181]
+        - generic [ref=e183]:
+          - strong [ref=e184]: “On The Go” audio edition
+          - text: — listen while working out or doing chores
+      - listitem [ref=e185]:
+        - img [ref=e186]
+        - generic [ref=e188]:
+          - strong [ref=e189]: English Subtitles
+          - text: — follow along easily, even if English isn’t your first language
+      - listitem [ref=e190]:
+        - img [ref=e191]
+        - generic [ref=e193]:
+          - strong [ref=e194]: Transcripts
+          - text: of each masterclass — skim for the bits you need
+      - listitem [ref=e195]:
+        - img [ref=e196]
+        - generic [ref=e198]:
+          - strong [ref=e199]: Expert Action Blueprint
+          - text: — key takeaways & action steps
+      - listitem [ref=e200]:
+        - img [ref=e201]
+        - generic [ref=e203]:
+          - strong [ref=e204]: Summit Workbook
+          - text: — make a plan, take action, see the transformation
+      - listitem [ref=e205]:
+        - img [ref=e206]
+        - generic [ref=e208]:
+          - strong [ref=e209]: 14-Day Money-Back Guarantee
+          - text: — risk-free
+    - generic [ref=e210]:
+      - paragraph [ref=e211]: 🎁 Plus 4 Free Gifts
+      - generic [ref=e212]:
+        - img [ref=e213]
+        - generic [ref=e215]:
+          - strong [ref=e216]: "Gift 1:"
+          - text: Summit Digest Emails
+      - generic [ref=e217]:
+        - img [ref=e218]
+        - generic [ref=e220]:
+          - strong [ref=e221]: "Gift 2:"
+          - text: Same-Page Parenting Style Guidebook
+      - generic [ref=e222]:
+        - img [ref=e223]
+        - generic [ref=e225]:
+          - strong [ref=e226]: "Gift 3:"
+          - text: Reclaim Your Time Guidebook
+      - generic [ref=e227]:
+        - img [ref=e228]
+        - generic [ref=e230]:
+          - strong [ref=e231]: "Gift 4:"
+          - text: Parent’s Pocket-Saving Hacks
+    - generic [ref=e232]:
+      - paragraph [ref=e233]: "Total value: $1,117"
+      - paragraph [ref=e234]: "Regular price: $197"
+      - paragraph [ref=e235]: "Your price today:"
+      - paragraph [ref=e236]: $147 Save $50
+    - link "Upgrade to VIP Now" [ref=e237] [cursor=pointer]:
+      - /url: "#"
+      - text: Upgrade to VIP Now
+      - img [ref=e238]
+    - generic [ref=e240]:
+      - img [ref=e241]
+      - generic [ref=e243]: 14-day money-back guarantee · Secure checkout
+  - generic [ref=e245]:
+    - paragraph [ref=e246]: Learn From These
+    - heading "40+ World-Leading Experts and Authorities" [level=2] [ref=e247]
+    - generic [ref=e248]:
+      - paragraph [ref=e249]: Day 1 — The Butterfly Mind
+      - heading "Boost Your Child’s Focus & Attention" [level=3] [ref=e250]
+      - generic [ref=e251]:
+        - group [ref=e252]:
+          - generic "Dr. Stephen Cowan NY Medical College · 35+ yrs pediatric experience “ADHD Finally Makes Sense Through The Five Phase Model” View More" [ref=e253] [cursor=pointer]:
+            - img [ref=e254]
+            - generic [ref=e255]:
+              - paragraph [ref=e256]: Dr. Stephen Cowan
+              - paragraph [ref=e257]: NY Medical College · 35+ yrs pediatric experience
+              - paragraph [ref=e258]: “ADHD Finally Makes Sense Through The Five Phase Model”
+            - text: View More
+        - group [ref=e259]:
+          - generic "Pippa Simou Coaching Psychologist · The ADD-vantage “Sometimes ADHD Is Quiet Girls Burning Out Trying to Be Perfect” View More" [ref=e260] [cursor=pointer]:
+            - img [ref=e261]
+            - generic [ref=e262]:
+              - paragraph [ref=e263]: Pippa Simou
+              - paragraph [ref=e264]: Coaching Psychologist · The ADD-vantage
+              - paragraph [ref=e265]: “Sometimes ADHD Is Quiet Girls Burning Out Trying to Be Perfect”
+            - text: View More
+        - group [ref=e266]:
+          - generic "Dr. Peg Dawson Co-author ‘Smart but Scattered’ · 475k copies sold “What Shapes Kids Isn’t Advice — It’s How You Handle Your Urge to Control” View More" [ref=e267] [cursor=pointer]:
+            - img [ref=e268]
+            - generic [ref=e269]:
+              - paragraph [ref=e270]: Dr. Peg Dawson
+              - paragraph [ref=e271]: Co-author ‘Smart but Scattered’ · 475k copies sold
+              - paragraph [ref=e272]: “What Shapes Kids Isn’t Advice — It’s How You Handle Your Urge to Control”
+            - text: View More
+    - generic [ref=e273]:
+      - paragraph [ref=e274]: Day 2 — From Storm to Calm
+      - heading "Manage Emotional Regulation & Impulse Control" [level=3] [ref=e275]
+      - generic [ref=e276]:
+        - group [ref=e277]:
+          - generic "Dr. Tracy Packiam Alloway Award-winning psychologist · 15 books “The Hidden Genius Behind ADHD Memory Gaps” View More" [ref=e278] [cursor=pointer]:
+            - img [ref=e279]
+            - generic [ref=e280]:
+              - paragraph [ref=e281]: Dr. Tracy Packiam Alloway
+              - paragraph [ref=e282]: Award-winning psychologist · 15 books
+              - paragraph [ref=e283]: “The Hidden Genius Behind ADHD Memory Gaps”
+            - text: View More
+        - group [ref=e284]:
+          - generic "Dr. Liz Angoff Licensed Ed. Psychologist · Author “It Wasn’t ADHD That Made Them Feel Broken” View More" [ref=e285] [cursor=pointer]:
+            - img [ref=e286]
+            - generic [ref=e287]:
+              - paragraph [ref=e288]: Dr. Liz Angoff
+              - paragraph [ref=e289]: Licensed Ed. Psychologist · Author
+              - paragraph [ref=e290]: “It Wasn’t ADHD That Made Them Feel Broken”
+            - text: View More
+        - group [ref=e291]:
+          - generic "Katelyn Mabry Author · Kids’ ADHD Podcast Host “Why ADHD Kids Chase Friends Who Reject Them” View More" [ref=e292] [cursor=pointer]:
+            - img [ref=e293]
+            - generic [ref=e294]:
+              - paragraph [ref=e295]: Katelyn Mabry
+              - paragraph [ref=e296]: Author · Kids’ ADHD Podcast Host
+              - paragraph [ref=e297]: “Why ADHD Kids Chase Friends Who Reject Them”
+            - text: View More
+    - generic [ref=e298]:
+      - paragraph [ref=e299]: Day 3 — Taming The Time Monster
+      - heading "Create Routines That Stick" [level=3] [ref=e300]
+      - generic [ref=e301]:
+        - group [ref=e302]:
+          - generic "Dr. Cindy Hovington PhD Neuroscientist · Curious Neuron (180k) “The Hardest Part Isn’t Them Losing Control, It’s You” View More" [ref=e303] [cursor=pointer]:
+            - img [ref=e304]
+            - generic [ref=e305]:
+              - paragraph [ref=e306]: Dr. Cindy Hovington
+              - paragraph [ref=e307]: PhD Neuroscientist · Curious Neuron (180k)
+              - paragraph [ref=e308]: “The Hardest Part Isn’t Them Losing Control, It’s You”
+            - text: View More
+        - group [ref=e309]:
+          - generic "Laura Petix Pediatric OT · The OT Butterfly (231k) “The Meltdown You See Is Nothing Compared to What’s Held In” View More" [ref=e310] [cursor=pointer]:
+            - img [ref=e311]
+            - generic [ref=e312]:
+              - paragraph [ref=e313]: Laura Petix
+              - paragraph [ref=e314]: Pediatric OT · The OT Butterfly (231k)
+              - paragraph [ref=e315]: “The Meltdown You See Is Nothing Compared to What’s Held In”
+            - text: View More
+        - group [ref=e316]:
+          - generic "Dr. Edward Hallowell World Authority on ADHD · NYT bestselling author “Turn Your Bright Kid Into a Brilliant Success in School and Life” View More" [ref=e317] [cursor=pointer]:
+            - img [ref=e318]
+            - generic [ref=e319]:
+              - paragraph [ref=e320]: Dr. Edward Hallowell
+              - paragraph [ref=e321]: World Authority on ADHD · NYT bestselling author
+              - paragraph [ref=e322]: “Turn Your Bright Kid Into a Brilliant Success in School and Life”
+            - text: View More
+    - generic [ref=e323]:
+      - paragraph [ref=e324]: Day 4 — School Survival
+      - heading "Tools & Strategies for Academic Performance" [level=3] [ref=e325]
+      - generic [ref=e326]:
+        - group [ref=e327]:
+          - generic "Eli Harwood Licensed Therapist · Millions of followers “They Hold Onto Feeling Noticed Forever” View More" [ref=e328] [cursor=pointer]:
+            - img [ref=e329]
+            - generic [ref=e330]:
+              - paragraph [ref=e331]: Eli Harwood
+              - paragraph [ref=e332]: Licensed Therapist · Millions of followers
+              - paragraph [ref=e333]: “They Hold Onto Feeling Noticed Forever”
+            - text: View More
+        - group [ref=e334]:
+          - generic "Dana Kay 2× bestselling author · ADHD Thrive Institute “Mislabeling Inflammation as Bad Behavior” View More" [ref=e335] [cursor=pointer]:
+            - img [ref=e336]
+            - generic [ref=e337]:
+              - paragraph [ref=e338]: Dana Kay
+              - paragraph [ref=e339]: 2× bestselling author · ADHD Thrive Institute
+              - paragraph [ref=e340]: “Mislabeling Inflammation as Bad Behavior”
+            - text: View More
+        - group [ref=e341]:
+          - generic "Dr. Sasha Hamdani White House-recognized psychiatrist “Why Forcing Focus Backfires — What Works Instead” View More" [ref=e342] [cursor=pointer]:
+            - img [ref=e343]
+            - generic [ref=e344]:
+              - paragraph [ref=e345]: Dr. Sasha Hamdani
+              - paragraph [ref=e346]: White House-recognized psychiatrist
+              - paragraph [ref=e347]: “Why Forcing Focus Backfires — What Works Instead”
+            - text: View More
+    - generic [ref=e348]:
+      - paragraph [ref=e349]: Day 5 — The ADHD Parent Paradox
+      - heading "How To Parent When You Have ADHD Too" [level=3] [ref=e350]
+      - generic [ref=e351]:
+        - group [ref=e352]:
+          - generic "Dr. Megan Anna Neff AuDHD Clinical Psychologist · 175k “What Happens When the Mask Comes Off?” View More" [ref=e353] [cursor=pointer]:
+            - img [ref=e354]
+            - generic [ref=e355]:
+              - paragraph [ref=e356]: Dr. Megan Anna Neff
+              - paragraph [ref=e357]: AuDHD Clinical Psychologist · 175k
+              - paragraph [ref=e358]: “What Happens When the Mask Comes Off?”
+            - text: View More
+        - group [ref=e359]:
+          - generic "Dayna Abraham Bestselling author · Calm the Chaos “When Your Child Needs You and You Need Everyone to Leave You Alone” View More" [ref=e360] [cursor=pointer]:
+            - img [ref=e361]
+            - generic [ref=e362]:
+              - paragraph [ref=e363]: Dayna Abraham
+              - paragraph [ref=e364]: Bestselling author · Calm the Chaos
+              - paragraph [ref=e365]: “When Your Child Needs You and You Need Everyone to Leave You Alone”
+            - text: View More
+        - group [ref=e366]:
+          - generic "Elaine Taylor-Klaus Co-founder ImpactADHD · Master Certified Coach “Couples Break When Symptoms Get Confused With Character” View More" [ref=e367] [cursor=pointer]:
+            - img [ref=e368]
+            - generic [ref=e369]:
+              - paragraph [ref=e370]: Elaine Taylor-Klaus
+              - paragraph [ref=e371]: Co-founder ImpactADHD · Master Certified Coach
+              - paragraph [ref=e372]: “Couples Break When Symptoms Get Confused With Character”
+            - text: View More
+    - paragraph [ref=e373]: + 25 more experts included in your VIP Pass
+  - generic [ref=e376]:
+    - generic [ref=e377]:
+      - generic [ref=e378]: ★ Save 77% — One-Time Offer
+      - heading "Ready to keep every lesson forever?" [level=3] [ref=e379]
+      - paragraph [ref=e380]: Full VIP Pass + all 4 free gifts for one payment.
+    - list [ref=e381]:
+      - listitem [ref=e382]:
+        - img [ref=e383]
+        - generic [ref=e385]:
+          - strong [ref=e386]: Unlimited Lifetime Access
+          - text: to the 5-day summit & 40+ masterclasses
+      - listitem [ref=e387]:
+        - img [ref=e388]
+        - strong [ref=e391]: Audio edition, transcripts, subtitles, blueprints & workbook
+      - listitem [ref=e392]:
+        - img [ref=e393]
+        - generic [ref=e395]:
+          - strong [ref=e396]: 4 VIP bonus gifts
+          - text: (Digest Emails, Same-Page Parenting, Reclaim Your Time, Pocket-Saving Hacks)
+      - listitem [ref=e397]:
+        - img [ref=e398]
+        - generic [ref=e400]:
+          - strong [ref=e401]: 14-Day Money-Back Guarantee
+          - text: — risk-free
+    - generic [ref=e402]:
+      - paragraph [ref=e403]: "Total value: $1,117"
+      - paragraph [ref=e404]: "Regular price: $197"
+      - paragraph [ref=e405]: "Your price today:"
+      - paragraph [ref=e406]: $147 Save $50
+    - link "Upgrade to VIP Now" [ref=e407] [cursor=pointer]:
+      - /url: "#"
+      - text: Upgrade to VIP Now
+      - img [ref=e408]
+  - generic [ref=e412]:
+    - generic [ref=e414]:
+      - img [ref=e415]
+      - paragraph [ref=e417]: 14-DAY
+    - generic [ref=e418]:
+      - paragraph [ref=e419]: One single payment, backed by a full 14-day money-back guarantee
+      - paragraph [ref=e420]: If the VIP Pass doesn’t absolutely exceed your expectations, send us an email and we’ll return your full investment — no questions asked.
+  - generic [ref=e422]:
+    - heading "Why Are We Offering This?" [level=2] [ref=e423]
+    - paragraph [ref=e424]: (and for only $147!)
+    - generic [ref=e425]:
+      - paragraph [ref=e426]: We designed this Summit with a deep understanding of how wonderfully unique your child’s ADHD brain is.
+      - paragraph [ref=e427]:
+        - text: The insights shared during these five days are too valuable to be experienced just once or to
+        - strong [ref=e428]: disappear after 24 hours.
+      - paragraph [ref=e429]: These are strategies that can genuinely transform your relationship with your child — strategies you’ll want to revisit as your child grows.
+      - paragraph [ref=e430]: We created the VIP Pass because we believe everyone deserves the chance to absorb this life-changing information in a way that honors their natural learning style and pace.
+      - paragraph [ref=e431]:
+        - text: Whether that’s diving deep into transcripts at 11 PM when your kids are asleep, or listening to audio while commuting — when you invest in your $147 VIP Pass, you
+        - strong [ref=e432]: give yourself permission to learn and implement at your own pace.
+  - generic [ref=e434]:
+    - generic [ref=e435]:
+      - paragraph [ref=e436]: Here’s Everything You’re Getting
+      - heading "When You Upgrade Today" [level=2] [ref=e437]
+    - table [ref=e439]:
+      - rowgroup [ref=e440]:
+        - row "Free Pass VIP Pass" [ref=e441]:
+          - columnheader [ref=e442]
+          - columnheader "Free Pass" [ref=e443]
+          - columnheader "VIP Pass" [ref=e444]
+      - rowgroup [ref=e445]:
+        - row "24-hour access to all 5 Summit days (40+ masterclasses)" [ref=e446]:
+          - cell "24-hour access to all 5 Summit days (40+ masterclasses)" [ref=e447]
+          - cell [ref=e448]:
+            - img [ref=e450]
+          - cell [ref=e452]:
+            - img [ref=e454]
+        - row "Free Sign-Up Gift" [ref=e456]:
+          - cell "Free Sign-Up Gift" [ref=e457]
+          - cell [ref=e458]:
+            - img [ref=e460]
+          - cell [ref=e462]:
+            - img [ref=e464]
+        - row "Unlimited lifetime access to 40+ masterclass recordings" [ref=e466]:
+          - cell "Unlimited lifetime access to 40+ masterclass recordings" [ref=e467]
+          - cell [ref=e468]:
+            - img [ref=e470]
+          - cell [ref=e472]:
+            - img [ref=e474]
+        - row "“On The Go” audio edition of the entire summit" [ref=e476]:
+          - cell "“On The Go” audio edition of the entire summit" [ref=e477]
+          - cell [ref=e478]:
+            - img [ref=e480]
+          - cell [ref=e482]:
+            - img [ref=e484]
+        - row "English subtitles for 40+ masterclasses" [ref=e486]:
+          - cell "English subtitles for 40+ masterclasses" [ref=e487]
+          - cell [ref=e488]:
+            - img [ref=e490]
+          - cell [ref=e492]:
+            - img [ref=e494]
+        - row "Transcript of each masterclass" [ref=e496]:
+          - cell "Transcript of each masterclass" [ref=e497]
+          - cell [ref=e498]:
+            - img [ref=e500]
+          - cell [ref=e502]:
+            - img [ref=e504]
+        - row "Expert Action Blueprint of each masterclass" [ref=e506]:
+          - cell "Expert Action Blueprint of each masterclass" [ref=e507]
+          - cell [ref=e508]:
+            - img [ref=e510]
+          - cell [ref=e512]:
+            - img [ref=e514]
+        - row "Summit Workbook" [ref=e516]:
+          - cell "Summit Workbook" [ref=e517]
+          - cell [ref=e518]:
+            - img [ref=e520]
+          - cell [ref=e522]:
+            - img [ref=e524]
+        - row "4 VIP bonuses" [ref=e526]:
+          - cell "4 VIP bonuses" [ref=e527]
+          - cell [ref=e528]:
+            - img [ref=e530]
+          - cell [ref=e532]:
+            - img [ref=e534]
+  - generic [ref=e538]:
+    - generic [ref=e539]:
+      - generic [ref=e540]: ★ Last Chance — Save 77%
+      - heading "Your VIP Pass is waiting" [level=3] [ref=e541]
+      - paragraph [ref=e542]: You won’t see this offer anywhere else.
+    - list [ref=e543]:
+      - listitem [ref=e544]:
+        - img [ref=e545]
+        - generic [ref=e547]:
+          - strong [ref=e548]: Lifetime access
+          - text: to all 40+ masterclasses
+      - listitem [ref=e549]:
+        - img [ref=e550]
+        - strong [ref=e553]: Audio, subtitles, transcripts, blueprints, workbook
+      - listitem [ref=e554]:
+        - img [ref=e555]
+        - generic [ref=e557]:
+          - strong [ref=e558]: 4 free bonuses
+          - text: — worth $196 alone
+      - listitem [ref=e559]:
+        - img [ref=e560]
+        - generic [ref=e562]:
+          - strong [ref=e563]: 14-day money-back
+          - text: guarantee
+    - generic [ref=e564]:
+      - paragraph [ref=e565]: "Total value: $1,117"
+      - paragraph [ref=e566]: "Regular price: $197"
+      - paragraph [ref=e567]: "Your price today:"
+      - paragraph [ref=e568]: $147 Save $50
+    - link "Upgrade to VIP Now" [ref=e569] [cursor=pointer]:
+      - /url: "#"
+      - text: Upgrade to VIP Now
+      - img [ref=e570]
+    - generic [ref=e572]:
+      - img [ref=e573]
+      - generic [ref=e575]: Secure checkout · Instant access after payment
+  - contentinfo [ref=e576]:
+    - generic [ref=e577]:
+      - paragraph [ref=e578]: StrategicParenting ADHD
+      - navigation [ref=e579]:
+        - link "Privacy policy" [ref=e580] [cursor=pointer]:
+          - /url: "#"
+        - link "Cookies" [ref=e581] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms and Conditions" [ref=e582] [cursor=pointer]:
+          - /url: "#"

@@ -1,0 +1,192 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of ADHD Parenting Summit 2026 ADHD Parenting Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of ADHD Parenting Summit 2026" [ref=e32]
+        - generic [ref=e34]: ADHD Parenting Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Speakers" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers
+                  - generic [ref=e68]: Speakers
+          - listitem [ref=e69]:
+            - generic [ref=e70]:
+              - img [ref=e71]
+              - generic [ref=e73]: Funnels
+            - list [ref=e74]:
+              - listitem [ref=e75]:
+                - link "Funnels" [ref=e76] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnels
+                  - generic [ref=e80]: Funnels
+              - listitem [ref=e81]:
+                - link "Funnel Steps" [ref=e82] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-steps
+                  - generic [ref=e86]: Funnel Steps
+          - listitem [ref=e87]:
+            - generic [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e91]: Sales
+            - list [ref=e92]:
+              - listitem [ref=e93]:
+                - link "Products" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/products
+                  - generic [ref=e98]: Products
+              - listitem [ref=e99]:
+                - link "Orders" [ref=e100] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/orders
+                  - generic [ref=e105]: Orders
+              - listitem [ref=e106]:
+                - link "Coupons" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/coupons
+                  - generic [ref=e112]: Coupons
+              - listitem [ref=e113]:
+                - link "Affiliates" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/affiliates
+                  - generic [ref=e118]: Affiliates
+          - listitem [ref=e119]:
+            - generic [ref=e120]:
+              - img [ref=e121]
+              - generic [ref=e123]: Analytics
+            - list [ref=e124]:
+              - listitem [ref=e125]:
+                - link "Funnel performance" [ref=e126] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-performance
+                  - generic [ref=e130]: Funnel performance
+              - listitem [ref=e131]:
+                - link "UTM attribution" [ref=e132] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/utm-breakdown
+                  - generic [ref=e136]: UTM attribution
+          - listitem [ref=e137]:
+            - generic [ref=e138] [cursor=pointer]:
+              - img [ref=e139]
+              - generic [ref=e142]: Settings
+              - button "Settings" [ref=e143]:
+                - img [ref=e144]
+    - main [ref=e147]:
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - navigation [ref=e152]:
+              - list [ref=e153]:
+                - listitem [ref=e154]:
+                  - link "Summits" [ref=e155] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits
+                - listitem [ref=e156]:
+                  - img [ref=e157]
+                  - link "ADHD Parenting Summit 2026" [ref=e159] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                - listitem [ref=e160]:
+                  - img [ref=e161]
+                  - generic [ref=e163]: View
+            - heading "View ADHD Parenting Summit 2026" [level=1] [ref=e164]
+          - generic [ref=e166]:
+            - link "Edit" [ref=e167] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab/edit
+            - button "Delete" [ref=e168] [cursor=pointer]
+        - generic [ref=e171]:
+          - generic [ref=e178]:
+            - generic [ref=e180]:
+              - heading "Basics" [level=2] [ref=e181]
+              - paragraph [ref=e182]: Summit identity, lifecycle status, and phase schedule.
+            - generic [ref=e184]:
+              - generic [ref=e188]:
+                - generic [ref=e191]:
+                  - term [ref=e194]: Title
+                  - definition [ref=e196]:
+                    - generic [ref=e198]: ADHD Parenting Summit 2026
+                - generic [ref=e201]:
+                  - term [ref=e204]: Status
+                  - definition [ref=e206]:
+                    - generic [ref=e209]: published
+                - generic [ref=e212]:
+                  - term [ref=e215]: Current phase
+                  - definition [ref=e217]:
+                    - generic [ref=e220]: pre
+                - generic [ref=e223]:
+                  - term [ref=e226]: Timezone
+                  - definition [ref=e228]:
+                    - generic [ref=e230]: America/New_York
+                - generic [ref=e233]:
+                  - term [ref=e236]: Slug
+                  - definition [ref=e238]:
+                    - generic [ref=e240]: /adhd-parenting-summit-2026
+                - generic [ref=e243]:
+                  - term [ref=e246]: Topic
+                  - definition [ref=e248]:
+                    - generic [ref=e250]: ADHD parenting
+                - generic [ref=e253]:
+                  - term [ref=e256]: Description
+                  - definition [ref=e258]:
+                    - generic [ref=e260]: A 5-day virtual summit for parents navigating ADHD.
+              - generic [ref=e264]:
+                - generic [ref=e267]:
+                  - term [ref=e270]: Pre-summit starts
+                  - definition [ref=e272]:
+                    - generic [ref=e274]: Mar 18, 2026 07:37:38
+                - generic [ref=e277]:
+                  - term [ref=e280]: Late pre-summit
+                  - definition [ref=e282]:
+                    - generic [ref=e284]: Apr 10, 2026 06:37:38
+                - generic [ref=e287]:
+                  - term [ref=e290]: During summit
+                  - definition [ref=e292]:
+                    - generic [ref=e294]: Apr 24, 2026 06:37:38
+                - generic [ref=e297]:
+                  - term [ref=e300]: Post-summit
+                  - definition [ref=e302]:
+                    - generic [ref=e304]: May 1, 2026 06:37:38
+                - generic [ref=e307]:
+                  - term [ref=e310]: Ends
+                  - definition [ref=e312]:
+                    - generic [ref=e314]: May 17, 2026 06:37:38
+          - generic [ref=e317]:
+            - tablist [ref=e318]:
+              - tab "Speakers" [ref=e319] [cursor=pointer]:
+                - generic [ref=e320]: Speakers
+              - tab "Funnels" [ref=e321] [cursor=pointer]:
+                - generic [ref=e322]: Funnels
+              - tab "Orders" [ref=e323] [cursor=pointer]:
+                - generic [ref=e324]: Orders
+            - tabpanel [ref=e325]
+  - generic:
+    - status

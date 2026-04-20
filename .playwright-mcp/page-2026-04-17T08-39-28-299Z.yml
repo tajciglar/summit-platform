@@ -1,0 +1,214 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e10]: Internal Server Error
+    - button "Copy as Markdown" [ref=e11] [cursor=pointer]:
+      - img [ref=e12]
+      - generic [ref=e15]: Copy as Markdown
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - heading "LogicException" [level=1] [ref=e20]
+      - generic [ref=e22]: vendor/filament/filament/src/Resources/Resource/Concerns/BelongsToTenant.php:86
+      - paragraph [ref=e23]: The model [Spatie\Permission\Models\Role] does not have a relationship named [summit]. You can change the relationship being used by passing it to the [ownershipRelationship] argument of the [tenant()] method in configuration. You can change the relationship being used per-resource by setting it as the [$tenantOwnershipRelationshipName] static property on the [BezhanSalleh\FilamentShield\Resources\Roles\RoleResource] resource class.
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: LARAVEL
+          - generic [ref=e28]: 13.3.0
+        - generic [ref=e29]:
+          - generic [ref=e30]: PHP
+          - generic [ref=e31]: 8.4.1
+      - generic [ref=e32]:
+        - img [ref=e33]
+        - text: UNHANDLED
+      - generic [ref=e36]: CODE 0
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - img [ref=e40]
+        - text: "500"
+      - generic [ref=e43]:
+        - img [ref=e44]
+        - text: GET
+      - generic [ref=e47]: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+      - button [ref=e48] [cursor=pointer]:
+        - img [ref=e49]
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - heading "Exception trace" [level=3] [ref=e60]
+      - generic [ref=e61]:
+        - generic [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e68]: 58 vendor frames
+          - button [ref=e69]:
+            - img [ref=e70]
+        - generic [ref=e74]:
+          - generic [ref=e75] [cursor=pointer]:
+            - generic [ref=e78]:
+              - code [ref=e82]:
+                - generic [ref=e83]: Illuminate\View\Factory->renderComponent()
+              - generic [ref=e85]: storage/framework/views/4943bc92ebba41e8b0e508149542e0ad.blade.php:16
+            - button [ref=e87]:
+              - img [ref=e88]
+          - code [ref=e96]:
+            - generic [ref=e97]: "11 $__env->slot($name, attributes: $slot->attributes->getAttributes());"
+            - generic [ref=e98]: 12 echo $slot->toHtml();
+            - generic [ref=e99]: 13 $__env->endSlot();
+            - generic [ref=e100]: "14 }"
+            - generic [ref=e101]: 15 ?>
+            - generic [ref=e102]: 16 @endcomponent
+        - generic [ref=e104] [cursor=pointer]:
+          - img [ref=e105]
+          - generic [ref=e109]: 74 vendor frames
+          - button [ref=e110]:
+            - img [ref=e111]
+        - generic [ref=e116] [cursor=pointer]:
+          - generic [ref=e119]:
+            - code [ref=e123]:
+              - generic [ref=e124]: Illuminate\Foundation\Application->handleRequest(object(Illuminate\Http\Request))
+            - generic [ref=e126]: public/index.php:20
+          - button [ref=e128]:
+            - img [ref=e129]
+        - generic [ref=e134] [cursor=pointer]:
+          - img [ref=e135]
+          - generic [ref=e139]: 1 vendor frame
+          - button [ref=e140]:
+            - img [ref=e141]
+    - generic [ref=e145]:
+      - generic [ref=e146]:
+        - generic [ref=e147]:
+          - img [ref=e149]
+          - heading "Queries" [level=3] [ref=e151]
+        - generic [ref=e153]: 1-7 of 7
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - img [ref=e158]
+              - generic [ref=e160]: pgsql
+            - code [ref=e164]:
+              - generic [ref=e165]: select * from "sessions" where "id" = 'lgXeLgPqm5ZvGyTWjqXi0tRnUPqNCeLDHs0FeClD' limit 1
+          - generic [ref=e166]: 7.98ms
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - img [ref=e170]
+              - generic [ref=e172]: pgsql
+            - code [ref=e176]:
+              - generic [ref=e177]: select * from "users" where "id" = '019d9a96-aa8b-708b-bebc-7a755d20dfb1' limit 1
+          - generic [ref=e178]: 1.55ms
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - img [ref=e182]
+              - generic [ref=e184]: pgsql
+            - code [ref=e188]:
+              - generic [ref=e189]: select * from "summits" where "slug" = 'adhd-parenting-summit-2026' limit 1
+          - generic [ref=e190]: 0.78ms
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - generic [ref=e193]:
+              - img [ref=e194]
+              - generic [ref=e196]: pgsql
+            - code [ref=e200]:
+              - generic [ref=e201]: select "roles".*, "model_has_roles"."model_id" as "pivot_model_id", "model_has_roles"."role_id" as "pivot_role_id", "model_has_roles"."model_type" as "pivot_model_type" from "roles" inner join "model_has_roles" on "roles"."id" = "model_has_roles"."role_id" where "model_has_roles"."model_id" in ('019d9a96-aa8b-708b-bebc-7a755d20dfb1') and "model_has_roles"."model_type" = 'App\Models\User'
+          - generic [ref=e202]: 2.09ms
+        - generic [ref=e203]:
+          - generic [ref=e204]:
+            - generic [ref=e205]:
+              - img [ref=e206]
+              - generic [ref=e208]: pgsql
+            - code [ref=e212]:
+              - generic [ref=e213]: select * from "summits" order by "title" asc
+          - generic [ref=e214]: 0.79ms
+        - generic [ref=e215]:
+          - generic [ref=e216]:
+            - generic [ref=e217]:
+              - img [ref=e218]
+              - generic [ref=e220]: pgsql
+            - code [ref=e224]:
+              - generic [ref=e225]: select * from "cache" where "key" in ('laravel-cache-spatie.permission.cache')
+          - generic [ref=e226]: 1.06ms
+        - generic [ref=e227]:
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - img [ref=e230]
+              - generic [ref=e232]: pgsql
+            - code [ref=e236]:
+              - generic [ref=e237]: select * from "permissions"
+          - generic [ref=e238]: 1.09ms
+  - generic [ref=e240]:
+    - generic [ref=e241]:
+      - heading "Headers" [level=2] [ref=e242]
+      - generic [ref=e243]:
+        - generic [ref=e244]:
+          - generic [ref=e245]: host
+          - generic [ref=e247]: 127.0.0.1:8000
+        - generic [ref=e248]:
+          - generic [ref=e249]: connection
+          - generic [ref=e251]: keep-alive
+        - generic [ref=e252]:
+          - generic [ref=e253]: sec-ch-ua
+          - generic [ref=e255]: "\"Google Chrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\""
+        - generic [ref=e256]:
+          - generic [ref=e257]: sec-ch-ua-mobile
+          - generic [ref=e259]: "?0"
+        - generic [ref=e260]:
+          - generic [ref=e261]: sec-ch-ua-platform
+          - generic [ref=e263]: "\"macOS\""
+        - generic [ref=e264]:
+          - generic [ref=e265]: upgrade-insecure-requests
+          - generic [ref=e267]: "1"
+        - generic [ref=e268]:
+          - generic [ref=e269]: user-agent
+          - generic [ref=e271]: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36
+        - generic [ref=e272]:
+          - generic [ref=e273]: accept
+          - generic [ref=e275]: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+        - generic [ref=e276]:
+          - generic [ref=e277]: sec-fetch-site
+          - generic [ref=e279]: none
+        - generic [ref=e280]:
+          - generic [ref=e281]: sec-fetch-mode
+          - generic [ref=e283]: navigate
+        - generic [ref=e284]:
+          - generic [ref=e285]: sec-fetch-user
+          - generic [ref=e287]: "?1"
+        - generic [ref=e288]:
+          - generic [ref=e289]: sec-fetch-dest
+          - generic [ref=e291]: document
+        - generic [ref=e292]:
+          - generic [ref=e293]: accept-encoding
+          - generic [ref=e295]: gzip, deflate, br, zstd
+        - generic [ref=e296]:
+          - generic [ref=e297]: accept-language
+          - generic [ref=e299]: en-US,en;q=0.9
+        - generic [ref=e300]:
+          - generic [ref=e301]: cookie
+          - generic [ref=e303]: XSRF-TOKEN=eyJpdiI6IkJMNjdtKzI4VUFkdU1tR1dVT01XTGc9PSIsInZhbHVlIjoiTzZHVVppa1d2dHlHYjlCd09zZDIxZHN4Ykw0WCtVcFFjK3BGMzdPOGNaMlQvY3BYTU11TVk3SHB2dDZEckh6UE40cVJ0bVl6eHo2N1pROGM1bkRXbyt3WE5oT1J2c3dVWVltbTMybG1qNStNQmVaVFdmWXJOVjgrM2xXblJ2NDUiLCJtYWMiOiJiZjg4YzRiMTZhYzAxYzk4NWM4ZWNhOTQxNmFlNDExZTBiMjFkNjMwZWQ0YWY5ZTFkYmFkYjMwOTk2NDk4OWZmIiwidGFnIjoiIn0%3D; laravel-session=eyJpdiI6Im9CUlNjblEzN2F5QWJpSXBSd3Z6Q0E9PSIsInZhbHVlIjoieU5FNjJpeUVvcUtTL3kzRTZNNDkwNkg0cjJJMGRtVDdxdVNlQTNLY1hFL0FSVVY3YlZiZmtndVFhWmhaVWNBanJWdGdOLzFhdzd2UUJhQWlaNTRjbSs5WVBiNXNVRVlNOGtTY2o0WFRzZTVyZWZlTS9HY0g5a2VEcXM3YjdQQmUiLCJtYWMiOiIzZDJiNzQzMzA2OGRlYTI3NWI3NGU4YWQ4MDA0MmJkZDM0NGJhYjU0MjgwODg4MGIyNjM5YTVkNDNkZmQ4NjY5IiwidGFnIjoiIn0%3D
+    - generic [ref=e304]:
+      - heading "Body" [level=2] [ref=e305]
+      - generic [ref=e306]: // No request body
+    - generic [ref=e307]:
+      - heading "Routing" [level=2] [ref=e308]
+      - generic [ref=e309]:
+        - generic [ref=e310]:
+          - generic [ref=e311]: controller
+          - generic [ref=e313]: Filament\Pages\Dashboard
+        - generic [ref=e314]:
+          - generic [ref=e315]: route name
+          - generic [ref=e317]: filament.admin.pages.dashboard
+        - generic [ref=e318]:
+          - generic [ref=e319]: middleware
+          - generic [ref=e321]: panel:admin, Illuminate\Cookie\Middleware\EncryptCookies, Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse, Illuminate\Session\Middleware\StartSession, Filament\Http\Middleware\AuthenticateSession, Illuminate\View\Middleware\ShareErrorsFromSession, Illuminate\Foundation\Http\Middleware\PreventRequestForgery, Illuminate\Routing\Middleware\SubstituteBindings, Filament\Http\Middleware\DisableBladeIconComponents, Filament\Http\Middleware\DispatchServingFilamentEvent, Filament\Http\Middleware\Authenticate, Filament\Http\Middleware\IdentifyTenant
+    - generic [ref=e322]:
+      - heading "Routing parameters" [level=2] [ref=e323]
+      - code [ref=e328]:
+        - generic [ref=e329]: "{"
+        - generic [ref=e330]: "\"tenant\": \"adhd-parenting-summit-2026\""
+        - generic [ref=e331]: "}"
+  - generic [ref=e334]:
+    - img [ref=e336]
+    - img [ref=e3374]

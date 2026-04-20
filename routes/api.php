@@ -10,9 +10,6 @@ Route::get('/funnels/{funnelId}/published-content', [PublicFunnelController::cla
 Route::get('/funnels/resolve', \App\Http\Controllers\Api\FunnelResolveController::class)
     ->middleware('throttle:60,1');
 
-Route::post('/admin/catalog/refresh', \App\Http\Controllers\Api\CatalogRefreshController::class)
-    ->middleware('throttle:10,1');
-
 // Preview token is the only access control — intentionally no session/bearer auth.
 Route::get('/landing-page-drafts/{token}', [LandingPageDraftController::class, 'showByToken'])
     ->middleware('throttle:120,1');

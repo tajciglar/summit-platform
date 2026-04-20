@@ -1,0 +1,255 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of ADHD Parenting Summit 2026 ADHD Parenting Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of ADHD Parenting Summit 2026" [ref=e32]
+        - generic [ref=e34]: ADHD Parenting Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Speakers" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers
+                  - generic [ref=e68]: Speakers
+          - listitem [ref=e69]:
+            - generic [ref=e70]:
+              - img [ref=e71]
+              - generic [ref=e73]: Funnels
+            - list [ref=e74]:
+              - listitem [ref=e75]:
+                - link "Funnels" [ref=e76] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnels
+                  - generic [ref=e80]: Funnels
+              - listitem [ref=e81]:
+                - link "Funnel Steps" [ref=e82] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-steps
+                  - generic [ref=e86]: Funnel Steps
+          - listitem [ref=e87]:
+            - generic [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e91]: Sales
+            - list [ref=e92]:
+              - listitem [ref=e93]:
+                - link "Products" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/products
+                  - generic [ref=e98]: Products
+              - listitem [ref=e99]:
+                - link "Orders" [ref=e100] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/orders
+                  - generic [ref=e105]: Orders
+              - listitem [ref=e106]:
+                - link "Coupons" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/coupons
+                  - generic [ref=e112]: Coupons
+              - listitem [ref=e113]:
+                - link "Affiliates" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/affiliates
+                  - generic [ref=e118]: Affiliates
+          - listitem [ref=e119]:
+            - generic [ref=e120]:
+              - img [ref=e121]
+              - generic [ref=e123]: Analytics
+            - list [ref=e124]:
+              - listitem [ref=e125]:
+                - link "Funnel performance" [ref=e126] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-performance
+                  - generic [ref=e130]: Funnel performance
+              - listitem [ref=e131]:
+                - link "UTM attribution" [ref=e132] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/utm-breakdown
+                  - generic [ref=e136]: UTM attribution
+          - listitem [ref=e137]:
+            - generic [ref=e138] [cursor=pointer]:
+              - img [ref=e139]
+              - generic [ref=e142]: Settings
+              - button "Settings" [ref=e143]:
+                - img [ref=e144]
+    - main [ref=e147]:
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - navigation [ref=e152]:
+              - list [ref=e153]:
+                - listitem [ref=e154]:
+                  - link "Summits" [ref=e155] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits
+                - listitem [ref=e156]:
+                  - img [ref=e157]
+                  - generic [ref=e159]: List
+            - heading "Summits" [level=1] [ref=e160]
+          - link "New summit" [ref=e163] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/create
+        - generic [ref=e171]:
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: Search
+              - generic [ref=e177]:
+                - img [ref=e179]
+                - searchbox "Search" [ref=e182]
+            - button "Filter" [ref=e185] [cursor=pointer]:
+              - img [ref=e186]
+              - generic [ref=e189]: "0"
+            - button "Column manager" [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+          - table [ref=e196]:
+            - rowgroup [ref=e197]:
+              - row "Select/deselect all items for bulk actions. Title Slug Status Current phase Speakers Funnels Ends Actions" [ref=e198]:
+                - columnheader "Select/deselect all items for bulk actions." [ref=e199]:
+                  - checkbox "Select/deselect all items for bulk actions." [ref=e200]
+                - columnheader "Title" [ref=e201]:
+                  - button "Title" [ref=e202] [cursor=pointer]:
+                    - text: Title
+                    - img [ref=e203]
+                - columnheader "Slug" [ref=e205]
+                - columnheader "Status" [ref=e206]
+                - columnheader "Current phase" [ref=e207]
+                - columnheader "Speakers" [ref=e208]
+                - columnheader "Funnels" [ref=e209]
+                - columnheader "Ends" [ref=e210]:
+                  - button "Ends" [ref=e211] [cursor=pointer]:
+                    - text: Ends
+                    - img [ref=e212]
+                - columnheader "Actions" [ref=e214]
+            - rowgroup [ref=e215]:
+              - row "Select/deselect item 019d9a96-aaa2-7080-a93b-a130c4ceb7f4 for bulk actions. Productivity Summit 2026 productivity-summit-2026 draft pre 4 0 May 17, 2026 View Edit Duplicate Delete" [ref=e216]:
+                - cell "Select/deselect item 019d9a96-aaa2-7080-a93b-a130c4ceb7f4 for bulk actions." [ref=e217]:
+                  - checkbox "Select/deselect item 019d9a96-aaa2-7080-a93b-a130c4ceb7f4 for bulk actions." [ref=e218]
+                - cell "Productivity Summit 2026" [ref=e219]:
+                  - link "Productivity Summit 2026" [ref=e220] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e221]: Productivity Summit 2026
+                - cell "productivity-summit-2026" [ref=e222]:
+                  - link "productivity-summit-2026" [ref=e223] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e224]: productivity-summit-2026
+                - cell "draft" [ref=e225]:
+                  - link "draft" [ref=e226] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e228]: draft
+                - cell "pre" [ref=e229]:
+                  - link "pre" [ref=e230] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e232]: pre
+                - cell "4" [ref=e233]:
+                  - link "4" [ref=e234] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e235]: "4"
+                - cell "0" [ref=e236]:
+                  - link "0" [ref=e237] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e238]: "0"
+                - cell "May 17, 2026" [ref=e239]:
+                  - link "May 17, 2026" [ref=e240] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                    - generic [ref=e241]: May 17, 2026
+                - cell "View Edit Duplicate Delete" [ref=e242]:
+                  - generic [ref=e243]:
+                    - link "View" [ref=e244] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4
+                      - img [ref=e245]
+                      - text: View
+                    - link "Edit" [ref=e248] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aaa2-7080-a93b-a130c4ceb7f4/edit
+                      - img [ref=e249]
+                      - text: Edit
+                    - button "Duplicate" [ref=e252] [cursor=pointer]:
+                      - img [ref=e253]
+                      - text: Duplicate
+                    - button "Delete" [ref=e255] [cursor=pointer]:
+                      - img [ref=e256]
+                      - text: Delete
+              - row "Select/deselect item 019d9a96-aa9b-72c2-88f4-7f001c9008ab for bulk actions. ADHD Parenting Summit 2026 adhd-parenting-summit-2026 published pre 8 1 May 17, 2026 View Edit Duplicate Delete" [ref=e258]:
+                - cell "Select/deselect item 019d9a96-aa9b-72c2-88f4-7f001c9008ab for bulk actions." [ref=e259]:
+                  - checkbox "Select/deselect item 019d9a96-aa9b-72c2-88f4-7f001c9008ab for bulk actions." [ref=e260]
+                - cell "ADHD Parenting Summit 2026" [ref=e261]:
+                  - link "ADHD Parenting Summit 2026" [ref=e262] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e263]: ADHD Parenting Summit 2026
+                - cell "adhd-parenting-summit-2026" [ref=e264]:
+                  - link "adhd-parenting-summit-2026" [ref=e265] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e266]: adhd-parenting-summit-2026
+                - cell "published" [ref=e267]:
+                  - link "published" [ref=e268] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e270]: published
+                - cell "pre" [ref=e271]:
+                  - link "pre" [ref=e272] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e274]: pre
+                - cell "8" [ref=e275]:
+                  - link "8" [ref=e276] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e277]: "8"
+                - cell "1" [ref=e278]:
+                  - link "1" [ref=e279] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e280]: "1"
+                - cell "May 17, 2026" [ref=e281]:
+                  - link "May 17, 2026" [ref=e282] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                    - generic [ref=e283]: May 17, 2026
+                - cell "View Edit Duplicate Delete" [ref=e284]:
+                  - generic [ref=e285]:
+                    - link "View" [ref=e286] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                      - img [ref=e287]
+                      - text: View
+                    - link "Edit" [ref=e290] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab/edit
+                      - img [ref=e291]
+                      - text: Edit
+                    - button "Duplicate" [ref=e294] [cursor=pointer]:
+                      - img [ref=e295]
+                      - text: Duplicate
+                    - button "Delete" [ref=e297] [cursor=pointer]:
+                      - img [ref=e298]
+                      - text: Delete
+          - navigation "Pagination navigation" [ref=e300]:
+            - generic [ref=e303]:
+              - generic [ref=e305]: Per page
+              - combobox "Per page" [ref=e307]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status

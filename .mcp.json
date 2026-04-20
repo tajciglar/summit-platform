@@ -1,0 +1,15 @@
+{
+    "mcpServers": {
+        "framer": {
+            "type": "http",
+            "url": "https://mcp.unframer.co/mcp?id=e1f6ff9e475d00a6f62979fff86f4a207b26206e9a79c9502895a89cfc8f3be9&secret=0Mbkfsq5Ec83JaHhcyy6FLjmdOLRPcru"
+        },
+        "laravel-boost": {
+            "command": "php",
+            "args": [
+                "artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

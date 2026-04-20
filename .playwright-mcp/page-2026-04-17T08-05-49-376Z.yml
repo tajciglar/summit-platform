@@ -1,0 +1,201 @@
+- generic [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Dashboard" [ref=e34] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e35]
+                  - generic [ref=e37]: Dashboard
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - generic [ref=e42]: Content
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Summits" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/summits
+                  - generic [ref=e49]: Summits
+              - listitem [ref=e50]:
+                - link "Speakers" [ref=e51] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/speakers
+                  - generic [ref=e55]: Speakers
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: Funnels
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Funnels" [ref=e63] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnels
+                  - generic [ref=e67]: Funnels
+              - listitem [ref=e68]:
+                - link "Funnel Steps" [ref=e69] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps
+                  - generic [ref=e73]: Funnel Steps
+          - listitem [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Sales
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Products" [ref=e81] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/products
+                  - generic [ref=e85]: Products
+              - listitem [ref=e86]:
+                - link "Orders" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/orders
+                  - generic [ref=e92]: Orders
+              - listitem [ref=e93]:
+                - link "Coupons" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/coupons
+                  - generic [ref=e99]: Coupons
+              - listitem [ref=e100]:
+                - link "Affiliates" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/affiliates
+                  - generic [ref=e105]: Affiliates
+          - listitem [ref=e106]:
+            - generic [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e111]: Settings
+              - button "Settings" [ref=e112]:
+                - img [ref=e113]
+    - main [ref=e116]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - navigation [ref=e121]:
+              - list [ref=e122]:
+                - listitem [ref=e123]:
+                  - link "Funnel Steps" [ref=e124] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps
+                - listitem [ref=e125]:
+                  - img [ref=e126]
+                  - link "Registration" [ref=e128] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f0-7318-be24-26b96f590734
+                - listitem [ref=e129]:
+                  - img [ref=e130]
+                  - generic [ref=e132]: Edit
+            - heading "Edit Registration" [level=1] [ref=e133]
+          - generic [ref=e135]:
+            - link "View" [ref=e136] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f0-7318-be24-26b96f590734
+            - button "Delete" [ref=e137] [cursor=pointer]
+        - generic [ref=e143]:
+          - generic [ref=e147]:
+            - generic [ref=e151]:
+              - heading "Step" [level=2] [ref=e154]
+              - generic [ref=e156]:
+                - generic [ref=e159]:
+                  - generic [ref=e163]:
+                    - text: Funnel
+                    - superscript [ref=e164]: "*"
+                  - generic [ref=e170]:
+                    - button "Main Opt-in Funnel" [ref=e171] [cursor=pointer]:
+                      - generic [ref=e173]: Main Opt-in Funnel
+                    - button "Clear selection" [ref=e174] [cursor=pointer]:
+                      - img [ref=e175]
+                - generic [ref=e179]:
+                  - generic [ref=e183]:
+                    - text: Step type
+                    - superscript [ref=e184]: "*"
+                  - generic [ref=e190]:
+                    - button "Opt-in" [ref=e191] [cursor=pointer]:
+                      - generic [ref=e193]: Opt-in
+                    - button "Clear selection" [ref=e194] [cursor=pointer]:
+                      - img [ref=e195]
+                - generic [ref=e199]:
+                  - generic [ref=e203]:
+                    - text: Name
+                    - superscript [ref=e204]: "*"
+                  - textbox "Name*" [ref=e208]: Registration
+                - generic [ref=e211]:
+                  - generic [ref=e215]:
+                    - text: Slug
+                    - superscript [ref=e216]: "*"
+                  - textbox "Slug*" [ref=e220]: register
+                - generic [ref=e223]:
+                  - generic [ref=e227]: Product (for checkout/upsell)
+                  - button "No product linked" [ref=e234] [cursor=pointer]:
+                    - generic [ref=e236]: No product linked
+                - generic [ref=e239]:
+                  - generic [ref=e243]: Sort order
+                  - spinbutton "Sort order" [ref=e247]: "0"
+                - generic [ref=e253]:
+                  - switch "Is published" [checked] [ref=e254] [cursor=pointer]
+                  - generic [ref=e255]: Is published
+            - generic [ref=e259]:
+              - generic [ref=e261]:
+                - heading "Page content" [level=2] [ref=e262]
+                - paragraph [ref=e263]: "The block tree rendered at /{summit}/{funnel}/{step}. Reorder, add, and remove blocks inline."
+              - generic [ref=e268]:
+                - generic [ref=e269]: Page content
+                - generic [ref=e272]:
+                  - button "Add block" [active] [ref=e274] [cursor=pointer]
+                  - generic [ref=e285]:
+                    - button "Hero Section" [ref=e286] [cursor=pointer]:
+                      - img [ref=e287]
+                      - generic [ref=e289]: Hero Section
+                    - button "Speaker Grid" [ref=e290] [cursor=pointer]:
+                      - img [ref=e291]
+                      - generic [ref=e293]: Speaker Grid
+                    - button "Video Embed" [ref=e294] [cursor=pointer]:
+                      - img [ref=e295]
+                      - generic [ref=e298]: Video Embed
+                    - button "Text / Rich Content" [ref=e299] [cursor=pointer]:
+                      - img [ref=e300]
+                      - generic [ref=e302]: Text / Rich Content
+                    - button "Image" [ref=e303] [cursor=pointer]:
+                      - img [ref=e304]
+                      - generic [ref=e306]: Image
+                    - button "Call to Action" [ref=e307] [cursor=pointer]:
+                      - img [ref=e308]
+                      - generic [ref=e310]: Call to Action
+                    - button "Testimonials" [ref=e311] [cursor=pointer]:
+                      - img [ref=e312]
+                      - generic [ref=e314]: Testimonials
+                    - button "FAQ Accordion" [ref=e315] [cursor=pointer]:
+                      - img [ref=e316]
+                      - generic [ref=e318]: FAQ Accordion
+                    - button "Countdown Timer" [ref=e319] [cursor=pointer]:
+                      - img [ref=e320]
+                      - generic [ref=e322]: Countdown Timer
+                    - button "Pricing Card" [ref=e323] [cursor=pointer]:
+                      - img [ref=e324]
+                      - generic [ref=e326]: Pricing Card
+                    - button "Divider / Spacer" [ref=e327] [cursor=pointer]:
+                      - img [ref=e328]
+                      - generic [ref=e329]: Divider / Spacer
+                    - button "Checkout Form" [ref=e330] [cursor=pointer]:
+                      - img [ref=e331]
+                      - generic [ref=e333]: Checkout Form
+                    - button "Order Bumps" [ref=e334] [cursor=pointer]:
+                      - img [ref=e335]
+                      - generic [ref=e337]: Order Bumps
+                    - button "Upsell Offer" [ref=e338] [cursor=pointer]:
+                      - img [ref=e339]
+                      - generic [ref=e341]: Upsell Offer
+          - generic [ref=e279]:
+            - button "Save changes" [ref=e280] [cursor=pointer]:
+              - generic [ref=e281]: Save changes
+            - button "Cancel" [ref=e282] [cursor=pointer]
+  - generic:
+    - status

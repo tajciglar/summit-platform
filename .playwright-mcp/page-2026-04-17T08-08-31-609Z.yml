@@ -1,0 +1,485 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Dashboard" [ref=e34] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e35]
+                  - generic [ref=e37]: Dashboard
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - generic [ref=e42]: Content
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Summits" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/summits
+                  - generic [ref=e49]: Summits
+              - listitem [ref=e50]:
+                - link "Speakers" [ref=e51] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/speakers
+                  - generic [ref=e55]: Speakers
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: Funnels
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Funnels" [ref=e63] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnels
+                  - generic [ref=e67]: Funnels
+              - listitem [ref=e68]:
+                - link "Funnel Steps" [ref=e69] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps
+                  - generic [ref=e73]: Funnel Steps
+          - listitem [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Sales
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Products" [ref=e81] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/products
+                  - generic [ref=e85]: Products
+              - listitem [ref=e86]:
+                - link "Orders" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/orders
+                  - generic [ref=e92]: Orders
+              - listitem [ref=e93]:
+                - link "Coupons" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/coupons
+                  - generic [ref=e99]: Coupons
+              - listitem [ref=e100]:
+                - link "Affiliates" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/affiliates
+                  - generic [ref=e105]: Affiliates
+          - listitem [ref=e106]:
+            - generic [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e111]: Settings
+              - button "Settings" [ref=e112]:
+                - img [ref=e113]
+    - main [ref=e116]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - navigation [ref=e121]:
+              - list [ref=e122]:
+                - listitem [ref=e123]:
+                  - link "Speakers" [ref=e124] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers
+                - listitem [ref=e125]:
+                  - img [ref=e126]
+                  - generic [ref=e128]: List
+            - heading "Speakers" [level=1] [ref=e129]
+          - link "New speaker" [ref=e132] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/admin/speakers/create
+        - generic [ref=e140]:
+          - generic [ref=e142]:
+            - button "Reorder records" [ref=e144] [cursor=pointer]:
+              - img [ref=e145]
+            - generic [ref=e147]:
+              - generic [ref=e148]:
+                - generic [ref=e149]: Search
+                - generic [ref=e150]:
+                  - img [ref=e152]
+                  - searchbox "Search" [ref=e155]
+              - button "Filter" [ref=e158] [cursor=pointer]:
+                - img [ref=e159]
+                - generic [ref=e162]: "0"
+              - button "Column manager" [ref=e165] [cursor=pointer]:
+                - img [ref=e166]
+          - table [ref=e169]:
+            - rowgroup [ref=e170]:
+              - row "Select/deselect all items for bulk actions. Name Summit Masterclass Rating Is featured Goes live at Actions" [ref=e171]:
+                - columnheader "Select/deselect all items for bulk actions." [ref=e172]:
+                  - checkbox "Select/deselect all items for bulk actions." [ref=e173]
+                - columnheader [ref=e174]
+                - columnheader "Name" [ref=e175]:
+                  - button "Name" [ref=e176] [cursor=pointer]:
+                    - text: Name
+                    - img [ref=e177]
+                - columnheader "Summit" [ref=e179]
+                - columnheader "Masterclass" [ref=e180]
+                - columnheader "Rating" [ref=e181]
+                - columnheader "Is featured" [ref=e182]
+                - columnheader "Goes live at" [ref=e183]:
+                  - button "Goes live at" [ref=e184] [cursor=pointer]:
+                    - text: Goes live at
+                    - img [ref=e185]
+                - columnheader "Actions" [ref=e187]
+            - rowgroup [ref=e188]:
+              - row "Select/deselect item 019d99f1-a4e0-736b-8680-7379510f59c0 for bulk actions. Eleanora Wunsch ADHD Parenting Summit 2026 Horizontal motivating middleware 3 Apr 12, 2026 06:36:27 View Edit Delete" [ref=e189]:
+                - cell "Select/deselect item 019d99f1-a4e0-736b-8680-7379510f59c0 for bulk actions." [ref=e190]:
+                  - checkbox "Select/deselect item 019d99f1-a4e0-736b-8680-7379510f59c0 for bulk actions." [ref=e191]
+                - cell [ref=e192]:
+                  - link [ref=e193] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                - cell "Eleanora Wunsch" [ref=e195]:
+                  - link "Eleanora Wunsch" [ref=e196] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - generic [ref=e197]: Eleanora Wunsch
+                - cell "ADHD Parenting Summit 2026" [ref=e198]:
+                  - link "ADHD Parenting Summit 2026" [ref=e199] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - generic [ref=e200]: ADHD Parenting Summit 2026
+                - cell "Horizontal motivating middleware" [ref=e201]:
+                  - link "Horizontal motivating middleware" [ref=e202] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - generic [ref=e203]: Horizontal motivating middleware
+                - cell "3" [ref=e204]:
+                  - link "3" [ref=e205] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - generic [ref=e207]: "3"
+                - cell [ref=e208]:
+                  - link [ref=e209] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - img [ref=e211]
+                - cell "Apr 12, 2026 06:36:27" [ref=e213]:
+                  - link "Apr 12, 2026 06:36:27" [ref=e214] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                    - generic [ref=e215]: Apr 12, 2026 06:36:27
+                - cell "View Edit Delete" [ref=e216]:
+                  - generic [ref=e217]:
+                    - link "View" [ref=e218] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0
+                      - img [ref=e219]
+                      - text: View
+                    - link "Edit" [ref=e222] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4e0-736b-8680-7379510f59c0/edit
+                      - img [ref=e223]
+                      - text: Edit
+                    - button "Delete" [ref=e226] [cursor=pointer]:
+                      - img [ref=e227]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b65a9d5b for bulk actions. Elnora Shanahan ADHD Parenting Summit 2026 Synchronised fresh-thinking analyzer 3 Apr 12, 2026 17:00:37 View Edit Delete" [ref=e229]:
+                - cell "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b65a9d5b for bulk actions." [ref=e230]:
+                  - checkbox "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b65a9d5b for bulk actions." [ref=e231]
+                - cell [ref=e232]:
+                  - link [ref=e233] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                - cell "Elnora Shanahan" [ref=e235]:
+                  - link "Elnora Shanahan" [ref=e236] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - generic [ref=e237]: Elnora Shanahan
+                - cell "ADHD Parenting Summit 2026" [ref=e238]:
+                  - link "ADHD Parenting Summit 2026" [ref=e239] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - generic [ref=e240]: ADHD Parenting Summit 2026
+                - cell "Synchronised fresh-thinking analyzer" [ref=e241]:
+                  - link "Synchronised fresh-thinking analyzer" [ref=e242] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - generic [ref=e243]: Synchronised fresh-thinking analyzer
+                - cell "3" [ref=e244]:
+                  - link "3" [ref=e245] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - generic [ref=e247]: "3"
+                - cell [ref=e248]:
+                  - link [ref=e249] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - img [ref=e251]
+                - cell "Apr 12, 2026 17:00:37" [ref=e253]:
+                  - link "Apr 12, 2026 17:00:37" [ref=e254] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                    - generic [ref=e255]: Apr 12, 2026 17:00:37
+                - cell "View Edit Delete" [ref=e256]:
+                  - generic [ref=e257]:
+                    - link "View" [ref=e258] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b
+                      - img [ref=e259]
+                      - text: View
+                    - link "Edit" [ref=e262] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b65a9d5b/edit
+                      - img [ref=e263]
+                      - text: Edit
+                    - button "Delete" [ref=e266] [cursor=pointer]:
+                      - img [ref=e267]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4d9-7393-9036-c809bbbb6184 for bulk actions. Adaline Deckow ADHD Parenting Summit 2026 Intuitive demand-driven monitoring 3 Apr 13, 2026 05:15:02 View Edit Delete" [ref=e269]:
+                - cell "Select/deselect item 019d99f1-a4d9-7393-9036-c809bbbb6184 for bulk actions." [ref=e270]:
+                  - checkbox "Select/deselect item 019d99f1-a4d9-7393-9036-c809bbbb6184 for bulk actions." [ref=e271]
+                - cell [ref=e272]:
+                  - link [ref=e273] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                - cell "Adaline Deckow" [ref=e275]:
+                  - link "Adaline Deckow" [ref=e276] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - generic [ref=e277]: Adaline Deckow
+                - cell "ADHD Parenting Summit 2026" [ref=e278]:
+                  - link "ADHD Parenting Summit 2026" [ref=e279] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - generic [ref=e280]: ADHD Parenting Summit 2026
+                - cell "Intuitive demand-driven monitoring" [ref=e281]:
+                  - link "Intuitive demand-driven monitoring" [ref=e282] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - generic [ref=e283]: Intuitive demand-driven monitoring
+                - cell "3" [ref=e284]:
+                  - link "3" [ref=e285] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - generic [ref=e287]: "3"
+                - cell [ref=e288]:
+                  - link [ref=e289] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - img [ref=e291]
+                - cell "Apr 13, 2026 05:15:02" [ref=e293]:
+                  - link "Apr 13, 2026 05:15:02" [ref=e294] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                    - generic [ref=e295]: Apr 13, 2026 05:15:02
+                - cell "View Edit Delete" [ref=e296]:
+                  - generic [ref=e297]:
+                    - link "View" [ref=e298] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                      - img [ref=e299]
+                      - text: View
+                    - link "Edit" [ref=e302] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184/edit
+                      - img [ref=e303]
+                      - text: Edit
+                    - button "Delete" [ref=e306] [cursor=pointer]:
+                      - img [ref=e307]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b64dfc2e for bulk actions. Alvena Monahan ADHD Parenting Summit 2026 Open-source grid-enabled project 3 Apr 25, 2026 15:50:06 View Edit Delete" [ref=e309]:
+                - cell "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b64dfc2e for bulk actions." [ref=e310]:
+                  - checkbox "Select/deselect item 019d99f1-a4dd-7278-abfb-fe27b64dfc2e for bulk actions." [ref=e311]
+                - cell [ref=e312]:
+                  - link [ref=e313] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                - cell "Alvena Monahan" [ref=e315]:
+                  - link "Alvena Monahan" [ref=e316] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - generic [ref=e317]: Alvena Monahan
+                - cell "ADHD Parenting Summit 2026" [ref=e318]:
+                  - link "ADHD Parenting Summit 2026" [ref=e319] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - generic [ref=e320]: ADHD Parenting Summit 2026
+                - cell "Open-source grid-enabled project" [ref=e321]:
+                  - link "Open-source grid-enabled project" [ref=e322] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - generic [ref=e323]: Open-source grid-enabled project
+                - cell "3" [ref=e324]:
+                  - link "3" [ref=e325] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - generic [ref=e327]: "3"
+                - cell [ref=e328]:
+                  - link [ref=e329] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - img [ref=e331]
+                - cell "Apr 25, 2026 15:50:06" [ref=e333]:
+                  - link "Apr 25, 2026 15:50:06" [ref=e334] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                    - generic [ref=e335]: Apr 25, 2026 15:50:06
+                - cell "View Edit Delete" [ref=e336]:
+                  - generic [ref=e337]:
+                    - link "View" [ref=e338] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e
+                      - img [ref=e339]
+                      - text: View
+                    - link "Edit" [ref=e342] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dd-7278-abfb-fe27b64dfc2e/edit
+                      - img [ref=e343]
+                      - text: Edit
+                    - button "Delete" [ref=e346] [cursor=pointer]:
+                      - img [ref=e347]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4de-7230-b217-5d952a611d77 for bulk actions. Vernice Bruen ADHD Parenting Summit 2026 Universal content-based groupware 3 Apr 20, 2026 17:25:34 View Edit Delete" [ref=e349]:
+                - cell "Select/deselect item 019d99f1-a4de-7230-b217-5d952a611d77 for bulk actions." [ref=e350]:
+                  - checkbox "Select/deselect item 019d99f1-a4de-7230-b217-5d952a611d77 for bulk actions." [ref=e351]
+                - cell [ref=e352]:
+                  - link [ref=e353] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                - cell "Vernice Bruen" [ref=e355]:
+                  - link "Vernice Bruen" [ref=e356] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - generic [ref=e357]: Vernice Bruen
+                - cell "ADHD Parenting Summit 2026" [ref=e358]:
+                  - link "ADHD Parenting Summit 2026" [ref=e359] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - generic [ref=e360]: ADHD Parenting Summit 2026
+                - cell "Universal content-based groupware" [ref=e361]:
+                  - link "Universal content-based groupware" [ref=e362] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - generic [ref=e363]: Universal content-based groupware
+                - cell "3" [ref=e364]:
+                  - link "3" [ref=e365] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - generic [ref=e367]: "3"
+                - cell [ref=e368]:
+                  - link [ref=e369] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - img [ref=e371]
+                - cell "Apr 20, 2026 17:25:34" [ref=e373]:
+                  - link "Apr 20, 2026 17:25:34" [ref=e374] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                    - generic [ref=e375]: Apr 20, 2026 17:25:34
+                - cell "View Edit Delete" [ref=e376]:
+                  - generic [ref=e377]:
+                    - link "View" [ref=e378] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77
+                      - img [ref=e379]
+                      - text: View
+                    - link "Edit" [ref=e382] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a611d77/edit
+                      - img [ref=e383]
+                      - text: Edit
+                    - button "Delete" [ref=e386] [cursor=pointer]:
+                      - img [ref=e387]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4dc-72ce-a05f-a069078c1eac for bulk actions. Sabina Daugherty ADHD Parenting Summit 2026 Intuitive global middleware 4 Apr 18, 2026 13:36:11 View Edit Delete" [ref=e389]:
+                - cell "Select/deselect item 019d99f1-a4dc-72ce-a05f-a069078c1eac for bulk actions." [ref=e390]:
+                  - checkbox "Select/deselect item 019d99f1-a4dc-72ce-a05f-a069078c1eac for bulk actions." [ref=e391]
+                - cell [ref=e392]:
+                  - link [ref=e393] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                - cell "Sabina Daugherty" [ref=e395]:
+                  - link "Sabina Daugherty" [ref=e396] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - generic [ref=e397]: Sabina Daugherty
+                - cell "ADHD Parenting Summit 2026" [ref=e398]:
+                  - link "ADHD Parenting Summit 2026" [ref=e399] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - generic [ref=e400]: ADHD Parenting Summit 2026
+                - cell "Intuitive global middleware" [ref=e401]:
+                  - link "Intuitive global middleware" [ref=e402] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - generic [ref=e403]: Intuitive global middleware
+                - cell "4" [ref=e404]:
+                  - link "4" [ref=e405] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - generic [ref=e407]: "4"
+                - cell [ref=e408]:
+                  - link [ref=e409] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - img [ref=e411]
+                - cell "Apr 18, 2026 13:36:11" [ref=e413]:
+                  - link "Apr 18, 2026 13:36:11" [ref=e414] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                    - generic [ref=e415]: Apr 18, 2026 13:36:11
+                - cell "View Edit Delete" [ref=e416]:
+                  - generic [ref=e417]:
+                    - link "View" [ref=e418] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac
+                      - img [ref=e419]
+                      - text: View
+                    - link "Edit" [ref=e422] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4dc-72ce-a05f-a069078c1eac/edit
+                      - img [ref=e423]
+                      - text: Edit
+                    - button "Delete" [ref=e426] [cursor=pointer]:
+                      - img [ref=e427]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4df-724e-9d01-cfd3fc06ac8c for bulk actions. Reginald Kuvalis ADHD Parenting Summit 2026 Proactive intangible firmware 5 Apr 11, 2026 14:53:21 View Edit Delete" [ref=e429]:
+                - cell "Select/deselect item 019d99f1-a4df-724e-9d01-cfd3fc06ac8c for bulk actions." [ref=e430]:
+                  - checkbox "Select/deselect item 019d99f1-a4df-724e-9d01-cfd3fc06ac8c for bulk actions." [ref=e431]
+                - cell [ref=e432]:
+                  - link [ref=e433] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                - cell "Reginald Kuvalis" [ref=e435]:
+                  - link "Reginald Kuvalis" [ref=e436] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - generic [ref=e437]: Reginald Kuvalis
+                - cell "ADHD Parenting Summit 2026" [ref=e438]:
+                  - link "ADHD Parenting Summit 2026" [ref=e439] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - generic [ref=e440]: ADHD Parenting Summit 2026
+                - cell "Proactive intangible firmware" [ref=e441]:
+                  - link "Proactive intangible firmware" [ref=e442] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - generic [ref=e443]: Proactive intangible firmware
+                - cell "5" [ref=e444]:
+                  - link "5" [ref=e445] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - generic [ref=e447]: "5"
+                - cell [ref=e448]:
+                  - link [ref=e449] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - img [ref=e451]
+                - cell "Apr 11, 2026 14:53:21" [ref=e453]:
+                  - link "Apr 11, 2026 14:53:21" [ref=e454] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                    - generic [ref=e455]: Apr 11, 2026 14:53:21
+                - cell "View Edit Delete" [ref=e456]:
+                  - generic [ref=e457]:
+                    - link "View" [ref=e458] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c
+                      - img [ref=e459]
+                      - text: View
+                    - link "Edit" [ref=e462] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4df-724e-9d01-cfd3fc06ac8c/edit
+                      - img [ref=e463]
+                      - text: Edit
+                    - button "Delete" [ref=e466] [cursor=pointer]:
+                      - img [ref=e467]
+                      - text: Delete
+              - row "Select/deselect item 019d99f1-a4de-7230-b217-5d952a208859 for bulk actions. Ollie Sipes ADHD Parenting Summit 2026 Profound foreground complexity 4 Apr 11, 2026 03:06:14 View Edit Delete" [ref=e469]:
+                - cell "Select/deselect item 019d99f1-a4de-7230-b217-5d952a208859 for bulk actions." [ref=e470]:
+                  - checkbox "Select/deselect item 019d99f1-a4de-7230-b217-5d952a208859 for bulk actions." [ref=e471]
+                - cell [ref=e472]:
+                  - link [ref=e473] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                - cell "Ollie Sipes" [ref=e475]:
+                  - link "Ollie Sipes" [ref=e476] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - generic [ref=e477]: Ollie Sipes
+                - cell "ADHD Parenting Summit 2026" [ref=e478]:
+                  - link "ADHD Parenting Summit 2026" [ref=e479] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - generic [ref=e480]: ADHD Parenting Summit 2026
+                - cell "Profound foreground complexity" [ref=e481]:
+                  - link "Profound foreground complexity" [ref=e482] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - generic [ref=e483]: Profound foreground complexity
+                - cell "4" [ref=e484]:
+                  - link "4" [ref=e485] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - generic [ref=e487]: "4"
+                - cell [ref=e488]:
+                  - link [ref=e489] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - img [ref=e491]
+                - cell "Apr 11, 2026 03:06:14" [ref=e493]:
+                  - link "Apr 11, 2026 03:06:14" [ref=e494] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                    - generic [ref=e495]: Apr 11, 2026 03:06:14
+                - cell "View Edit Delete" [ref=e496]:
+                  - generic [ref=e497]:
+                    - link "View" [ref=e498] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859
+                      - img [ref=e499]
+                      - text: View
+                    - link "Edit" [ref=e502] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4de-7230-b217-5d952a208859/edit
+                      - img [ref=e503]
+                      - text: Edit
+                    - button "Delete" [ref=e506] [cursor=pointer]:
+                      - img [ref=e507]
+                      - text: Delete
+          - navigation "Pagination navigation" [ref=e509]:
+            - generic [ref=e510]: Showing 1 to 8 of 8 results
+            - generic [ref=e513]:
+              - generic [ref=e515]: Per page
+              - combobox "Per page" [ref=e517]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status

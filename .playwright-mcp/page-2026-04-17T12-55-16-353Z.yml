@@ -1,0 +1,274 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/althea-academy
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of Althea Academy Althea Academy" [ref=e31] [cursor=pointer]:
+        - img "Avatar of Althea Academy" [ref=e32]
+        - generic [ref=e34]: Althea Academy
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Summit
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "ADHD Parenting Summit 2026" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/current-summit/019d9b5d-feeb-721f-b989-749907ce1f9e
+                  - generic [ref=e69]: ADHD Parenting Summit 2026
+              - listitem [ref=e70]:
+                - link "+ New summit" [ref=e71] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/summits/create
+                  - generic [ref=e75]: + New summit
+          - listitem [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - generic [ref=e80]: Content
+            - list [ref=e81]:
+              - listitem [ref=e82]:
+                - link "Speakers" [ref=e83] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/speakers
+                  - generic [ref=e86]: Speakers
+          - listitem [ref=e87]:
+            - generic [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e91]: Funnels
+            - list [ref=e92]:
+              - listitem [ref=e93]:
+                - link "Funnels" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnels
+                  - generic [ref=e98]: Funnels
+              - listitem [ref=e99]:
+                - link "Funnel Steps" [ref=e100] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps
+                  - generic [ref=e104]: Funnel Steps
+          - listitem [ref=e105]:
+            - generic [ref=e106]:
+              - img [ref=e107]
+              - generic [ref=e109]: Sales
+            - list [ref=e110]:
+              - listitem [ref=e111]:
+                - link "Products" [ref=e112] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/products
+                  - generic [ref=e116]: Products
+              - listitem [ref=e117]:
+                - link "Orders" [ref=e118] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/orders
+                  - generic [ref=e123]: Orders
+              - listitem [ref=e124]:
+                - link "Coupons" [ref=e125] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/coupons
+                  - generic [ref=e130]: Coupons
+              - listitem [ref=e131]:
+                - link "Affiliates" [ref=e132] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/affiliates
+                  - generic [ref=e136]: Affiliates
+          - listitem [ref=e137]:
+            - generic [ref=e138]:
+              - img [ref=e139]
+              - generic [ref=e141]: Analytics
+            - list [ref=e142]:
+              - listitem [ref=e143]:
+                - link "Funnel performance" [ref=e144] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-performance
+                  - generic [ref=e148]: Funnel performance
+              - listitem [ref=e149]:
+                - link "UTM attribution" [ref=e150] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/utm-breakdown
+                  - generic [ref=e154]: UTM attribution
+          - listitem [ref=e155]:
+            - generic [ref=e156] [cursor=pointer]:
+              - img [ref=e157]
+              - generic [ref=e160]: Settings
+              - button "Settings" [ref=e161]:
+                - img [ref=e162]
+    - main [ref=e165]:
+      - generic [ref=e167]:
+        - generic [ref=e168]:
+          - generic [ref=e169]:
+            - navigation [ref=e170]:
+              - list [ref=e171]:
+                - listitem [ref=e172]:
+                  - link "Funnel Steps" [ref=e173] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps
+                - listitem [ref=e174]:
+                  - img [ref=e175]
+                  - link "Registration" [ref=e177] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps/019d9b5d-ff19-704b-9876-2cb597343bd9
+                - listitem [ref=e178]:
+                  - img [ref=e179]
+                  - generic [ref=e181]: View
+            - heading "View Registration" [level=1] [ref=e182]
+          - generic [ref=e184]:
+            - link "Edit" [ref=e185] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps/019d9b5d-ff19-704b-9876-2cb597343bd9/edit
+            - button "Delete" [ref=e186] [cursor=pointer]
+        - generic [ref=e192]:
+          - generic [ref=e196]:
+            - heading "Step" [level=2] [ref=e199]
+            - generic [ref=e201]:
+              - generic [ref=e204]:
+                - generic [ref=e208]: Funnel
+                - generic [ref=e214]:
+                  - button "Main Opt-in Funnel" [disabled] [ref=e215]:
+                    - generic [ref=e217]: Main Opt-in Funnel
+                  - button "Clear selection" [ref=e218] [cursor=pointer]:
+                    - img [ref=e219]
+              - generic [ref=e223]:
+                - generic [ref=e227]: Step type
+                - generic [ref=e233]:
+                  - button "Opt-in" [disabled] [ref=e234]:
+                    - generic [ref=e236]: Opt-in
+                  - button "Clear selection" [ref=e237] [cursor=pointer]:
+                    - img [ref=e238]
+              - generic [ref=e242]:
+                - generic [ref=e246]: Name
+                - textbox "Name" [disabled] [ref=e250]: Registration
+              - generic [ref=e253]:
+                - generic [ref=e257]: Slug
+                - textbox "Slug" [disabled] [ref=e261]: register
+              - generic [ref=e264]:
+                - generic [ref=e268]: Product (for checkout/upsell)
+                - button "No product linked" [disabled] [ref=e275]:
+                  - generic [ref=e277]: No product linked
+              - generic [ref=e280]:
+                - generic [ref=e284]: Sort order
+                - spinbutton "Sort order" [disabled] [ref=e288]: "0"
+              - generic [ref=e294]:
+                - switch "Is published" [checked] [disabled]
+                - generic [ref=e295]: Is published
+          - generic [ref=e299]:
+            - generic [ref=e301]:
+              - heading "Landing pages" [level=2] [ref=e302]
+              - paragraph [ref=e303]: Generated variants for this step. Click one to edit its content.
+            - generic [ref=e308]:
+              - link "Generate variants" [ref=e310] [cursor=pointer]:
+                - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/generate-landing-pages
+                - img [ref=e311]
+                - generic [ref=e313]: Generate variants
+              - generic [ref=e314]:
+                - generic [ref=e315]:
+                  - generic [ref=e316]:
+                    - generic [ref=e317]:
+                      - generic [ref=e318]: opus-v2
+                      - generic [ref=e319]: Generating
+                    - generic [ref=e320]: "Variant #3 · default · 2 hours ago"
+                  - generic [ref=e321]:
+                    - link "Preview" [ref=e322] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/GigI4LG4tyU0f4vMXyFAS0VlQuHxCgmZJq2INVyQ
+                    - link "Edit" [ref=e323] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b7d-dbbd-71de-a5c0-4017b9ade575/edit
+                    - button "Delete" [ref=e324] [cursor=pointer]
+                - generic [ref=e325]:
+                  - generic [ref=e326]:
+                    - generic [ref=e327]:
+                      - generic [ref=e328]: variant-1
+                      - generic [ref=e329]: Ready
+                    - generic [ref=e330]: "Variant #2 · default · 2 hours ago"
+                  - generic [ref=e331]:
+                    - link "Preview" [ref=e332] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/AfqiROxb88SXQy8w9tofAkEM2fWjqduOueVGipHv
+                    - button "Publish" [ref=e333] [cursor=pointer]
+                    - link "Edit" [ref=e334] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b7c-d81d-72c1-a37e-62a9e4129b09/edit
+                    - button "Delete" [ref=e335] [cursor=pointer]
+                - generic [ref=e336]:
+                  - generic [ref=e337]:
+                    - generic [ref=e338]:
+                      - generic [ref=e339]: opus-v1
+                      - generic [ref=e340]: Ready
+                    - generic [ref=e341]: "Variant #1 · default · 2 hours ago"
+                  - generic [ref=e342]:
+                    - link "Preview" [ref=e343] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/Lbryjs8oV3nP3ASM0W37EyytFf8cOJJaghehlEzI
+                    - button "Publish" [ref=e344] [cursor=pointer]
+                    - link "Edit" [ref=e345] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b7c-a3d3-71e2-a9d6-43dbc4623642/edit
+                    - button "Delete" [ref=e346] [cursor=pointer]
+                - generic [ref=e347]:
+                  - generic [ref=e348]:
+                    - generic [ref=e349]:
+                      - generic [ref=e350]: variant-1
+                      - generic [ref=e351]: Failed
+                    - generic [ref=e352]: "Variant #3 · default · 2 hours ago"
+                    - paragraph [ref=e353]: "Anthropic API returned 429: {\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"This request would exceed your organization's rate limit of 4,000 output tokens per minute (org: 4360ff8f-1c44-4e4d-a8a7-1169f2b57bbc, model: claude-opus-4-7). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.c"
+                  - generic [ref=e354]:
+                    - link "Preview" [ref=e355] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/wSCtjH3TNnlFQpXRiFBdSTTi6aVN4GDidpPp2UvS
+                    - link "Edit" [ref=e356] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b75-f697-71f4-b6f2-788046a8cf19/edit
+                    - button "Delete" [ref=e357] [cursor=pointer]
+                - generic [ref=e358]:
+                  - generic [ref=e359]:
+                    - generic [ref=e360]:
+                      - generic [ref=e361]: opus-v2
+                      - generic [ref=e362]: Ready
+                    - generic [ref=e363]: "Variant #2 · default · 2 hours ago"
+                  - generic [ref=e364]:
+                    - link "Preview" [ref=e365] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/7gLVfNFP9cOz9febgKamtXBch929HRSbyqniwe5w
+                    - button "Publish" [ref=e366] [cursor=pointer]
+                    - link "Edit" [ref=e367] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b75-474c-7054-a093-01379a6ff214/edit
+                    - button "Delete" [ref=e368] [cursor=pointer]
+                - generic [ref=e369]:
+                  - generic [ref=e370]:
+                    - generic [ref=e371]:
+                      - generic [ref=e372]: opus-v3
+                      - generic [ref=e373]: Failed
+                    - generic [ref=e374]: "Variant #1 · default · 2 hours ago"
+                    - paragraph [ref=e375]: "Anthropic API returned 429: {\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"This request would exceed your organization's rate limit of 4,000 output tokens per minute (org: 4360ff8f-1c44-4e4d-a8a7-1169f2b57bbc, model: claude-opus-4-7). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.c"
+                  - generic [ref=e376]:
+                    - link "Preview" [ref=e377] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/RJP4OzahuRhD8poGNJYfv6RgwEsjNC2T3pEJBz3z
+                    - link "Edit" [ref=e378] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b74-cb1f-729a-9b3f-892439cae5e4/edit
+                    - button "Delete" [ref=e379] [cursor=pointer]
+                - generic [ref=e380]:
+                  - generic [ref=e381]:
+                    - generic [ref=e382]:
+                      - generic [ref=e383]: variant-3
+                      - generic [ref=e384]: Ready
+                    - generic [ref=e385]: "Variant #1 · default · 2 hours ago"
+                  - generic [ref=e386]:
+                    - link "Preview" [ref=e387] [cursor=pointer]:
+                      - /url: http://localhost:3000/preview/53dblpOxHFgX6ageaMBhKyJHMuDKH4j5QmAGT0cK
+                    - button "Publish" [ref=e388] [cursor=pointer]
+                    - link "Edit" [ref=e389] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9b5d-ff16-71bc-86de-e52f759bff3f/landing-pages/019d9b74-3f83-7173-b72c-ed4c9bd32e73/edit
+                    - button "Delete" [ref=e390] [cursor=pointer]
+  - generic:
+    - status

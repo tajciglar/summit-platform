@@ -1,0 +1,254 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e6]
+        - generic [ref=e9]: ADHD Parenting Summit
+        - generic [ref=e10]: Design variants
+      - generic [ref=e11]: 2026 · Feb 10 – 14
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - heading "WeCreateCourses Landing Pages versions" [level=1] [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - generic [ref=e20]:
+              - img [ref=e21]
+              - text: Golden template
+            - generic [ref=e23]: Reference build · 1:1 audience replica
+          - heading "APS · ADHD Parenting" [level=2] [ref=e24]
+          - paragraph [ref=e25]: Full 20-section replica of parenting-summits.com — lavender + yellow palette, Poppins + Cormorant Garamond, Lucide icon system, 5-day speaker catalogue, social-proof strip, 11-item FAQ, optin modal, mobile-sticky CTA.
+        - link "World's Largest · ADHD Parenting Summit ● Event Ended Discover The Secrets The ADHD Parenting Summit 2026 Get Instant Access → Golden Lavender + Sun Poppins · Cormorant Lucide icons Mobile-first 20 sections ADHD Parenting Summit · APS The production reference. Hero w/ speaker collage, 5-day expert catalogue (30 speakers), press-logo marquee, Mastery Collection bonus stack, 6 parent testimonials, social-proof strip (IG / FB / Trustpilot), 11-item FAQ accordion, modal optin and mobile-sticky CTA. Built to match parenting-summits.com 1:1. aps-parenting.html Poppins · Cormorant Garamond" [ref=e26] [cursor=pointer]:
+          - /url: /aps-parenting.html
+          - generic [ref=e27]:
+            - generic [ref=e28]: World's Largest · ADHD Parenting Summit
+            - generic [ref=e29]:
+              - generic [ref=e30]: ● Event Ended
+              - generic [ref=e31]: Discover The Secrets
+              - generic [ref=e32]: The ADHD Parenting Summit 2026
+              - generic [ref=e33]: Get Instant Access →
+          - generic [ref=e34]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: Golden
+              - generic [ref=e37]: Lavender + Sun
+              - generic [ref=e38]: Poppins · Cormorant
+              - generic [ref=e39]: Lucide icons
+              - generic [ref=e40]: Mobile-first
+              - generic [ref=e41]: 20 sections
+            - heading "ADHD Parenting Summit · APS" [level=3] [ref=e42]
+            - paragraph [ref=e43]: The production reference. Hero w/ speaker collage, 5-day expert catalogue (30 speakers), press-logo marquee, Mastery Collection bonus stack, 6 parent testimonials, social-proof strip (IG / FB / Trustpilot), 11-item FAQ accordion, modal optin and mobile-sticky CTA. Built to match parenting-summits.com 1:1.
+          - generic [ref=e44]:
+            - generic [ref=e45]: aps-parenting.html
+            - generic [ref=e46]: Poppins · Cormorant Garamond
+      - generic [ref=e47]:
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - heading "Featured · audit-passed" [level=2] [ref=e50]
+            - paragraph [ref=e51]: "Designed against the design-taste-frontend skill with a `.impeccable.md` context pass, then audited on accessibility, performance, theming, responsive, and anti-patterns. Both score 17–19 / 20."
+          - generic [ref=e52]: Shortlist
+        - generic [ref=e53]:
+          - link "The Register · Vol. VII 10 → 14 · ii · mmxxvi A five-evening intensive 17/20 Rose + paper Serif-led Broadsheet Editorial magazine cover. Folio strip, § section markers, page numbers, pull-quote with hanging quote mark. Indexed contributor register with one-sentence teaser per speaker. opus-broadsheet.html Instrument · Geist" [ref=e54] [cursor=pointer]:
+            - /url: /opus-broadsheet.html
+            - generic [ref=e55]:
+              - generic [ref=e56]:
+                - generic [ref=e57]: The Register · Vol. VII
+                - generic [ref=e58]: 10 → 14 · ii · mmxxvi
+              - generic [ref=e59]:
+                - generic [ref=e60]: A five-evening
+                - generic [ref=e61]: intensive
+            - generic [ref=e62]:
+              - generic [ref=e63]:
+                - generic [ref=e64]: 17/20
+                - generic [ref=e65]: Rose + paper
+                - generic [ref=e66]: Serif-led
+              - heading "Broadsheet" [level=3] [ref=e67]
+              - paragraph [ref=e68]: Editorial magazine cover. Folio strip, § section markers, page numbers, pull-quote with hanging quote mark. Indexed contributor register with one-sentence teaser per speaker.
+            - generic [ref=e69]:
+              - generic [ref=e70]: opus-broadsheet.html
+              - generic [ref=e71]: Instrument · Geist
+          - link "Entry · 2026.02.10 Five evenings of field notes 19/20 Rust + cream Journal Field Notes Scientific field journal. Graph-paper section backgrounds, rotated stamps, date-stamped entries, observation-style stats, marginalia annotations, ledger-style date chip. opus-fieldnotes.html Outfit · Fraunces" [ref=e72] [cursor=pointer]:
+            - /url: /opus-fieldnotes.html
+            - generic [ref=e73]:
+              - generic [ref=e75]: Entry · 2026.02.10
+              - generic [ref=e76]:
+                - generic [ref=e77]: Five evenings
+                - generic [ref=e78]: of field notes
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - generic [ref=e81]: 19/20
+                - generic [ref=e82]: Rust + cream
+                - generic [ref=e83]: Journal
+              - heading "Field Notes" [level=3] [ref=e84]
+              - paragraph [ref=e85]: Scientific field journal. Graph-paper section backgrounds, rotated stamps, date-stamped entries, observation-style stats, marginalia annotations, ledger-style date chip.
+            - generic [ref=e86]:
+              - generic [ref=e87]: opus-fieldnotes.html
+              - generic [ref=e88]: Outfit · Fraunces
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - heading "Opus series · photo-free" [level=2] [ref=e91]
+            - paragraph [ref=e92]: Earlier iterations. Light palettes, monogram speaker tiles, ADHD-tuned motion. Kept for comparison.
+          - generic [ref=e93]: Archive
+        - generic [ref=e94]:
+          - link "5 evenings · editorial Light Rose accent Editorial Cream Warm cream + deep rose. List-dominant. \"Week in five sentences\" takeaway. Best for a quiet, authoritative tone. opus-v9.html Geist · Instrument" [ref=e95] [cursor=pointer]:
+            - /url: /opus-v9.html
+            - generic [ref=e97]:
+              - generic [ref=e98]: "5"
+              - generic [ref=e99]: evenings · editorial
+            - generic [ref=e100]:
+              - generic [ref=e101]:
+                - generic [ref=e102]: Light
+                - generic [ref=e103]: Rose accent
+              - heading "Editorial Cream" [level=3] [ref=e104]
+              - paragraph [ref=e105]:
+                - text: Warm cream + deep rose. List-dominant. "Week in five sentences" takeaway.
+                - text: Best for a quiet, authoritative tone.
+            - generic [ref=e106]:
+              - generic [ref=e107]: opus-v9.html
+              - generic [ref=e108]: Geist · Instrument
+          - link "41 speakers bento · rust Light Rust accent Warm Rust Paper + terracotta. Bento-style hero. \"This week's kitchen\" before/after copy section. Warm and editorial. opus-v10.html Outfit · Fraunces" [ref=e109] [cursor=pointer]:
+            - /url: /opus-v10.html
+            - generic [ref=e111]:
+              - generic [ref=e112]: "41"
+              - generic [ref=e113]:
+                - generic [ref=e114]: speakers
+                - generic [ref=e115]: bento · rust
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: Light
+                - generic [ref=e119]: Rust accent
+              - heading "Warm Rust" [level=3] [ref=e120]
+              - paragraph [ref=e121]: Paper + terracotta. Bento-style hero. "This week's kitchen" before/after copy section. Warm and editorial.
+            - generic [ref=e122]:
+              - generic [ref=e123]: opus-v10.html
+              - generic [ref=e124]: Outfit · Fraunces
+          - link "brain Light Sage + terracotta Gentle Sage Muted sage + terracotta accent. Centered editorial hero. Community-warm feel. V6.html Outfit · Fraunces" [ref=e125] [cursor=pointer]:
+            - /url: /V6.html
+            - generic [ref=e128]: brain
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - generic [ref=e131]: Light
+                - generic [ref=e132]: Sage + terracotta
+              - heading "Gentle Sage" [level=3] [ref=e133]
+              - paragraph [ref=e134]: Muted sage + terracotta accent. Centered editorial hero. Community-warm feel.
+            - generic [ref=e135]:
+              - generic [ref=e136]: V6.html
+              - generic [ref=e137]: Outfit · Fraunces
+          - link "5 Vol. VII · MMXXVI Light Parchment + butter Editorial Parchment Warm parchment + butter yellow. Magazine-indexed. Publication-schedule timeline. Numbered speaker register. V7.html Cabinet Grotesk" [ref=e138] [cursor=pointer]:
+            - /url: /V7.html
+            - generic [ref=e140]:
+              - generic [ref=e141]: "5"
+              - generic [ref=e142]: Vol. VII · MMXXVI
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]: Light
+                - generic [ref=e146]: Parchment + butter
+              - heading "Editorial Parchment" [level=3] [ref=e147]
+              - paragraph [ref=e148]: Warm parchment + butter yellow. Magazine-indexed. Publication-schedule timeline. Numbered speaker register.
+            - generic [ref=e149]:
+              - generic [ref=e150]: V7.html
+              - generic [ref=e151]: Cabinet Grotesk
+          - link "V8 free virtual summit Light Photos Free Virtual Summit Pre-existing light variant. Speaker carousel with photos. V8.html —" [ref=e152] [cursor=pointer]:
+            - /url: /V8.html
+            - generic [ref=e154]:
+              - generic [ref=e155]: V8
+              - generic [ref=e156]: free virtual summit
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - generic [ref=e159]: Light
+                - generic [ref=e160]: Photos
+              - heading "Free Virtual Summit" [level=3] [ref=e161]
+              - paragraph [ref=e162]: Pre-existing light variant. Speaker carousel with photos.
+            - generic [ref=e163]:
+              - generic [ref=e164]: V8.html
+              - generic [ref=e165]: —
+          - link "V9 Light V9 Alternate layout variant. V9.html —" [ref=e166] [cursor=pointer]:
+            - /url: /V9.html
+            - generic [ref=e169]: V9
+            - generic [ref=e170]:
+              - generic [ref=e172]: Light
+              - heading "V9" [level=3] [ref=e173]
+              - paragraph [ref=e174]: Alternate layout variant.
+            - generic [ref=e175]:
+              - generic [ref=e176]: V9.html
+              - generic [ref=e177]: —
+          - link "V10 Light V10 Alternate layout variant. V10.html —" [ref=e178] [cursor=pointer]:
+            - /url: /V10.html
+            - generic [ref=e181]: V10
+            - generic [ref=e182]:
+              - generic [ref=e184]: Light
+              - heading "V10" [level=3] [ref=e185]
+              - paragraph [ref=e186]: Alternate layout variant.
+            - generic [ref=e187]:
+              - generic [ref=e188]: V10.html
+              - generic [ref=e189]: —
+      - generic [ref=e190]:
+        - generic [ref=e192]:
+          - heading "Original series · with photos" [level=2] [ref=e193]
+          - paragraph [ref=e194]: Earlier iterations. Include speaker photos; mixed palettes.
+        - generic [ref=e195]:
+          - link "V1 Light An Editorial Series V1.html" [ref=e196] [cursor=pointer]:
+            - /url: /V1.html
+            - generic [ref=e198]: V1
+            - generic [ref=e199]:
+              - generic [ref=e201]: Light
+              - heading "An Editorial Series" [level=3] [ref=e202]
+            - generic [ref=e204]: V1.html
+          - link "V2 lime + indigo · patched light Light (patched) System Editorial Hero flipped from dark to light. Grid-bg motif, indigo accent. V2.html" [ref=e205] [cursor=pointer]:
+            - /url: /V2.html
+            - generic [ref=e207]:
+              - generic [ref=e208]: V2
+              - generic [ref=e209]: lime + indigo · patched light
+            - generic [ref=e210]:
+              - generic [ref=e212]: Light (patched)
+              - heading "System Editorial" [level=3] [ref=e213]
+              - paragraph [ref=e214]: Hero flipped from dark to light. Grid-bg motif, indigo accent.
+            - generic [ref=e216]: V2.html
+          - link "V3 Light Softer Way Softer palette, bright-busy-mind copy. V3.html" [ref=e217] [cursor=pointer]:
+            - /url: /V3.html
+            - generic [ref=e219]: V3
+            - generic [ref=e220]:
+              - generic [ref=e222]: Light
+              - heading "Softer Way" [level=3] [ref=e223]
+              - paragraph [ref=e224]: Softer palette, bright-busy-mind copy.
+            - generic [ref=e226]: V3.html
+          - link "V4 violet + sun Violet-heavy Rewire (original) Violet + sun yellow. Original Rewire layout with speaker collage. V4.html" [ref=e227] [cursor=pointer]:
+            - /url: /V4.html
+            - generic [ref=e229]:
+              - generic [ref=e230]: V4
+              - generic [ref=e231]: violet + sun
+            - generic [ref=e232]:
+              - generic [ref=e234]: Violet-heavy
+              - heading "Rewire (original)" [level=3] [ref=e235]
+              - paragraph [ref=e236]: Violet + sun yellow. Original Rewire layout with speaker collage.
+            - generic [ref=e238]: V4.html
+      - generic [ref=e239]:
+        - generic [ref=e241]:
+          - heading "Stitch & other experiments" [level=2] [ref=e242]
+          - paragraph [ref=e243]: Earlier experiments, kept for reference.
+        - generic [ref=e244]:
+          - link "stitch-v1 Stitch V1 stitch-v1.html" [ref=e245] [cursor=pointer]:
+            - /url: /stitch-v1.html
+            - generic [ref=e247]: stitch-v1
+            - heading "Stitch V1" [level=3] [ref=e249]
+            - generic [ref=e251]: stitch-v1.html
+          - link "stitch-v2 Stitch V2 stitch-v2.html" [ref=e252] [cursor=pointer]:
+            - /url: /stitch-v2.html
+            - generic [ref=e254]: stitch-v2
+            - heading "Stitch V2" [level=3] [ref=e256]
+            - generic [ref=e258]: stitch-v2.html
+          - link "stitch-v3 Stitch V3 stitch-v3.html" [ref=e259] [cursor=pointer]:
+            - /url: /stitch-v3.html
+            - generic [ref=e261]: stitch-v3
+            - heading "Stitch V3" [level=3] [ref=e263]
+            - generic [ref=e265]: stitch-v3.html
+          - link "adhd-summit ADHD Summit (original) adhd-summit.html" [ref=e266] [cursor=pointer]:
+            - /url: /adhd-summit.html
+            - generic [ref=e268]: adhd-summit
+            - heading "ADHD Summit (original)" [level=3] [ref=e270]
+            - generic [ref=e272]: adhd-summit.html
+  - contentinfo [ref=e273]:
+    - generic [ref=e274]:
+      - generic [ref=e275]: © 2026 Althea Academy · ADHD Parenting Summit · Design variants
+      - generic [ref=e276]: Generated 2026-04-17

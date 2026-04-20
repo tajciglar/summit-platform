@@ -1,0 +1,328 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of Productivity Summit 2026 Productivity Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of Productivity Summit 2026" [ref=e32]
+        - generic [ref=e34]: Productivity Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Summits" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/summits
+                  - generic [ref=e69]: Summits
+              - listitem [ref=e70]:
+                - link "Speakers" [ref=e71] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers
+                  - generic [ref=e75]: Speakers
+          - listitem [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - generic [ref=e80]: Funnels
+            - list [ref=e81]:
+              - listitem [ref=e82]:
+                - link "Funnels" [ref=e83] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/funnels
+                  - generic [ref=e87]: Funnels
+              - listitem [ref=e88]:
+                - link "Funnel Steps" [ref=e89] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/funnel-steps
+                  - generic [ref=e93]: Funnel Steps
+          - listitem [ref=e94]:
+            - generic [ref=e95]:
+              - img [ref=e96]
+              - generic [ref=e98]: Sales
+            - list [ref=e99]:
+              - listitem [ref=e100]:
+                - link "Products" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/products
+                  - generic [ref=e105]: Products
+              - listitem [ref=e106]:
+                - link "Orders" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/orders
+                  - generic [ref=e112]: Orders
+              - listitem [ref=e113]:
+                - link "Coupons" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/coupons
+                  - generic [ref=e119]: Coupons
+              - listitem [ref=e120]:
+                - link "Affiliates" [ref=e121] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/affiliates
+                  - generic [ref=e125]: Affiliates
+          - listitem [ref=e126]:
+            - generic [ref=e127] [cursor=pointer]:
+              - img [ref=e128]
+              - generic [ref=e131]: Settings
+              - button "Settings" [ref=e132]:
+                - img [ref=e133]
+    - main [ref=e136]:
+      - generic [ref=e138]:
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - navigation [ref=e141]:
+              - list [ref=e142]:
+                - listitem [ref=e143]:
+                  - link "Speakers" [ref=e144] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers
+                - listitem [ref=e145]:
+                  - img [ref=e146]
+                  - generic [ref=e148]: List
+            - heading "Speakers" [level=1] [ref=e149]
+          - link "New speaker" [ref=e152] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/create
+        - generic [ref=e160]:
+          - generic [ref=e162]:
+            - button "Reorder records" [ref=e164] [cursor=pointer]:
+              - img [ref=e165]
+            - generic [ref=e167]:
+              - generic [ref=e168]:
+                - generic [ref=e169]: Search
+                - generic [ref=e170]:
+                  - img [ref=e172]
+                  - searchbox "Search" [ref=e175]
+              - button "Filter" [ref=e178] [cursor=pointer]:
+                - img [ref=e179]
+                - generic [ref=e182]: "0"
+              - button "Column manager" [ref=e185] [cursor=pointer]:
+                - img [ref=e186]
+          - table [ref=e189]:
+            - rowgroup [ref=e190]:
+              - row "Select/deselect all items for bulk actions. Name Summit Masterclass Rating Is featured Goes live at Actions" [ref=e191]:
+                - columnheader "Select/deselect all items for bulk actions." [ref=e192]:
+                  - checkbox "Select/deselect all items for bulk actions." [ref=e193]
+                - columnheader [ref=e194]
+                - columnheader "Name" [ref=e195]:
+                  - button "Name" [ref=e196] [cursor=pointer]:
+                    - text: Name
+                    - img [ref=e197]
+                - columnheader "Summit" [ref=e199]
+                - columnheader "Masterclass" [ref=e200]
+                - columnheader "Rating" [ref=e201]
+                - columnheader "Is featured" [ref=e202]
+                - columnheader "Goes live at" [ref=e203]:
+                  - button "Goes live at" [ref=e204] [cursor=pointer]:
+                    - text: Goes live at
+                    - img [ref=e205]
+                - columnheader "Actions" [ref=e207]
+            - rowgroup [ref=e208]:
+              - row "Select/deselect item 019d9a96-aaa7-7289-924d-ab22d2e2ecd8 for bulk actions. Gunnar Hamill Productivity Summit 2026 Pre-emptive 3rdgeneration alliance 4 Apr 10, 2026 08:00:35 View Edit Delete" [ref=e209]:
+                - cell "Select/deselect item 019d9a96-aaa7-7289-924d-ab22d2e2ecd8 for bulk actions." [ref=e210]:
+                  - checkbox "Select/deselect item 019d9a96-aaa7-7289-924d-ab22d2e2ecd8 for bulk actions." [ref=e211]
+                - cell [ref=e212]:
+                  - link [ref=e213] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                - cell "Gunnar Hamill" [ref=e215]:
+                  - link "Gunnar Hamill" [ref=e216] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - generic [ref=e217]: Gunnar Hamill
+                - cell "Productivity Summit 2026" [ref=e218]:
+                  - link "Productivity Summit 2026" [ref=e219] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - generic [ref=e220]: Productivity Summit 2026
+                - cell "Pre-emptive 3rdgeneration alliance" [ref=e221]:
+                  - link "Pre-emptive 3rdgeneration alliance" [ref=e222] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - generic [ref=e223]: Pre-emptive 3rdgeneration alliance
+                - cell "4" [ref=e224]:
+                  - link "4" [ref=e225] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - generic [ref=e227]: "4"
+                - cell [ref=e228]:
+                  - link [ref=e229] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - img [ref=e231]
+                - cell "Apr 10, 2026 08:00:35" [ref=e233]:
+                  - link "Apr 10, 2026 08:00:35" [ref=e234] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                    - generic [ref=e235]: Apr 10, 2026 08:00:35
+                - cell "View Edit Delete" [ref=e236]:
+                  - generic [ref=e237]:
+                    - link "View" [ref=e238] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8
+                      - img [ref=e239]
+                      - text: View
+                    - link "Edit" [ref=e242] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaa7-7289-924d-ab22d2e2ecd8/edit
+                      - img [ref=e243]
+                      - text: Edit
+                    - button "Delete" [ref=e246] [cursor=pointer]:
+                      - img [ref=e247]
+                      - text: Delete
+              - row "Select/deselect item 019d9a96-aaaa-7011-80a9-7970001ad014 for bulk actions. Wava Jacobson Productivity Summit 2026 Re-engineered modular flexibility 5 Apr 12, 2026 19:34:42 View Edit Delete" [ref=e249]:
+                - cell "Select/deselect item 019d9a96-aaaa-7011-80a9-7970001ad014 for bulk actions." [ref=e250]:
+                  - checkbox "Select/deselect item 019d9a96-aaaa-7011-80a9-7970001ad014 for bulk actions." [ref=e251]
+                - cell [ref=e252]:
+                  - link [ref=e253] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                - cell "Wava Jacobson" [ref=e255]:
+                  - link "Wava Jacobson" [ref=e256] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - generic [ref=e257]: Wava Jacobson
+                - cell "Productivity Summit 2026" [ref=e258]:
+                  - link "Productivity Summit 2026" [ref=e259] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - generic [ref=e260]: Productivity Summit 2026
+                - cell "Re-engineered modular flexibility" [ref=e261]:
+                  - link "Re-engineered modular flexibility" [ref=e262] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - generic [ref=e263]: Re-engineered modular flexibility
+                - cell "5" [ref=e264]:
+                  - link "5" [ref=e265] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - generic [ref=e267]: "5"
+                - cell [ref=e268]:
+                  - link [ref=e269] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - img [ref=e271]
+                - cell "Apr 12, 2026 19:34:42" [ref=e273]:
+                  - link "Apr 12, 2026 19:34:42" [ref=e274] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                    - generic [ref=e275]: Apr 12, 2026 19:34:42
+                - cell "View Edit Delete" [ref=e276]:
+                  - generic [ref=e277]:
+                    - link "View" [ref=e278] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014
+                      - img [ref=e279]
+                      - text: View
+                    - link "Edit" [ref=e282] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-7970001ad014/edit
+                      - img [ref=e283]
+                      - text: Edit
+                    - button "Delete" [ref=e286] [cursor=pointer]:
+                      - img [ref=e287]
+                      - text: Delete
+              - row "Select/deselect item 019d9a96-aaaa-7011-80a9-797000e71d5a for bulk actions. Ottis Kunde Productivity Summit 2026 Sharable eco-centric interface 5 Apr 22, 2026 18:40:24 View Edit Delete" [ref=e289]:
+                - cell "Select/deselect item 019d9a96-aaaa-7011-80a9-797000e71d5a for bulk actions." [ref=e290]:
+                  - checkbox "Select/deselect item 019d9a96-aaaa-7011-80a9-797000e71d5a for bulk actions." [ref=e291]
+                - cell [ref=e292]:
+                  - link [ref=e293] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                - cell "Ottis Kunde" [ref=e295]:
+                  - link "Ottis Kunde" [ref=e296] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - generic [ref=e297]: Ottis Kunde
+                - cell "Productivity Summit 2026" [ref=e298]:
+                  - link "Productivity Summit 2026" [ref=e299] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - generic [ref=e300]: Productivity Summit 2026
+                - cell "Sharable eco-centric interface" [ref=e301]:
+                  - link "Sharable eco-centric interface" [ref=e302] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - generic [ref=e303]: Sharable eco-centric interface
+                - cell "5" [ref=e304]:
+                  - link "5" [ref=e305] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - generic [ref=e307]: "5"
+                - cell [ref=e308]:
+                  - link [ref=e309] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - img [ref=e311]
+                - cell "Apr 22, 2026 18:40:24" [ref=e313]:
+                  - link "Apr 22, 2026 18:40:24" [ref=e314] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                    - generic [ref=e315]: Apr 22, 2026 18:40:24
+                - cell "View Edit Delete" [ref=e316]:
+                  - generic [ref=e317]:
+                    - link "View" [ref=e318] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a
+                      - img [ref=e319]
+                      - text: View
+                    - link "Edit" [ref=e322] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaaa-7011-80a9-797000e71d5a/edit
+                      - img [ref=e323]
+                      - text: Edit
+                    - button "Delete" [ref=e326] [cursor=pointer]:
+                      - img [ref=e327]
+                      - text: Delete
+              - row "Select/deselect item 019d9a96-aaab-7103-b307-c9af618e3421 for bulk actions. Kiera McKenzie Productivity Summit 2026 Ergonomic stable software 3 Apr 23, 2026 00:15:10 View Edit Delete" [ref=e329]:
+                - cell "Select/deselect item 019d9a96-aaab-7103-b307-c9af618e3421 for bulk actions." [ref=e330]:
+                  - checkbox "Select/deselect item 019d9a96-aaab-7103-b307-c9af618e3421 for bulk actions." [ref=e331]
+                - cell [ref=e332]:
+                  - link [ref=e333] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                - cell "Kiera McKenzie" [ref=e335]:
+                  - link "Kiera McKenzie" [ref=e336] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - generic [ref=e337]: Kiera McKenzie
+                - cell "Productivity Summit 2026" [ref=e338]:
+                  - link "Productivity Summit 2026" [ref=e339] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - generic [ref=e340]: Productivity Summit 2026
+                - cell "Ergonomic stable software" [ref=e341]:
+                  - link "Ergonomic stable software" [ref=e342] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - generic [ref=e343]: Ergonomic stable software
+                - cell "3" [ref=e344]:
+                  - link "3" [ref=e345] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - generic [ref=e347]: "3"
+                - cell [ref=e348]:
+                  - link [ref=e349] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - img [ref=e351]
+                - cell "Apr 23, 2026 00:15:10" [ref=e353]:
+                  - link "Apr 23, 2026 00:15:10" [ref=e354] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                    - generic [ref=e355]: Apr 23, 2026 00:15:10
+                - cell "View Edit Delete" [ref=e356]:
+                  - generic [ref=e357]:
+                    - link "View" [ref=e358] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421
+                      - img [ref=e359]
+                      - text: View
+                    - link "Edit" [ref=e362] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/productivity-summit-2026/speakers/019d9a96-aaab-7103-b307-c9af618e3421/edit
+                      - img [ref=e363]
+                      - text: Edit
+                    - button "Delete" [ref=e366] [cursor=pointer]:
+                      - img [ref=e367]
+                      - text: Delete
+          - navigation "Pagination navigation" [ref=e369]:
+            - generic [ref=e370]: Showing 1 to 4 of 4 results
+            - generic [ref=e373]:
+              - generic [ref=e375]: Per page
+              - combobox "Per page" [ref=e377]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status

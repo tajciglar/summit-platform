@@ -1,0 +1,277 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expand sidebar" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - generic [ref=e7]:
+      - generic [ref=e10]:
+        - generic [ref=e11]: Global search
+        - generic [ref=e12]:
+          - img [ref=e14]
+          - searchbox "Global search" [ref=e17]
+      - button "User menu" [ref=e20] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e21]
+  - generic [ref=e22]:
+    - complementary [ref=e23]:
+      - navigation [ref=e26]:
+        - list [ref=e27]:
+          - listitem [ref=e28]:
+            - list [ref=e29]:
+              - listitem [ref=e30]:
+                - link [ref=e31] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e32]
+          - listitem [ref=e34]:
+            - button [ref=e37] [cursor=pointer]:
+              - img [ref=e38]
+          - listitem [ref=e40]:
+            - button [ref=e43] [cursor=pointer]:
+              - img [ref=e44]
+          - listitem [ref=e46]:
+            - button [ref=e49] [cursor=pointer]:
+              - img [ref=e50]
+          - listitem [ref=e52]:
+            - button [ref=e55] [cursor=pointer]:
+              - img [ref=e56]
+    - main [ref=e60]:
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - navigation [ref=e65]:
+              - list [ref=e66]:
+                - listitem [ref=e67]:
+                  - link "Funnels" [ref=e68] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnels
+                - listitem [ref=e69]:
+                  - img [ref=e70]
+                  - link "Main Opt-in Funnel" [ref=e72] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnels/019d99f1-a4e8-717b-914c-b69751f29b27
+                - listitem [ref=e73]:
+                  - img [ref=e74]
+                  - generic [ref=e76]: View
+            - heading "View Main Opt-in Funnel" [level=1] [ref=e77]
+          - generic [ref=e79]:
+            - link "New step" [ref=e80] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/funnel-steps/create
+              - img [ref=e81]
+              - text: New step
+            - link "Edit" [ref=e83] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/funnels/019d99f1-a4e8-717b-914c-b69751f29b27/edit
+            - button "Delete" [ref=e84] [cursor=pointer]
+        - generic [ref=e90]:
+          - generic [ref=e96]:
+            - definition [ref=e101]:
+              - generic [ref=e103]: Main Opt-in Funnel
+            - generic [ref=e106]:
+              - term [ref=e109]: Status
+              - definition [ref=e111]:
+                - generic [ref=e114]:
+                  - img [ref=e115]
+                  - text: Live
+            - generic [ref=e119]:
+              - term [ref=e122]: Phase
+              - definition [ref=e124]:
+                - generic [ref=e127]: pre
+            - generic [ref=e130]:
+              - term [ref=e133]: Summit
+              - definition [ref=e135]:
+                - generic [ref=e137]: ADHD Parenting Summit 2026
+            - generic [ref=e140]:
+              - term [ref=e143]: Slug
+              - definition [ref=e145]:
+                - generic [ref=e147]: /main-optin
+            - generic [ref=e150]:
+              - term [ref=e153]: Description
+              - definition [ref=e155]:
+                - generic [ref=e157]: Doloribus dolore et optio.
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - heading "Steps" [level=2] [ref=e163]
+                - text: 6 total
+              - link "Add New Step" [ref=e164] [cursor=pointer]:
+                - /url: http://127.0.0.1:8000/admin/funnel-steps/create
+                - img [ref=e165]
+                - text: Add New Step
+            - generic [ref=e168]:
+              - 'generic "Order: #0" [ref=e169]':
+                - img [ref=e170]
+              - generic [ref=e172]:
+                - generic [ref=e173]:
+                  - text: Optin
+                  - generic [ref=e174]:
+                    - img [ref=e175]
+                    - generic [ref=e178]: Live
+                - link "Registration" [ref=e179] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f0-7318-be24-26b96f590734/edit
+              - generic [ref=e180]:
+                - generic [ref=e181]: —
+                - generic [ref=e182]: Views
+              - generic [ref=e183]:
+                - generic [ref=e184]: "0"
+                - generic [ref=e185]: Conversions
+              - generic [ref=e186]:
+                - generic [ref=e187]: $0.00
+                - generic [ref=e188]: Revenue
+              - generic [ref=e189]:
+                - link "Preview" [ref=e190] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f0-7318-be24-26b96f590734
+                  - img [ref=e191]
+                  - text: Preview
+                - link [ref=e194] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f0-7318-be24-26b96f590734/edit
+                  - img [ref=e195]
+            - generic [ref=e197]:
+              - generic [ref=e198]:
+                - 'generic "Order: #0" [ref=e199]':
+                  - img [ref=e200]
+                - generic [ref=e202]:
+                  - generic [ref=e203]:
+                    - text: Checkout
+                    - generic [ref=e206]: Draft
+                  - link "Basic Checkout" [ref=e207] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18ec-7084-bb5a-57b6de46e448/edit
+                - generic [ref=e208]:
+                  - generic [ref=e209]: —
+                  - generic [ref=e210]: Views
+                - generic [ref=e211]:
+                  - generic [ref=e212]: "0"
+                  - generic [ref=e213]: Conversions
+                - generic [ref=e214]:
+                  - generic [ref=e215]: $0.00
+                  - generic [ref=e216]: Revenue
+                - generic [ref=e217]:
+                  - link "Preview" [ref=e218] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18ec-7084-bb5a-57b6de46e448
+                    - img [ref=e219]
+                    - text: Preview
+                  - link [ref=e222] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18ec-7084-bb5a-57b6de46e448/edit
+                    - img [ref=e223]
+              - generic [ref=e225]:
+                - img [ref=e227]
+                - generic [ref=e229]:
+                  - generic [ref=e230]: Order Bump
+                  - generic [ref=e231]: "Mask Off: Finding Your True ADHD Self"
+                - generic [ref=e234]: Active
+              - link "Add Order Bump" [ref=e236] [cursor=pointer]:
+                - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18ec-7084-bb5a-57b6de46e448/edit
+                - img [ref=e237]
+                - text: Add Order Bump
+            - generic [ref=e240]:
+              - 'generic "Order: #1" [ref=e241]':
+                - img [ref=e242]
+              - generic [ref=e244]:
+                - generic [ref=e245]:
+                  - text: Thank you
+                  - generic [ref=e246]:
+                    - img [ref=e247]
+                    - generic [ref=e250]: Live
+                - link "Thank You" [ref=e251] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f4-7276-95b0-ae916e3f4a1f/edit
+              - generic [ref=e252]:
+                - generic [ref=e253]: —
+                - generic [ref=e254]: Views
+              - generic [ref=e255]:
+                - generic [ref=e256]: "0"
+                - generic [ref=e257]: Conversions
+              - generic [ref=e258]:
+                - generic [ref=e259]: $0.00
+                - generic [ref=e260]: Revenue
+              - generic [ref=e261]:
+                - link "Preview" [ref=e262] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f4-7276-95b0-ae916e3f4a1f
+                  - img [ref=e263]
+                  - text: Preview
+                - link [ref=e266] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f4-7276-95b0-ae916e3f4a1f/edit
+                  - img [ref=e267]
+            - generic [ref=e269]:
+              - generic [ref=e270]:
+                - 'generic "Order: #2" [ref=e271]':
+                  - img [ref=e272]
+                - generic [ref=e274]:
+                  - generic [ref=e275]:
+                    - text: One Click Upsell
+                    - generic [ref=e276]:
+                      - img [ref=e277]
+                      - generic [ref=e280]: Live
+                  - link "VIP Upsell" [ref=e281] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f5-70e7-8ed4-0e22f17b0743/edit
+                - generic [ref=e282]:
+                  - generic [ref=e283]: —
+                  - generic [ref=e284]: Views
+                - generic [ref=e285]:
+                  - generic [ref=e286]: "0"
+                  - generic [ref=e287]: Conversions
+                - generic [ref=e288]:
+                  - generic [ref=e289]: $0.00
+                  - generic [ref=e290]: Revenue
+                - generic [ref=e291]:
+                  - link "Preview" [ref=e292] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f5-70e7-8ed4-0e22f17b0743
+                    - img [ref=e293]
+                    - text: Preview
+                  - link [ref=e296] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f5-70e7-8ed4-0e22f17b0743/edit
+                    - img [ref=e297]
+              - generic [ref=e299]:
+                - img [ref=e301]
+                - generic [ref=e303]:
+                  - generic [ref=e304]: Offer
+                  - generic [ref=e305]: VIP All-Access Pass
+            - generic [ref=e307]:
+              - 'generic "Order: #3" [ref=e308]':
+                - img [ref=e309]
+              - generic [ref=e311]:
+                - generic [ref=e312]:
+                  - text: Thank you
+                  - generic [ref=e313]:
+                    - img [ref=e314]
+                    - generic [ref=e317]: Live
+                - link "Confirmation" [ref=e318] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f6-73a1-9e7a-56cb7909c4ab/edit
+              - generic [ref=e319]:
+                - generic [ref=e320]: —
+                - generic [ref=e321]: Views
+              - generic [ref=e322]:
+                - generic [ref=e323]: "0"
+                - generic [ref=e324]: Conversions
+              - generic [ref=e325]:
+                - generic [ref=e326]: $0.00
+                - generic [ref=e327]: Revenue
+              - generic [ref=e328]:
+                - link "Preview" [ref=e329] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f6-73a1-9e7a-56cb7909c4ab
+                  - img [ref=e330]
+                  - text: Preview
+                - link [ref=e333] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99f1-a4f6-73a1-9e7a-56cb7909c4ab/edit
+                  - img [ref=e334]
+            - generic [ref=e337]:
+              - 'generic "Order: #10" [ref=e338]':
+                - img [ref=e339]
+              - generic [ref=e341]:
+                - generic [ref=e342]:
+                  - text: Optin
+                  - generic [ref=e345]: Draft
+                - link "Registration — Variant B" [ref=e346] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18e6-723e-97c6-f57e166a70a6/edit
+              - generic [ref=e347]:
+                - generic [ref=e348]: —
+                - generic [ref=e349]: Views
+              - generic [ref=e350]:
+                - generic [ref=e351]: "0"
+                - generic [ref=e352]: Conversions
+              - generic [ref=e353]:
+                - generic [ref=e354]: $0.00
+                - generic [ref=e355]: Revenue
+              - generic [ref=e356]:
+                - link "Preview" [ref=e357] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18e6-723e-97c6-f57e166a70a6
+                  - img [ref=e358]
+                  - text: Preview
+                - link [ref=e361] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps/019d99ff-18e6-723e-97c6-f57e166a70a6/edit
+                  - img [ref=e362]
+  - generic:
+    - status

@@ -1,0 +1,197 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/althea-academy
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of Althea Academy Althea Academy" [ref=e31] [cursor=pointer]:
+        - img "Avatar of Althea Academy" [ref=e32]
+        - generic [ref=e34]: Althea Academy
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]: Current summit
+          - combobox [ref=e40]:
+            - option "All summits in domain" [selected]
+            - option "ADHD Parenting Summit 2026"
+        - list [ref=e41]:
+          - listitem [ref=e42]:
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Dashboard" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy
+                  - img [ref=e46]
+                  - generic [ref=e48]: Dashboard
+          - listitem [ref=e49]:
+            - generic [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e52]:
+                - img [ref=e53]
+            - list [ref=e55]:
+              - listitem [ref=e56]:
+                - link "Roles" [ref=e57] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/shield/roles
+                  - img [ref=e58]
+                  - generic [ref=e60]: Roles
+          - listitem [ref=e61]:
+            - generic [ref=e62]:
+              - img [ref=e63]
+              - generic [ref=e65]: Content
+            - list [ref=e66]:
+              - listitem [ref=e67]:
+                - link "Speakers" [ref=e68] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/speakers
+                  - generic [ref=e71]: Speakers
+          - listitem [ref=e72]:
+            - generic [ref=e73]:
+              - img [ref=e74]
+              - generic [ref=e76]: Funnels
+            - list [ref=e77]:
+              - listitem [ref=e78]:
+                - link "Funnels" [ref=e79] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnels
+                  - generic [ref=e83]: Funnels
+              - listitem [ref=e84]:
+                - link "Funnel Steps" [ref=e85] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps
+                  - generic [ref=e89]: Funnel Steps
+          - listitem [ref=e90]:
+            - generic [ref=e91]:
+              - img [ref=e92]
+              - generic [ref=e94]: Sales
+            - list [ref=e95]:
+              - listitem [ref=e96]:
+                - link "Products" [ref=e97] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/products
+                  - generic [ref=e101]: Products
+              - listitem [ref=e102]:
+                - link "Orders" [ref=e103] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/orders
+                  - generic [ref=e108]: Orders
+              - listitem [ref=e109]:
+                - link "Coupons" [ref=e110] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/coupons
+                  - generic [ref=e115]: Coupons
+              - listitem [ref=e116]:
+                - link "Affiliates" [ref=e117] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/affiliates
+                  - generic [ref=e121]: Affiliates
+          - listitem [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e124]
+              - generic [ref=e126]: Analytics
+            - list [ref=e127]:
+              - listitem [ref=e128]:
+                - link "Funnel performance" [ref=e129] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-performance
+                  - generic [ref=e133]: Funnel performance
+              - listitem [ref=e134]:
+                - link "UTM attribution" [ref=e135] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/utm-breakdown
+                  - generic [ref=e139]: UTM attribution
+          - listitem [ref=e140]:
+            - generic [ref=e141] [cursor=pointer]:
+              - img [ref=e142]
+              - generic [ref=e145]: Settings
+              - button "Settings" [ref=e146]:
+                - img [ref=e147]
+    - main [ref=e150]:
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - navigation [ref=e155]:
+              - list [ref=e156]:
+                - listitem [ref=e157]:
+                  - link "Funnels" [ref=e158] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels
+                - listitem [ref=e159]:
+                  - img [ref=e160]
+                  - generic [ref=e162]: List
+            - heading "Funnels" [level=1] [ref=e163]
+          - link "New funnel" [ref=e166] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/create
+        - generic [ref=e174]:
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]: Search
+              - generic [ref=e180]:
+                - img [ref=e182]
+                - searchbox "Search" [ref=e185]
+            - button "Filter" [ref=e188] [cursor=pointer]:
+              - img [ref=e189]
+              - generic [ref=e192]: "0"
+            - button "Column manager" [ref=e195] [cursor=pointer]:
+              - img [ref=e196]
+          - table [ref=e199]:
+            - rowgroup [ref=e200]:
+              - row "Select/deselect all items for bulk actions. Name Summit Phase Steps Is active Actions" [ref=e201]:
+                - columnheader "Select/deselect all items for bulk actions." [ref=e202]:
+                  - checkbox "Select/deselect all items for bulk actions." [ref=e203]
+                - columnheader "Name" [ref=e204]:
+                  - button "Name" [ref=e205] [cursor=pointer]:
+                    - text: Name
+                    - img [ref=e206]
+                - columnheader "Summit" [ref=e208]
+                - columnheader "Phase" [ref=e209]
+                - columnheader "Steps" [ref=e210]
+                - columnheader "Is active" [ref=e211]
+                - columnheader "Actions" [ref=e212]
+            - rowgroup [ref=e213]:
+              - row "Select/deselect item 019d9af0-71cd-71fb-9b1a-6ee977516723 for bulk actions. Main Opt-in Funnel ADHD Parenting Summit 2026 pre 4 View Edit Delete" [ref=e214]:
+                - cell "Select/deselect item 019d9af0-71cd-71fb-9b1a-6ee977516723 for bulk actions." [ref=e215]:
+                  - checkbox "Select/deselect item 019d9af0-71cd-71fb-9b1a-6ee977516723 for bulk actions." [ref=e216]
+                - cell "Main Opt-in Funnel" [ref=e217]:
+                  - link "Main Opt-in Funnel" [ref=e218] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                    - generic [ref=e219]: Main Opt-in Funnel
+                - cell "ADHD Parenting Summit 2026" [ref=e220]:
+                  - link "ADHD Parenting Summit 2026" [ref=e221] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                    - generic [ref=e222]: ADHD Parenting Summit 2026
+                - cell "pre" [ref=e223]:
+                  - link "pre" [ref=e224] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                    - generic [ref=e226]: pre
+                - cell "4" [ref=e227]:
+                  - link "4" [ref=e228] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                    - generic [ref=e229]: "4"
+                - cell [ref=e230]:
+                  - link [ref=e231] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                    - img [ref=e233]
+                - cell "View Edit Delete" [ref=e235]:
+                  - generic [ref=e236]:
+                    - link "View" [ref=e237] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723
+                      - img [ref=e238]
+                      - text: View
+                    - link "Edit" [ref=e241] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/althea-academy/funnels/019d9af0-71cd-71fb-9b1a-6ee977516723/edit
+                      - img [ref=e242]
+                      - text: Edit
+                    - button "Delete" [ref=e245] [cursor=pointer]:
+                      - img [ref=e246]
+                      - text: Delete
+          - navigation "Pagination navigation" [ref=e248]:
+            - generic [ref=e251]:
+              - generic [ref=e253]: Per page
+              - combobox "Per page" [ref=e255]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status

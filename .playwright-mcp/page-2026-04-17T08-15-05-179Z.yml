@@ -1,0 +1,239 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Dashboard" [ref=e34] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e35]
+                  - generic [ref=e37]: Dashboard
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - generic [ref=e42]: Content
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Summits" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/summits
+                  - generic [ref=e49]: Summits
+              - listitem [ref=e50]:
+                - link "Speakers" [ref=e51] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/speakers
+                  - generic [ref=e55]: Speakers
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: Funnels
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Funnels" [ref=e63] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnels
+                  - generic [ref=e67]: Funnels
+              - listitem [ref=e68]:
+                - link "Funnel Steps" [ref=e69] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps
+                  - generic [ref=e73]: Funnel Steps
+          - listitem [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Sales
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Products" [ref=e81] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/products
+                  - generic [ref=e85]: Products
+              - listitem [ref=e86]:
+                - link "Orders" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/orders
+                  - generic [ref=e92]: Orders
+              - listitem [ref=e93]:
+                - link "Coupons" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/coupons
+                  - generic [ref=e99]: Coupons
+              - listitem [ref=e100]:
+                - link "Affiliates" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/affiliates
+                  - generic [ref=e105]: Affiliates
+          - listitem [ref=e106]:
+            - generic [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e111]: Settings
+              - button "Settings" [ref=e112]:
+                - img [ref=e113]
+    - main [ref=e116]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - navigation [ref=e121]:
+              - list [ref=e122]:
+                - listitem [ref=e123]:
+                  - link "Speakers" [ref=e124] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers
+                - listitem [ref=e125]:
+                  - img [ref=e126]
+                  - link "Deckow" [ref=e128] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+                - listitem [ref=e129]:
+                  - img [ref=e130]
+                  - generic [ref=e132]: Edit
+            - heading "Edit Deckow" [level=1] [ref=e133]
+          - generic [ref=e135]:
+            - link "View" [ref=e136] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/speakers/019d99f1-a4d9-7393-9036-c809bbbb6184
+            - button "Delete" [ref=e137] [cursor=pointer]
+        - generic [ref=e143]:
+          - generic [ref=e147]:
+            - generic [ref=e151]:
+              - heading "Identity" [level=2] [ref=e154]
+              - generic [ref=e156]:
+                - generic [ref=e159]:
+                  - generic [ref=e163]:
+                    - text: Summit
+                    - superscript [ref=e164]: "*"
+                  - generic [ref=e170]:
+                    - button "ADHD Parenting Summit 2026" [ref=e171] [cursor=pointer]:
+                      - generic [ref=e173]: ADHD Parenting Summit 2026
+                    - button "Clear selection" [ref=e174] [cursor=pointer]:
+                      - img [ref=e175]
+                - generic [ref=e179]:
+                  - generic [ref=e183]:
+                    - text: Slug
+                    - superscript [ref=e184]: "*"
+                  - generic [ref=e185]:
+                    - textbox "Slug*" [ref=e188]: adaline-deckow-268
+                    - generic [ref=e192]: URL slug within this summit.
+                - generic [ref=e195]:
+                  - generic [ref=e199]:
+                    - text: First name
+                    - superscript [ref=e200]: "*"
+                  - textbox "First name*" [ref=e204]: Adaline
+                - generic [ref=e207]:
+                  - generic [ref=e211]:
+                    - text: Last name
+                    - superscript [ref=e212]: "*"
+                  - textbox "Last name*" [ref=e216]: Deckow
+                - generic [ref=e219]:
+                  - generic [ref=e223]: Email
+                  - textbox "Email" [ref=e227]: glover.harvey@example.com
+                - generic [ref=e230]:
+                  - generic [ref=e234]: Professional title
+                  - generic [ref=e235]:
+                    - textbox "Professional title" [ref=e238]: Diagnostic Medical Sonographer at Corwin, Parker and Walsh
+                    - generic [ref=e242]: e.g. CEO of Company X
+            - generic [ref=e246]:
+              - heading "Media & bio" [level=2] [ref=e249]
+              - generic [ref=e251]:
+                - generic [ref=e254]:
+                  - generic [ref=e258]: Photo
+                  - group "Photo" [ref=e260]:
+                    - button "Photo" [ref=e262]
+                - generic [ref=e265]:
+                  - generic [ref=e269]: Website url
+                  - textbox "Website url" [ref=e273]
+                - generic [ref=e276]:
+                  - generic [ref=e280]: Short bio
+                  - textbox "Short bio" [ref=e285]: Magni beatae qui ut sapiente minima molestias maiores inventore magnam modi dolorum inventore voluptatum est illum natus consequuntur consequuntur voluptatem totam.
+                - generic [ref=e288]:
+                  - generic [ref=e292]: Long bio
+                  - textbox "Long bio" [ref=e297]: Cumque quidem eius ipsa. Aut quos dicta et excepturi expedita. Dolore suscipit aut quas. Placeat adipisci officia minima laboriosam quidem dolor. Non hic rerum id consequatur officia. Reprehenderit non optio aut sit. Sit occaecati laudantium eos. Ad neque veritatis voluptatum impedit hic esse voluptatem ipsa. Doloribus quidem qui fugit nesciunt vitae. Quae ut laborum molestiae voluptas tenetur omnis. Consequatur omnis doloremque iusto ut a natus aliquam. Fugit quia quia neque placeat culpa.
+                - generic [ref=e300]:
+                  - generic [ref=e304]: Social links
+                  - generic [ref=e305]:
+                    - generic [ref=e308]:
+                      - table [ref=e309]:
+                        - rowgroup [ref=e310]:
+                          - row "Platform URL" [ref=e311]:
+                            - columnheader "Platform" [ref=e312]
+                            - columnheader "URL" [ref=e313]
+                            - columnheader [ref=e314]
+                        - rowgroup [ref=e315]:
+                          - row "twitter https://twitter.com/libby17 Delete row" [ref=e316]:
+                            - cell "twitter" [ref=e317]:
+                              - textbox [ref=e318]: twitter
+                            - cell "https://twitter.com/libby17" [ref=e319]:
+                              - textbox [ref=e320]: https://twitter.com/libby17
+                            - cell "Delete row" [ref=e321]:
+                              - generic [ref=e322]:
+                                - button "Delete row" [disabled]:
+                                  - img
+                          - row "linkedin https://linkedin.com/in/parker.tess Delete row" [ref=e323]:
+                            - cell "linkedin" [ref=e324]:
+                              - textbox [ref=e325]: linkedin
+                            - cell "https://linkedin.com/in/parker.tess" [ref=e326]:
+                              - textbox [ref=e327]: https://linkedin.com/in/parker.tess
+                            - cell "Delete row" [ref=e328]:
+                              - generic [ref=e329]:
+                                - button "Delete row" [disabled]:
+                                  - img
+                      - generic [ref=e330]:
+                        - button "Add row" [disabled]
+                    - generic [ref=e334]: e.g. twitter, linkedin, instagram
+            - generic [ref=e338]:
+              - heading "Masterclass" [level=2] [ref=e341]
+              - generic [ref=e343]:
+                - generic [ref=e346]:
+                  - generic [ref=e350]: Masterclass title
+                  - textbox "Masterclass title" [ref=e354]: Intuitive demand-driven monitoring
+                - generic [ref=e357]:
+                  - generic [ref=e361]: Masterclass description
+                  - textbox "Masterclass description" [ref=e366]: Cumque aperiam corporis reprehenderit vel. Quis dicta aspernatur velit iste deleniti omnis ipsa. Atque magni dolores eligendi qui magni et autem. Aut asperiores voluptas et qui libero dolores ad.
+                - generic [ref=e369]:
+                  - generic [ref=e373]: Free video url
+                  - textbox "Free video url" [ref=e377]
+                - generic [ref=e380]:
+                  - generic [ref=e384]: Vip video url
+                  - textbox "Vip video url" [ref=e388]
+                - generic [ref=e391]:
+                  - generic [ref=e395]: Goes live at
+                  - generic [ref=e396]:
+                    - textbox "Goes live at" [ref=e399]: 2026-04-13T05:15
+                    - generic [ref=e403]: When the video becomes available.
+                - generic [ref=e406]:
+                  - generic [ref=e410]: Free access window hours
+                  - generic [ref=e411]:
+                    - spinbutton "Free access window hours" [ref=e414]: "24"
+                    - generic [ref=e418]: Free viewing window after a user clicks play.
+            - generic [ref=e422]:
+              - heading "Display" [level=2] [ref=e425]
+              - generic [ref=e427]:
+                - generic [ref=e430]:
+                  - generic [ref=e434]: Sort order
+                  - spinbutton "Sort order" [ref=e438]: "23"
+                - generic [ref=e441]:
+                  - generic [ref=e445]: Rating
+                  - generic [ref=e446]:
+                    - combobox "Rating" [ref=e449]:
+                      - option "Unrated"
+                      - option "1"
+                      - option "2"
+                      - option "3" [selected]
+                      - option "4"
+                      - option "5"
+                    - generic [ref=e453]: Internal quality rating.
+                - generic [ref=e459]:
+                  - switch "Is featured" [ref=e460] [cursor=pointer]
+                  - generic [ref=e461]: Is featured
+          - generic [ref=e466]:
+            - button "Save changes" [ref=e467] [cursor=pointer]:
+              - generic [ref=e468]: Save changes
+            - button "Cancel" [disabled]
+  - generic:
+    - status

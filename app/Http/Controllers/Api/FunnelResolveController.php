@@ -28,15 +28,16 @@ class FunnelResolveController extends Controller
         $step = $funnel->steps()->where('slug', $stepSlug)->first();
         abort_if(! $step, 404, "No step with slug {$stepSlug}");
 
-        $summit->loadMissing(['summitSpeakers.speaker', 'products.prices']);
+        $summit->loadMissing(['speakers', 'products.prices']);
 
-        $starts = Carbon::parse($summit->pre_summit_starts_at)->startOfDay();
+        $starts = $summit->pre_summit_starts_at
+            ? Carbon::parse($summit->pre_summit_starts_at)->startOfDay()
+            : null;
 
-        $speakers = $summit->summitSpeakers->map(function ($ss) use ($starts) {
-            $dayNumber = $ss->presentation_day
-                ? $starts->diffInDays(Carbon::parse($ss->presentation_day)->startOfDay()) + 1
+        $speakers = $summit->speakers->map(function ($s) use ($starts) {
+            $dayNumber = ($starts && $s->goes_live_at)
+                ? (int) ($starts->diffInDays(Carbon::parse($s->goes_live_at)->startOfDay()) + 1)
                 : 0;
-            $s = $ss->speaker;
 
             return [
                 'id' => $s->id,
@@ -45,11 +46,11 @@ class FunnelResolveController extends Controller
                 'fullName' => trim("{$s->first_name} {$s->last_name}"),
                 'title' => $s->title,
                 'photoUrl' => $s->photo_url,
-                'shortDescription' => $s->short_description,
-                'longDescription' => $s->long_description,
-                'dayNumber' => (int) $dayNumber,
-                'masterclassTitle' => $ss->masterclass_title,
-                'sortOrder' => $ss->sort_order,
+                'shortBio' => $s->short_bio,
+                'longBio' => $s->long_bio,
+                'dayNumber' => $dayNumber,
+                'masterclassTitle' => $s->masterclass_title,
+                'sortOrder' => $s->sort_order,
             ];
         })->values();
 

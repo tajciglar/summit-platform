@@ -1,0 +1,172 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Dashboard" [ref=e34] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e35]
+                  - generic [ref=e37]: Dashboard
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - generic [ref=e42]: Content
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Summits" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/summits
+                  - generic [ref=e49]: Summits
+              - listitem [ref=e50]:
+                - link "Speakers" [ref=e51] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/speakers
+                  - generic [ref=e55]: Speakers
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: Funnels
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Funnels" [ref=e63] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnels
+                  - generic [ref=e67]: Funnels
+              - listitem [ref=e68]:
+                - link "Funnel Steps" [ref=e69] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps
+                  - generic [ref=e73]: Funnel Steps
+          - listitem [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Sales
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Products" [ref=e81] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/products
+                  - generic [ref=e85]: Products
+              - listitem [ref=e86]:
+                - link "Orders" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/orders
+                  - generic [ref=e92]: Orders
+              - listitem [ref=e93]:
+                - link "Coupons" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/coupons
+                  - generic [ref=e99]: Coupons
+              - listitem [ref=e100]:
+                - link "Affiliates" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/affiliates
+                  - generic [ref=e105]: Affiliates
+          - listitem [ref=e106]:
+            - generic [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e111]: Settings
+              - button "Settings" [ref=e112]:
+                - img [ref=e113]
+    - main [ref=e116]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - navigation [ref=e121]:
+              - list [ref=e122]:
+                - listitem [ref=e123]:
+                  - link "Funnel Step Bumps" [ref=e124] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/funnel-steps
+                - listitem [ref=e125]:
+                  - img [ref=e126]
+                  - generic [ref=e128]: Edit
+            - heading "Edit Funnel Step Bump" [level=1] [ref=e129]
+          - button "Delete" [ref=e132] [cursor=pointer]
+        - generic [ref=e136]:
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - generic [ref=e142]:
+                - heading "Content" [level=2] [ref=e145]
+                - generic [ref=e147]:
+                  - generic [ref=e150]:
+                    - generic [ref=e154]: Call to action
+                    - textbox "Call to action" [ref=e158]:
+                      - /placeholder: Yes — add this for $17
+                      - text: "Mask Off: Finding Your True ADHD Self"
+                  - generic [ref=e161]:
+                    - generic [ref=e165]: Description
+                    - textbox "Description" [ref=e170]: Audio companion.
+                  - generic [ref=e173]:
+                    - generic [ref=e177]: Bullet list (optional)
+                    - button "Add bullet" [ref=e181] [cursor=pointer]
+                  - generic [ref=e184]:
+                    - generic [ref=e188]: Checkbox label
+                    - textbox "Checkbox label" [ref=e192]:
+                      - /placeholder: Yes, add this to my order
+                      - text: Yes, add this.
+              - generic [ref=e196]:
+                - heading "Image" [level=2] [ref=e199]
+                - generic [ref=e204]:
+                  - generic [ref=e208]: Bump image
+                  - generic [ref=e209]:
+                    - group "Bump image" [ref=e210]:
+                      - button "Bump image" [ref=e212]
+                    - generic [ref=e216]: Square image works best; shown next to the copy on checkout.
+              - generic [ref=e220]:
+                - heading "Settings" [level=2] [ref=e223]
+                - generic [ref=e225]:
+                  - generic [ref=e228]:
+                    - generic [ref=e232]:
+                      - text: Attached to checkout step
+                      - superscript [ref=e233]: "*"
+                    - generic [ref=e239]:
+                      - button "Basic Checkout" [ref=e240] [cursor=pointer]:
+                        - generic [ref=e242]: Basic Checkout
+                      - button "Clear selection" [ref=e243] [cursor=pointer]:
+                        - img [ref=e244]
+                  - generic [ref=e248]:
+                    - generic [ref=e252]:
+                      - text: Product being offered
+                      - superscript [ref=e253]: "*"
+                    - generic [ref=e259]:
+                      - button "VIP All-Access Pass" [ref=e260] [cursor=pointer]:
+                        - generic [ref=e262]: VIP All-Access Pass
+                      - button "Clear selection" [ref=e263] [cursor=pointer]:
+                        - img [ref=e264]
+                  - generic [ref=e268]:
+                    - generic [ref=e272]: Sort order
+                    - spinbutton "Sort order" [ref=e276]: "0"
+                  - generic [ref=e282]:
+                    - switch "Is active" [checked] [ref=e283] [cursor=pointer]
+                    - generic [ref=e284]: Is active
+            - generic [ref=e285]:
+              - button "Save changes" [disabled]
+          - complementary [ref=e286]:
+            - generic [ref=e287]:
+              - generic [ref=e288]: Live preview
+              - generic [ref=e289]: Updates as you type
+            - generic [ref=e290]:
+              - generic [ref=e291]:
+                - checkbox [disabled] [ref=e292]
+                - generic [ref=e294]:
+                  - generic [ref=e295]: Yes, add this.
+                  - generic [ref=e296]: $197.00
+              - generic [ref=e297]:
+                - img [ref=e299]
+                - generic [ref=e301]:
+                  - generic [ref=e302]: VIP All-Access Pass
+                  - generic [ref=e303]: "Mask Off: Finding Your True ADHD Self"
+                  - paragraph [ref=e304]: Audio companion.
+            - paragraph [ref=e305]: This is how the bump will appear on checkout. Customers tick the checkbox to add it to their order.
+  - generic:
+    - status

@@ -1,0 +1,148 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/althea-academy
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of Althea Academy Althea Academy" [ref=e31] [cursor=pointer]:
+        - img "Avatar of Althea Academy" [ref=e32]
+        - generic [ref=e34]: Althea Academy
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]: Current summit
+          - combobox [ref=e40]:
+            - option "All summits in domain"
+            - option "ADHD Parenting Summit 2026" [selected]
+        - list [ref=e41]:
+          - listitem [ref=e42]:
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Dashboard" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy
+                  - img [ref=e46]
+                  - generic [ref=e48]: Dashboard
+          - listitem [ref=e49]:
+            - generic [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e52]:
+                - img [ref=e53]
+            - list [ref=e55]:
+              - listitem [ref=e56]:
+                - link "Roles" [ref=e57] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/shield/roles
+                  - img [ref=e58]
+                  - generic [ref=e60]: Roles
+          - listitem [ref=e61]:
+            - generic [ref=e62]:
+              - img [ref=e63]
+              - generic [ref=e65]: Content
+            - list [ref=e66]:
+              - listitem [ref=e67]:
+                - link "Speakers" [ref=e68] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/speakers
+                  - generic [ref=e71]: Speakers
+          - listitem [ref=e72]:
+            - generic [ref=e73]:
+              - img [ref=e74]
+              - generic [ref=e76]: Funnels
+            - list [ref=e77]:
+              - listitem [ref=e78]:
+                - link "Funnels" [ref=e79] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnels
+                  - generic [ref=e83]: Funnels
+              - listitem [ref=e84]:
+                - link "Funnel Steps" [ref=e85] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps
+                  - generic [ref=e89]: Funnel Steps
+          - listitem [ref=e90]:
+            - generic [ref=e91]:
+              - img [ref=e92]
+              - generic [ref=e94]: Sales
+            - list [ref=e95]:
+              - listitem [ref=e96]:
+                - link "Products" [ref=e97] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/products
+                  - generic [ref=e101]: Products
+              - listitem [ref=e102]:
+                - link "Orders" [ref=e103] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/orders
+                  - generic [ref=e108]: Orders
+              - listitem [ref=e109]:
+                - link "Coupons" [ref=e110] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/coupons
+                  - generic [ref=e115]: Coupons
+              - listitem [ref=e116]:
+                - link "Affiliates" [ref=e117] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/affiliates
+                  - generic [ref=e121]: Affiliates
+          - listitem [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e124]
+              - generic [ref=e126]: Analytics
+            - list [ref=e127]:
+              - listitem [ref=e128]:
+                - link "Funnel performance" [ref=e129] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-performance
+                  - generic [ref=e133]: Funnel performance
+              - listitem [ref=e134]:
+                - link "UTM attribution" [ref=e135] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/utm-breakdown
+                  - generic [ref=e139]: UTM attribution
+          - listitem [ref=e140]:
+            - generic [ref=e141] [cursor=pointer]:
+              - img [ref=e142]
+              - generic [ref=e145]: Settings
+              - button "Settings" [ref=e146]:
+                - img [ref=e147]
+    - main [ref=e150]:
+      - generic [ref=e152]:
+        - heading "Dashboard" [level=1] [ref=e155]
+        - generic [ref=e162]:
+          - generic [ref=e166]:
+            - img "Avatar of Admin User" [ref=e167]
+            - generic [ref=e168]:
+              - heading "Welcome" [level=2] [ref=e169]
+              - paragraph [ref=e170]: Admin User
+            - button "Sign out" [ref=e172] [cursor=pointer]:
+              - img [ref=e173]
+              - text: Sign out
+          - generic [ref=e179]:
+            - heading "Revenue by summit" [level=2] [ref=e180]
+            - paragraph [ref=e181]: All-time completed orders across summits you can access.
+          - generic [ref=e194]:
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - img [ref=e200]
+                - generic [ref=e202]: Revenue (all time)
+              - generic [ref=e203]: $0.00
+              - generic [ref=e205]: Completed orders
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - img [ref=e211]
+                - generic [ref=e213]: Revenue (last 30d)
+              - generic [ref=e214]: $0.00
+              - generic [ref=e216]: Completed in the last 30 days
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - img [ref=e222]
+                - generic [ref=e224]: Buyers
+              - generic [ref=e225]: "0"
+              - generic [ref=e227]: 1 published summits
+          - generic [ref=e231]:
+            - heading "Revenue trend (30 days)" [level=2] [ref=e232]
+            - paragraph [ref=e233]: Daily completed-order revenue for this summit.
+  - generic:
+    - status

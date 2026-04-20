@@ -47,7 +47,6 @@ class Summit extends Model implements HasMedia, HasName
     {
         return [
             'audience' => SummitAudience::class,
-            'starts_at' => 'datetime',
             'pre_summit_starts_at' => 'datetime',
             'late_pre_summit_starts_at' => 'datetime',
             'during_summit_starts_at' => 'datetime',
@@ -76,11 +75,6 @@ class Summit extends Model implements HasMedia, HasName
     public function speakers(): HasMany
     {
         return $this->hasMany(Speaker::class);
-    }
-
-    public function summitSpeakers(): HasMany
-    {
-        return $this->hasMany(SummitSpeaker::class)->orderBy('sort_order');
     }
 
     public function products(): HasMany
@@ -146,11 +140,11 @@ class Summit extends Model implements HasMedia, HasName
     {
         $speakers = [];
         try {
-            $this->loadMissing('summitSpeakers.speaker');
-            foreach ($this->summitSpeakers as $link) {
+            $this->loadMissing('speakers');
+            foreach ($this->speakers as $s) {
                 $speakers[] = [
-                    'name' => $link->speaker?->full_name ?? '',
-                    'photo' => $link->speaker?->photo_url ?? null,
+                    'name' => trim("{$s->first_name} {$s->last_name}"),
+                    'photo' => $s->photo_url ?? null,
                 ];
             }
         } catch (\Throwable) {

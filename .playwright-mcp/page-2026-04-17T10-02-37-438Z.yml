@@ -1,0 +1,508 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of ADHD Parenting Summit 2026 ADHD Parenting Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of ADHD Parenting Summit 2026" [ref=e32]
+        - generic [ref=e34]: ADHD Parenting Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Speakers" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers
+                  - generic [ref=e68]: Speakers
+          - listitem [ref=e69]:
+            - generic [ref=e70]:
+              - img [ref=e71]
+              - generic [ref=e73]: Funnels
+            - list [ref=e74]:
+              - listitem [ref=e75]:
+                - link "Funnels" [ref=e76] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnels
+                  - generic [ref=e80]: Funnels
+              - listitem [ref=e81]:
+                - link "Funnel Steps" [ref=e82] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-steps
+                  - generic [ref=e86]: Funnel Steps
+          - listitem [ref=e87]:
+            - generic [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e91]: Sales
+            - list [ref=e92]:
+              - listitem [ref=e93]:
+                - link "Products" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/products
+                  - generic [ref=e98]: Products
+              - listitem [ref=e99]:
+                - link "Orders" [ref=e100] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/orders
+                  - generic [ref=e105]: Orders
+              - listitem [ref=e106]:
+                - link "Coupons" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/coupons
+                  - generic [ref=e112]: Coupons
+              - listitem [ref=e113]:
+                - link "Affiliates" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/affiliates
+                  - generic [ref=e118]: Affiliates
+          - listitem [ref=e119]:
+            - generic [ref=e120]:
+              - img [ref=e121]
+              - generic [ref=e123]: Analytics
+            - list [ref=e124]:
+              - listitem [ref=e125]:
+                - link "Funnel performance" [ref=e126] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-performance
+                  - generic [ref=e130]: Funnel performance
+              - listitem [ref=e131]:
+                - link "UTM attribution" [ref=e132] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/utm-breakdown
+                  - generic [ref=e136]: UTM attribution
+          - listitem [ref=e137]:
+            - generic [ref=e138] [cursor=pointer]:
+              - img [ref=e139]
+              - generic [ref=e142]: Settings
+              - button "Settings" [ref=e143]:
+                - img [ref=e144]
+    - main [ref=e147]:
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - navigation [ref=e152]:
+              - list [ref=e153]:
+                - listitem [ref=e154]:
+                  - link "Summits" [ref=e155] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits
+                - listitem [ref=e156]:
+                  - img [ref=e157]
+                  - link "ADHD Parenting Summit 2026" [ref=e159] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab
+                - listitem [ref=e160]:
+                  - img [ref=e161]
+                  - generic [ref=e163]: View
+            - heading "View ADHD Parenting Summit 2026" [level=1] [ref=e164]
+          - generic [ref=e166]:
+            - link "Edit" [ref=e167] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits/019d9a96-aa9b-72c2-88f4-7f001c9008ab/edit
+            - button "Delete" [ref=e168] [cursor=pointer]
+        - generic [ref=e171]:
+          - generic [ref=e178]:
+            - generic [ref=e180]:
+              - heading "Basics" [level=2] [ref=e181]
+              - paragraph [ref=e182]: Summit identity, lifecycle status, and phase schedule.
+            - generic [ref=e184]:
+              - generic [ref=e188]:
+                - generic [ref=e191]:
+                  - term [ref=e194]: Title
+                  - definition [ref=e196]:
+                    - generic [ref=e198]: ADHD Parenting Summit 2026
+                - generic [ref=e201]:
+                  - term [ref=e204]: Status
+                  - definition [ref=e206]:
+                    - generic [ref=e209]: published
+                - generic [ref=e212]:
+                  - term [ref=e215]: Current phase
+                  - definition [ref=e217]:
+                    - generic [ref=e220]: pre
+                - generic [ref=e223]:
+                  - term [ref=e226]: Timezone
+                  - definition [ref=e228]:
+                    - generic [ref=e230]: America/New_York
+                - generic [ref=e233]:
+                  - term [ref=e236]: Slug
+                  - definition [ref=e238]:
+                    - generic [ref=e240]: /adhd-parenting-summit-2026
+                - generic [ref=e243]:
+                  - term [ref=e246]: Topic
+                  - definition [ref=e248]:
+                    - generic [ref=e250]: ADHD parenting
+                - generic [ref=e253]:
+                  - term [ref=e256]: Description
+                  - definition [ref=e258]:
+                    - generic [ref=e260]: A 5-day virtual summit for parents navigating ADHD.
+              - generic [ref=e264]:
+                - generic [ref=e267]:
+                  - term [ref=e270]: Pre-summit starts
+                  - definition [ref=e272]:
+                    - generic [ref=e274]: Mar 18, 2026 07:37:38
+                - generic [ref=e277]:
+                  - term [ref=e280]: Late pre-summit
+                  - definition [ref=e282]:
+                    - generic [ref=e284]: Apr 10, 2026 06:37:38
+                - generic [ref=e287]:
+                  - term [ref=e290]: During summit
+                  - definition [ref=e292]:
+                    - generic [ref=e294]: Apr 24, 2026 06:37:38
+                - generic [ref=e297]:
+                  - term [ref=e300]: Post-summit
+                  - definition [ref=e302]:
+                    - generic [ref=e304]: May 1, 2026 06:37:38
+                - generic [ref=e307]:
+                  - term [ref=e310]: Ends
+                  - definition [ref=e312]:
+                    - generic [ref=e314]: May 17, 2026 06:37:38
+          - generic [ref=e317]:
+            - tablist [ref=e318]:
+              - tab "Speakers" [ref=e319] [cursor=pointer]:
+                - generic [ref=e320]: Speakers
+              - tab "Funnels" [ref=e321] [cursor=pointer]:
+                - generic [ref=e322]: Funnels
+              - tab "Orders" [ref=e323] [cursor=pointer]:
+                - generic [ref=e324]: Orders
+            - tabpanel "Speakers New speaker Search Filter Column manager Name Masterclass Rating Is featured Goes live at Actions Clementine Terry Optimized systematic structure 3 Apr 10, 2026 17:23:06 View Edit Wilfredo Smith Assimilated interactive framework 4 Apr 18, 2026 02:27:54 View Edit Loraine Friesen Sharable discrete opensystem 5 Apr 10, 2026 14:16:36 View Edit Della Legros Persistent web-enabled challenge 5 Apr 14, 2026 17:18:13 View Edit Kenny Grant Universal disintermediate adapter 5 Apr 16, 2026 07:57:16 View Edit Jamey Becker Enterprise-wide human-resource product 4 Apr 16, 2026 05:58:58 View Edit Brooke Kirlin Synergized secondary synergy 5 Apr 14, 2026 10:50:10 View Edit Woodrow O'Keefe Multi-tiered cohesive conglomeration 3 May 1, 2026 02:42:10 View Edit Pagination navigation" [ref=e330]:
+              - generic [ref=e336]:
+                - generic [ref=e337]:
+                  - generic [ref=e338]:
+                    - heading "Speakers" [level=2] [ref=e340]
+                    - link "New speaker" [ref=e342] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/create
+                      - img [ref=e343]
+                      - text: New speaker
+                  - generic [ref=e346]:
+                    - generic [ref=e347]:
+                      - generic [ref=e348]: Search
+                      - generic [ref=e349]:
+                        - img [ref=e351]
+                        - searchbox "Search" [ref=e354]
+                    - button "Filter" [ref=e357] [cursor=pointer]:
+                      - img [ref=e358]
+                      - generic [ref=e361]: "0"
+                    - button "Column manager" [ref=e364] [cursor=pointer]:
+                      - img [ref=e365]
+                - table [ref=e368]:
+                  - rowgroup [ref=e369]:
+                    - row "Name Masterclass Rating Is featured Goes live at Actions" [ref=e370]:
+                      - columnheader [ref=e371]
+                      - columnheader "Name" [ref=e372]:
+                        - button "Name" [ref=e373] [cursor=pointer]:
+                          - text: Name
+                          - img [ref=e374]
+                      - columnheader "Masterclass" [ref=e376]
+                      - columnheader "Rating" [ref=e377]
+                      - columnheader "Is featured" [ref=e378]
+                      - columnheader "Goes live at" [ref=e379]:
+                        - button "Goes live at" [ref=e380] [cursor=pointer]:
+                          - text: Goes live at
+                          - img [ref=e381]
+                      - columnheader "Actions" [ref=e383]
+                  - rowgroup [ref=e384]:
+                    - row "Clementine Terry Optimized systematic structure 3 Apr 10, 2026 17:23:06 View Edit" [ref=e385]:
+                      - cell [ref=e386]:
+                        - link [ref=e387] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                      - cell "Clementine Terry" [ref=e389]:
+                        - link "Clementine Terry" [ref=e390] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                          - generic [ref=e391]: Clementine Terry
+                      - cell "Optimized systematic structure" [ref=e392]:
+                        - link "Optimized systematic structure" [ref=e393] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                          - generic [ref=e394]: Optimized systematic structure
+                      - cell "3" [ref=e395]:
+                        - link "3" [ref=e396] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                          - generic [ref=e398]: "3"
+                      - cell [ref=e399]:
+                        - link [ref=e400] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                          - img [ref=e402]
+                      - cell "Apr 10, 2026 17:23:06" [ref=e404]:
+                        - link "Apr 10, 2026 17:23:06" [ref=e405] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                          - generic [ref=e406]: Apr 10, 2026 17:23:06
+                      - cell "View Edit" [ref=e407]:
+                        - generic [ref=e408]:
+                          - link "View" [ref=e409] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941
+                            - img [ref=e410]
+                            - text: View
+                          - link "Edit" [ref=e413] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab3-7092-a92a-1ca143148941/edit
+                            - img [ref=e414]
+                            - text: Edit
+                    - row "Wilfredo Smith Assimilated interactive framework 4 Apr 18, 2026 02:27:54 View Edit" [ref=e416]:
+                      - cell [ref=e417]:
+                        - link [ref=e418] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                      - cell "Wilfredo Smith" [ref=e420]:
+                        - link "Wilfredo Smith" [ref=e421] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                          - generic [ref=e422]: Wilfredo Smith
+                      - cell "Assimilated interactive framework" [ref=e423]:
+                        - link "Assimilated interactive framework" [ref=e424] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                          - generic [ref=e425]: Assimilated interactive framework
+                      - cell "4" [ref=e426]:
+                        - link "4" [ref=e427] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                          - generic [ref=e429]: "4"
+                      - cell [ref=e430]:
+                        - link [ref=e431] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                          - img [ref=e433]
+                      - cell "Apr 18, 2026 02:27:54" [ref=e435]:
+                        - link "Apr 18, 2026 02:27:54" [ref=e436] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                          - generic [ref=e437]: Apr 18, 2026 02:27:54
+                      - cell "View Edit" [ref=e438]:
+                        - generic [ref=e439]:
+                          - link "View" [ref=e440] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e
+                            - img [ref=e441]
+                            - text: View
+                          - link "Edit" [ref=e444] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab1-7011-8f61-554b8440024e/edit
+                            - img [ref=e445]
+                            - text: Edit
+                    - row "Loraine Friesen Sharable discrete opensystem 5 Apr 10, 2026 14:16:36 View Edit" [ref=e447]:
+                      - cell [ref=e448]:
+                        - link [ref=e449] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                      - cell "Loraine Friesen" [ref=e451]:
+                        - link "Loraine Friesen" [ref=e452] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                          - generic [ref=e453]: Loraine Friesen
+                      - cell "Sharable discrete opensystem" [ref=e454]:
+                        - link "Sharable discrete opensystem" [ref=e455] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                          - generic [ref=e456]: Sharable discrete opensystem
+                      - cell "5" [ref=e457]:
+                        - link "5" [ref=e458] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                          - generic [ref=e460]: "5"
+                      - cell [ref=e461]:
+                        - link [ref=e462] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                          - img [ref=e464]
+                      - cell "Apr 10, 2026 14:16:36" [ref=e466]:
+                        - link "Apr 10, 2026 14:16:36" [ref=e467] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                          - generic [ref=e468]: Apr 10, 2026 14:16:36
+                      - cell "View Edit" [ref=e469]:
+                        - generic [ref=e470]:
+                          - link "View" [ref=e471] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28
+                            - img [ref=e472]
+                            - text: View
+                          - link "Edit" [ref=e475] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aaaf-7113-9e33-1ba09b325c28/edit
+                            - img [ref=e476]
+                            - text: Edit
+                    - row "Della Legros Persistent web-enabled challenge 5 Apr 14, 2026 17:18:13 View Edit" [ref=e478]:
+                      - cell [ref=e479]:
+                        - link [ref=e480] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                      - cell "Della Legros" [ref=e482]:
+                        - link "Della Legros" [ref=e483] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                          - generic [ref=e484]: Della Legros
+                      - cell "Persistent web-enabled challenge" [ref=e485]:
+                        - link "Persistent web-enabled challenge" [ref=e486] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                          - generic [ref=e487]: Persistent web-enabled challenge
+                      - cell "5" [ref=e488]:
+                        - link "5" [ref=e489] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                          - generic [ref=e491]: "5"
+                      - cell [ref=e492]:
+                        - link [ref=e493] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                          - img [ref=e495]
+                      - cell "Apr 14, 2026 17:18:13" [ref=e497]:
+                        - link "Apr 14, 2026 17:18:13" [ref=e498] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                          - generic [ref=e499]: Apr 14, 2026 17:18:13
+                      - cell "View Edit" [ref=e500]:
+                        - generic [ref=e501]:
+                          - link "View" [ref=e502] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf
+                            - img [ref=e503]
+                            - text: View
+                          - link "Edit" [ref=e506] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d8b5faf/edit
+                            - img [ref=e507]
+                            - text: Edit
+                    - row "Kenny Grant Universal disintermediate adapter 5 Apr 16, 2026 07:57:16 View Edit" [ref=e509]:
+                      - cell [ref=e510]:
+                        - link [ref=e511] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                      - cell "Kenny Grant" [ref=e513]:
+                        - link "Kenny Grant" [ref=e514] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                          - generic [ref=e515]: Kenny Grant
+                      - cell "Universal disintermediate adapter" [ref=e516]:
+                        - link "Universal disintermediate adapter" [ref=e517] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                          - generic [ref=e518]: Universal disintermediate adapter
+                      - cell "5" [ref=e519]:
+                        - link "5" [ref=e520] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                          - generic [ref=e522]: "5"
+                      - cell [ref=e523]:
+                        - link [ref=e524] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                          - img [ref=e526]
+                      - cell "Apr 16, 2026 07:57:16" [ref=e528]:
+                        - link "Apr 16, 2026 07:57:16" [ref=e529] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                          - generic [ref=e530]: Apr 16, 2026 07:57:16
+                      - cell "View Edit" [ref=e531]:
+                        - generic [ref=e532]:
+                          - link "View" [ref=e533] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c
+                            - img [ref=e534]
+                            - text: View
+                          - link "Edit" [ref=e537] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a470b20c/edit
+                            - img [ref=e538]
+                            - text: Edit
+                    - row "Jamey Becker Enterprise-wide human-resource product 4 Apr 16, 2026 05:58:58 View Edit" [ref=e540]:
+                      - cell [ref=e541]:
+                        - link [ref=e542] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                      - cell "Jamey Becker" [ref=e544]:
+                        - link "Jamey Becker" [ref=e545] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                          - generic [ref=e546]: Jamey Becker
+                      - cell "Enterprise-wide human-resource product" [ref=e547]:
+                        - link "Enterprise-wide human-resource product" [ref=e548] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                          - generic [ref=e549]: Enterprise-wide human-resource product
+                      - cell "4" [ref=e550]:
+                        - link "4" [ref=e551] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                          - generic [ref=e553]: "4"
+                      - cell [ref=e554]:
+                        - link [ref=e555] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                          - img [ref=e557]
+                      - cell "Apr 16, 2026 05:58:58" [ref=e559]:
+                        - link "Apr 16, 2026 05:58:58" [ref=e560] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                          - generic [ref=e561]: Apr 16, 2026 05:58:58
+                      - cell "View Edit" [ref=e562]:
+                        - generic [ref=e563]:
+                          - link "View" [ref=e564] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402
+                            - img [ref=e565]
+                            - text: View
+                          - link "Edit" [ref=e568] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab4-7303-968e-9c497d727402/edit
+                            - img [ref=e569]
+                            - text: Edit
+                    - row "Brooke Kirlin Synergized secondary synergy 5 Apr 14, 2026 10:50:10 View Edit" [ref=e571]:
+                      - cell [ref=e572]:
+                        - link [ref=e573] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                      - cell "Brooke Kirlin" [ref=e575]:
+                        - link "Brooke Kirlin" [ref=e576] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                          - generic [ref=e577]: Brooke Kirlin
+                      - cell "Synergized secondary synergy" [ref=e578]:
+                        - link "Synergized secondary synergy" [ref=e579] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                          - generic [ref=e580]: Synergized secondary synergy
+                      - cell "5" [ref=e581]:
+                        - link "5" [ref=e582] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                          - generic [ref=e584]: "5"
+                      - cell [ref=e585]:
+                        - link [ref=e586] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                          - img [ref=e588]
+                      - cell "Apr 14, 2026 10:50:10" [ref=e590]:
+                        - link "Apr 14, 2026 10:50:10" [ref=e591] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                          - generic [ref=e592]: Apr 14, 2026 10:50:10
+                      - cell "View Edit" [ref=e593]:
+                        - generic [ref=e594]:
+                          - link "View" [ref=e595] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513
+                            - img [ref=e596]
+                            - text: View
+                          - link "Edit" [ref=e599] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab0-7277-8c11-52b0a534d513/edit
+                            - img [ref=e600]
+                            - text: Edit
+                    - row "Woodrow O'Keefe Multi-tiered cohesive conglomeration 3 May 1, 2026 02:42:10 View Edit" [ref=e602]:
+                      - cell [ref=e603]:
+                        - link [ref=e604] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                      - cell "Woodrow O'Keefe" [ref=e606]:
+                        - link "Woodrow O'Keefe" [ref=e607] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                          - generic [ref=e608]: Woodrow O'Keefe
+                      - cell "Multi-tiered cohesive conglomeration" [ref=e609]:
+                        - link "Multi-tiered cohesive conglomeration" [ref=e610] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                          - generic [ref=e611]: Multi-tiered cohesive conglomeration
+                      - cell "3" [ref=e612]:
+                        - link "3" [ref=e613] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                          - generic [ref=e615]: "3"
+                      - cell [ref=e616]:
+                        - link [ref=e617] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                          - img [ref=e619]
+                      - cell "May 1, 2026 02:42:10" [ref=e621]:
+                        - link "May 1, 2026 02:42:10" [ref=e622] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                          - generic [ref=e623]: May 1, 2026 02:42:10
+                      - cell "View Edit" [ref=e624]:
+                        - generic [ref=e625]:
+                          - link "View" [ref=e626] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b
+                            - img [ref=e627]
+                            - text: View
+                          - link "Edit" [ref=e630] [cursor=pointer]:
+                            - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers/019d9a96-aab2-7215-b036-d948180b2b1b/edit
+                            - img [ref=e631]
+                            - text: Edit
+                - navigation "Pagination navigation" [ref=e633]:
+                  - generic [ref=e636]:
+                    - generic [ref=e638]: Per page
+                    - combobox "Per page" [ref=e640]:
+                      - option "5"
+                      - option "10" [selected]
+                      - option "25"
+                      - option "50"
+  - generic:
+    - status

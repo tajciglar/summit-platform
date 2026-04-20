@@ -4,20 +4,18 @@ use App\Models\Funnel;
 use App\Models\FunnelStep;
 use App\Models\Speaker;
 use App\Models\Summit;
-use App\Models\SummitSpeaker;
 
 it('resolves a funnel by summit slug + funnel slug + step slug', function () {
     $summit = Summit::factory()->create([
         'slug' => 'test-summit',
         'title' => 'Test Summit',
-        'starts_at' => '2026-05-01 00:00:00',
         'ends_at' => '2026-05-03 23:59:59',
     ]);
     $funnel = Funnel::factory()->for($summit)->create(['slug' => 'main']);
     FunnelStep::factory()->for($funnel)->create([
         'step_type' => 'optin',
         'slug' => 'optin',
-        'content' => [],
+        'page_content' => '{}',
     ]);
 
     $response = $this->getJson('/api/funnels/resolve?summit_slug=test-summit&funnel_slug=main&step_slug=optin');
@@ -33,15 +31,13 @@ it('returns 404 for unknown summit slug', function () {
     $response->assertNotFound();
 });
 
-it('computes speaker day_number from presentation_day', function () {
+it('computes speaker day_number from goes_live_at', function () {
     $summit = Summit::factory()->create(['slug' => 'day-test', 'pre_summit_starts_at' => '2026-05-01']);
     $funnel = Funnel::factory()->for($summit)->create(['slug' => 'main']);
-    FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'slug' => 'optin', 'content' => []]);
-    $speaker = Speaker::factory()->create();
-    SummitSpeaker::factory()->create([
+    FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'slug' => 'optin', 'page_content' => '{}']);
+    Speaker::factory()->create([
         'summit_id' => $summit->id,
-        'speaker_id' => $speaker->id,
-        'presentation_day' => '2026-05-03',
+        'goes_live_at' => '2026-05-03 00:00:00',
     ]);
 
     $response = $this->getJson('/api/funnels/resolve?summit_slug=day-test&funnel_slug=main&step_slug=optin');

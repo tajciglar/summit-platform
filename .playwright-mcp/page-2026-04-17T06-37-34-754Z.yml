@@ -1,0 +1,236 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Dashboard" [ref=e34] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e35]
+                  - generic [ref=e37]: Dashboard
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - generic [ref=e42]: Content
+            - list [ref=e43]:
+              - listitem [ref=e44]:
+                - link "Summits" [ref=e45] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/summits
+                  - generic [ref=e49]: Summits
+              - listitem [ref=e50]:
+                - link "Speakers" [ref=e51] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/speakers
+                  - generic [ref=e55]: Speakers
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e60]: Funnels
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Funnels" [ref=e63] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnels
+                  - generic [ref=e67]: Funnels
+              - listitem [ref=e68]:
+                - link "Funnel Steps" [ref=e69] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/funnel-steps
+                  - generic [ref=e73]: Funnel Steps
+          - listitem [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Sales
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Products" [ref=e81] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/products
+                  - generic [ref=e85]: Products
+              - listitem [ref=e86]:
+                - link "Orders" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/orders
+                  - generic [ref=e92]: Orders
+              - listitem [ref=e93]:
+                - link "Coupons" [ref=e94] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/coupons
+                  - generic [ref=e99]: Coupons
+              - listitem [ref=e100]:
+                - link "Affiliates" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/affiliates
+                  - generic [ref=e105]: Affiliates
+          - listitem [ref=e106]:
+            - generic [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e111]: Settings
+              - button "Settings" [ref=e112]:
+                - img [ref=e113]
+    - main [ref=e116]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - navigation [ref=e121]:
+              - list [ref=e122]:
+                - listitem [ref=e123]:
+                  - link "Products" [ref=e124] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/products
+                - listitem [ref=e125]:
+                  - img [ref=e126]
+                  - link "VIP Pass + Handbook (bundle)" [ref=e128] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/products/019d9a1f-4a94-70ce-8814-6ed747189188
+                - listitem [ref=e129]:
+                  - img [ref=e130]
+                  - generic [ref=e132]: Edit
+            - heading "Edit VIP Pass + Handbook (bundle)" [level=1] [ref=e133]
+          - generic [ref=e135]:
+            - link "View" [ref=e136] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/products/019d9a1f-4a94-70ce-8814-6ed747189188
+            - button "Delete" [ref=e137] [cursor=pointer]
+        - generic [ref=e143]:
+          - generic [ref=e147]:
+            - generic [ref=e151]:
+              - heading "Product" [level=2] [ref=e154]
+              - generic [ref=e156]:
+                - generic [ref=e159]:
+                  - generic [ref=e163]: Summit
+                  - generic [ref=e164]:
+                    - generic [ref=e169]:
+                      - button "ADHD Parenting Summit 2026" [ref=e170] [cursor=pointer]:
+                        - generic [ref=e172]: ADHD Parenting Summit 2026
+                      - button "Clear selection" [ref=e173] [cursor=pointer]:
+                        - img [ref=e174]
+                    - generic [ref=e179]: Leave empty if this product is sold across multiple summits.
+                - generic [ref=e182]:
+                  - generic [ref=e186]: Category
+                  - generic [ref=e187]:
+                    - combobox "Category" [ref=e190]: bundle
+                    - generic [ref=e194]: "Free-text: vip_pass, bundle, recording, etc."
+                - generic [ref=e197]:
+                  - generic [ref=e201]:
+                    - text: Name
+                    - superscript [ref=e202]: "*"
+                  - textbox "Name*" [ref=e206]: VIP Pass + Handbook (bundle)
+                - generic [ref=e209]:
+                  - generic [ref=e213]:
+                    - text: Slug
+                    - superscript [ref=e214]: "*"
+                  - textbox "Slug*" [ref=e218]: vip-plus-handbook-bundle
+                - generic [ref=e221]:
+                  - generic [ref=e225]: Description
+                  - textbox "Description" [ref=e230]: Everything in the VIP Pass plus the printable ADHD Parenting Handbook.
+            - generic [ref=e234]:
+              - generic [ref=e236]:
+                - heading "Role in the funnel" [level=2] [ref=e237]
+                - paragraph [ref=e238]: How this product is sold.
+              - generic [ref=e240]:
+                - generic [ref=e243]:
+                  - generic [ref=e247]:
+                    - text: Product kind
+                    - superscript [ref=e248]: "*"
+                  - generic [ref=e254]:
+                    - button "Combo — bundles multiple products" [ref=e255] [cursor=pointer]:
+                      - generic [ref=e257]: Combo — bundles multiple products
+                    - button "Clear selection" [ref=e258] [cursor=pointer]:
+                      - img [ref=e259]
+                - generic [ref=e263]:
+                  - generic [ref=e267]: Products in this combo
+                  - generic [ref=e268]:
+                    - button "VIP All-Access Pass Remove VIP All-Access Pass ADHD Parenting Handbook Remove ADHD Parenting Handbook" [ref=e274] [cursor=pointer]:
+                      - generic [ref=e276]:
+                        - generic [ref=e277]:
+                          - generic [ref=e279]: VIP All-Access Pass
+                          - button "Remove VIP All-Access Pass" [ref=e280]:
+                            - img [ref=e281]
+                        - generic [ref=e283]:
+                          - generic [ref=e285]: ADHD Parenting Handbook
+                          - button "Remove ADHD Parenting Handbook" [ref=e286]:
+                            - img [ref=e287]
+                    - generic [ref=e292]: Pick 2+ products to bundle. At checkout, Stripe receives one line item per child product using its own stripe_price_id.
+                - generic [ref=e295]:
+                  - generic [ref=e299]: Combo discount (cents)
+                  - generic [ref=e300]:
+                    - generic [ref=e301]:
+                      - generic [ref=e303]: ¢
+                      - spinbutton "Combo discount (cents)" [ref=e305]: "1700"
+                    - generic [ref=e309]: Optional. Subtracted from the sum of children's current-phase prices.
+                - generic [ref=e312]:
+                  - term [ref=e315]: Pricing preview
+                  - definition [ref=e317]:
+                    - generic [ref=e320]:
+                      - generic [ref=e321]:
+                        - generic [ref=e322]: Children (2)
+                        - list [ref=e323]:
+                          - listitem [ref=e324]: VIP All-Access Pass
+                          - listitem [ref=e325]: ADHD Parenting Handbook
+                      - table [ref=e326]:
+                        - rowgroup [ref=e327]:
+                          - row "Phase Sum of children Discount Combo total" [ref=e328]:
+                            - columnheader "Phase" [ref=e329]
+                            - columnheader "Sum of children" [ref=e330]
+                            - columnheader "Discount" [ref=e331]
+                            - columnheader "Combo total" [ref=e332]
+                        - rowgroup [ref=e333]:
+                          - row "Pre-summit $114.00 −$17.00 $97.00" [ref=e334]:
+                            - cell "Pre-summit" [ref=e335]
+                            - cell "$114.00" [ref=e336]
+                            - cell "−$17.00" [ref=e337]
+                            - cell "$97.00" [ref=e338]
+                          - row "Late pre $164.00 −$17.00 $147.00" [ref=e339]:
+                            - cell "Late pre" [ref=e340]
+                            - cell "$164.00" [ref=e341]
+                            - cell "−$17.00" [ref=e342]
+                            - cell "$147.00" [ref=e343]
+                          - row "During $214.00 −$17.00 $197.00" [ref=e344]:
+                            - cell "During" [ref=e345]
+                            - cell "$214.00" [ref=e346]
+                            - cell "−$17.00" [ref=e347]
+                            - cell "$197.00" [ref=e348]
+                          - row "Post-summit $264.00 −$17.00 $247.00" [ref=e349]:
+                            - cell "Post-summit" [ref=e350]
+                            - cell "$264.00" [ref=e351]
+                            - cell "−$17.00" [ref=e352]
+                            - cell "$247.00" [ref=e353]
+            - generic [ref=e357]:
+              - heading "Type & access" [level=2] [ref=e360]
+              - generic [ref=e362]:
+                - generic [ref=e365]:
+                  - generic [ref=e369]:
+                    - text: Product type
+                    - superscript [ref=e370]: "*"
+                  - generic [ref=e376]:
+                    - button "One-time purchase" [ref=e377] [cursor=pointer]:
+                      - generic [ref=e379]: One-time purchase
+                    - button "Clear selection" [ref=e380] [cursor=pointer]:
+                      - img [ref=e381]
+                - generic [ref=e385]:
+                  - generic [ref=e389]: Tier
+                  - generic [ref=e390]:
+                    - combobox "Tier" [ref=e393]: vip
+                    - generic [ref=e397]: basic, vip, etc.
+                - generic [ref=e400]:
+                  - generic [ref=e403]:
+                    - switch "Grants VIP access" [checked] [ref=e404] [cursor=pointer]
+                    - generic [ref=e405]: Grants VIP access
+                  - generic [ref=e410]: Buyer unlocks VIP videos on purchase.
+                - generic [ref=e416]:
+                  - switch "Is active" [checked] [ref=e417] [cursor=pointer]
+                  - generic [ref=e418]: Is active
+          - generic [ref=e423]:
+            - button "Save changes" [ref=e424] [cursor=pointer]:
+              - generic [ref=e425]: Save changes
+            - button "Cancel" [ref=e426] [cursor=pointer]
+  - generic:
+    - status

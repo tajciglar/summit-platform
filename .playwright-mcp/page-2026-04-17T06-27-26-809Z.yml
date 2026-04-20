@@ -1,0 +1,186 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e10]: Internal Server Error
+    - button "Copy as Markdown" [ref=e11] [cursor=pointer]:
+      - img [ref=e12]
+      - generic [ref=e15]: Copy as Markdown
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Error" [level=1] [ref=e20]
+      - generic [ref=e22]: app/Filament/Resources/Products/Pages/ListProducts.php:34
+      - paragraph [ref=e23]: Class "Filament\Resources\Components\Tab" not found
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: LARAVEL
+          - generic [ref=e28]: 13.3.0
+        - generic [ref=e29]:
+          - generic [ref=e30]: PHP
+          - generic [ref=e31]: 8.4.1
+      - generic [ref=e32]:
+        - img [ref=e33]
+        - text: UNHANDLED
+      - generic [ref=e36]: CODE 0
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - img [ref=e40]
+        - text: "500"
+      - generic [ref=e43]:
+        - img [ref=e44]
+        - text: GET
+      - generic [ref=e47]: http://127.0.0.1:8000/admin/products
+      - button [ref=e48] [cursor=pointer]:
+        - img [ref=e49]
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - heading "Exception trace" [level=3] [ref=e60]
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63] [cursor=pointer]:
+            - generic [ref=e66]:
+              - code [ref=e70]:
+                - generic [ref=e71]: App\Filament\Resources\Products\Pages\ListProducts->getTabs()
+              - generic [ref=e73]: app/Filament/Resources/Products/Pages/ListProducts.php:34
+            - button [ref=e75]:
+              - img [ref=e76]
+          - code [ref=e84]:
+            - generic [ref=e85]: 29 ->pluck('c', 'kind');
+            - generic [ref=e86]: "30"
+            - generic [ref=e87]: "31 $badge = fn (?int $n): ?string => $n ? (string) $n : null;"
+            - generic [ref=e88]: "32"
+            - generic [ref=e89]: 33 return [
+            - generic [ref=e90]: 34 'all' => Tab::make('All products')
+            - generic [ref=e91]: 35 ->icon('heroicon-o-squares-2x2')
+            - generic [ref=e92]: "36 ->badge(Product::query()->count() ?: null),"
+            - generic [ref=e93]: "37"
+            - generic [ref=e94]: 38 'standalone' => Tab::make('Standalone')
+            - generic [ref=e95]: 39 ->icon('heroicon-o-cube')
+            - generic [ref=e96]: 40 ->badge($badge($counts['standalone'] ?? 0))
+            - generic [ref=e97]: 41 ->modifyQueryUsing(fn (Builder $q) => $q->where('kind', 'standalone')),
+            - generic [ref=e98]: "42"
+            - generic [ref=e99]: 43 'bumps' => Tab::make('Order bumps')
+            - generic [ref=e100]: 44 ->icon('heroicon-o-plus-circle')
+            - generic [ref=e101]: 45 ->badge($badge($counts['bump'] ?? 0))
+            - generic [ref=e102]: "46"
+        - generic [ref=e104] [cursor=pointer]:
+          - img [ref=e105]
+          - generic [ref=e109]: 79 vendor frames
+          - button [ref=e110]:
+            - img [ref=e111]
+        - generic [ref=e116] [cursor=pointer]:
+          - generic [ref=e119]:
+            - code [ref=e123]:
+              - generic [ref=e124]: Illuminate\Foundation\Application->handleRequest(object(Illuminate\Http\Request))
+            - generic [ref=e126]: public/index.php:20
+          - button [ref=e128]:
+            - img [ref=e129]
+        - generic [ref=e134] [cursor=pointer]:
+          - img [ref=e135]
+          - generic [ref=e139]: 1 vendor frame
+          - button [ref=e140]:
+            - img [ref=e141]
+    - generic [ref=e145]:
+      - generic [ref=e146]:
+        - generic [ref=e147]:
+          - img [ref=e149]
+          - heading "Queries" [level=3] [ref=e151]
+        - generic [ref=e153]: 1-3 of 3
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - img [ref=e158]
+              - generic [ref=e160]: pgsql
+            - code [ref=e164]:
+              - generic [ref=e165]: select * from "sessions" where "id" = 'CXlD4t1hYJYz1998uej1ZbcxeUGZktqM8m4cnUFo' limit 1
+          - generic [ref=e166]: 10.71ms
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - img [ref=e170]
+              - generic [ref=e172]: pgsql
+            - code [ref=e176]:
+              - generic [ref=e177]: select * from "users" where "id" = '019d99f1-a4b6-736f-8cbb-351a0d46499c' limit 1
+          - generic [ref=e178]: 1.82ms
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - img [ref=e182]
+              - generic [ref=e184]: pgsql
+            - code [ref=e188]:
+              - generic [ref=e189]: select kind, COUNT(*) as c from "products" group by "kind"
+          - generic [ref=e190]: 2.25ms
+  - generic [ref=e192]:
+    - generic [ref=e193]:
+      - heading "Headers" [level=2] [ref=e194]
+      - generic [ref=e195]:
+        - generic [ref=e196]:
+          - generic [ref=e197]: host
+          - generic [ref=e199]: 127.0.0.1:8000
+        - generic [ref=e200]:
+          - generic [ref=e201]: connection
+          - generic [ref=e203]: keep-alive
+        - generic [ref=e204]:
+          - generic [ref=e205]: sec-ch-ua
+          - generic [ref=e207]: "\"Google Chrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\""
+        - generic [ref=e208]:
+          - generic [ref=e209]: sec-ch-ua-mobile
+          - generic [ref=e211]: "?0"
+        - generic [ref=e212]:
+          - generic [ref=e213]: sec-ch-ua-platform
+          - generic [ref=e215]: "\"macOS\""
+        - generic [ref=e216]:
+          - generic [ref=e217]: upgrade-insecure-requests
+          - generic [ref=e219]: "1"
+        - generic [ref=e220]:
+          - generic [ref=e221]: user-agent
+          - generic [ref=e223]: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36
+        - generic [ref=e224]:
+          - generic [ref=e225]: accept
+          - generic [ref=e227]: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+        - generic [ref=e228]:
+          - generic [ref=e229]: sec-fetch-site
+          - generic [ref=e231]: none
+        - generic [ref=e232]:
+          - generic [ref=e233]: sec-fetch-mode
+          - generic [ref=e235]: navigate
+        - generic [ref=e236]:
+          - generic [ref=e237]: sec-fetch-user
+          - generic [ref=e239]: "?1"
+        - generic [ref=e240]:
+          - generic [ref=e241]: sec-fetch-dest
+          - generic [ref=e243]: document
+        - generic [ref=e244]:
+          - generic [ref=e245]: accept-encoding
+          - generic [ref=e247]: gzip, deflate, br, zstd
+        - generic [ref=e248]:
+          - generic [ref=e249]: accept-language
+          - generic [ref=e251]: en-US,en;q=0.9
+        - generic [ref=e252]:
+          - generic [ref=e253]: cookie
+          - generic [ref=e255]: XSRF-TOKEN=eyJpdiI6InhQKzNiL0djQ21jK0w2bjBDWW1vSHc9PSIsInZhbHVlIjoieTJDY2p0WE9iellIU0JmUUZtSERMLzJOWjNRYnlNM2tKRUFXcEp5T3MvMEpYeURzajFGSGxhV0M3MVZYUmRDdFhtQjMwUCsyMyswNndWdEd0OFZtNFQ3VUZ5V0g1TGszaXhpQ2pGM3dwdDdBV0ZkOXJWdGJoTUZ2UGlsKzRJZzUiLCJtYWMiOiJjYjQ1ODlmOTI4MzhlMjdiZGUzMjA1ZDY5YjcyN2M2YTRkNjAxZGU4OTQ2ZTcwZDMwMmI4ZTVjMDA0ODE1NjIwIiwidGFnIjoiIn0%3D; laravel-session=eyJpdiI6IkJNRmxqcU1Dak9aWVlQV05Sb0x0REE9PSIsInZhbHVlIjoiNGM2cGc1Y2g1RUhmMzJyYzdtclFqUWM1a2xJL2dadWR4SytZbFZyQm5JY0pmTmI5YWY3UmVzU0Z6ZG9sS3BmOEt4RittYWIvb1BNVmtaWC9udjA5ZEVFV0lmV1NGT1lkMHM0Z2tkaEJrUmtaQnErcXYwN0c0UjhJNXpJaDU0NlQiLCJtYWMiOiI5NDZlNzllNWQzNTliNzViZjkxNGE0ZTRhOTBjYWI3OTNiNmFlMDRmODVkNDBjZTg2MmY0NzM5MTdlNWM0NTRjIiwidGFnIjoiIn0%3D
+    - generic [ref=e256]:
+      - heading "Body" [level=2] [ref=e257]
+      - generic [ref=e258]: // No request body
+    - generic [ref=e259]:
+      - heading "Routing" [level=2] [ref=e260]
+      - generic [ref=e261]:
+        - generic [ref=e262]:
+          - generic [ref=e263]: controller
+          - generic [ref=e265]: App\Filament\Resources\Products\Pages\ListProducts
+        - generic [ref=e266]:
+          - generic [ref=e267]: route name
+          - generic [ref=e269]: filament.admin.resources.products.index
+        - generic [ref=e270]:
+          - generic [ref=e271]: middleware
+          - generic [ref=e273]: panel:admin, Illuminate\Cookie\Middleware\EncryptCookies, Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse, Illuminate\Session\Middleware\StartSession, Filament\Http\Middleware\AuthenticateSession, Illuminate\View\Middleware\ShareErrorsFromSession, Illuminate\Foundation\Http\Middleware\PreventRequestForgery, Illuminate\Routing\Middleware\SubstituteBindings, Filament\Http\Middleware\DisableBladeIconComponents, Filament\Http\Middleware\DispatchServingFilamentEvent, Filament\Http\Middleware\Authenticate
+    - generic [ref=e274]:
+      - heading "Routing parameters" [level=2] [ref=e275]
+      - generic [ref=e276]: // No routing parameters
+  - generic [ref=e279]:
+    - img [ref=e281]
+    - img [ref=e3319]

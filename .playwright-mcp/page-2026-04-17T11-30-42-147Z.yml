@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/althea-academy
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of Althea Academy Althea Academy" [ref=e31] [cursor=pointer]:
+        - img "Avatar of Althea Academy" [ref=e32]
+        - generic [ref=e34]: Althea Academy
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47]:
+              - img [ref=e48]
+              - generic [ref=e50]: Summit
+            - list [ref=e51]:
+              - listitem [ref=e52]:
+                - link "ADHD Parenting Summit 2026" [ref=e53] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/current-summit/019d9b1a-a5d0-7179-9232-02e0d88069e0
+                  - generic [ref=e56]: ADHD Parenting Summit 2026
+          - listitem [ref=e57]:
+            - generic [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e60]:
+                - img [ref=e61]
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Roles" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/shield/roles
+                  - img [ref=e66]
+                  - generic [ref=e68]: Roles
+          - listitem [ref=e69]:
+            - generic [ref=e70]:
+              - img [ref=e71]
+              - generic [ref=e73]: Content
+            - list [ref=e74]:
+              - listitem [ref=e75]:
+                - link "Speakers" [ref=e76] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/speakers
+                  - generic [ref=e79]: Speakers
+          - listitem [ref=e80]:
+            - generic [ref=e81]:
+              - img [ref=e82]
+              - generic [ref=e84]: Funnels
+            - list [ref=e85]:
+              - listitem [ref=e86]:
+                - link "Funnels" [ref=e87] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnels
+                  - generic [ref=e91]: Funnels
+              - listitem [ref=e92]:
+                - link "Funnel Steps" [ref=e93] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-steps
+                  - generic [ref=e97]: Funnel Steps
+          - listitem [ref=e98]:
+            - generic [ref=e99]:
+              - img [ref=e100]
+              - generic [ref=e102]: Sales
+            - list [ref=e103]:
+              - listitem [ref=e104]:
+                - link "Products" [ref=e105] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/products
+                  - generic [ref=e109]: Products
+              - listitem [ref=e110]:
+                - link "Orders" [ref=e111] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/orders
+                  - generic [ref=e116]: Orders
+              - listitem [ref=e117]:
+                - link "Coupons" [ref=e118] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/coupons
+                  - generic [ref=e123]: Coupons
+              - listitem [ref=e124]:
+                - link "Affiliates" [ref=e125] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/affiliates
+                  - generic [ref=e129]: Affiliates
+          - listitem [ref=e130]:
+            - generic [ref=e131]:
+              - img [ref=e132]
+              - generic [ref=e134]: Analytics
+            - list [ref=e135]:
+              - listitem [ref=e136]:
+                - link "Funnel performance" [ref=e137] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/funnel-performance
+                  - generic [ref=e141]: Funnel performance
+              - listitem [ref=e142]:
+                - link "UTM attribution" [ref=e143] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/althea-academy/utm-breakdown
+                  - generic [ref=e147]: UTM attribution
+          - listitem [ref=e148]:
+            - generic [ref=e149] [cursor=pointer]:
+              - img [ref=e150]
+              - generic [ref=e153]: Settings
+              - button "Settings" [ref=e154]:
+                - img [ref=e155]
+    - main [ref=e158]:
+      - generic [ref=e160]:
+        - heading "Dashboard" [level=1] [ref=e163]
+        - generic [ref=e174]:
+          - img "Avatar of Admin User" [ref=e175]
+          - generic [ref=e176]:
+            - heading "Welcome" [level=2] [ref=e177]
+            - paragraph [ref=e178]: Admin User
+          - button "Sign out" [ref=e180] [cursor=pointer]:
+            - img [ref=e181]
+            - text: Sign out
+  - generic:
+    - status

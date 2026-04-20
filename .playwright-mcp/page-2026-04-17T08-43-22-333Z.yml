@@ -1,0 +1,108 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - button "Collapse sidebar" [ref=e6] [cursor=pointer]:
+        - img [ref=e7]
+      - link "Summit Builder" [ref=e9] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+        - generic [ref=e10]: Summit Builder
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Global search
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - searchbox "Global search" [ref=e21]
+      - button "User menu" [ref=e24] [cursor=pointer]:
+        - img "Avatar of Admin User" [ref=e25]
+  - generic [ref=e26]:
+    - complementary [ref=e28]:
+      - button "Avatar of ADHD Parenting Summit 2026 ADHD Parenting Summit 2026" [ref=e31] [cursor=pointer]:
+        - img "Avatar of ADHD Parenting Summit 2026" [ref=e32]
+        - generic [ref=e34]: ADHD Parenting Summit 2026
+        - img [ref=e35]
+      - navigation [ref=e37]:
+        - list [ref=e38]:
+          - listitem [ref=e39]:
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Dashboard" [ref=e42] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026
+                  - img [ref=e43]
+                  - generic [ref=e45]: Dashboard
+          - listitem [ref=e46]:
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e49]:
+                - img [ref=e50]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Roles" [ref=e54] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/shield/roles
+                  - img [ref=e55]
+                  - generic [ref=e57]: Roles
+          - listitem [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e62]: Content
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Summits" [ref=e65] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/summits
+                  - generic [ref=e69]: Summits
+              - listitem [ref=e70]:
+                - link "Speakers" [ref=e71] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/speakers
+                  - generic [ref=e75]: Speakers
+          - listitem [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - generic [ref=e80]: Funnels
+            - list [ref=e81]:
+              - listitem [ref=e82]:
+                - link "Funnels" [ref=e83] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnels
+                  - generic [ref=e87]: Funnels
+              - listitem [ref=e88]:
+                - link "Funnel Steps" [ref=e89] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/funnel-steps
+                  - generic [ref=e93]: Funnel Steps
+          - listitem [ref=e94]:
+            - generic [ref=e95]:
+              - img [ref=e96]
+              - generic [ref=e98]: Sales
+            - list [ref=e99]:
+              - listitem [ref=e100]:
+                - link "Products" [ref=e101] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/products
+                  - generic [ref=e105]: Products
+              - listitem [ref=e106]:
+                - link "Orders" [ref=e107] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/orders
+                  - generic [ref=e112]: Orders
+              - listitem [ref=e113]:
+                - link "Coupons" [ref=e114] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/coupons
+                  - generic [ref=e119]: Coupons
+              - listitem [ref=e120]:
+                - link "Affiliates" [ref=e121] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/adhd-parenting-summit-2026/affiliates
+                  - generic [ref=e125]: Affiliates
+          - listitem [ref=e126]:
+            - generic [ref=e127] [cursor=pointer]:
+              - img [ref=e128]
+              - generic [ref=e131]: Settings
+              - button "Settings" [ref=e132]:
+                - img [ref=e133]
+    - main [ref=e136]:
+      - generic [ref=e138]:
+        - heading "Dashboard" [level=1] [ref=e141]
+        - generic [ref=e152]:
+          - img "Avatar of Admin User" [ref=e153]
+          - generic [ref=e154]:
+            - heading "Welcome" [level=2] [ref=e155]
+            - paragraph [ref=e156]: Admin User
+          - button "Sign out" [ref=e158] [cursor=pointer]:
+            - img [ref=e159]
+            - text: Sign out
+  - generic:
+    - status

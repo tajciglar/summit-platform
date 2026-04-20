@@ -1,24 +1,20 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
+// Adds the FK constraint now that the contacts table exists.
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('optins', function (Blueprint $table) {
-            $table->uuid('contact_id')->nullable()->after('id');
-            $table->foreign('contact_id')->references('id')->on('contacts')->nullOnDelete();
-        });
+        DB::statement('ALTER TABLE optins ADD CONSTRAINT optins_contact_id_fkey FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE SET NULL');
+        DB::statement('CREATE INDEX optins_contact_id_idx ON optins(contact_id)');
     }
 
     public function down(): void
     {
-        Schema::table('optins', function (Blueprint $table) {
-            $table->dropForeign(['contact_id']);
-            $table->dropColumn('contact_id');
-        });
+        DB::statement('ALTER TABLE optins DROP CONSTRAINT IF EXISTS optins_contact_id_fkey');
+        DB::statement('DROP INDEX IF EXISTS optins_contact_id_idx');
     }
 };
