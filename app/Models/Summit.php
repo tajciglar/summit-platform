@@ -22,6 +22,7 @@ class Summit extends Model
     ];
 
     protected $casts = [
+        'starts_at' => 'datetime',
         'pre_summit_starts_at' => 'datetime',
         'late_pre_summit_starts_at' => 'datetime',
         'during_summit_starts_at' => 'datetime',

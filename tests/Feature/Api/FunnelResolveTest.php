@@ -34,7 +34,7 @@ it('returns 404 for unknown summit slug', function () {
 });
 
 it('computes speaker day_number from presentation_day', function () {
-    $summit = Summit::factory()->create(['slug' => 'day-test', 'starts_at' => '2026-05-01']);
+    $summit = Summit::factory()->create(['slug' => 'day-test', 'pre_summit_starts_at' => '2026-05-01']);
     $funnel = Funnel::factory()->for($summit)->create(['slug' => 'main']);
     FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'slug' => 'optin', 'content' => []]);
     $speaker = Speaker::factory()->create();
