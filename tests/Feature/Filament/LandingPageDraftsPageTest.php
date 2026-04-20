@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\LandingPageDraftStatus;
 use App\Filament\Resources\Funnels\Pages\LandingPageDraftsPage;
 use App\Models\Domain;
 use App\Models\Funnel;
@@ -37,7 +38,7 @@ it('renders the drafts page without drafts', function () {
         ->assertSee('No drafts yet');
 });
 
-it('lists visible drafts (excludes rejected + archived)', function () {
+it('lists visible drafts (excludes archived)', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
     $batch = LandingPageBatch::create([
@@ -47,17 +48,12 @@ it('lists visible drafts (excludes rejected + archived)', function () {
     $ready = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 1,
         'template_key' => 'opus-v1', 'sections' => [],
-        'status' => 'ready', 'preview_token' => 't1',
-    ]);
-    $rejected = LandingPageDraft::create([
-        'batch_id' => $batch->id, 'version_number' => 2,
-        'template_key' => 'opus-v2', 'sections' => [],
-        'status' => 'rejected', 'preview_token' => 't2',
+        'status' => LandingPageDraftStatus::Ready, 'preview_token' => 't1',
     ]);
     $archived = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 3,
         'template_key' => 'opus-v1', 'sections' => [],
-        'status' => 'archived', 'preview_token' => 't3',
+        'status' => LandingPageDraftStatus::Archived, 'preview_token' => 't3',
     ]);
 
     $page = livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
@@ -84,10 +80,10 @@ it('approve action marks draft as shortlisted', function () {
     livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
         ->call('approve', $draft->id);
 
-    expect($draft->fresh()->status)->toBe('shortlisted');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Shortlisted);
 });
 
-it('reject action marks draft as rejected', function () {
+it('reject action marks draft as archived', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
     $batch = LandingPageBatch::create([
@@ -97,13 +93,13 @@ it('reject action marks draft as rejected', function () {
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 1,
         'template_key' => 'opus-v1', 'sections' => [],
-        'status' => 'ready', 'preview_token' => 't1',
+        'status' => LandingPageDraftStatus::Ready, 'preview_token' => 't1',
     ]);
 
     livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
         ->call('reject', $draft->id);
 
-    expect($draft->fresh()->status)->toBe('rejected');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Archived);
 });
 
 it('polls every 3s while a draft is generating', function () {
@@ -144,7 +140,7 @@ it('publish action calls PublishDraftService', function () {
     livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
         ->call('publish', $draft->id);
 
-    expect($draft->fresh()->status)->toBe('published');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Published);
 });
 
 it('publish action shows notification when funnel has no optin step', function () {
@@ -165,5 +161,5 @@ it('publish action shows notification when funnel has no optin step', function (
     livewire(LandingPageDraftsPage::class, ['record' => $funnel->id])
         ->call('publish', $draft->id);
 
-    expect($draft->fresh()->status)->toBe('shortlisted'); // unchanged — publish was blocked
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Shortlisted); // unchanged — publish was blocked
 });

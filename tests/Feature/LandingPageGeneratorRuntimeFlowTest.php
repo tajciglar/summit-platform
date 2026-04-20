@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Jobs\GenerateLandingPageVersionJob;
 use App\Models\LandingPageDraft;
-use App\Services\FunnelGenerator\Phases\BlockDesignPhase;
 use App\Services\LandingPageGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
@@ -27,11 +27,11 @@ class LandingPageGeneratorRuntimeFlowTest extends TestCase
         $generator->shouldReceive('generateSections')->once()->andReturn($sections);
         $this->app->instance(LandingPageGenerator::class, $generator);
 
-        $draft = LandingPageDraft::factory()->create(['status' => 'pending']);
+        $draft = LandingPageDraft::factory()->create(['status' => LandingPageDraftStatus::Queued]);
         (new GenerateLandingPageVersionJob($draft))->handle($generator);
 
         $draft->refresh();
-        $this->assertSame('ready', $draft->status);
+        $this->assertSame(LandingPageDraftStatus::Ready, $draft->status);
         $this->assertEquals($sections, $draft->sections);
     }
 
@@ -44,11 +44,11 @@ class LandingPageGeneratorRuntimeFlowTest extends TestCase
         $generator->shouldReceive('generate')->once()->andReturn($blocks);
         $this->app->instance(LandingPageGenerator::class, $generator);
 
-        $draft = LandingPageDraft::factory()->create(['status' => 'pending']);
+        $draft = LandingPageDraft::factory()->create(['status' => LandingPageDraftStatus::Queued]);
         (new GenerateLandingPageVersionJob($draft))->handle($generator);
 
         $draft->refresh();
-        $this->assertSame('ready', $draft->status);
+        $this->assertSame(LandingPageDraftStatus::Ready, $draft->status);
         $this->assertEquals($blocks, $draft->blocks);
     }
 }

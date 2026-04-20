@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Filament\Resources\Funnels\Pages\ManageLandingPageBatches;
 use App\Jobs\PublishLandingPageDraftJob;
 use App\Models\Funnel;
@@ -19,8 +20,9 @@ class ManageLandingPageBatchesApproveTest extends TestCase
 
     private function makePage(Funnel $funnel): ManageLandingPageBatches
     {
-        $page = new ManageLandingPageBatches();
+        $page = new ManageLandingPageBatches;
         $page->record = $funnel;
+
         return $page;
     }
 
@@ -29,9 +31,10 @@ class ManageLandingPageBatchesApproveTest extends TestCase
         $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
         $optinStep = FunnelStep::factory()->create([
             'funnel_id' => $funnel->id,
-            'slug'      => 'optin',
-            'content'   => [],
+            'slug' => 'optin',
+            'content' => [],
         ]);
+
         return [$funnel, $optinStep];
     }
 
@@ -46,19 +49,19 @@ class ManageLandingPageBatchesApproveTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'ready',
-            'blocks'   => ['foo' => 'bar'],
+            'status' => 'ready',
+            'blocks' => ['foo' => 'bar'],
         ]);
 
         $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['foo' => 'bar'], $optinStep->fresh()->content);
-        $this->assertSame('approved', $draft->fresh()->status);
+        $this->assertSame(LandingPageDraftStatus::Shortlisted, $draft->fresh()->status);
         Queue::assertNotPushed(PublishLandingPageDraftJob::class);
     }
 
@@ -73,19 +76,19 @@ class ManageLandingPageBatchesApproveTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'ready',
+            'status' => 'ready',
             'sections' => [['id' => 'abc', 'type' => 'hero', 'status' => 'ready']],
         ]);
 
         $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['published_draft_id' => $draft->id], $optinStep->fresh()->content);
-        $this->assertSame('publishing', $draft->fresh()->status);
+        $this->assertSame(LandingPageDraftStatus::Publishing, $draft->fresh()->status);
         Queue::assertPushed(PublishLandingPageDraftJob::class, function ($job) use ($draft) {
             return $job->draftId === $draft->id;
         });
@@ -102,19 +105,19 @@ class ManageLandingPageBatchesApproveTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'ready',
-            'blocks'   => ['foo' => 'bar'],
+            'status' => 'ready',
+            'blocks' => ['foo' => 'bar'],
         ]);
 
         $this->makePage($funnel)->approveDraft($draft->id);
 
         $this->assertEquals(['foo' => 'bar'], $optinStep->fresh()->content);
-        $this->assertSame('approved', $draft->fresh()->status);
+        $this->assertSame(LandingPageDraftStatus::Shortlisted, $draft->fresh()->status);
         Queue::assertNotPushed(PublishLandingPageDraftJob::class);
     }
 }

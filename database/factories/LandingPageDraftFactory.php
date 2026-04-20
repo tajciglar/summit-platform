@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +26,7 @@ class LandingPageDraftFactory extends Factory
             'enabled_sections' => null,
             'published_html' => null,
             'published_hydration_manifest' => null,
-            'status' => 'pending',
+            'status' => LandingPageDraftStatus::Queued,
             'preview_token' => Str::random(40),
             'error_message' => null,
             'token_count' => null,
@@ -35,28 +36,28 @@ class LandingPageDraftFactory extends Factory
 
     public function ready(): static
     {
-        return $this->state(fn () => ['status' => 'ready']);
+        return $this->state(fn () => ['status' => LandingPageDraftStatus::Ready]);
     }
 
     public function shortlisted(): static
     {
-        return $this->state(fn () => ['status' => 'shortlisted']);
+        return $this->state(fn () => ['status' => LandingPageDraftStatus::Shortlisted]);
     }
 
     public function approved(): static
     {
-        return $this->state(fn () => ['status' => 'approved']);
+        return $this->state(fn () => ['status' => LandingPageDraftStatus::Shortlisted]);
     }
 
     public function published(): static
     {
-        return $this->state(fn () => ['status' => 'published']);
+        return $this->state(fn () => ['status' => LandingPageDraftStatus::Published]);
     }
 
     public function failed(): static
     {
         return $this->state(fn () => [
-            'status' => 'failed',
+            'status' => LandingPageDraftStatus::Failed,
             'error_message' => 'Generation failed',
         ]);
     }

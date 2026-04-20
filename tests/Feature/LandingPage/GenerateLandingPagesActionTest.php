@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\LandingPage;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Filament\Resources\Summits\Pages\ManageLandingPageBatches;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
@@ -18,17 +19,16 @@ it('dispatches batch job when invoked', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 3,
-        'status'        => 'queued',
-        'notes'         => 'Target audience: busy parents.',
+        'status' => 'queued',
+        'notes' => 'Target audience: busy parents.',
     ]);
 
     dispatch(new GenerateLandingPageBatchJob($batch));
 
-    Queue::assertPushed(GenerateLandingPageBatchJob::class, fn ($job) =>
-        $job->batch->id === $batch->id
+    Queue::assertPushed(GenerateLandingPageBatchJob::class, fn ($job) => $job->batch->id === $batch->id
     );
 });
 
@@ -37,17 +37,17 @@ it('approveDraft copies blocks to optin step and marks siblings rejected', funct
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $optinStep = FunnelStep::factory()->create([
-        'funnel_id'  => $funnel->id,
-        'slug'       => 'optin',
-        'step_type'  => 'optin',
-        'content'    => [],
+        'funnel_id' => $funnel->id,
+        'slug' => 'optin',
+        'step_type' => 'optin',
+        'content' => [],
     ]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 2,
-        'status'        => 'running',
+        'status' => 'running',
     ]);
 
     $blocks = [
@@ -55,30 +55,30 @@ it('approveDraft copies blocks to optin step and marks siblings rejected', funct
     ];
 
     $winner = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'ready',
-        'preview_token'  => 'tok-winner',
-        'blocks'         => $blocks,
+        'status' => 'ready',
+        'preview_token' => 'tok-winner',
+        'blocks' => $blocks,
     ]);
 
     $sibling = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 2,
-        'status'         => 'ready',
-        'preview_token'  => 'tok-sibling',
-        'blocks'         => [['id' => 'def', 'type' => 'HeroBlock', 'version' => 1, 'props' => []]],
+        'status' => 'ready',
+        'preview_token' => 'tok-sibling',
+        'blocks' => [['id' => 'def', 'type' => 'HeroBlock', 'version' => 1, 'props' => []]],
     ]);
 
     // Instantiate the page and set the record directly
-    $page = new ManageLandingPageBatches();
+    $page = new ManageLandingPageBatches;
     $page->record = $summit;
 
     $page->approveDraft($winner->id);
 
     expect($optinStep->fresh()->content)->toEqual($blocks);
-    expect($winner->fresh()->status)->toBe('approved');
-    expect($sibling->fresh()->status)->toBe('rejected');
+    expect($winner->fresh()->status)->toBe(LandingPageDraftStatus::Shortlisted);
+    expect($sibling->fresh()->status)->toBe(LandingPageDraftStatus::Archived);
     expect($batch->fresh()->status)->toBe('completed');
 });
 
@@ -87,28 +87,28 @@ it('approveDraft does not re-approve an already-approved draft', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 1,
-        'status'        => 'completed', // batch already done
+        'status' => 'completed', // batch already done
     ]);
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'approved', // already approved
-        'preview_token'  => 'tok-already',
-        'blocks'         => [],
+        'status' => LandingPageDraftStatus::Shortlisted, // already approved
+        'preview_token' => 'tok-already',
+        'blocks' => [],
     ]);
 
-    $page = new ManageLandingPageBatches();
+    $page = new ManageLandingPageBatches;
     $page->record = $summit;
 
     // Should return early without throwing
     $page->approveDraft($draft->id);
 
     // Status should remain approved (not changed)
-    expect($draft->fresh()->status)->toBe('approved');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Shortlisted);
 });
 
 it('rejectDraft does not reject an already-approved draft', function () {
@@ -116,25 +116,25 @@ it('rejectDraft does not reject an already-approved draft', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 1,
-        'status'        => 'completed',
+        'status' => 'completed',
     ]);
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'approved',
-        'preview_token'  => 'tok-approved',
-        'blocks'         => [],
+        'status' => LandingPageDraftStatus::Shortlisted,
+        'preview_token' => 'tok-approved',
+        'blocks' => [],
     ]);
 
-    $page = new ManageLandingPageBatches();
+    $page = new ManageLandingPageBatches;
     $page->record = $summit;
 
     $page->rejectDraft($draft->id);
 
     // Status must remain approved — guard fired
-    expect($draft->fresh()->status)->toBe('approved');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Shortlisted);
 });

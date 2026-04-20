@@ -2,6 +2,7 @@
 
 namespace App\Services\Templates;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Models\FunnelStep;
 use App\Models\FunnelStepRevision;
 use App\Models\LandingPageDraft;
@@ -42,11 +43,11 @@ class PublishDraftService
             // Archive previously-published drafts for this funnel
             LandingPageDraft::query()
                 ->whereHas('batch', fn ($q) => $q->where('funnel_id', $batch->funnel_id))
-                ->where('status', 'published')
+                ->where('status', LandingPageDraftStatus::Published)
                 ->where('id', '!=', $draft->id)
-                ->update(['status' => 'archived']);
+                ->update(['status' => LandingPageDraftStatus::Archived]);
 
-            $draft->update(['status' => 'published']);
+            $draft->update(['status' => LandingPageDraftStatus::Published]);
         });
     }
 }

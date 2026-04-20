@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
@@ -54,7 +55,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
             ],
             [
                 'template_key' => $this->templateKey,
-                'status' => 'generating',
+                'status' => LandingPageDraftStatus::Generating,
                 'preview_token' => Str::random(40),
             ]
         );
@@ -91,7 +92,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 'palette' => $palette,
                 'token_count' => $result['tokens'],
                 'generation_ms' => (int) ((microtime(true) - $start) * 1000),
-                'status' => 'ready',
+                'status' => LandingPageDraftStatus::Ready,
             ]);
         } catch (\Throwable $e) {
             if ($this->isRateLimitError($e) && $this->attempts() < $this->tries) {
@@ -105,7 +106,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
             }
 
             $draft->update([
-                'status' => 'failed',
+                'status' => LandingPageDraftStatus::Failed,
                 'error_message' => substr($e->getMessage(), 0, 500),
                 'generation_ms' => (int) ((microtime(true) - $start) * 1000),
             ]);

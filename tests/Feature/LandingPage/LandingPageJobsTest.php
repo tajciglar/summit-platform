@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\LandingPage;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Jobs\GenerateLandingPageVersionJob;
 use App\Models\Funnel;
@@ -10,6 +11,7 @@ use App\Models\LandingPageDraft;
 use App\Models\Summit;
 use App\Services\LandingPageGenerator;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 use Mockery;
 
 it('batch job creates N drafts and dispatches N version jobs', function () {
@@ -19,10 +21,10 @@ it('batch job creates N drafts and dispatches N version jobs', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 3,
-        'status'        => 'queued',
+        'status' => 'queued',
     ]);
 
     (new GenerateLandingPageBatchJob($batch))->handle();
@@ -40,10 +42,10 @@ it('batch job assigns sequential version numbers', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 2,
-        'status'        => 'queued',
+        'status' => 'queued',
     ]);
 
     (new GenerateLandingPageBatchJob($batch))->handle();
@@ -62,17 +64,17 @@ it('version job saves blocks and marks draft ready', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 1,
-        'status'        => 'running',
+        'status' => 'running',
     ]);
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'pending',
-        'preview_token'  => \Illuminate\Support\Str::random(40),
+        'status' => LandingPageDraftStatus::Queued,
+        'preview_token' => Str::random(40),
     ]);
 
     $fakeBlocks = [
@@ -88,7 +90,7 @@ it('version job saves blocks and marks draft ready', function () {
     (new GenerateLandingPageVersionJob($draft))->handle($generator);
 
     $fresh = $draft->fresh();
-    expect($fresh->status)->toBe('ready');
+    expect($fresh->status)->toBe(LandingPageDraftStatus::Ready);
     expect($fresh->blocks)->toEqual($fakeBlocks);
 });
 
@@ -98,17 +100,17 @@ it('version job marks draft failed on exception', function () {
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 1,
-        'status'        => 'running',
+        'status' => 'running',
     ]);
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'pending',
-        'preview_token'  => \Illuminate\Support\Str::random(40),
+        'status' => LandingPageDraftStatus::Queued,
+        'preview_token' => Str::random(40),
     ]);
 
     $generator = Mockery::mock(LandingPageGenerator::class);
@@ -119,6 +121,6 @@ it('version job marks draft failed on exception', function () {
     expect(fn () => $job->handle($generator))->toThrow(\RuntimeException::class);
 
     $fresh = $draft->fresh();
-    expect($fresh->status)->toBe('failed');
+    expect($fresh->status)->toBe(LandingPageDraftStatus::Failed);
     expect($fresh->error_message)->toContain('API timeout');
 });

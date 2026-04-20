@@ -2,28 +2,30 @@
 
 namespace Tests\Feature\LandingPage;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Summit;
+use Illuminate\Support\Str;
 
 it('can create a batch with drafts', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     $batch = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 3,
-        'status'        => 'queued',
-        'notes'         => 'Focus on ADHD parents.',
+        'status' => 'queued',
+        'notes' => 'Focus on ADHD parents.',
     ]);
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'pending',
-        'preview_token'  => \Illuminate\Support\Str::random(40),
+        'status' => LandingPageDraftStatus::Queued,
+        'preview_token' => Str::random(40),
     ]);
 
     expect($batch->fresh()->drafts)->toHaveCount(1);
@@ -34,11 +36,11 @@ it('can create a batch with drafts', function () {
 it('draft stores blocks as array cast', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
-    $batch  = LandingPageBatch::create([
-        'summit_id'     => $summit->id,
-        'funnel_id'     => $funnel->id,
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
         'version_count' => 1,
-        'status'        => 'queued',
+        'status' => 'queued',
     ]);
 
     $blocks = [
@@ -46,11 +48,11 @@ it('draft stores blocks as array cast', function () {
     ];
 
     $draft = LandingPageDraft::create([
-        'batch_id'       => $batch->id,
+        'batch_id' => $batch->id,
         'version_number' => 1,
-        'status'         => 'ready',
-        'preview_token'  => \Illuminate\Support\Str::random(40),
-        'blocks'         => $blocks,
+        'status' => LandingPageDraftStatus::Ready,
+        'preview_token' => Str::random(40),
+        'blocks' => $blocks,
     ]);
 
     expect($draft->fresh()->blocks)->toEqual($blocks);

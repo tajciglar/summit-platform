@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\LandingPageDraftStatus;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
@@ -64,12 +65,12 @@ it('runs the full generate → approve → publish flow', function () {
     GenerateLandingPageBatchJob::dispatchSync($batch->id);
 
     $draft = LandingPageDraft::where('batch_id', $batch->id)->firstOrFail();
-    expect($draft->status)->toBe('ready');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
     expect($draft->template_key)->toBe('opus-v1');
     expect($draft->sections)->toEqual(['summit' => ['name' => 'Integration Summit']]);
 
     // Approve + publish
-    $draft->update(['status' => 'shortlisted']);
+    $draft->update(['status' => LandingPageDraftStatus::Shortlisted]);
     app(PublishDraftService::class)->publish($draft, $user);
 
     // Verify live

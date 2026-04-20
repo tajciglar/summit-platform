@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\LandingPageDraftStatus;
 use App\Enums\SummitAudience;
 use App\Jobs\GenerateLandingPageVersionJob;
 use App\Models\Funnel;
@@ -35,7 +36,7 @@ it('creates a draft with content from TemplateFiller', function () {
     $draft = LandingPageDraft::first();
     expect($draft->template_key)->toBe('opus-v1');
     expect($draft->sections)->toEqual(['summit' => ['name' => $summit->title], 'hero' => ['headline' => 'H']]);
-    expect($draft->status)->toBe('ready');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
     expect($draft->token_count)->toBe(300);
     expect($draft->version_number)->toBe(1);
 });
@@ -57,7 +58,7 @@ it('marks draft as failed when filler throws', function () {
     GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
 
     $draft = LandingPageDraft::first();
-    expect($draft->status)->toBe('failed');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Failed);
     expect($draft->error_message)->toContain('oops');
 });
 
@@ -81,7 +82,7 @@ it('re-throws 429 rate-limit errors and keeps draft in generating state for retr
         ->toThrow(RuntimeException::class);
 
     $draft = LandingPageDraft::first();
-    expect($draft->status)->toBe('generating');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Generating);
     expect($draft->error_message)->toBeNull();
 });
 
@@ -110,7 +111,7 @@ it('marks draft as failed on final 429 after all retries exhausted', function ()
     dispatch_sync($job);
 
     $draft = LandingPageDraft::first();
-    expect($draft->status)->toBe('failed');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Failed);
     expect($draft->error_message)->toContain('429');
 });
 
@@ -137,7 +138,7 @@ it('seeds enabled_sections from defaultEnabledSections for opus-v1', function ()
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft)->not->toBeNull();
-    expect($draft->status)->toBe('ready');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
     expect($draft->enabled_sections)
         ->toBeArray()
         ->toContain('hero')
@@ -169,7 +170,7 @@ it('leaves enabled_sections null for legacy templates like opus-v2', function ()
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft)->not->toBeNull();
-    expect($draft->status)->toBe('ready');
+    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
     expect($draft->enabled_sections)->toBeNull();
 });
 

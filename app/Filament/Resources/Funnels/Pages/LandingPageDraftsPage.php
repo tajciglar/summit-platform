@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Funnels\Pages;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use App\Models\LandingPageDraft;
+use App\Services\Templates\PublishDraftService;
 use App\Services\Templates\TemplateRegistry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
@@ -33,7 +35,7 @@ class LandingPageDraftsPage extends Page
         return LandingPageDraft::query()
             ->whereHas('batch', fn ($q) => $q->where('funnel_id', $this->funnel->id))
             ->when($this->batch, fn ($q) => $q->where('batch_id', $this->batch))
-            ->whereNotIn('status', ['rejected', 'archived'])
+            ->whereNotIn('status', [LandingPageDraftStatus::Archived->value])
             ->orderByDesc('created_at')
             ->get();
     }
@@ -45,12 +47,12 @@ class LandingPageDraftsPage extends Page
 
     public function approve(string $draftId): void
     {
-        LandingPageDraft::findOrFail($draftId)->update(['status' => 'shortlisted']);
+        LandingPageDraft::findOrFail($draftId)->update(['status' => LandingPageDraftStatus::Shortlisted]);
     }
 
     public function reject(string $draftId): void
     {
-        LandingPageDraft::findOrFail($draftId)->update(['status' => 'rejected']);
+        LandingPageDraft::findOrFail($draftId)->update(['status' => LandingPageDraftStatus::Archived]);
     }
 
     public function publish(string $draftId): void
@@ -58,7 +60,7 @@ class LandingPageDraftsPage extends Page
         $draft = LandingPageDraft::findOrFail($draftId);
 
         try {
-            app(\App\Services\Templates\PublishDraftService::class)
+            app(PublishDraftService::class)
                 ->publish($draft, auth()->user());
         } catch (ModelNotFoundException $e) {
             Notification::make()
@@ -71,7 +73,9 @@ class LandingPageDraftsPage extends Page
 
     public function getPollingInterval(): ?string
     {
-        $hasPending = $this->drafts->whereIn('status', ['queued', 'generating'])->isNotEmpty();
+        $hasPending = $this->drafts->filter(
+            fn (LandingPageDraft $d) => in_array($d->status, [LandingPageDraftStatus::Queued, LandingPageDraftStatus::Generating], true)
+        )->isNotEmpty();
 
         return $hasPending ? '3s' : null;
     }

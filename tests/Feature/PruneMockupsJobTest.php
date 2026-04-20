@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Jobs\PruneMockupsJob;
 use App\Models\LandingPageDraft;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,8 +17,8 @@ class PruneMockupsJobTest extends TestCase
     {
         Storage::fake('public');
 
-        $old = LandingPageDraft::factory()->create(['status' => 'rejected']);
-        $young = LandingPageDraft::factory()->create(['status' => 'rejected']);
+        $old = LandingPageDraft::factory()->create(['status' => LandingPageDraftStatus::Archived]);
+        $young = LandingPageDraft::factory()->create(['status' => LandingPageDraftStatus::Archived]);
         $active = LandingPageDraft::factory()->create(['status' => 'ready']);
 
         Storage::disk('public')->put("draft-mockups/{$old->id}/a.png", 'x');

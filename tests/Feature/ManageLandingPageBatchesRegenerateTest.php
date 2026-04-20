@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Filament\Resources\Funnels\Pages\ManageLandingPageBatches;
 use App\Jobs\RegenerateSectionJob;
 use App\Models\Funnel;
@@ -26,20 +27,20 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $sectionId = '550e8400-e29b-41d4-a716-446655440000';
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'ready',
+            'status' => 'ready',
             'sections' => [
                 ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
-        $page = new ManageLandingPageBatches();
+        $page = new ManageLandingPageBatches;
         $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
@@ -63,20 +64,20 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $sectionId = '550e8400-e29b-41d4-a716-446655440000';
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'generating',
+            'status' => 'generating',
             'sections' => [
                 ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
-        $page = new ManageLandingPageBatches();
+        $page = new ManageLandingPageBatches;
         $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
@@ -97,20 +98,20 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'completed',
+            'status' => 'completed',
         ]);
 
         $sectionId = '550e8400-e29b-41d4-a716-446655440000';
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'approved',
+            'status' => LandingPageDraftStatus::Shortlisted,
             'sections' => [
                 ['id' => $sectionId, 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
-        $page = new ManageLandingPageBatches();
+        $page = new ManageLandingPageBatches;
         $page->record = $funnel;
 
         $page->regenerateSection($draft->id, $sectionId, null);
@@ -128,18 +129,18 @@ class ManageLandingPageBatchesRegenerateTest extends TestCase
         $batch = LandingPageBatch::factory()->create([
             'summit_id' => $summit->id,
             'funnel_id' => $funnel->id,
-            'status'    => 'running',
+            'status' => 'running',
         ]);
 
         $draft = LandingPageDraft::factory()->create([
             'batch_id' => $batch->id,
-            'status'   => 'ready',
+            'status' => 'ready',
             'sections' => [
                 ['id' => '550e8400-e29b-41d4-a716-446655440000', 'type' => 'hero', 'status' => 'ready'],
             ],
         ]);
 
-        $page = new ManageLandingPageBatches();
+        $page = new ManageLandingPageBatches;
         $page->record = $funnel;
 
         $page->regenerateSection($draft->id, 'not-a-uuid', null);

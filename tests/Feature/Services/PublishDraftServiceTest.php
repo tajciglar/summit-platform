@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\LandingPageDraftStatus;
 use App\Enums\SummitAudience;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
@@ -50,7 +51,7 @@ it('writes template_key + content to the optin step and snapshots the previous c
     expect($rev->page_content_snapshot)->toEqual(['template_key' => 'old', 'content' => ['a' => 1]]);
     expect($rev->published_by)->toBe($user->id);
 
-    expect($draft->fresh()->status)->toBe('published');
+    expect($draft->fresh()->status)->toBe(LandingPageDraftStatus::Published);
 });
 
 it('archives previously-published drafts for the same funnel', function () {
@@ -72,8 +73,8 @@ it('archives previously-published drafts for the same funnel', function () {
 
     app(PublishDraftService::class)->publish($new, User::factory()->create());
 
-    expect($old->fresh()->status)->toBe('archived');
-    expect($new->fresh()->status)->toBe('published');
+    expect($old->fresh()->status)->toBe(LandingPageDraftStatus::Archived);
+    expect($new->fresh()->status)->toBe(LandingPageDraftStatus::Published);
 });
 
 it('skips snapshot when page_content is empty', function () {

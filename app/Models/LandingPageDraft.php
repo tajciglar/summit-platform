@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\LandingPageDraftStatus;
 use App\Enums\SummitAudience;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,6 +38,7 @@ class LandingPageDraft extends Model
             'blocks' => 'array',
             'sections' => 'array',
             'enabled_sections' => 'array',
+            'status' => LandingPageDraftStatus::class,
             'audience' => SummitAudience::class,
             'palette' => 'array',
             'published_hydration_manifest' => 'array',

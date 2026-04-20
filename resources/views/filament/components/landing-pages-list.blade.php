@@ -36,16 +36,18 @@
                     $previewUrl = $previewBase && $draft->preview_token
                         ? "{$previewBase}/preview/{$draft->preview_token}"
                         : null;
-                    $isPublished = $draft->status === 'published';
-                    $isDone = in_array($draft->status, ['ready', 'completed', 'shortlisted', 'published'], true);
-                    $statusColor = match ($draft->status) {
-                        'published' => 'success',
-                        'ready', 'completed', 'shortlisted' => 'info',
-                        'generating', 'queued' => 'warning',
-                        'failed' => 'danger',
-                        default => 'gray',
-                    };
-                    $statusLabel = ucfirst(str_replace('_', ' ', (string) $draft->status));
+                    $isPublished = $draft->status === \App\Enums\LandingPageDraftStatus::Published;
+                    $isDone = in_array($draft->status, [
+                        \App\Enums\LandingPageDraftStatus::Ready,
+                        \App\Enums\LandingPageDraftStatus::Shortlisted,
+                        \App\Enums\LandingPageDraftStatus::Published,
+                    ], true);
+                    $statusColor = $draft->status instanceof \App\Enums\LandingPageDraftStatus
+                        ? $draft->status->badgeColor()
+                        : 'gray';
+                    $statusLabel = $draft->status instanceof \App\Enums\LandingPageDraftStatus
+                        ? $draft->status->label()
+                        : ucfirst((string) $draft->status);
                 @endphp
 
                 <div class="flex items-center gap-4 bg-white px-4 py-3 dark:bg-white/5">
