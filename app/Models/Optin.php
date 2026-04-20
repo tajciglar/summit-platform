@@ -13,7 +13,7 @@ class Optin extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'email', 'first_name', 'summit_id', 'funnel_id', 'funnel_step_id',
+        'contact_id', 'user_id', 'email', 'first_name', 'summit_id', 'funnel_id', 'funnel_step_id',
         'source_url', 'ip_address', 'user_agent',
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
         'activecampaign_synced',
@@ -41,5 +41,10 @@ class Optin extends Model
     public function funnelStep(): BelongsTo
     {
         return $this->belongsTo(FunnelStep::class);
+    }
+
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class);
     }
 }
