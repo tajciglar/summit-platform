@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\PageView;
 use App\Models\Summit;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Str;
 
 class FunnelConversionWidget extends ChartWidget
 {
@@ -22,7 +23,7 @@ class FunnelConversionWidget extends ChartWidget
     protected function getData(): array
     {
         $summits = Summit::where('status', 'published')
-            ->orderByDesc('starts_at')
+            ->orderByDesc('pre_summit_starts_at')
             ->limit(5)
             ->get();
 
@@ -43,9 +44,9 @@ class FunnelConversionWidget extends ChartWidget
                 ->count();
 
             $datasets[] = [
-                'label' => \Illuminate\Support\Str::limit($summit->title, 30),
+                'label' => Str::limit($summit->title, 30),
                 'data' => [$views, $optins, $checkouts, $purchases, $upsells],
-                'backgroundColor' => $colors[$i % count($colors)] . '33',
+                'backgroundColor' => $colors[$i % count($colors)].'33',
                 'borderColor' => $colors[$i % count($colors)],
                 'borderWidth' => 2,
             ];
