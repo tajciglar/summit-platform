@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\FunnelSteps\Pages;
 
+use App\Filament\Concerns\ManagesLandingPageDrafts;
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
@@ -9,6 +10,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditFunnelStep extends EditRecord
 {
+    use ManagesLandingPageDrafts;
+
     protected static string $resource = FunnelStepResource::class;
 
     protected function getHeaderActions(): array
