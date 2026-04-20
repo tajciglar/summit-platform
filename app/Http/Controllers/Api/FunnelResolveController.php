@@ -30,7 +30,7 @@ class FunnelResolveController extends Controller
 
         $summit->loadMissing(['summitSpeakers.speaker', 'products.prices']);
 
-        $starts = Carbon::parse($summit->starts_at)->startOfDay();
+        $starts = Carbon::parse($summit->pre_summit_starts_at)->startOfDay();
 
         $speakers = $summit->summitSpeakers->map(function ($ss) use ($starts) {
             $dayNumber = $ss->presentation_day

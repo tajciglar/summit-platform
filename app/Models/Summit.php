@@ -13,13 +13,19 @@ class Summit extends Model
 
     protected $fillable = [
         'slug', 'title', 'description', 'topic', 'hero_image_url',
-        'status', 'current_phase', 'timezone', 'starts_at', 'ends_at',
+        'status', 'current_phase', 'timezone',
+        'pre_summit_starts_at', 'late_pre_summit_starts_at',
+        'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
+        'audience',
         'summit_type',
         'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
     ];
 
     protected $casts = [
-        'starts_at' => 'datetime',
+        'pre_summit_starts_at' => 'datetime',
+        'late_pre_summit_starts_at' => 'datetime',
+        'during_summit_starts_at' => 'datetime',
+        'post_summit_starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'style_brief' => 'array',
         'style_brief_built_at' => 'datetime',
@@ -82,7 +88,7 @@ class Summit extends Model
             $this->loadMissing('summitSpeakers.speaker');
             foreach ($this->summitSpeakers as $link) {
                 $speakers[] = [
-                    'name'  => $link->speaker?->full_name ?? '',
+                    'name' => $link->speaker?->full_name ?? '',
                     'photo' => $link->speaker?->photo_url ?? null,
                 ];
             }
@@ -91,13 +97,13 @@ class Summit extends Model
         }
 
         return [
-            'name'        => $this->title,
-            'date'        => $this->starts_at?->toDateString() ?? '',
+            'name' => $this->title,
+            'date' => $this->pre_summit_starts_at?->toDateString() ?? '',
             'brandColors' => [],
-            'mode'        => 'light',
-            'speakers'    => $speakers,
-            'toneBrief'   => '',
-            'product'     => null,
+            'mode' => 'light',
+            'speakers' => $speakers,
+            'toneBrief' => '',
+            'product' => null,
         ];
     }
 }

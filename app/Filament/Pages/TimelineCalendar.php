@@ -12,6 +12,7 @@ use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Url;
 
 class TimelineCalendar extends Page
 {
@@ -27,13 +28,13 @@ class TimelineCalendar extends Page
 
     protected string $view = 'filament.pages.timeline-calendar';
 
-    #[\Livewire\Attributes\Url]
+    #[Url]
     public int $year;
 
-    #[\Livewire\Attributes\Url]
+    #[Url]
     public string $typeFilter = '';
 
-    #[\Livewire\Attributes\Url]
+    #[Url]
     public string $search = '';
 
     public function mount(): void
@@ -103,7 +104,7 @@ class TimelineCalendar extends Page
             $query->where('title', 'ilike', "%{$this->search}%");
         }
 
-        return $query->orderBy('starts_at')->get()->map(function (Summit $summit) {
+        return $query->orderBy('pre_summit_starts_at')->get()->map(function (Summit $summit) {
             return [
                 'id' => $summit->id,
                 'title' => $summit->title,

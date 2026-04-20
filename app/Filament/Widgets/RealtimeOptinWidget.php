@@ -23,7 +23,7 @@ class RealtimeOptinWidget extends StatsOverviewWidget
 
         // Active summits (published, with events happening within ±7 days)
         $activeSummits = Summit::where('status', 'published')
-            ->where('starts_at', '<=', $now->copy()->addDays(7))
+            ->where('pre_summit_starts_at', '<=', $now->copy()->addDays(7))
             ->where(function ($q) use ($now) {
                 $q->whereNull('ends_at')
                     ->orWhere('ends_at', '>=', $now->copy()->subDays(7));
@@ -45,7 +45,7 @@ class RealtimeOptinWidget extends StatsOverviewWidget
         }
 
         $stats[] = Stat::make('Optins Today (All Summits)', number_format($todayOptins))
-            ->description($yesterdayOptins > 0 ? 'Yesterday: ' . number_format($yesterdayOptins) : 'No data yesterday')
+            ->description($yesterdayOptins > 0 ? 'Yesterday: '.number_format($yesterdayOptins) : 'No data yesterday')
             ->color('success')
             ->chart($hourlyData);
 
@@ -57,8 +57,8 @@ class RealtimeOptinWidget extends StatsOverviewWidget
 
             $summitTotal = Optin::where('summit_id', $summit->id)->count();
 
-            $stats[] = Stat::make($summit->title, number_format($summitToday) . ' today')
-                ->description('Total: ' . number_format($summitTotal))
+            $stats[] = Stat::make($summit->title, number_format($summitToday).' today')
+                ->description('Total: '.number_format($summitTotal))
                 ->color('info');
         }
 

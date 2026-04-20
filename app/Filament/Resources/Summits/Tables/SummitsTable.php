@@ -9,8 +9,8 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
@@ -56,7 +56,8 @@ class SummitsTable
                         default => $state,
                     }),
                 TextColumn::make('funnels_count')->counts('funnels')->label('Funnels'),
-                TextColumn::make('starts_at')->dateTime()->sortable(),
+                TextColumn::make('pre_summit_starts_at')->label('Starts')->dateTime()->sortable(),
+                TextColumn::make('ends_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
                 Action::make('quickView')
@@ -75,7 +76,7 @@ class SummitsTable
                                 TextEntry::make('current_phase')->label('Phase')
                                     ->formatStateUsing(fn (string $state) => str_replace('_', ' ', ucfirst($state))),
                                 TextEntry::make('summit_type')->label('Type')->formatStateUsing(fn (string $state) => ucfirst($state)),
-                                TextEntry::make('starts_at')->dateTime(),
+                                TextEntry::make('pre_summit_starts_at')->label('Starts')->dateTime(),
                                 TextEntry::make('ends_at')->dateTime(),
                             ])->columns(3),
                         Section::make('Stats')
@@ -85,11 +86,12 @@ class SummitsTable
                                 TextEntry::make('orders_count')->label('Orders')
                                     ->state(fn ($record) => number_format($record->orders()->where('status', 'completed')->count())),
                                 TextEntry::make('revenue')->label('Revenue')
-                                    ->state(fn ($record) => '$' . number_format($record->orders()->where('status', 'completed')->sum('total_cents') / 100, 2)),
+                                    ->state(fn ($record) => '$'.number_format($record->orders()->where('status', 'completed')->sum('total_cents') / 100, 2)),
                                 TextEntry::make('checklist_progress')->label('Checklist')
                                     ->state(function ($record) {
                                         $total = $record->checklistItems()->count();
                                         $done = $record->checklistItems()->where('status', 'done')->count();
+
                                         return $total > 0 ? "{$done}/{$total} done" : 'No checklist';
                                     }),
                             ])->columns(4),
@@ -113,7 +115,7 @@ class SummitsTable
                         ->action(function (Collection $records, array $data) {
                             $records->each(fn ($r) => $r->update(['status' => $data['status']]));
                             Notification::make()
-                                ->title(count($records) . ' summits updated to ' . $data['status'])
+                                ->title(count($records).' summits updated to '.$data['status'])
                                 ->success()
                                 ->send();
                         })
@@ -135,7 +137,7 @@ class SummitsTable
                         ->action(function (Collection $records, array $data) {
                             $records->each(fn ($r) => $r->update(['current_phase' => $data['current_phase']]));
                             Notification::make()
-                                ->title(count($records) . ' summits phase updated')
+                                ->title(count($records).' summits phase updated')
                                 ->success()
                                 ->send();
                         })

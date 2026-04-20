@@ -19,7 +19,7 @@ class SummitComparisonWidget extends Widget
         return Summit::where('status', 'published')
             ->withCount(['optins', 'orders'])
             ->withSum('orders as revenue_cents', 'total_cents')
-            ->orderByDesc('starts_at')
+            ->orderByDesc('pre_summit_starts_at')
             ->limit(10)
             ->get()
             ->map(function (Summit $s) {

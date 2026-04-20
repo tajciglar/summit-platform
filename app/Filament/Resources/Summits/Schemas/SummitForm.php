@@ -53,8 +53,11 @@ class SummitForm
                 TextInput::make('timezone')
                     ->default('America/New_York')
                     ->required(),
-                DateTimePicker::make('starts_at'),
-                DateTimePicker::make('ends_at'),
+                DateTimePicker::make('pre_summit_starts_at')->label('Pre-summit starts'),
+                DateTimePicker::make('late_pre_summit_starts_at')->label('Late pre-summit starts'),
+                DateTimePicker::make('during_summit_starts_at')->label('During summit starts'),
+                DateTimePicker::make('post_summit_starts_at')->label('Post-summit starts'),
+                DateTimePicker::make('ends_at')->label('Ends'),
                 Section::make('Style')
                     ->description('Drives AI-generated landing page look & feel across every funnel of this summit.')
                     ->schema([
