@@ -34,6 +34,11 @@ import {
   violetSunSectionOrder,
   violetSunDefaultEnabledSections,
 } from './violet-sun.sections';
+import {
+  rustCreamSupportedSections,
+  rustCreamSectionOrder,
+  rustCreamDefaultEnabledSections,
+} from './rust-cream.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -98,6 +103,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/rust-cream.jpg',
     schema: RustCreamSchema,
     tags: ['warm', 'editorial', 'modern'] as const,
+    supportedSections: rustCreamSupportedSections,
+    sectionOrder: rustCreamSectionOrder,
+    defaultEnabledSections: rustCreamDefaultEnabledSections,
   },
   'blue-coral': {
     key: 'blue-coral',
