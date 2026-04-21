@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Funnels\Pages;
 
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
+use App\Filament\Resources\Summits\SummitResource;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
@@ -102,10 +103,9 @@ class ViewFunnel extends EditRecord
     }
 
     /**
-     * ViewFunnel extends EditRecord so Filament's default breadcrumb tail
-     * reads "Edit", which is misleading — this page is the funnel overview.
-     * Collapse the trail to just `Funnels > {name}` so operators can tell
-     * they've landed on the view page rather than the edit form.
+     * Funnels live inside a summit. Breadcrumb climbs to the summit view
+     * (which hosts the Funnels tab) instead of the standalone Funnels index,
+     * so the back-nav matches how operators actually drilled in.
      *
      * @return array<string, string>
      */
@@ -114,10 +114,13 @@ class ViewFunnel extends EditRecord
         /** @var Funnel $funnel */
         $funnel = $this->record;
 
-        return [
-            FunnelResource::getUrl('index') => FunnelResource::getBreadcrumb(),
-            $funnel->name,
-        ];
+        $breadcrumbs = [];
+        if ($funnel->summit_id) {
+            $breadcrumbs[SummitResource::getUrl('view', ['record' => $funnel->summit_id])] = $funnel->summit?->title ?? 'Summit';
+        }
+        $breadcrumbs[] = $funnel->name;
+
+        return $breadcrumbs;
     }
 
     public function form(Schema $schema): Schema

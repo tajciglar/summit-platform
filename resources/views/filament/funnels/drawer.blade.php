@@ -51,7 +51,10 @@
     $revenueCents = (int) ($stats->cents ?? 0);
     $views = 0; // TODO: wire page-view analytics; currently not tracked.
 
-    $funnelsIndexUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('index');
+    $summit = $funnel->summit;
+    $summitUrl = $summit
+        ? \App\Filament\Resources\Summits\SummitResource::getUrl('view', ['record' => $summit->id])
+        : \App\Filament\Resources\Funnels\FunnelResource::getUrl('index');
     $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]);
     $stepEditUrl = fn (\App\Models\FunnelStep $s) =>
         \App\Filament\Resources\FunnelSteps\FunnelStepResource::getUrl('edit', ['record' => $s->id]);
@@ -73,9 +76,9 @@
 <aside class="fi-funnel-drawer flex h-full w-60 shrink-0 flex-col gap-6 border-r border-gray-200 bg-white p-5 dark:border-white/10 dark:bg-gray-900">
     {{-- Funnel header --}}
     <div class="flex flex-col gap-2">
-        <a href="{{ $funnelsIndexUrl }}"
+        <a href="{{ $summitUrl }}"
            class="text-[11px] font-medium uppercase tracking-wide text-gray-500 hover:text-gray-700 dark:text-gray-400">
-            Funnel
+            {{ $summit?->title ?? 'Funnel' }}
         </a>
         <a href="{{ $funnelEditUrl }}"
            class="flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400">

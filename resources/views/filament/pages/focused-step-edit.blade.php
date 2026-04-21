@@ -22,7 +22,10 @@
         : null;
 
     $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]);
-    $funnelsIndexUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('index');
+    $summit = $funnel->summit;
+    $summitUrl = $summit
+        ? \App\Filament\Resources\Summits\SummitResource::getUrl('view', ['record' => $summit->id])
+        : null;
 @endphp
 
 <div
@@ -56,8 +59,10 @@
             <header class="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-gray-200 bg-gray-50/90 px-10 py-4 backdrop-blur dark:border-white/10 dark:bg-gray-950/90">
                 <div class="min-w-0">
                     <nav class="mb-1.5 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                        <a href="{{ $funnelsIndexUrl }}" class="hover:text-gray-700 dark:hover:text-gray-200">Funnels</a>
-                        <span>/</span>
+                        @if ($summitUrl)
+                            <a href="{{ $summitUrl }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ $summit->title }}</a>
+                            <span>/</span>
+                        @endif
                         <a href="{{ $funnelEditUrl }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ $funnel->name }}</a>
                         <span>/</span>
                         <span class="text-gray-700 dark:text-gray-200">{{ $record->name }}</span>
