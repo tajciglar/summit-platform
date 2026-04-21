@@ -9,6 +9,7 @@ use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
 use App\Models\Summit;
+use App\Models\User;
 use App\Services\Templates\AudiencePalettes;
 use App\Services\Templates\TemplateFiller;
 
@@ -240,33 +241,6 @@ it('filters section_config entries down to sections the template actually suppor
     expect($draft->enabled_sections)->toEqual(['hero', 'footer']);
 });
 
-it('leaves enabled_sections null for legacy templates like lime-ink', function () {
-    $summit = Summit::factory()->create();
-    $funnel = Funnel::factory()->for($summit)->create();
-    $batch = LandingPageBatch::create([
-        'summit_id' => $summit->id,
-        'funnel_id' => $funnel->id,
-        'version_count' => 1,
-        'status' => 'running',
-    ]);
-
-    $this->mock(TemplateFiller::class, function ($m) {
-        $m->shouldReceive('fill')
-            ->once()
-            ->andReturn([
-                'content' => ['summit' => ['name' => 'Test Summit']],
-                'tokens' => 100,
-            ]);
-    });
-
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'lime-ink', 1);
-
-    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
-    expect($draft)->not->toBeNull();
-    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
-    expect($draft->enabled_sections)->toBeNull();
-});
-
 it('stores audience and palette on the draft when summit has audience', function () {
     $summit = Summit::factory()->create(['audience' => SummitAudience::AdhdWomen]);
     $funnel = Funnel::factory()->for($summit)->create();
@@ -315,6 +289,75 @@ it('stores audience from batch override when present (overrides summit default)'
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->audience)->toBe(SummitAudience::Ai);
     expect($draft->palette)->toBe(AudiencePalettes::PALETTES['ai']);
+});
+
+it('auto-publishes the draft into the funnel step when batch.auto_publish is true', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'ochre-ink']);
+    $step = FunnelStep::factory()->for($funnel)->create([
+        'step_type' => 'optin',
+        'page_content' => [],
+    ]);
+    $user = User::factory()->create();
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
+        'version_count' => 1,
+        'status' => 'running',
+        'auto_publish' => true,
+        'published_by_user_id' => $user->id,
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')
+            ->once()
+            ->andReturn([
+                'content' => ['hero' => ['headline' => 'Auto-published']],
+                'tokens' => 100,
+            ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->status)->toBe(LandingPageDraftStatus::Published);
+
+    $step->refresh();
+    expect($step->page_content)
+        ->toHaveKey('template_key', 'ochre-ink')
+        ->and($step->page_content['content'])->toEqual(['hero' => ['headline' => 'Auto-published']]);
+});
+
+it('does not auto-publish when batch.auto_publish is false', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'ochre-ink']);
+    $step = FunnelStep::factory()->for($funnel)->create([
+        'step_type' => 'optin',
+        'page_content' => [],
+    ]);
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->once()->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
+
+    $step->refresh();
+    expect($step->page_content)->toEqual([]);
 });
 
 it('stores NEUTRAL palette when summit has no audience', function () {

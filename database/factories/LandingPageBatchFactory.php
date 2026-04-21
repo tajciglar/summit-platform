@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
 use App\Models\Summit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -41,6 +42,14 @@ class LandingPageBatchFactory extends Factory
         return $this->state(fn () => [
             'status' => 'completed',
             'completed_at' => now(),
+        ]);
+    }
+
+    public function autoPublish(?User $user = null): static
+    {
+        return $this->state(fn () => [
+            'auto_publish' => true,
+            'published_by_user_id' => $user?->id ?? User::factory(),
         ]);
     }
 }

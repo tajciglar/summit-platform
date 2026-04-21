@@ -27,6 +27,8 @@ class LandingPageBatch extends Model
         'versions_per_template',
         'completed_at',
         'audience_override',
+        'auto_publish',
+        'published_by_user_id',
     ];
 
     protected function casts(): array
@@ -37,6 +39,7 @@ class LandingPageBatch extends Model
             'versions_per_template' => 'array',
             'completed_at' => 'datetime',
             'audience_override' => SummitAudience::class,
+            'auto_publish' => 'boolean',
         ];
     }
 
@@ -53,6 +56,11 @@ class LandingPageBatch extends Model
     public function funnelStep(): BelongsTo
     {
         return $this->belongsTo(FunnelStep::class);
+    }
+
+    public function publishedByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'published_by_user_id');
     }
 
     public function drafts(): HasMany

@@ -7,6 +7,7 @@ use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
 use App\Services\Templates\AudienceResolver;
+use App\Services\Templates\PublishDraftService;
 use App\Services\Templates\TemplateFiller;
 use App\Services\Templates\TemplateRegistry;
 use Illuminate\Bus\Queueable;
@@ -42,8 +43,12 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         return [60, 120, 180];
     }
 
-    public function handle(TemplateFiller $filler, TemplateRegistry $registry, AudienceResolver $audienceResolver): void
-    {
+    public function handle(
+        TemplateFiller $filler,
+        TemplateRegistry $registry,
+        AudienceResolver $audienceResolver,
+        PublishDraftService $publisher,
+    ): void {
         $batch = LandingPageBatch::findOrFail($this->batchId);
 
         // Use firstOrCreate so retries don't trip the unique (batch_id, version_number)
@@ -92,6 +97,8 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 'generation_ms' => (int) ((microtime(true) - $start) * 1000),
                 'status' => LandingPageDraftStatus::Ready,
             ]);
+
+            $this->autoPublishIfRequested($publisher, $batch, $draft);
         } catch (\Throwable $e) {
             if ($this->isRateLimitError($e) && $this->attempts() < $this->tries) {
                 // Keep the draft in generating state and let Laravel retry
@@ -117,6 +124,37 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         $m = $e->getMessage();
 
         return str_contains($m, '429') || str_contains($m, 'rate_limit_error');
+    }
+
+    /**
+     * Promote the Ready draft straight to FunnelStep.page_content when the
+     * batch was dispatched via the "Generate all steps" funnel action. A
+     * publish failure must not fail the generation job — the draft stays
+     * Ready and an operator can retry the publish from the draft list.
+     */
+    private function autoPublishIfRequested(
+        PublishDraftService $publisher,
+        LandingPageBatch $batch,
+        LandingPageDraft $draft,
+    ): void {
+        if (! $batch->auto_publish) {
+            return;
+        }
+
+        $user = $batch->publishedByUser;
+        if (! $user) {
+            report(new \RuntimeException(
+                "LandingPageBatch {$batch->id} flagged auto_publish but has no published_by_user_id; skipping auto-publish."
+            ));
+
+            return;
+        }
+
+        try {
+            $publisher->publish($draft->fresh(), $user);
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     /**
