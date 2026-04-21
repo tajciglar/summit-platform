@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Domains;
 
-use App\Filament\Resources\Domains\Pages;
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Models\Domain;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -12,7 +12,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -20,7 +19,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -81,11 +79,10 @@ class DomainResource extends Resource
                     Toggle::make('is_active')
                         ->default(true)
                         ->columnSpanFull(),
-                    SpatieMediaLibraryFileUpload::make('logo')
-                        ->collection('logo')
-                        ->image()
-                        ->imageEditor()
-                        ->maxSize(2048)
+                    MediaPickerInput::make('logo_media_item_id')
+                        ->category('brand')
+                        ->role('logo')
+                        ->label('Logo')
                         ->columnSpanFull(),
                 ]),
 
@@ -106,12 +103,6 @@ class DomainResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('logo')
-                    ->collection('logo')
-                    ->conversion('small')
-                    ->label('')
-                    ->square()
-                    ->size(36),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable()
