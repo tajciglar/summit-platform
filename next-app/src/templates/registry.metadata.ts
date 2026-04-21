@@ -14,6 +14,16 @@ import {
   opusV1SectionOrder,
   opusV1DefaultEnabledSections,
 } from './ochre-ink/sections';
+import {
+  indigoGoldSupportedSections,
+  indigoGoldSectionOrder,
+  indigoGoldDefaultEnabledSections,
+} from './indigo-gold.sections';
+import {
+  limeInkSupportedSections,
+  limeInkSectionOrder,
+  limeInkDefaultEnabledSections,
+} from './lime-ink.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -48,6 +58,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/lime-ink.jpg',
     schema: LimeInkSchema,
     tags: ['modern', 'mono', 'dark'] as const,
+    supportedSections: limeInkSupportedSections,
+    sectionOrder: limeInkSectionOrder,
+    defaultEnabledSections: limeInkDefaultEnabledSections,
   },
   'cream-sage': {
     key: 'cream-sage',
@@ -90,6 +103,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/indigo-gold.jpg',
     schema: IndigoGoldSchema,
     tags: ['warm', 'modern'] as const,
+    supportedSections: indigoGoldSupportedSections,
+    sectionOrder: indigoGoldSectionOrder,
+    defaultEnabledSections: indigoGoldDefaultEnabledSections,
   },
   'lavender-gold': {
     key: 'lavender-gold',

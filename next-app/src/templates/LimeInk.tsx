@@ -1,8 +1,11 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Inter / JetBrains Mono) must be loaded by
 // the page — see Task 19/20 (preview/public routes) for wiring.
+import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
+import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { LimeInkContent } from './lime-ink.schema';
+import { limeInkDefaultEnabledSections } from './lime-ink.sections';
 import type { Speaker } from './types';
 
 type Props = {
@@ -12,6 +15,8 @@ type Props = {
 
 type RootProps = Props & {
   funnelId: string;
+  enabledSections?: string[];
+  palette?: import('@/lib/palette').Palette | null;
 };
 
 // Deterministic sparkline heights keyed by trend label. Keeps the AI-fillable
@@ -155,9 +160,13 @@ function Hero({ content, speakers }: Props) {
             className="h-[1px] w-16"
             style={{ background: 'rgba(255,255,255,0.2)' }}
           ></span>
-          <span className="lime-ink-mono text-xs" style={{ color: '#71717A' }}>
-            {h.dateRangeLabel}
-          </span>
+          <EventStatusBadge
+            status={h.eventStatus}
+            dateLabel={h.dateRangeLabel}
+            liveLabel={h.liveLabel}
+            endedLabel={h.endedLabel}
+            style={{ '--esb-primary': '#DCFF6B', '--esb-fg': '#0A0A0B' } as CSSProperties}
+          />
         </div>
 
         <div className="grid md:grid-cols-12 gap-10 items-end">
@@ -1277,34 +1286,35 @@ function Footer({ content }: { content: LimeInkContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function LimeInk({ content, speakers, funnelId }: RootProps) {
+export function LimeInk({ content, speakers, funnelId, enabledSections }: RootProps) {
+  const enabled = new Set(enabledSections ?? limeInkDefaultEnabledSections);
   return (
     <div className="lime-ink-root lime-ink-body antialiased">
       <a href="#main" className="lime-ink-skip-nav">
         Skip to content
       </a>
 
-      <TopBar content={content} />
+      {enabled.has('top-bar') && <TopBar content={content} />}
 
       <main id="main">
-        <Hero content={content} speakers={speakers} />
-        <Press content={content} />
-        <Stats content={content} />
-        <Overview content={content} />
-        <SpeakersDay content={content} speakers={speakers} />
-        <Outcomes content={content} />
-        <FreeGift content={content} />
-        <Bonuses content={content} />
-        <Founders content={content} />
-        <Testimonials content={content} />
-        <PullQuote content={content} />
-        <Figures content={content} />
-        <Shifts content={content} />
-        <FAQ content={content} />
-        <FinalCTA content={content} />
+        {enabled.has('hero') && <Hero content={content} speakers={speakers} />}
+        {enabled.has('press') && <Press content={content} />}
+        {enabled.has('stats') && <Stats content={content} />}
+        {enabled.has('overview') && <Overview content={content} />}
+        {enabled.has('speakers') && <SpeakersDay content={content} speakers={speakers} />}
+        {enabled.has('outcomes') && <Outcomes content={content} />}
+        {enabled.has('free-gift') && <FreeGift content={content} />}
+        {enabled.has('bonuses') && <Bonuses content={content} />}
+        {enabled.has('founders') && <Founders content={content} />}
+        {enabled.has('testimonials') && <Testimonials content={content} />}
+        {enabled.has('pull-quote') && <PullQuote content={content} />}
+        {enabled.has('figures') && <Figures content={content} />}
+        {enabled.has('shifts') && <Shifts content={content} />}
+        {enabled.has('faq') && <FAQ content={content} />}
+        {enabled.has('closing-cta') && <FinalCTA content={content} />}
       </main>
 
-      <Footer content={content} />
+      {enabled.has('footer') && <Footer content={content} />}
 
       <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
     </div>

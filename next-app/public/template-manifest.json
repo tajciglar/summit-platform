@@ -95,6 +95,22 @@
               "format": "uuid",
               "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
             }
+          },
+          "eventStatus": {
+            "type": "string",
+            "enum": [
+              "before",
+              "live",
+              "ended"
+            ]
+          },
+          "liveLabel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "endedLabel": {
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -1304,6 +1320,20 @@
                 "type": "string",
                 "minLength": 1
               },
+              "eventStatus": {
+                "type": "string",
+                "enum": [
+                  "before",
+                  "live",
+                  "ended"
+                ]
+              },
+              "liveLabel": {
+                "type": "string"
+              },
+              "endedLabel": {
+                "type": "string"
+              },
               "metaLabel": {
                 "type": "string",
                 "minLength": 1
@@ -2145,6 +2175,22 @@
                 "format": "uuid",
                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
               }
+            },
+            "eventStatus": {
+              "type": "string",
+              "enum": [
+                "before",
+                "live",
+                "ended"
+              ]
+            },
+            "liveLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "endedLabel": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -2920,6 +2966,20 @@
               "dateRangeLabel": {
                 "type": "string",
                 "minLength": 1
+              },
+              "eventStatus": {
+                "type": "string",
+                "enum": [
+                  "before",
+                  "live",
+                  "ended"
+                ]
+              },
+              "liveLabel": {
+                "type": "string"
+              },
+              "endedLabel": {
+                "type": "string"
               },
               "eyebrow": {
                 "type": "string",
@@ -3823,7 +3883,64 @@
           "footer"
         ],
         "additionalProperties": false
-      }
+      },
+      "supportedSections": [
+        "top-bar",
+        "hero",
+        "press",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "bonuses",
+        "founders",
+        "testimonials",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "faq",
+        "closing-cta",
+        "footer"
+      ],
+      "sectionOrder": [
+        "top-bar",
+        "hero",
+        "press",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "bonuses",
+        "founders",
+        "testimonials",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "faq",
+        "closing-cta",
+        "footer"
+      ],
+      "defaultEnabledSections": [
+        "top-bar",
+        "hero",
+        "press",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "bonuses",
+        "founders",
+        "testimonials",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "faq",
+        "closing-cta",
+        "footer"
+      ]
     },
     {
       "key": "cream-sage",
@@ -3905,6 +4022,20 @@
               "dateRangeLabel": {
                 "type": "string",
                 "minLength": 1
+              },
+              "eventStatus": {
+                "type": "string",
+                "enum": [
+                  "before",
+                  "live",
+                  "ended"
+                ]
+              },
+              "liveLabel": {
+                "type": "string"
+              },
+              "endedLabel": {
+                "type": "string"
               },
               "headlineLead": {
                 "type": "string",
@@ -8218,6 +8349,16 @@
                 "type": "string",
                 "minLength": 1
               },
+              "headlineItalicTail": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
               "subheadlineLead": {
                 "type": "string",
                 "minLength": 1
@@ -8229,6 +8370,71 @@
               "ctaLabel": {
                 "type": "string",
                 "minLength": 1
+              },
+              "ctaNote": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "eventStatusLabel": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "eventStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "before",
+                      "live",
+                      "ended"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "dateRangeLabel": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "liveLabel": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "endedLabel": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "giftNoteLead": {
                 "type": "string",
@@ -8263,6 +8469,21 @@
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                 }
+              },
+              "collagePhotoUrls": {
+                "anyOf": [
+                  {
+                    "maxItems": 6,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -8386,7 +8607,7 @@
               },
               "bodyParagraphs": {
                 "minItems": 1,
-                "maxItems": 3,
+                "maxItems": 10,
                 "type": "array",
                 "items": {
                   "type": "string",
@@ -8404,6 +8625,17 @@
               "cardSubhead": {
                 "type": "string",
                 "minLength": 1
+              },
+              "imageUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -8435,6 +8667,65 @@
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                 }
+              },
+              "sectionEyebrow": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sectionHeadline": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "days": {
+                "anyOf": [
+                  {
+                    "maxItems": 7,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "badge": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "speakerIds": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "badge",
+                        "title",
+                        "speakerIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -8984,7 +9275,70 @@
           "footer"
         ],
         "additionalProperties": false
-      }
+      },
+      "supportedSections": [
+        "top-bar",
+        "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta"
+      ],
+      "sectionOrder": [
+        "top-bar",
+        "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta"
+      ],
+      "defaultEnabledSections": [
+        "top-bar",
+        "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta"
+      ]
     },
     {
       "key": "lavender-gold",
