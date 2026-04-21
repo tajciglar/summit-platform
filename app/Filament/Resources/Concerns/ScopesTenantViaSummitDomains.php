@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Concerns;
 
 use App\Support\CurrentSummit;
 use Filament\Facades\Filament;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,4 +41,13 @@ trait ScopesTenantViaSummitDomains
     {
         return 'summit';
     }
+
+    /**
+     * Default Filament behavior fires `summit()->associate($tenant)` on create.
+     * Our tenant is a Domain (not a Summit), so that overwrites `summit_id`
+     * with the domain's UUID and triggers an FK violation. We keep the read
+     * scoping above and rely on the form's `summit_id` default (seeded from
+     * CurrentSummit::getId()) to set the correct value on create.
+     */
+    public static function observeTenancyModelCreation(Panel $panel): void {}
 }

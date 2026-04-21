@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ViewField;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
@@ -205,6 +206,14 @@ class FunnelStepResource extends Resource
     {
         return 'funnel';
     }
+
+    /**
+     * Default Filament behavior fires `funnel()->associate($tenant)` on create.
+     * Our tenant is a Domain (not a Funnel), so that would overwrite `funnel_id`
+     * with the domain's UUID and trip the FK. We keep the read scoping above
+     * and rely on the form's `funnel_id` field to set the correct value.
+     */
+    public static function observeTenancyModelCreation(Panel $panel): void {}
 
     public static function getPages(): array
     {

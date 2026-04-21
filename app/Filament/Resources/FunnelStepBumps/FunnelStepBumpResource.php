@@ -13,6 +13,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -145,6 +146,14 @@ class FunnelStepBumpResource extends Resource
     {
         return 'funnelStep';
     }
+
+    /**
+     * Default Filament behavior fires `funnelStep()->associate($tenant)` on
+     * create. Our tenant is a Domain (not a FunnelStep), so that would trip
+     * the FK. Read scoping is handled above; the form's `funnel_step_id`
+     * field supplies the correct value on create.
+     */
+    public static function observeTenancyModelCreation(Panel $panel): void {}
 
     public static function getPages(): array
     {
