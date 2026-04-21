@@ -4,13 +4,13 @@ namespace App\Filament\Resources\FunnelSteps;
 
 use App\Enums\BlockType;
 use App\Models\FunnelStep;
+use App\Services\Templates\TemplateBlockFactory;
 use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
@@ -44,25 +44,25 @@ class FunnelStepResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema->components([
-            Section::make('Live landing page')
-                ->description('What visitors see right now')
-                ->visible(fn (Get $get): bool => $get('step_type') === 'optin')
+        return $schema->columns(1)->components([
+            // Meta row: Name / URL slug / Step type / Order.
+            // `is_published` rides along here too (rendered compactly) so we
+            // don't need a separate publish-section chrome — the live URL pill
+            // is rendered in the page blade above the form.
+            Section::make()
+                ->columnSpanFull()
+                ->columns(['default' => 1, 'md' => 4])
                 ->components([
-                    ViewField::make('live_landing_card')
-                        ->view('filament.components.live-landing-card'),
-                ]),
-
-            Section::make('Step details')
-                ->description('Identity, type, and product link')
-                ->columns(3)
-                ->components([
-                    Select::make('funnel_id')
-                        ->label('Funnel')
-                        ->relationship('funnel', 'name')
+                    TextInput::make('name')
                         ->required()
-                        ->searchable()
-                        ->preload(),
+                        ->maxLength(500)
+                        ->columnSpan(1),
+                    TextInput::make('slug')
+                        ->label('URL slug')
+                        ->required()
+                        ->maxLength(255)
+                        ->prefix(fn (?FunnelStep $record): string => $record?->funnel ? '/'.$record->funnel->slug.'/' : '/')
+                        ->columnSpan(1),
                     Select::make('step_type')
                         ->options([
                             'optin' => 'Opt-in',
@@ -74,40 +74,46 @@ class FunnelStepResource extends Resource
                         ])
                         ->required()
                         ->native(false)
-                        ->live(),
-                    TextInput::make('name')->required()->maxLength(500),
-                    TextInput::make('slug')->required()->maxLength(255),
+                        ->live()
+                        ->columnSpan(1),
+                    TextInput::make('sort_order')
+                        ->label('Order')
+                        ->numeric()
+                        ->default(0)
+                        ->columnSpan(1),
+                    Toggle::make('is_published')
+                        ->label('Published')
+                        ->inline(false)
+                        ->default(false)
+                        ->columnSpan(['default' => 1, 'md' => 4]),
+                    // Product linkage is optional per step_type. Hidden for
+                    // optin/sales/thank-you; shown for checkout/upsell/downsell.
                     Select::make('product_id')
-                        ->label('Product (for checkout/upsell)')
+                        ->label('Product (for checkout / upsell)')
                         ->relationship('product', 'name')
                         ->searchable()
                         ->preload()
-                        ->placeholder('No product linked'),
-                    TextInput::make('sort_order')->numeric()->default(0),
-                    Toggle::make('is_published')->default(false),
-                ]),
-
-            Section::make('Generated landing page')
-                ->description('This page was built by the AI landing-page pipeline. Edit sections in the draft editor.')
-                ->visible(fn (?FunnelStep $record): bool => $record !== null && self::isGeneratedContent($record->page_content))
-                ->components([
-                    ViewField::make('generated_content_card')
-                        ->view('filament.components.step-generated-content-card'),
+                        ->placeholder('No product linked')
+                        ->visible(fn (Get $get): bool => in_array($get('step_type'), ['checkout', 'upsell', 'downsell'], true))
+                        ->columnSpan(['default' => 1, 'md' => 4]),
                 ]),
 
             Section::make('Page content blocks')
+                ->columnSpanFull()
                 ->description(fn (Get $get): string => is_array($get('page_content'))
                     ? count($get('page_content')).' blocks'
-                    : 'empty')
-                ->visible(fn (?FunnelStep $record): bool => $record === null || ! self::isGeneratedContent($record->page_content))
-                ->collapsed()
+                    : '0 blocks')
                 ->components([
+                    ViewField::make('blocks_empty_state')
+                        ->view('filament.components.step-blocks-empty-state')
+                        ->visible(fn (Get $get): bool => ! is_array($get('page_content')) || count($get('page_content')) === 0),
+
                     Builder::make('page_content')
-                        ->blocks(self::pageContentBlocks())
+                        ->label('')
+                        ->blocks(fn (?FunnelStep $record) => self::builderBlocks($record))
                         ->addActionLabel('Add block')
                         ->collapsible()
-                        ->dehydrateStateUsing(fn ($state) => self::coerceToBuilderState($state))
-                        ->afterStateHydrated(fn ($component, $state) => $component->state(self::coerceToBuilderState($state))),
+                        ->visible(fn (Get $get): bool => is_array($get('page_content')) && count($get('page_content')) > 0),
                 ]),
         ]);
     }
@@ -152,7 +158,6 @@ class FunnelStepResource extends Resource
                 TernaryFilter::make('is_published'),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -208,56 +213,25 @@ class FunnelStepResource extends Resource
     }
 
     /**
-     * Build one Filament Builder block per BlockType enum case.
+     * Builder blocks for a given step:
+     *   - Generated content (has template_key): one block per top-level section
+     *     in that template's jsonSchema, with fields auto-built from the schema.
+     *   - Legacy / hand-built: fall back to the generic BlockType enum.
      */
-    private static function pageContentBlocks(): array
+    public static function builderBlocks(?FunnelStep $record): array
     {
+        $pageContent = $record?->page_content;
+        $templateKey = is_array($pageContent) ? ($pageContent['template_key'] ?? null) : null;
+
+        if (is_string($templateKey)) {
+            return app(TemplateBlockFactory::class)->blocksForStep($record);
+        }
+
         return collect(BlockType::cases())
             ->map(fn (BlockType $type) => Block::make($type->value)
                 ->label($type->label())
                 ->icon($type->icon())
                 ->schema($type->filamentFields()))
             ->all();
-    }
-
-    /**
-     * Filament Builder expects a sequential list of {type, data} entries.
-     * Landing-page-generator output stores a different shape (e.g.
-     * {"content": {...}}). For legacy shapes we start the Builder empty
-     * rather than crashing — the operator can rebuild from scratch or
-     * regenerate via the Landing Pages UI.
-     *
-     * @param  mixed  $state
-     * @return array<int, array{type: string, data: array}>
-     */
-    public static function coerceToBuilderState($state): array
-    {
-        if (! is_array($state) || empty($state)) {
-            return [];
-        }
-
-        // Already a sequential list
-        if (array_is_list($state)) {
-            return array_values(array_filter(
-                $state,
-                fn ($item) => is_array($item) && isset($item['type']),
-            ));
-        }
-
-        // Associative map → not Builder-compatible (likely generator output)
-        return [];
-    }
-
-    /**
-     * Generator-published pages store `page_content` as an associative array
-     * with a `template_key`. Hand-built pages use a sequential Builder list.
-     * This lets the form swap the Builder out for an info card + link to the
-     * draft editor so operators get the rich per-section editing experience.
-     *
-     * @param  mixed  $state
-     */
-    public static function isGeneratedContent($state): bool
-    {
-        return is_array($state) && ! empty($state) && isset($state['template_key']);
     }
 }

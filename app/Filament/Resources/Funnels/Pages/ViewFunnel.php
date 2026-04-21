@@ -7,18 +7,28 @@ use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
 use App\Models\LandingPageBatch;
+use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 
-class ViewFunnel extends ViewRecord
+/**
+ * Read-oriented funnel page with just slug + description editable inline.
+ * Extends EditRecord so form state hydrates from the record, but the submit
+ * action is hidden and each editable field saves independently on blur.
+ */
+class ViewFunnel extends EditRecord
 {
     protected static string $resource = FunnelResource::class;
 
@@ -62,6 +72,8 @@ class ViewFunnel extends ViewRecord
                             'template_pool' => [$record->template_key],
                             'versions_per_template' => [$record->template_key => 1],
                             'version_count' => 1,
+                            'auto_publish' => true,
+                            'published_by_user_id' => auth()->id(),
                         ]);
                         GenerateLandingPageBatchJob::dispatch($batch->id);
                         $dispatched++;
@@ -79,12 +91,17 @@ class ViewFunnel extends ViewRecord
                 ->icon('heroicon-o-plus')
                 ->color('gray')
                 ->url(fn () => FunnelStepResource::getUrl('create')),
-            EditAction::make()->url(fn () => FunnelResource::getUrl('edit', ['record' => $this->record])),
             DeleteAction::make(),
         ];
     }
 
-    public function infolist(Schema $schema): Schema
+    /** Hide the default submit button; slug + description save on blur. */
+    protected function getFormActions(): array
+    {
+        return [];
+    }
+
+    public function form(Schema $schema): Schema
     {
         return $schema->components([
             Section::make()
@@ -118,23 +135,142 @@ class ViewFunnel extends ViewRecord
                     TextEntry::make('summit.title')
                         ->label('Summit')
                         ->columnSpan(2),
-                    TextEntry::make('slug')
+
+                    TextInput::make('slug')
+                        ->label('Slug')
                         ->prefix('/')
-                        ->color('gray')
-                        ->copyable()
+                        ->required()
+                        ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['slug' => $state]);
+                            Notification::make()->title('Slug saved')->success()->send();
+                        })
                         ->columnSpan(6),
-                    TextEntry::make('description')
+
+                    Textarea::make('description')
+                        ->label('Description')
                         ->placeholder('No description')
+                        ->rows(3)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['description' => $state]);
+                            Notification::make()->title('Description saved')->success()->send();
+                        })
                         ->columnSpan(6),
-                    TextEntry::make('template_key')
+
+                    Select::make('template_key')
                         ->label('Skin')
-                        ->placeholder('None — pick one in Edit to enable one-click generation')
+                        ->options(fn () => self::skinOptions())
+                        ->placeholder('None — pick a skin to enable one-click generation')
+                        ->helperText('The visual language (typography, spacing, layout). All steps share this skin.')
+                        ->native(false)
+                        ->searchable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['template_key' => $state]);
+                            Notification::make()->title('Skin saved')->success()->send();
+                        })
                         ->columnSpan(6),
+                ]),
+
+            Section::make('Sections per step type')
+                ->description('Selected sections will be generated on each step type when you click "Generate all steps".')
+                ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
+                ->columns(3)
+                ->schema([
+                    CheckboxList::make('section_config.optin')
+                        ->label('Optin')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(1)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update([
+                                'section_config' => array_merge(
+                                    $record->section_config ?? [],
+                                    ['optin' => array_values($state ?? [])],
+                                ),
+                            ]);
+                            Notification::make()->title('Optin sections saved')->success()->send();
+                        }),
+
+                    CheckboxList::make('section_config.sales_page')
+                        ->label('Sales page')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(1)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update([
+                                'section_config' => array_merge(
+                                    $record->section_config ?? [],
+                                    ['sales_page' => array_values($state ?? [])],
+                                ),
+                            ]);
+                            Notification::make()->title('Sales page sections saved')->success()->send();
+                        }),
+
+                    CheckboxList::make('section_config.thank_you')
+                        ->label('Thank you')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(1)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update([
+                                'section_config' => array_merge(
+                                    $record->section_config ?? [],
+                                    ['thank_you' => array_values($state ?? [])],
+                                ),
+                            ]);
+                            Notification::make()->title('Thank-you sections saved')->success()->send();
+                        }),
                 ]),
 
             ViewEntry::make('steps_list')
                 ->columnSpanFull()
                 ->view('filament.funnels.steps-list'),
         ]);
+    }
+
+    /** @return array<string, string> */
+    private static function skinOptions(): array
+    {
+        $registry = app(TemplateRegistry::class);
+
+        return collect($registry->allKeys())
+            ->mapWithKeys(fn (string $key) => [$key => $registry->get($key)['label'] ?? $key])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function sectionOptionsFor(?string $templateKey): array
+    {
+        if (! $templateKey) {
+            return [];
+        }
+
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        return collect($registry->supportedSections($templateKey))
+            ->mapWithKeys(fn (string $key) => [
+                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ])
+            ->all();
+    }
+
+    private static function skinSupportsSections(?string $templateKey): bool
+    {
+        if (! $templateKey) {
+            return false;
+        }
+
+        $registry = app(TemplateRegistry::class);
+
+        return $registry->exists($templateKey) && $registry->supportsSections($templateKey);
     }
 }

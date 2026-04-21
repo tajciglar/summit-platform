@@ -54,7 +54,7 @@ class EditLandingPageDraftPage extends Page implements HasForms
         $registry = app(TemplateRegistry::class);
         $templateKey = $this->landingDraft->template_key;
 
-        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+        if (! $registry->exists($templateKey) || ! $registry->supportsSectionEditing($templateKey)) {
             // Legacy whole-schema form: bind content directly.
             $this->form->fill([
                 'content' => $this->landingDraft->sections ?? [],
@@ -93,7 +93,7 @@ class EditLandingPageDraftPage extends Page implements HasForms
         $templateKey = $this->landingDraft->template_key;
         $summitId = $this->funnel->summit_id;
 
-        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+        if (! $registry->exists($templateKey) || ! $registry->supportsSectionEditing($templateKey)) {
             $template = $registry->exists($templateKey) ? $registry->get($templateKey) : ['jsonSchema' => []];
             $components = $mapper->map($template['jsonSchema'] ?? [], $summitId);
 
@@ -141,7 +141,7 @@ class EditLandingPageDraftPage extends Page implements HasForms
         $registry = app(TemplateRegistry::class);
         $templateKey = $this->landingDraft->template_key;
 
-        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+        if (! $registry->exists($templateKey) || ! $registry->supportsSectionEditing($templateKey)) {
             $this->landingDraft->update([
                 'sections' => $state['content'] ?? [],
             ]);

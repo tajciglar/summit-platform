@@ -16,38 +16,15 @@
         ->with(['bumps.product', 'product'])
         ->get();
 
-    // Preview URL per step = Next `/preview/{token}` from the latest published draft
-    // on that step's batch. Null if no draft has been published yet.
-    $previewTokens = \App\Models\LandingPageBatch::query()
-        ->where('funnel_id', $funnel->id)
-        ->whereIn('funnel_step_id', $steps->pluck('id'))
-        ->with([
-            'drafts' => fn ($q) => $q
-                ->where('status', \App\Enums\LandingPageDraftStatus::Published)
-                ->latest('created_at')
-                ->limit(1),
-        ])
-        ->get()
-        ->mapWithKeys(fn ($b) => [$b->funnel_step_id => $b->drafts->first()?->preview_token]);
-
     $nextBase = rtrim(config('next.url'), '/');
 
-    // Per-step static-HTML overrides for demo/preview pages we host in next-app/public.
-    // Shape: [funnel_slug][step_slug] => static path relative to the Next host.
-    $staticPreviewOverrides = [
-        'aps-post' => [
-            'optin' => '/aps-parenting.html',
-        ],
-    ];
+    // Preview URL = Next `/preview/step/{id}`, rendered from the step's live
+    // page_content. Same source as the step-edit preview so both pages stay
+    // in sync. Null when page_content has no template assigned yet.
+    $previewUrl = function ($s) use ($nextBase) {
+        $hasTemplate = is_array($s->page_content) && ! empty($s->page_content['template_key']);
 
-    $previewUrl = function ($s) use ($funnel, $staticPreviewOverrides, $nextBase, $previewTokens) {
-        $override = $staticPreviewOverrides[$funnel->slug][$s->slug] ?? null;
-        if ($override) {
-            return $nextBase.$override;
-        }
-        $token = $previewTokens->get($s->id);
-
-        return $token ? "{$nextBase}/preview/{$token}" : null;
+        return $hasTemplate ? "{$nextBase}/preview/step/{$s->id}" : null;
     };
 
     // Revenue per step: completed orders × total_cents

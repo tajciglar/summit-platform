@@ -259,9 +259,9 @@ class FunnelResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\LandingPageDraftsRelationManager::class,
-        ];
+        // Drafts list intentionally hidden for now; LandingPageDraftsRelationManager
+        // stays available and can be restored once we bring the drafts UI back.
+        return [];
     }
 
     public static function getPages(): array
