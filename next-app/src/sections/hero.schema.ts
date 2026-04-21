@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventStatusSchema } from '../components/event-status';
 
 export const HeroSchema = z.object({
   issueLabel: z.string().min(1),
@@ -13,6 +14,9 @@ export const HeroSchema = z.object({
   ratingText: z.string().min(1),
   figCaption: z.string().min(1),
   heroSpeakerIds: z.array(z.string().uuid()).min(1).max(4),
+  eventStatus: EventStatusSchema.optional(),
+  liveLabel: z.string().min(1).optional(),
+  endedLabel: z.string().min(1).optional(),
 });
 
 export type HeroContent = z.infer<typeof HeroSchema>;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Funnel;
+use App\Models\FunnelStep;
 use App\Models\Speaker;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,8 +25,35 @@ class PublicFunnelController extends Controller
             return response()->json(['error' => 'no published content'], 404);
         }
 
-        $speakers = Speaker::where('summit_id', $funnel->summit_id)->get()
-            ->map(fn ($s) => [
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id));
+    }
+
+    /**
+     * Admin-facing preview that mirrors the exact `page_content` of a single
+     * step. Used by the Filament "Preview live" button so block edits appear
+     * in preview immediately, without going through a draft publish.
+     */
+    public function showStep(FunnelStep $step): JsonResponse
+    {
+        $content = $step->page_content;
+
+        if (! is_array($content) || ! isset($content['template_key'])) {
+            return response()->json(['error' => 'step has no editable page_content'], 404);
+        }
+
+        $funnel = $step->funnel;
+
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id));
+    }
+
+    /**
+     * @param  array<string, mixed>  $content
+     * @return array<string, mixed>
+     */
+    private function payload(array $content, ?string $summitId, ?string $funnelId): array
+    {
+        $speakers = $summitId
+            ? Speaker::where('summit_id', $summitId)->get()->map(fn ($s) => [
                 'id' => $s->id,
                 'firstName' => $s->first_name,
                 'lastName' => $s->last_name,
@@ -39,16 +67,17 @@ class PublicFunnelController extends Controller
                 'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
                 'sortOrder' => $s->sort_order,
                 'isFeatured' => $s->is_featured,
-            ]);
+            ])
+            : collect();
 
-        return response()->json([
+        return [
             'template_key' => $content['template_key'],
             'content' => $content['content'] ?? [],
             'enabled_sections' => $content['enabled_sections'] ?? null,
             'audience' => $content['audience'] ?? null,
             'palette' => $content['palette'] ?? null,
             'speakers' => $speakers,
-            'funnel_id' => $funnel->id,
-        ]);
+            'funnel_id' => $funnelId,
+        ];
     }
 }

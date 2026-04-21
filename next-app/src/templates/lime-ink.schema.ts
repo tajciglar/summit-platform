@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventStatusSchema } from '../components/event-status';
 
 /**
  * Opus V2 — "technical / dev-console" aesthetic.
@@ -25,6 +26,9 @@ export const LimeInkSchema = z.object({
   hero: z.object({
     sectionLabel: z.string().min(1),             // "01 → HERO"
     dateRangeLabel: z.string().min(1),           // "Feb 10–14 · 2026"
+    eventStatus: EventStatusSchema.optional(),   // 'before' | 'live' | 'ended'
+    liveLabel: z.string().optional(),
+    endedLabel: z.string().optional(),
     eyebrow: z.string().min(1),                  // "A 5-day intensive · for parents · science-backed"
     heroLine1: z.string().min(1),                // First line, rendered before <br>
     headlineLead: z.string().min(1),             // Second line, before accent

@@ -1,5 +1,7 @@
+import type { CSSProperties } from 'react';
 import type { HeroContent } from '../../../sections/hero.schema';
 import type { Speaker } from '../../types';
+import { EventStatusBadge } from '../../../components/EventStatusBadge';
 import {
   AVATAR_GRADIENTS,
   PORTRAIT_GRADIENTS,
@@ -39,7 +41,13 @@ export function Hero({ content, speakers }: Props) {
         <div className="flex items-center justify-between mb-10 pb-4 rule">
           <div className="flex items-center gap-6">
             <span className="figure-label">{content.issueLabel}</span>
-            <span className="figure-label">{content.dateRangeLabel}</span>
+            <EventStatusBadge
+              status={content.eventStatus}
+              dateLabel={content.dateRangeLabel}
+              liveLabel={content.liveLabel}
+              endedLabel={content.endedLabel}
+              style={{ '--esb-primary': '#3B3027', '--esb-fg': '#FAF7F2' } as CSSProperties}
+            />
             <span className="figure-label hidden md:inline">{content.metaLabel}</span>
           </div>
           <span className="figure-label">{content.readerCount}</span>

@@ -33,6 +33,19 @@ describe('section schemas', () => {
     expect(res.success).toBe(false);
   });
 
+  it('HeroSchema accepts optional eventStatus enum + labels', () => {
+    const base = {
+      issueLabel: 'I', dateRangeLabel: '3–5 May, 2026', metaLabel: 'M', readerCount: '1',
+      eyebrow: 'E', headline: 'Headline', subheadline: 'sub', ctaLabel: 'cta',
+      ratingText: 'r', figCaption: 'f',
+      heroSpeakerIds: ['00000000-0000-4000-8000-000000000000'],
+    };
+    expect(HeroSchema.safeParse(base).success).toBe(true);
+    expect(HeroSchema.safeParse({ ...base, eventStatus: 'live' }).success).toBe(true);
+    expect(HeroSchema.safeParse({ ...base, eventStatus: 'ended', endedLabel: 'Summit has ended' }).success).toBe(true);
+    expect(HeroSchema.safeParse({ ...base, eventStatus: 'sideways' }).success).toBe(false);
+  });
+
   it('MarqueeSchema enforces min 3 items', () => {
     const res = MarqueeSchema.safeParse({ items: ['a', 'b'] });
     expect(res.success).toBe(false);

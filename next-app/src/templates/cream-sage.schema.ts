@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventStatusSchema } from '../components/event-status';
 
 /**
  * Opus V3 — "gentle / cozy editorial" aesthetic.
@@ -24,6 +25,9 @@ export const CreamSageSchema = z.object({
   hero: z.object({
     badgeLabel: z.string().min(1),               // "Gentle 5-Day Summit"
     dateRangeLabel: z.string().min(1),           // "Feb 10–14, 2026 · Free & Online"
+    eventStatus: EventStatusSchema.optional(),   // 'before' | 'live' | 'ended'
+    liveLabel: z.string().optional(),
+    endedLabel: z.string().optional(),
     headlineLead: z.string().min(1),             // "Your bright, "
     headlineAccent: z.string().min(1),           // "busy-minded" (italic/clay)
     headlineTrail: z.string().min(1),            // " child is not a problem to be solved."

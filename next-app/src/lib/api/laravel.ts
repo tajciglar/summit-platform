@@ -37,6 +37,15 @@ export async function fetchPublished(funnelId: string, stepType = 'optin'): Prom
   return res.json();
 }
 
+export async function fetchStepPreview(stepId: string): Promise<PublicPayload | null> {
+  const res = await fetch(`${BASE}/api/funnel-steps/${encodeURIComponent(stepId)}/preview-content`, {
+    cache: 'no-store',
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Step preview fetch failed: ${res.status}`);
+  return res.json();
+}
+
 export function speakersById(speakers: Speaker[]): Record<string, Speaker> {
   return Object.fromEntries(speakers.map((s) => [s.id, s]));
 }

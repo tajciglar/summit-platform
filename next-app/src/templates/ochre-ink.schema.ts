@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventStatusSchema } from '../components/event-status';
 
 export const OchreInkSchema = z.object({
   summit: z.object({
@@ -15,6 +16,9 @@ export const OchreInkSchema = z.object({
   hero: z.object({
     issueLabel: z.string().min(1),            // e.g. "Issue No. VII"
     dateRangeLabel: z.string().min(1),        // e.g. "Feb 10–14, 2026"
+    eventStatus: EventStatusSchema.optional(),
+    liveLabel: z.string().optional(),
+    endedLabel: z.string().optional(),
     metaLabel: z.string().min(1),             // e.g. "100% Free · Online"
     readerCount: z.string().min(1),           // e.g. "73,124 Readers"
     eyebrow: z.string().min(1),

@@ -1,17 +1,6 @@
-import type { ComponentType } from 'react';
 import { notFound } from 'next/navigation';
 import { fetchDraft, speakersById } from '@/lib/api/laravel';
-import type { Palette } from '@/lib/palette';
 import { getTemplate } from '@/templates/registry';
-import type { Speaker } from '@/templates/types';
-
-type OchreInkComponentProps = {
-  content: unknown;
-  speakers: Record<string, Speaker>;
-  funnelId: string;
-  enabledSections?: string[];
-  palette?: Palette | null;
-};
 
 export const dynamic = 'force-dynamic';
 
@@ -45,25 +34,14 @@ export default async function PreviewPage({
     );
   }
 
-  const speakers = speakersById(draft.speakers);
   const Component = template.Component;
-  // Only ochre-ink currently accepts `enabledSections` and `palette`. Other
-  // templates render their full content as-is (Phase 2a + 3a-1 scope).
-  // Normalize null → undefined for enabledSections so the layout falls back
-  // to its default enabled set for legacy drafts. palette stays null/Palette
-  // because `paletteStyle(null)` returns undefined on purpose.
-  const enabledSections = draft.enabled_sections ?? undefined;
-  if (draft.template_key === 'ochre-ink') {
-    const OchreInkComponent = Component as ComponentType<OchreInkComponentProps>;
-    return (
-      <OchreInkComponent
-        content={parsed.data}
-        enabledSections={enabledSections}
-        speakers={speakers}
-        funnelId={draft.funnel_id}
-        palette={draft.palette}
-      />
-    );
-  }
-  return <Component content={parsed.data} speakers={speakers} funnelId={draft.funnel_id} />;
+  return (
+    <Component
+      content={parsed.data}
+      speakers={speakersById(draft.speakers)}
+      funnelId={draft.funnel_id}
+      enabledSections={draft.enabled_sections ?? undefined}
+      palette={draft.palette}
+    />
+  );
 }
