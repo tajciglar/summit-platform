@@ -53,10 +53,20 @@ class CreateFunnel extends CreateRecord
 
             $pageContent = null;
             if ($funnel->template_key) {
+                // Seed one empty block per enabled section so the Builder
+                // renders them as editable cards out of the gate, instead
+                // of the "no blocks yet" empty state.
+                $content = [];
+                foreach (array_values($sections) as $key) {
+                    if (is_string($key) && $key !== '') {
+                        $content[$key] = [];
+                    }
+                }
+
                 $pageContent = [
                     'template_key' => $funnel->template_key,
                     'enabled_sections' => array_values($sections),
-                    'content' => (object) [],
+                    'content' => $content === [] ? (object) [] : $content,
                 ];
             }
 

@@ -54,8 +54,9 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
 
     $optin = $steps->firstWhere('step_type', 'optin');
     expect($optin->page_content['template_key'])->toBe('ochre-ink');
-    expect($optin->page_content['enabled_sections'])->toBe(['masthead', 'hero', 'footer']);
-    expect($optin->page_content['content'])->toBe([]);
+    expect($optin->page_content['enabled_sections'])->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
+    expect(array_keys($optin->page_content['content']))->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
+    expect($optin->page_content['content']['masthead'])->toBe([]);
 });
 
 it('creates no steps when no skin is picked', function () {

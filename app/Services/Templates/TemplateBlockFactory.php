@@ -102,12 +102,27 @@ class TemplateBlockFactory
         return array_merge($original, ['content' => $contentMap]);
     }
 
-    /** @return list<string> */
+    /**
+     * Ordered list of section keys the Builder should render for a template.
+     *
+     * For catalog-backed templates (those with `sectionSchemas`), keys come
+     * from `supportedSections` — kebab-case IDs like `stats-hero`, `closing-cta`
+     * that match the enabled_sections saved on the funnel. For legacy
+     * monolithic templates, keys come from the top-level jsonSchema properties
+     * (camelCase).
+     *
+     * @return list<string>
+     */
     private function schemaKeysForTemplate(?string $templateKey): array
     {
         if ($templateKey === null || ! $this->registry->exists($templateKey)) {
             return [];
         }
+
+        if ($this->registry->supportsSectionEditing($templateKey)) {
+            return $this->registry->supportedSections($templateKey);
+        }
+
         $schema = $this->registry->get($templateKey)['jsonSchema'] ?? null;
         if (! is_array($schema)) {
             return [];
@@ -140,6 +155,13 @@ class TemplateBlockFactory
     }
 
     /**
+     * Builder blocks for a step's template.
+     *
+     * Catalog-backed templates (those with `sectionSchemas`) produce one
+     * block per kebab-case section key — matching what was chosen in the
+     * funnel's `section_config`. Legacy monolithic templates fall back to
+     * top-level jsonSchema properties (camelCase).
+     *
      * @return list<Block>
      */
     public function blocksForStep(?FunnelStep $step): array
@@ -151,29 +173,52 @@ class TemplateBlockFactory
             return [];
         }
 
-        $template = $this->registry->get($templateKey);
-        $schema = $template['jsonSchema'] ?? null;
         $summitId = $step?->funnel?->summit_id;
+
+        if ($this->registry->supportsSectionEditing($templateKey)) {
+            return $this->catalogBlocks($templateKey, $summitId);
+        }
+
+        $schema = $this->registry->get($templateKey)['jsonSchema'] ?? null;
 
         if (! is_array($schema) || ($schema['type'] ?? null) !== 'object') {
             return [];
         }
 
-        $properties = $schema['properties'] ?? [];
         $blocks = [];
-
-        foreach ($properties as $name => $propSchema) {
+        foreach ($schema['properties'] ?? [] as $name => $propSchema) {
             if (! is_array($propSchema)) {
                 continue;
             }
 
             $name = (string) $name;
-            $fields = $this->fieldsForSection($propSchema, $summitId);
-
             $blocks[] = Block::make($name)
                 ->label($this->humanize($name))
                 ->icon($this->iconFor($name))
-                ->schema($fields);
+                ->schema($this->fieldsForSection($propSchema, $summitId));
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * @return list<Block>
+     */
+    private function catalogBlocks(string $templateKey, ?string $summitId): array
+    {
+        $sectionSchemas = $this->registry->sectionSchemas($templateKey);
+        $blocks = [];
+
+        foreach ($this->registry->supportedSections($templateKey) as $key) {
+            $propSchema = $sectionSchemas[$key] ?? null;
+            if (! is_array($propSchema)) {
+                continue;
+            }
+
+            $blocks[] = Block::make($key)
+                ->label($this->humanize($key))
+                ->icon($this->iconFor($key))
+                ->schema($this->fieldsForSection($propSchema, $summitId));
         }
 
         return $blocks;
@@ -207,26 +252,26 @@ class TemplateBlockFactory
     private function iconFor(string $name): string
     {
         return match ($name) {
-            'topBar', 'masthead' => 'heroicon-o-bars-3',
+            'topBar', 'top-bar', 'masthead' => 'heroicon-o-bars-3',
             'hero' => 'heroicon-o-star',
             'press', 'marquee' => 'heroicon-o-megaphone',
-            'trustBadges' => 'heroicon-o-shield-check',
-            'stats', 'figures' => 'heroicon-o-chart-bar',
-            'overview', 'intro', 'summit' => 'heroicon-o-document-text',
-            'speakersDay', 'speakersSection' => 'heroicon-o-user-group',
-            'outcomes', 'valueProps' => 'heroicon-o-sparkles',
-            'freeGift', 'freeGifts', 'supplement' => 'heroicon-o-gift',
-            'bonuses', 'bonusStack', 'vipBonuses' => 'heroicon-o-squares-plus',
-            'founders', 'hosts' => 'heroicon-o-user-circle',
-            'testimonials' => 'heroicon-o-chat-bubble-left-right',
-            'pullQuote' => 'heroicon-o-arrow-right-circle',
-            'shifts', 'reasons' => 'heroicon-o-check-badge',
-            'closing', 'cta' => 'heroicon-o-cursor-arrow-rays',
+            'trustBadges', 'trust-badges' => 'heroicon-o-shield-check',
+            'stats', 'figures', 'stats-hero', 'facts-stats' => 'heroicon-o-chart-bar',
+            'overview', 'intro', 'summit', 'summit-overview' => 'heroicon-o-document-text',
+            'speakersDay', 'speakersSection', 'speakers-by-day' => 'heroicon-o-user-group',
+            'outcomes', 'valueProps', 'value-prop' => 'heroicon-o-sparkles',
+            'freeGift', 'freeGifts', 'free-gift', 'supplement' => 'heroicon-o-gift',
+            'bonuses', 'bonusStack', 'bonus-stack', 'vipBonuses' => 'heroicon-o-squares-plus',
+            'founders', 'hosts', 'host-founder' => 'heroicon-o-user-circle',
+            'testimonials', 'testimonials-attendees' => 'heroicon-o-chat-bubble-left-right',
+            'pullQuote', 'pull-quote' => 'heroicon-o-arrow-right-circle',
+            'shifts', 'reasons', 'reasons-to-attend' => 'heroicon-o-check-badge',
+            'closing', 'cta', 'closing-cta' => 'heroicon-o-cursor-arrow-rays',
             'faqSection', 'faqs', 'faq' => 'heroicon-o-question-mark-circle',
             'mobileCta' => 'heroicon-o-device-phone-mobile',
             'footer' => 'heroicon-o-minus',
-            'priceCard' => 'heroicon-o-currency-dollar',
-            'comparisonTable' => 'heroicon-o-table-cells',
+            'priceCard', 'price-card' => 'heroicon-o-currency-dollar',
+            'comparisonTable', 'comparison-table' => 'heroicon-o-table-cells',
             'guarantee' => 'heroicon-o-lock-closed',
             'upgradeSection' => 'heroicon-o-arrow-trending-up',
             'whySection' => 'heroicon-o-light-bulb',
