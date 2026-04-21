@@ -8,14 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Speaker extends Model implements HasMedia
+class Speaker extends Model
 {
-    use HasFactory, HasMediaAttachments, HasUuid, InteractsWithMedia;
+    use HasFactory, HasMediaAttachments, HasUuid;
 
     protected $fillable = [
         'summit_id',
@@ -65,23 +61,5 @@ class Speaker extends Model implements HasMedia
     public function fullName(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('photo')
-            ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
-    }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-            ->fit(Fit::Crop, 160, 160)
-            ->nonQueued();
-
-        $this->addMediaConversion('card')
-            ->fit(Fit::Crop, 480, 640)
-            ->nonQueued();
     }
 }
