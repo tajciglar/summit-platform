@@ -10131,7 +10131,49 @@
           "footer"
         ],
         "additionalProperties": false
-      }
+      },
+      "supportedSections": [
+        "top-bar",
+        "hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "price-card",
+        "speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section",
+        "footer",
+        "mobile-sticky-cta"
+      ],
+      "sectionOrder": [
+        "top-bar",
+        "hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "price-card",
+        "speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section",
+        "footer",
+        "mobile-sticky-cta"
+      ],
+      "defaultEnabledSections": [
+        "top-bar",
+        "hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "price-card",
+        "speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section",
+        "footer",
+        "mobile-sticky-cta"
+      ]
     }
   ]
 }

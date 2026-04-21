@@ -49,6 +49,11 @@ import {
   greenGoldSectionOrder,
   greenGoldDefaultEnabledSections,
 } from './green-gold.sections';
+import {
+  lavenderGoldSupportedSections,
+  lavenderGoldSectionOrder,
+  lavenderGoldDefaultEnabledSections,
+} from './lavender-gold.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -153,6 +158,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/lavender-gold.jpg',
     schema: LavenderGoldSchema,
     tags: ['serif', 'warm'] as const,
+    supportedSections: lavenderGoldSupportedSections,
+    sectionOrder: lavenderGoldSectionOrder,
+    defaultEnabledSections: lavenderGoldDefaultEnabledSections,
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, TemplateMetadata<any>>;

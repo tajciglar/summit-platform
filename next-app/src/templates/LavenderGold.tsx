@@ -1,11 +1,14 @@
 import type { Speaker } from './types';
 import type { LavenderGoldContent } from './lavender-gold.schema';
+import { lavenderGoldDefaultEnabledSections } from './lavender-gold.sections';
 
 type Props = {
   content: LavenderGoldContent;
   speakers?: Record<string, Speaker>;
   funnelId?: string;
   ctaUrl?: string;
+  enabledSections?: string[];
+  palette?: import('@/lib/palette').Palette | null;
 };
 
 const LAV50 = '#F4F0FB';
@@ -209,8 +212,9 @@ function PriceCard({ content, ctaUrl }: { content: LavenderGoldContent['priceCar
   );
 }
 
-export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaUrl = '#purchase' }: Props) {
+export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaUrl = '#purchase', enabledSections }: Props) {
   const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  const enabled = new Set(enabledSections ?? lavenderGoldDefaultEnabledSections);
 
   return (
     <div style={{ fontFamily: 'Poppins,system-ui,sans-serif', background: '#fff', color: INK900 }}>
@@ -231,6 +235,7 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
       `}</style>
 
       {/* TOP BAR */}
+      {enabled.has('top-bar') && (
       <header style={{ position: 'sticky', top: 0, zIndex: 40, background: '#fff', borderBottom: `1px solid ${LAV100}` }}>
         <div style={{ maxWidth: 1152, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
@@ -247,8 +252,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           </a>
         </div>
       </header>
+      )}
 
       {/* HERO */}
+      {enabled.has('hero') && (
       <section style={{ padding: '2.5rem 1.25rem 4rem', background: 'linear-gradient(180deg,#F4EFFA 0%,#FFFFFF 60%)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.18em', color: '#fff', background: '#dc2626', borderRadius: 9999, padding: '0.5rem 1rem', marginBottom: '1.5rem', textTransform: 'uppercase', boxShadow: '0 4px 14px rgba(220,38,38,.3)' }}>
@@ -289,8 +296,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           </p>
         </div>
       </section>
+      )}
 
       {/* INTRO */}
+      {enabled.has('intro') && (
       <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
         <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.5rem' }}>{content.intro.eyebrow}</p>
@@ -300,8 +309,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           ))}
         </div>
       </section>
+      )}
 
       {/* VIP BONUSES */}
+      {enabled.has('vip-bonuses') && (
       <section style={{ padding: '3.5rem 1.25rem', background: LAV50 }}>
         <div style={{ maxWidth: 1152, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -327,8 +338,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           </div>
         </div>
       </section>
+      )}
 
       {/* FREE GIFTS */}
+      {enabled.has('free-gifts') && (
       <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
         <div style={{ maxWidth: 1152, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -356,8 +369,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.88rem', color: INK700 }}>{content.freeGifts.deliveryNote}</p>
         </div>
       </section>
+      )}
 
       {/* PRICE CARD #1 */}
+      {enabled.has('price-card') && (
       <section style={{ padding: '3.5rem 1.25rem', background: LAV50 }} id="purchase">
         <div style={{ maxWidth: 1152, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -370,9 +385,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           <PriceCard content={content.priceCard} ctaUrl={ctaUrl} />
         </div>
       </section>
+      )}
 
       {/* SPEAKERS */}
-      {sortedSpeakers.length > 0 && (
+      {enabled.has('speakers') && sortedSpeakers.length > 0 && (
         <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
           <div style={{ maxWidth: 1152, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -406,6 +422,7 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
       )}
 
       {/* COMPARISON TABLE */}
+      {enabled.has('comparison-table') && (
       <section style={{ padding: '3.5rem 1.25rem', background: LAV50 }}>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -444,13 +461,17 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           </div>
         </div>
       </section>
+      )}
 
       {/* PRICE CARD #2 */}
+      {enabled.has('price-card') && (
       <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
         <PriceCard content={content.priceCard} ctaUrl={ctaUrl} />
       </section>
+      )}
 
       {/* GUARANTEE */}
+      {enabled.has('guarantee') && (
       <section style={{ padding: '3.5rem 1.25rem', background: LAV50 }}>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
           <div style={{ background: '#FFF8E6', border: '2px dashed #F0DD8A', borderRadius: 20, padding: '1.75rem', display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
@@ -462,8 +483,10 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           </div>
         </div>
       </section>
+      )}
 
       {/* WHY SECTION */}
+      {enabled.has('why-section') && (
       <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
         <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: INK900, lineHeight: 1.15, marginBottom: '0.5rem' }}>{content.whySection.headline}</h2>
@@ -473,13 +496,17 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
           ))}
         </div>
       </section>
+      )}
 
       {/* PRICE CARD #3 */}
+      {enabled.has('price-card') && (
       <section style={{ padding: '3.5rem 1.25rem 5rem', background: LAV50 }}>
         <PriceCard content={content.priceCard} ctaUrl={ctaUrl} />
       </section>
+      )}
 
       {/* FOOTER */}
+      {enabled.has('footer') && (
       <footer style={{ background: INK900, color: '#fff', padding: '2rem 1.25rem', textAlign: 'center' }}>
         <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '1.1rem', color: LAV300, marginBottom: '1rem' }}>{content.footer.brandName}</p>
         <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
@@ -489,13 +516,16 @@ export function LavenderGold({ content, speakers = {}, funnelId: _funnelId, ctaU
         </div>
         <p style={{ fontSize: '0.78rem', opacity: 0.5, margin: 0 }}>{content.footer.copyright}</p>
       </footer>
+      )}
 
       {/* MOBILE STICKY CTA */}
+      {enabled.has('mobile-sticky-cta') && (
       <div className="lavender-gold-stick" style={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 50, padding: '0.65rem 1rem', background: 'rgba(27,19,44,.96)', display: 'none', justifyContent: 'center' }}>
         <a href={ctaUrl} style={{ ...btnCta, fontSize: '0.9rem', padding: '0.75rem 1.5rem' }}>
           {content.priceCard.ctaLabel} <ArrowRight size={16} />
         </a>
       </div>
+      )}
     </div>
   );
 }
