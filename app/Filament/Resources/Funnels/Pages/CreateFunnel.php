@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Funnels\Pages;
 use App\Filament\Pages\Concerns\InjectsCurrentSummitOnCreate;
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
+use App\Services\Templates\SectionPlaceholderFiller;
+use App\Services\Templates\TemplateRegistry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -45,6 +47,14 @@ class CreateFunnel extends CreateRecord
         $sectionConfig = $funnel->section_config ?? [];
         $created = 0;
 
+        $registry = app(TemplateRegistry::class);
+        $filler = app(SectionPlaceholderFiller::class);
+
+        $sectionSchemas = $funnel->template_key && $registry->supportsSectionEditing($funnel->template_key)
+            ? $registry->sectionSchemas($funnel->template_key)
+            : [];
+        $speakerIds = SectionPlaceholderFiller::speakerIdsFor($funnel->summit_id);
+
         foreach (self::AUTO_STEP_TYPES as $stepType => $defaults) {
             $sections = $sectionConfig[$stepType] ?? [];
             if (! is_array($sections) || count($sections) === 0) {
@@ -53,19 +63,18 @@ class CreateFunnel extends CreateRecord
 
             $pageContent = null;
             if ($funnel->template_key) {
-                // Seed one empty block per enabled section so the Builder
-                // renders them as editable cards out of the gate, instead
-                // of the "no blocks yet" empty state.
-                $content = [];
-                foreach (array_values($sections) as $key) {
-                    if (is_string($key) && $key !== '') {
-                        $content[$key] = [];
-                    }
-                }
+                // Seed each enabled section with placeholder copy for its
+                // required fields so the step renders in preview right
+                // away. Non-required fields stay empty and operators edit
+                // everything from the Builder.
+                $enabled = array_values($sections);
+                $content = $sectionSchemas !== []
+                    ? $filler->fillEnabled($sectionSchemas, $enabled, $speakerIds)
+                    : array_fill_keys($enabled, []);
 
                 $pageContent = [
                     'template_key' => $funnel->template_key,
-                    'enabled_sections' => array_values($sections),
+                    'enabled_sections' => $enabled,
                     'content' => $content === [] ? (object) [] : $content,
                 ];
             }

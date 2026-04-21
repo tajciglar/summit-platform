@@ -56,7 +56,12 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
     expect($optin->page_content['template_key'])->toBe('ochre-ink');
     expect($optin->page_content['enabled_sections'])->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
     expect(array_keys($optin->page_content['content']))->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
-    expect($optin->page_content['content']['masthead'])->toBe([]);
+
+    // Required fields are seeded with placeholder copy so the step renders
+    // in preview immediately.
+    expect($optin->page_content['content']['masthead'])->toHaveKeys(['volume', 'eyebrow']);
+    expect($optin->page_content['content']['masthead']['volume'])->toBeString()->not->toBeEmpty();
+    expect($optin->page_content['content']['footer'])->toHaveKeys(['tagline', 'volume', 'copyright']);
 });
 
 it('creates no steps when no skin is picked', function () {
