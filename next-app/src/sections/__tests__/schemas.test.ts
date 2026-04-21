@@ -16,6 +16,11 @@ import { StatsHeroSchema } from '../stats-hero.schema';
 import { FaqSchema } from '../faq.schema';
 import { ClosingCtaSchema } from '../closing-cta.schema';
 import { FooterSchema } from '../footer.schema';
+import { PriceCardSchema } from '../price-card.schema';
+import { ComparisonTableSchema } from '../comparison-table.schema';
+import { GuaranteeSchema } from '../guarantee.schema';
+import { FreeGiftSchema } from '../free-gift.schema';
+import { TrustBadgesSchema } from '../trust-badges.schema';
 
 describe('section schemas', () => {
   it('HeroSchema rejects empty headline', () => {
@@ -117,6 +122,56 @@ describe('section schemas', () => {
     }).success).toBe(true);
     expect(ClosingCtaSchema.safeParse({
       headline: 'H', subheadline: 'S', ctaLabel: 'cta',
+    }).success).toBe(true);
+  });
+
+  it('PriceCardSchema round-trips a valid offer', () => {
+    const res = PriceCardSchema.safeParse({
+      badge: 'ALL-ACCESS VIP PASS', headline: 'H', note: 'n',
+      features: ['f1'],
+      giftsBoxTitle: 'Included Free Gifts', giftItems: ['g1'],
+      totalValue: '$2,970', regularPrice: '$197', currentPrice: '$97',
+      savings: 'Save $100', ctaLabel: 'Upgrade', guarantee: 'fineprint',
+    });
+    expect(res.success).toBe(true);
+  });
+
+  it('ComparisonTableSchema requires at least one row', () => {
+    const bad = ComparisonTableSchema.safeParse({ eyebrow: 'e', headline: 'h', rows: [] });
+    expect(bad.success).toBe(false);
+    const good = ComparisonTableSchema.safeParse({
+      eyebrow: 'e', headline: 'h',
+      rows: [{ label: 'Live sessions', freePass: true, vipPass: true }],
+    });
+    expect(good.success).toBe(true);
+  });
+
+  it('GuaranteeSchema requires positive days', () => {
+    expect(GuaranteeSchema.safeParse({ heading: 'h', body: 'b', days: 0 }).success).toBe(false);
+    expect(GuaranteeSchema.safeParse({ heading: 'h', body: 'b', days: 30 }).success).toBe(true);
+  });
+
+  it('FreeGiftSchema enforces min 2 bullets', () => {
+    const base = {
+      eyebrow: 'Register Now & Get This Free', headline: 'h', body: 'b',
+      ctaLabel: 'cta', badgeLabel: 'FREE GIFT', cardTitle: 'ct', cardNote: 'cn',
+    };
+    expect(FreeGiftSchema.safeParse({ ...base, bullets: ['a'] }).success).toBe(false);
+    expect(FreeGiftSchema.safeParse({ ...base, bullets: ['a', 'b'] }).success).toBe(true);
+  });
+
+  it('TrustBadgesSchema rejects unknown icons and enforces min 2 items', () => {
+    expect(TrustBadgesSchema.safeParse({
+      items: [{ label: 'Secure', icon: 'rocket' as never }],
+    }).success).toBe(false);
+    expect(TrustBadgesSchema.safeParse({
+      items: [{ label: 'Secure', icon: 'shield' }],
+    }).success).toBe(false);
+    expect(TrustBadgesSchema.safeParse({
+      items: [
+        { label: 'Secure', icon: 'shield' },
+        { label: 'Private', icon: 'lock' },
+      ],
     }).success).toBe(true);
   });
 });
