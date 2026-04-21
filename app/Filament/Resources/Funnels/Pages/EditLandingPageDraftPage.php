@@ -8,19 +8,24 @@ use App\Models\LandingPageDraft;
 use App\Services\Templates\FilamentSchemaMapper;
 use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 /**
- * Render per-section fieldsets with an on/off toggle for each supported
- * section. Legacy templates without `supportedSections` fall back to a single
- * whole-schema form rendered under `data.content`.
+ * Block-based draft editor. Each enabled section becomes a draggable block
+ * the operator can reorder, edit in-place, remove, or add from the "add
+ * block" menu (which lists the skin's supported sections that aren't already
+ * on the page).
+ *
+ * Draft storage stays associative: `sections` is a map keyed by section
+ * key, `enabled_sections` is the ordered list that drives rendering. On
+ * save we rebuild both from the Builder's sequential state.
  */
 class EditLandingPageDraftPage extends Page implements HasForms
 {
@@ -43,24 +48,40 @@ class EditLandingPageDraftPage extends Page implements HasForms
     {
         $this->funnel = Funnel::findOrFail($record);
         $this->landingDraft = LandingPageDraft::findOrFail($draft);
+
         $registry = app(TemplateRegistry::class);
+        $templateKey = $this->landingDraft->template_key;
 
-        $initial = [
-            'content' => $this->landingDraft->sections ?? [],
-            'enabled' => [],
-        ];
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            // Legacy whole-schema form: bind content directly.
+            $this->form->fill([
+                'content' => $this->landingDraft->sections ?? [],
+            ]);
 
-        if ($registry->exists($this->landingDraft->template_key) && $registry->supportsSections($this->landingDraft->template_key)) {
-            $supported = $registry->supportedSections($this->landingDraft->template_key);
-            $enabled = $this->landingDraft->enabled_sections
-                ?? $registry->defaultEnabledSections($this->landingDraft->template_key);
-
-            foreach ($supported as $key) {
-                $initial['enabled'][$key] = in_array($key, $enabled, true);
-            }
+            return;
         }
 
-        $this->form->fill($initial);
+        $supported = $registry->supportedSections($templateKey);
+        $sections = $this->landingDraft->sections ?? [];
+        $enabled = $this->landingDraft->enabled_sections
+            ?? $registry->defaultEnabledSections($templateKey);
+
+        $enabled = array_values(array_filter(
+            $enabled,
+            fn (string $key): bool => in_array($key, $supported, true),
+        ));
+
+        $blocks = array_map(
+            fn (string $key): array => [
+                'type' => $key,
+                'data' => $sections[$key] ?? [],
+            ],
+            $enabled,
+        );
+
+        $this->form->fill([
+            'blocks' => $blocks,
+        ]);
     }
 
     public function form(Schema $schema): Schema
@@ -70,7 +91,6 @@ class EditLandingPageDraftPage extends Page implements HasForms
         $templateKey = $this->landingDraft->template_key;
         $summitId = $this->funnel->summit_id;
 
-        // Legacy templates without per-section support: one big form under data.content.
         if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
             $template = $registry->exists($templateKey) ? $registry->get($templateKey) : ['jsonSchema' => []];
             $components = $mapper->map($template['jsonSchema'] ?? [], $summitId);
@@ -84,61 +104,71 @@ class EditLandingPageDraftPage extends Page implements HasForms
                 ->statePath('data');
         }
 
-        // Per-section mode.
         $supported = $registry->supportedSections($templateKey);
-        $schemas = $registry->sectionSchemas($templateKey);
-        $order = $registry->sectionOrder($templateKey);
-        $orderedKeys = array_values(array_filter($order, fn (string $k): bool => in_array($k, $supported, true)));
+        $sectionSchemas = $registry->sectionSchemas($templateKey);
 
-        $sections = [];
-        foreach ($orderedKeys as $key) {
-            $label = $this->humanizeSectionLabel($key);
-            $sectionSchema = $schemas[$key] ?? [];
-            $fields = $mapper->map($sectionSchema, $summitId);
+        $blocks = array_map(
+            function (string $key) use ($sectionSchemas, $mapper, $summitId): Block {
+                $label = $this->humanizeSectionLabel($key);
 
-            $sections[] = Section::make($label)
-                ->description("Toggle to include or hide {$label} on the published page.")
-                ->collapsible()
-                ->schema([
-                    Toggle::make("enabled.{$key}")
-                        ->label('Include on page')
-                        ->inline(false),
-                    Fieldset::make($label)
-                        ->label($label)
-                        ->statePath("content.{$key}")
-                        ->schema($fields),
-                ]);
-        }
+                return Block::make($key)
+                    ->label($label)
+                    ->schema($mapper->map($sectionSchemas[$key] ?? [], $summitId));
+            },
+            $supported,
+        );
 
         return $schema
-            ->components($sections)
+            ->components([
+                Builder::make('blocks')
+                    ->label('Page blocks')
+                    ->blocks($blocks)
+                    ->addActionLabel('Add section')
+                    ->collapsible()
+                    ->collapsed()
+                    ->cloneable()
+                    ->reorderable()
+                    ->blockNumbers(false),
+            ])
             ->statePath('data');
     }
 
     public function save(): void
     {
         $state = $this->form->getState();
-        $content = $state['content'] ?? [];
-        $enabledMap = $state['enabled'] ?? [];
-
         $registry = app(TemplateRegistry::class);
+        $templateKey = $this->landingDraft->template_key;
 
-        if ($registry->exists($this->landingDraft->template_key) && $registry->supportsSections($this->landingDraft->template_key)) {
-            $order = $registry->sectionOrder($this->landingDraft->template_key);
-            $enabled = array_values(array_filter(
-                $order,
-                fn (string $k): bool => ! empty($enabledMap[$k]),
-            ));
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            $this->landingDraft->update([
+                'sections' => $state['content'] ?? [],
+            ]);
 
-            $this->landingDraft->update([
-                'sections' => $content,
-                'enabled_sections' => $enabled,
-            ]);
-        } else {
-            $this->landingDraft->update([
-                'sections' => $content,
-            ]);
+            Notification::make()
+                ->title('Draft saved')
+                ->success()
+                ->send();
+
+            return;
         }
+
+        $blocks = array_values(array_filter(
+            $state['blocks'] ?? [],
+            fn ($b): bool => is_array($b) && isset($b['type']),
+        ));
+
+        $sections = [];
+        $enabled = [];
+        foreach ($blocks as $block) {
+            $key = (string) $block['type'];
+            $sections[$key] = $block['data'] ?? [];
+            $enabled[] = $key;
+        }
+
+        $this->landingDraft->update([
+            'sections' => $sections,
+            'enabled_sections' => $enabled,
+        ]);
 
         Notification::make()
             ->title('Draft saved')

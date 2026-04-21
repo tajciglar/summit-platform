@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Funnels;
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Funnel;
 use App\Models\Summit;
+use App\Services\Templates\TemplateRegistry;
 use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -13,12 +14,14 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -96,7 +99,84 @@ class FunnelResource extends Resource
                     Textarea::make('description')->rows(3)->columnSpanFull(),
                     Toggle::make('is_active')->default(true),
                 ]),
+
+            Section::make('Design')
+                ->description('One skin drives every step. Palette is inherited from the summit audience. Pick which sections show up per step type; generate all steps in one click.')
+                ->components([
+                    Select::make('template_key')
+                        ->label('Skin')
+                        ->options(fn () => self::skinOptions())
+                        ->helperText('The visual language (typography, spacing, layout). All steps share this skin.')
+                        ->native(false)
+                        ->searchable()
+                        ->live(),
+
+                    CheckboxList::make('section_config.optin')
+                        ->label('Optin sections')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
+                        ->helperText('Selected sections will be generated on optin steps.'),
+
+                    CheckboxList::make('section_config.sales_page')
+                        ->label('Sales page sections')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
+                        ->helperText('Selected sections will be generated on sales-page steps.'),
+
+                    CheckboxList::make('section_config.thank_you')
+                        ->label('Thank-you sections')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
+                        ->helperText('Selected sections will be generated on thank-you steps.'),
+                ])
+                ->collapsed(fn (?Funnel $record): bool => $record !== null),
         ]);
+    }
+
+    /** @return array<string, string> */
+    private static function skinOptions(): array
+    {
+        $registry = app(TemplateRegistry::class);
+
+        return collect($registry->allKeys())
+            ->mapWithKeys(fn (string $key) => [$key => $registry->get($key)['label'] ?? $key])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function sectionOptionsFor(?string $templateKey): array
+    {
+        if (! $templateKey) {
+            return [];
+        }
+
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        return collect($registry->supportedSections($templateKey))
+            ->mapWithKeys(fn (string $key) => [
+                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ])
+            ->all();
+    }
+
+    private static function skinSupportsSections(?string $templateKey): bool
+    {
+        if (! $templateKey) {
+            return false;
+        }
+
+        $registry = app(TemplateRegistry::class);
+
+        return $registry->exists($templateKey) && $registry->supportsSections($templateKey);
     }
 
     public static function table(Table $table): Table

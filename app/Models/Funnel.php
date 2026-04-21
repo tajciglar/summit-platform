@@ -20,6 +20,8 @@ class Funnel extends Model
         'name',
         'description',
         'target_phase',
+        'template_key',
+        'section_config',
         'is_active',
     ];
 
@@ -27,6 +29,7 @@ class Funnel extends Model
     {
         return [
             'is_active' => 'boolean',
+            'section_config' => 'array',
         ];
     }
 

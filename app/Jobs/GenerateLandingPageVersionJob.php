@@ -78,9 +78,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 styleReferenceUrl: $batch->style_reference_url,
             );
 
-            $enabledSections = $registry->supportsSections($this->templateKey)
-                ? $registry->defaultEnabledSections($this->templateKey)
-                : null;
+            $enabledSections = $this->resolveEnabledSections($registry, $batch);
 
             $audienceEnum = $audienceResolver->resolveEnum($batch);
             $palette = $audienceResolver->resolveForBatch($batch);
@@ -119,5 +117,33 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         $m = $e->getMessage();
 
         return str_contains($m, '429') || str_contains($m, 'rate_limit_error');
+    }
+
+    /**
+     * Enabled sections priority: funnel.section_config[step_type] →
+     * template default → null. The funnel-level config is what the
+     * "Generate all steps" flow relies on to show a different section
+     * mix per step while sharing the same skin.
+     *
+     * @return list<string>|null
+     */
+    private function resolveEnabledSections(TemplateRegistry $registry, LandingPageBatch $batch): ?array
+    {
+        if (! $registry->supportsSections($this->templateKey)) {
+            return null;
+        }
+
+        $step = $batch->funnelStep;
+        $funnel = $batch->funnel;
+        $supported = $registry->supportedSections($this->templateKey);
+
+        if ($step && $funnel && is_array($funnel->section_config ?? null)) {
+            $forStep = $funnel->section_config[$step->step_type] ?? null;
+            if (is_array($forStep) && ! empty($forStep)) {
+                return array_values(array_intersect($forStep, $supported));
+            }
+        }
+
+        return $registry->defaultEnabledSections($this->templateKey);
     }
 }

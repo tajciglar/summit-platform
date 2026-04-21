@@ -13,12 +13,9 @@ use Illuminate\Support\Facades\Gate;
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
-    // Bypass Filament Shield permission checks for tests.
     Gate::before(fn () => true);
     $this->actingAs(User::factory()->admin()->create());
 
-    // Filament tenant is Domain — register one and make it the active tenant
-    // so URL generation for breadcrumbs / nav links works inside the page view.
     $this->tenant = Domain::create([
         'name' => 'Test Domain',
         'hostname' => 'test.localhost',
@@ -54,7 +51,16 @@ function makeDraft(array $overrides = []): array
     return [$funnel, $draft];
 }
 
-it('renders per-section fieldsets for opus-v1 drafts', function () {
+/** @return list<array{type: string, data: array}> Strip Builder's UUID keys for easy assertions. */
+function normalizeBlocks(array $blocks): array
+{
+    return array_values(array_map(
+        fn (array $b): array => ['type' => $b['type'], 'data' => $b['data'] ?? []],
+        $blocks,
+    ));
+}
+
+it('renders Builder blocks for opus-v1 drafts', function () {
     [$funnel, $draft] = makeDraft();
 
     livewire(EditLandingPageDraftPage::class, [
@@ -63,7 +69,7 @@ it('renders per-section fieldsets for opus-v1 drafts', function () {
     ])->assertSuccessful();
 });
 
-it('hydrates the enabled toggles from the draft enabled_sections', function () {
+it('hydrates Builder blocks from enabled_sections in order', function () {
     [$funnel, $draft] = makeDraft([
         'enabled_sections' => ['hero', 'faq', 'footer'],
     ]);
@@ -73,49 +79,66 @@ it('hydrates the enabled toggles from the draft enabled_sections', function () {
         'draft' => $draft->id,
     ])->assertSuccessful();
 
-    $data = $page->instance()->data;
+    $blocks = normalizeBlocks($page->instance()->data['blocks'] ?? []);
+    $types = array_column($blocks, 'type');
 
-    expect($data['enabled']['hero'] ?? null)->toBeTrue();
-    expect($data['enabled']['faq'] ?? null)->toBeTrue();
-    expect($data['enabled']['footer'] ?? null)->toBeTrue();
-    // `masthead` is supported but not in enabled_sections -> should be false.
-    expect($data['enabled']['masthead'] ?? null)->toBeFalse();
+    expect($types)->toBe(['hero', 'faq', 'footer']);
 });
 
 it('falls back to defaultEnabledSections when the draft has none stored', function () {
-    [$funnel, $draft] = makeDraft([
-        'enabled_sections' => null,
-    ]);
+    [$funnel, $draft] = makeDraft(['enabled_sections' => null]);
 
     $page = livewire(EditLandingPageDraftPage::class, [
         'record' => $funnel->id,
         'draft' => $draft->id,
     ])->assertSuccessful();
 
-    $data = $page->instance()->data;
+    $blocks = normalizeBlocks($page->instance()->data['blocks'] ?? []);
+    $types = array_column($blocks, 'type');
 
-    // opus-v1 defaultEnabledSections includes 'hero' and 'footer'.
-    expect($data['enabled']['hero'] ?? null)->toBeTrue();
-    expect($data['enabled']['footer'] ?? null)->toBeTrue();
+    expect($types)->toContain('hero');
+    expect($types)->toContain('footer');
 });
 
-it('toggling a section off removes it from enabled_sections on save', function () {
+it('removing a block persists enabled_sections minus that section', function () {
     [$funnel, $draft] = makeDraft([
         'enabled_sections' => ['hero', 'faq', 'footer'],
     ]);
 
-    livewire(EditLandingPageDraftPage::class, [
+    $page = livewire(EditLandingPageDraftPage::class, [
         'record' => $funnel->id,
         'draft' => $draft->id,
-    ])
-        ->set('data.enabled.faq', false)
-        ->call('save');
+    ]);
+
+    // Drop the middle block ('faq').
+    $blocks = collect($page->instance()->data['blocks'] ?? [])
+        ->reject(fn (array $b) => ($b['type'] ?? null) === 'faq')
+        ->values()
+        ->all();
+
+    $page->set('data.blocks', $blocks)->call('save');
 
     $fresh = $draft->fresh()->enabled_sections;
+    expect($fresh)->toBe(['hero', 'footer']);
+});
 
-    expect($fresh)->not->toContain('faq');
-    expect($fresh)->toContain('hero');
-    expect($fresh)->toContain('footer');
+it('reordering blocks persists the new enabled_sections order', function () {
+    [$funnel, $draft] = makeDraft([
+        'enabled_sections' => ['hero', 'faq', 'footer'],
+    ]);
+
+    $page = livewire(EditLandingPageDraftPage::class, [
+        'record' => $funnel->id,
+        'draft' => $draft->id,
+    ]);
+
+    // Swap 'faq' and 'footer'.
+    $blocks = collect($page->instance()->data['blocks'] ?? [])->values();
+    $reordered = [$blocks[0], $blocks[2], $blocks[1]];
+
+    $page->set('data.blocks', $reordered)->call('save');
+
+    expect($draft->fresh()->enabled_sections)->toBe(['hero', 'footer', 'faq']);
 });
 
 it('falls back to a whole-schema form when the template does not support sections', function () {
@@ -131,18 +154,22 @@ it('falls back to a whole-schema form when the template does not support section
     ])->assertSuccessful();
 });
 
-it('persists section content edits on save', function () {
+it('persists content edits inside a block on save', function () {
     [$funnel, $draft] = makeDraft([
         'sections' => ['hero' => ['headline' => 'Original', 'subheadline' => 'sub']],
         'enabled_sections' => ['hero'],
     ]);
 
-    livewire(EditLandingPageDraftPage::class, [
+    $page = livewire(EditLandingPageDraftPage::class, [
         'record' => $funnel->id,
         'draft' => $draft->id,
-    ])
-        ->set('data.content.hero.headline', 'Updated headline')
-        ->call('save');
+    ]);
+
+    // Builder state has a single hero block — rewrite its data.
+    $blocks = collect($page->instance()->data['blocks'] ?? [])->values()->all();
+    $blocks[0]['data']['headline'] = 'Updated headline';
+
+    $page->set('data.blocks', $blocks)->call('save');
 
     expect($draft->fresh()->sections['hero']['headline'])->toBe('Updated headline');
 });

@@ -4,6 +4,7 @@ use App\Enums\LandingPageDraftStatus;
 use App\Enums\SummitAudience;
 use App\Jobs\GenerateLandingPageVersionJob;
 use App\Models\Funnel;
+use App\Models\FunnelStep;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
 use App\Models\Speaker;
@@ -145,6 +146,98 @@ it('seeds enabled_sections from defaultEnabledSections for opus-v1', function ()
         ->toContain('footer')
         ->toContain('faq');
     expect($draft->enabled_sections)->toHaveCount(10);
+});
+
+it('uses funnel section_config for the step_type when present', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create([
+        'template_key' => 'opus-v1',
+        'section_config' => [
+            'optin' => ['hero', 'speakers-by-day', 'closing-cta', 'footer'],
+            'sales_page' => ['stats-hero', 'value-prop', 'testimonials-attendees', 'faq', 'closing-cta', 'footer'],
+            'thank_you' => ['hero', 'closing-cta', 'footer'],
+        ],
+    ]);
+    $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin']);
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')
+            ->once()
+            ->andReturn([
+                'content' => ['hero' => ['headline' => 'X']],
+                'tokens' => 100,
+            ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->enabled_sections)->toEqual(['hero', 'speakers-by-day', 'closing-cta', 'footer']);
+});
+
+it('falls back to template defaults when funnel section_config lacks this step_type', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create([
+        'template_key' => 'opus-v1',
+        'section_config' => ['optin' => ['hero', 'footer']],
+    ]);
+    $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'sales_page']);
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->once()->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->enabled_sections)->toBeArray()->toHaveCount(10);
+});
+
+it('filters section_config entries down to sections the template actually supports', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create([
+        'template_key' => 'opus-v1',
+        'section_config' => [
+            'optin' => ['hero', 'bogus-section', 'footer'],
+        ],
+    ]);
+    $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin']);
+    $batch = LandingPageBatch::create([
+        'summit_id' => $summit->id,
+        'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
+        'version_count' => 1,
+        'status' => 'running',
+    ]);
+
+    $this->mock(TemplateFiller::class, function ($m) {
+        $m->shouldReceive('fill')->once()->andReturn([
+            'content' => ['hero' => ['headline' => 'X']],
+            'tokens' => 100,
+        ]);
+    });
+
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+
+    $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
+    expect($draft->enabled_sections)->toEqual(['hero', 'footer']);
 });
 
 it('leaves enabled_sections null for legacy templates like opus-v2', function () {
