@@ -55,10 +55,15 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
     $optin = $steps->firstWhere('step_type', 'optin');
     expect($optin->page_content['template_key'])->toBe('ochre-ink');
     expect($optin->page_content['enabled_sections'])->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
-    expect(array_keys($optin->page_content['content']))->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
 
-    // Required fields are seeded with placeholder copy so the step renders
-    // in preview immediately.
+    // Content keys come from the whole-template jsonSchema (camelCase),
+    // which is what Next's Zod validates. Every required top-level
+    // property must be present even for sections not in enabled_sections,
+    // otherwise validation fails and preview errors.
+    expect(array_keys($optin->page_content['content']))->toContain(
+        'masthead', 'hero', 'featuredIn', 'socialProof', 'whatIsThis',
+        'speakersByDay', 'footer', 'closing',
+    );
     expect($optin->page_content['content']['masthead'])->toHaveKeys(['volume', 'eyebrow']);
     expect($optin->page_content['content']['masthead']['volume'])->toBeString()->not->toBeEmpty();
     expect($optin->page_content['content']['footer'])->toHaveKeys(['tagline', 'volume', 'copyright']);

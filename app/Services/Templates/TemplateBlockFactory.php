@@ -103,13 +103,11 @@ class TemplateBlockFactory
     }
 
     /**
-     * Ordered list of section keys the Builder should render for a template.
-     *
-     * For catalog-backed templates (those with `sectionSchemas`), keys come
-     * from `supportedSections` — kebab-case IDs like `stats-hero`, `closing-cta`
-     * that match the enabled_sections saved on the funnel. For legacy
-     * monolithic templates, keys come from the top-level jsonSchema properties
-     * (camelCase).
+     * Ordered list of section keys the Builder should render. Block types
+     * map 1:1 to the template's jsonSchema top-level properties (camelCase),
+     * which is the authoritative shape validated by the Next side's Zod
+     * schema. `enabled_sections` stays kebab-case for the renderer's
+     * section-toggle and is not used here.
      *
      * @return list<string>
      */
@@ -117,10 +115,6 @@ class TemplateBlockFactory
     {
         if ($templateKey === null || ! $this->registry->exists($templateKey)) {
             return [];
-        }
-
-        if ($this->registry->supportsSectionEditing($templateKey)) {
-            return $this->registry->supportedSections($templateKey);
         }
 
         $schema = $this->registry->get($templateKey)['jsonSchema'] ?? null;
@@ -155,12 +149,9 @@ class TemplateBlockFactory
     }
 
     /**
-     * Builder blocks for a step's template.
-     *
-     * Catalog-backed templates (those with `sectionSchemas`) produce one
-     * block per kebab-case section key — matching what was chosen in the
-     * funnel's `section_config`. Legacy monolithic templates fall back to
-     * top-level jsonSchema properties (camelCase).
+     * Builder blocks keyed by the template's top-level jsonSchema property
+     * names (camelCase). Matches the on-disk `page_content.content` shape
+     * that the Next side's Zod schema validates.
      *
      * @return list<Block>
      */
@@ -174,11 +165,6 @@ class TemplateBlockFactory
         }
 
         $summitId = $step?->funnel?->summit_id;
-
-        if ($this->registry->supportsSectionEditing($templateKey)) {
-            return $this->catalogBlocks($templateKey, $summitId);
-        }
-
         $schema = $this->registry->get($templateKey)['jsonSchema'] ?? null;
 
         if (! is_array($schema) || ($schema['type'] ?? null) !== 'object') {
@@ -195,29 +181,6 @@ class TemplateBlockFactory
             $blocks[] = Block::make($name)
                 ->label($this->humanize($name))
                 ->icon($this->iconFor($name))
-                ->schema($this->fieldsForSection($propSchema, $summitId));
-        }
-
-        return $blocks;
-    }
-
-    /**
-     * @return list<Block>
-     */
-    private function catalogBlocks(string $templateKey, ?string $summitId): array
-    {
-        $sectionSchemas = $this->registry->sectionSchemas($templateKey);
-        $blocks = [];
-
-        foreach ($this->registry->supportedSections($templateKey) as $key) {
-            $propSchema = $sectionSchemas[$key] ?? null;
-            if (! is_array($propSchema)) {
-                continue;
-            }
-
-            $blocks[] = Block::make($key)
-                ->label($this->humanize($key))
-                ->icon($this->iconFor($key))
                 ->schema($this->fieldsForSection($propSchema, $summitId));
         }
 

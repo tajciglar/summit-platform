@@ -50,8 +50,12 @@ class CreateFunnel extends CreateRecord
         $registry = app(TemplateRegistry::class);
         $filler = app(SectionPlaceholderFiller::class);
 
-        $sectionSchemas = $funnel->template_key && $registry->supportsSectionEditing($funnel->template_key)
-            ? $registry->sectionSchemas($funnel->template_key)
+        // The whole-template jsonSchema is authoritative — Next's Zod
+        // validates `content` against every top-level (camelCase) property,
+        // so we fill the full schema. `enabled_sections` (kebab) is a
+        // separate render-time toggle and lives alongside `content`.
+        $wholeSchema = $funnel->template_key && $registry->exists($funnel->template_key)
+            ? ($registry->get($funnel->template_key)['jsonSchema'] ?? [])
             : [];
         $speakerIds = SectionPlaceholderFiller::speakerIdsFor($funnel->summit_id);
 
@@ -63,14 +67,10 @@ class CreateFunnel extends CreateRecord
 
             $pageContent = null;
             if ($funnel->template_key) {
-                // Seed each enabled section with placeholder copy for its
-                // required fields so the step renders in preview right
-                // away. Non-required fields stay empty and operators edit
-                // everything from the Builder.
                 $enabled = array_values($sections);
-                $content = $sectionSchemas !== []
-                    ? $filler->fillEnabled($sectionSchemas, $enabled, $speakerIds)
-                    : array_fill_keys($enabled, []);
+                $content = is_array($wholeSchema) && ($wholeSchema['type'] ?? null) === 'object'
+                    ? $filler->fill($wholeSchema, $speakerIds)
+                    : [];
 
                 $pageContent = [
                     'template_key' => $funnel->template_key,

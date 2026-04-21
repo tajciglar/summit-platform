@@ -116,12 +116,20 @@ class SectionPlaceholderFiller
 
         return match ($type) {
             'string' => $this->placeholderString($name, $schema),
-            'integer', 'number' => 0,
+            'integer', 'number' => $this->placeholderNumber($schema),
             'boolean' => false,
             'array' => $this->placeholderArray($name, $schema, $speakerIds),
             'object' => $this->fillObject($schema, $speakerIds),
             default => null,
         };
+    }
+
+    /** @param array<string, mixed> $schema */
+    private function placeholderNumber(array $schema): int|float
+    {
+        $min = $schema['minimum'] ?? 0;
+
+        return is_numeric($min) ? $min + 0 : 0;
     }
 
     /** @param array<string, mixed> $schema */
