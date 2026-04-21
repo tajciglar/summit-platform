@@ -4,6 +4,7 @@
 import './violet-sun.styles.css';
 import { OptinModal } from '@/components/OptinModal';
 import type { VioletSunContent } from './violet-sun.schema';
+import { violetSunDefaultEnabledSections } from './violet-sun.sections';
 import type { Speaker } from './types';
 
 type Props = {
@@ -13,6 +14,8 @@ type Props = {
 
 type RootProps = Props & {
   funnelId: string;
+  enabledSections?: string[];
+  palette?: import('@/lib/palette').Palette | null;
 };
 
 // Deterministic sparkline heights keyed by trend label.
@@ -1388,34 +1391,35 @@ function Footer({ content }: { content: VioletSunContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function VioletSun({ content, speakers, funnelId }: RootProps) {
+export function VioletSun({ content, speakers, funnelId, enabledSections }: RootProps) {
+  const enabled = new Set(enabledSections ?? violetSunDefaultEnabledSections);
   return (
     <div className="violet-sun-root violet-sun-body antialiased">
       <a href="#main" className="violet-sun-skip-nav">
         Skip to content
       </a>
 
-      <TopBar content={content} />
+      {enabled.has('top-bar') && <TopBar content={content} />}
 
       <main id="main">
-        <Hero content={content} speakers={speakers} />
-        <Press content={content} />
-        <Stats content={content} />
-        <Overview content={content} />
-        <SpeakersDay content={content} speakers={speakers} />
-        <Outcomes content={content} />
-        <FreeGift content={content} />
-        <Bonuses content={content} />
-        <Founders content={content} />
-        <Testimonials content={content} />
-        <PullQuote content={content} />
-        <Figures content={content} />
-        <Shifts content={content} />
-        <FAQ content={content} />
-        <FinalCTA content={content} />
+        {enabled.has('hero') && <Hero content={content} speakers={speakers} />}
+        {enabled.has('press') && <Press content={content} />}
+        {enabled.has('stats') && <Stats content={content} />}
+        {enabled.has('overview') && <Overview content={content} />}
+        {enabled.has('speakers') && <SpeakersDay content={content} speakers={speakers} />}
+        {enabled.has('outcomes') && <Outcomes content={content} />}
+        {enabled.has('free-gift') && <FreeGift content={content} />}
+        {enabled.has('bonuses') && <Bonuses content={content} />}
+        {enabled.has('founders') && <Founders content={content} />}
+        {enabled.has('testimonials') && <Testimonials content={content} />}
+        {enabled.has('pull-quote') && <PullQuote content={content} />}
+        {enabled.has('figures') && <Figures content={content} />}
+        {enabled.has('shifts') && <Shifts content={content} />}
+        {enabled.has('faq') && <FAQ content={content} />}
+        {enabled.has('closing-cta') && <FinalCTA content={content} />}
       </main>
 
-      <Footer content={content} />
+      {enabled.has('footer') && <Footer content={content} />}
 
       <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
     </div>

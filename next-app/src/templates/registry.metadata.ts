@@ -29,6 +29,11 @@ import {
   creamSageSectionOrder,
   creamSageDefaultEnabledSections,
 } from './cream-sage.sections';
+import {
+  violetSunSupportedSections,
+  violetSunSectionOrder,
+  violetSunDefaultEnabledSections,
+} from './violet-sun.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -83,6 +88,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/violet-sun.jpg',
     schema: VioletSunSchema,
     tags: ['editorial', 'warm', 'modern', 'serif'] as const,
+    supportedSections: violetSunSupportedSections,
+    sectionOrder: violetSunSectionOrder,
+    defaultEnabledSections: violetSunDefaultEnabledSections,
   },
   'rust-cream': {
     key: 'rust-cream',
