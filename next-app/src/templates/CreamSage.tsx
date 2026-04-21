@@ -1,8 +1,11 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Fraunces / DM Sans / Nunito) must be loaded
 // by the page — see Task 19/20 (preview/public routes) for wiring.
+import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
+import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { CreamSageContent } from './cream-sage.schema';
+import { creamSageDefaultEnabledSections } from './cream-sage.sections';
 import type { Speaker } from './types';
 
 type Props = {
@@ -12,6 +15,8 @@ type Props = {
 
 type RootProps = Props & {
   funnelId: string;
+  enabledSections?: string[];
+  palette?: import('@/lib/palette').Palette | null;
 };
 
 /* ============== PALETTE CONSTANTS ============== */
@@ -141,15 +146,7 @@ function Hero({ content, speakers }: Props) {
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-6">
-            <div
-              className="inline-flex items-center gap-3 pl-2 pr-5 py-2 mb-7"
-              style={{
-                background: '#FFFFFF',
-                border: '1px solid #B3C3B7',
-                borderRadius: 999,
-                boxShadow: '0 10px 25px -10px rgba(74,107,93,0.25)',
-              }}
-            >
+            <div className="inline-flex items-center gap-3 mb-7">
               <span
                 className="cream-sage-eyebrow px-3 py-1.5"
                 style={{
@@ -160,12 +157,13 @@ function Hero({ content, speakers }: Props) {
               >
                 {h.badgeLabel}
               </span>
-              <span
-                className="font-bold text-base md:text-lg"
-                style={{ fontFamily: "'Fraunces', serif", color: '#2F4A40' }}
-              >
-                {h.dateRangeLabel}
-              </span>
+              <EventStatusBadge
+                status={h.eventStatus}
+                dateLabel={h.dateRangeLabel}
+                liveLabel={h.liveLabel}
+                endedLabel={h.endedLabel}
+                style={{ '--esb-primary': '#2F4A40', '--esb-fg': '#FAF7F2' } as CSSProperties}
+              />
             </div>
             <h1
               className="font-black text-5xl md:text-6xl lg:text-7xl leading-[1.02] mb-8"
@@ -1338,34 +1336,35 @@ function Footer({ content }: { content: CreamSageContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function CreamSage({ content, speakers, funnelId }: RootProps) {
+export function CreamSage({ content, speakers, funnelId, enabledSections }: RootProps) {
+  const enabled = new Set(enabledSections ?? creamSageDefaultEnabledSections);
   return (
     <div className="cream-sage-root cream-sage-body antialiased">
       <a href="#main" className="cream-sage-skip-nav">
         Skip to content
       </a>
 
-      <TopBar content={content} />
+      {enabled.has('top-bar') && <TopBar content={content} />}
 
       <main id="main">
-        <Hero content={content} speakers={speakers} />
-        <Press content={content} />
-        <Stats content={content} />
-        <Overview content={content} />
-        <SpeakersDay content={content} speakers={speakers} />
-        <Outcomes content={content} />
-        <FreeGift content={content} />
-        <Bonuses content={content} />
-        <Founders content={content} />
-        <Testimonials content={content} />
-        <PullQuote content={content} />
-        <Figures content={content} />
-        <Shifts content={content} />
-        <FAQ content={content} />
-        <FinalCTA content={content} />
+        {enabled.has('hero') && <Hero content={content} speakers={speakers} />}
+        {enabled.has('press') && <Press content={content} />}
+        {enabled.has('stats') && <Stats content={content} />}
+        {enabled.has('overview') && <Overview content={content} />}
+        {enabled.has('speakers') && <SpeakersDay content={content} speakers={speakers} />}
+        {enabled.has('outcomes') && <Outcomes content={content} />}
+        {enabled.has('free-gift') && <FreeGift content={content} />}
+        {enabled.has('bonuses') && <Bonuses content={content} />}
+        {enabled.has('founders') && <Founders content={content} />}
+        {enabled.has('testimonials') && <Testimonials content={content} />}
+        {enabled.has('pull-quote') && <PullQuote content={content} />}
+        {enabled.has('figures') && <Figures content={content} />}
+        {enabled.has('shifts') && <Shifts content={content} />}
+        {enabled.has('faq') && <FAQ content={content} />}
+        {enabled.has('closing-cta') && <FinalCTA content={content} />}
       </main>
 
-      <Footer content={content} />
+      {enabled.has('footer') && <Footer content={content} />}
 
       <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
     </div>

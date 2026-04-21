@@ -24,6 +24,11 @@ import {
   limeInkSectionOrder,
   limeInkDefaultEnabledSections,
 } from './lime-ink.sections';
+import {
+  creamSageSupportedSections,
+  creamSageSectionOrder,
+  creamSageDefaultEnabledSections,
+} from './cream-sage.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -68,6 +73,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/cream-sage.jpg',
     schema: CreamSageSchema,
     tags: ['editorial', 'serif', 'warm'] as const,
+    supportedSections: creamSageSupportedSections,
+    sectionOrder: creamSageSectionOrder,
+    defaultEnabledSections: creamSageDefaultEnabledSections,
   },
   'violet-sun': {
     key: 'violet-sun',
