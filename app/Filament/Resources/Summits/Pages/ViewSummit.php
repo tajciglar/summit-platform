@@ -26,8 +26,9 @@ class ViewSummit extends ViewRecord
 
     /**
      * Relation managers render as tabs alongside the main "Basics" tab,
-     * giving the summit page a clear in-page section nav: Basics, Speakers,
-     * Funnels, Orders.
+     * giving the summit page a clear in-page section nav: Basics, Funnels,
+     * Speakers, Orders. Funnels come first because operators work on them
+     * day-to-day; speakers/orders are secondary.
      */
     public function getContentTabPosition(): ?ContentTabPosition
     {

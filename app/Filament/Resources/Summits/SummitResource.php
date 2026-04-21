@@ -276,8 +276,8 @@ class SummitResource extends Resource
     public static function getRelations(): array
     {
         return [
-            SpeakersRelationManager::class,
             FunnelsRelationManager::class,
+            SpeakersRelationManager::class,
             RelationManagers\OrdersRelationManager::class,
         ];
     }
