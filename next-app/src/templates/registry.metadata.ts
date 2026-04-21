@@ -44,6 +44,11 @@ import {
   blueCoralSectionOrder,
   blueCoralDefaultEnabledSections,
 } from './blue-coral.sections';
+import {
+  greenGoldSupportedSections,
+  greenGoldSectionOrder,
+  greenGoldDefaultEnabledSections,
+} from './green-gold.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -128,6 +133,9 @@ export const templateMetadata = {
     thumbnail: '/template-thumbs/green-gold.jpg',
     schema: GreenGoldSchema,
     tags: ['warm', 'modern', 'editorial'] as const,
+    supportedSections: greenGoldSupportedSections,
+    sectionOrder: greenGoldSectionOrder,
+    defaultEnabledSections: greenGoldDefaultEnabledSections,
   },
   'indigo-gold': {
     key: 'indigo-gold',

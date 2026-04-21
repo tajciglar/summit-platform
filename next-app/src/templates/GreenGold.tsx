@@ -4,6 +4,7 @@
 import './green-gold.styles.css';
 import { OptinModal } from '@/components/OptinModal';
 import type { GreenGoldContent } from './green-gold.schema';
+import { greenGoldDefaultEnabledSections } from './green-gold.sections';
 import type { Speaker } from './types';
 
 type Props = {
@@ -13,6 +14,8 @@ type Props = {
 
 type RootProps = Props & {
   funnelId: string;
+  enabledSections?: string[];
+  palette?: import('@/lib/palette').Palette | null;
 };
 
 // Deterministic gradient + accent cycles, drawn from the green-gold HTML palette
@@ -1216,35 +1219,36 @@ function Footer({ content }: { content: GreenGoldContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function GreenGold({ content, speakers, funnelId }: RootProps) {
+export function GreenGold({ content, speakers, funnelId, enabledSections }: RootProps) {
+  const enabled = new Set(enabledSections ?? greenGoldDefaultEnabledSections);
   return (
     <div className="green-gold-root green-gold-body antialiased">
       <a href="#main-content" className="green-gold-skip-nav">
         Skip to content
       </a>
 
-      <TopBar content={content} />
+      {enabled.has('top-bar') && <TopBar content={content} />}
 
       <main id="main-content">
-        <Hero content={content} speakers={speakers} />
-        <Press content={content} />
-        <Trust content={content} />
-        <Stats content={content} />
-        <Overview content={content} />
-        <SpeakersDay content={content} speakers={speakers} />
-        <Outcomes content={content} />
-        <FreeGift content={content} />
-        <Bonuses content={content} />
-        <Founders content={content} />
-        <Testimonials content={content} />
-        <PullQuote content={content} />
-        <Figures content={content} />
-        <Shifts content={content} />
-        <ClosingCTA content={content} />
-        <FAQ content={content} />
+        {enabled.has('hero') && <Hero content={content} speakers={speakers} />}
+        {enabled.has('press') && <Press content={content} />}
+        {enabled.has('trust') && <Trust content={content} />}
+        {enabled.has('stats') && <Stats content={content} />}
+        {enabled.has('overview') && <Overview content={content} />}
+        {enabled.has('speakers') && <SpeakersDay content={content} speakers={speakers} />}
+        {enabled.has('outcomes') && <Outcomes content={content} />}
+        {enabled.has('free-gift') && <FreeGift content={content} />}
+        {enabled.has('bonuses') && <Bonuses content={content} />}
+        {enabled.has('founders') && <Founders content={content} />}
+        {enabled.has('testimonials') && <Testimonials content={content} />}
+        {enabled.has('pull-quote') && <PullQuote content={content} />}
+        {enabled.has('figures') && <Figures content={content} />}
+        {enabled.has('shifts') && <Shifts content={content} />}
+        {enabled.has('closing-cta') && <ClosingCTA content={content} />}
+        {enabled.has('faq') && <FAQ content={content} />}
       </main>
 
-      <Footer content={content} />
+      {enabled.has('footer') && <Footer content={content} />}
 
       <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
     </div>
