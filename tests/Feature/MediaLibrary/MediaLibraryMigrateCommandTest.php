@@ -54,7 +54,6 @@ it('migrates a Summit hero media row into the library', function () {
 });
 
 it('is idempotent on re-run', function () {
-    Summit::factory()->create();
     DB::table('media')->insert([
         'id' => 9998,
         'model_type' => Summit::class,

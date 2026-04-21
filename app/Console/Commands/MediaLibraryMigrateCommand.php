@@ -120,9 +120,17 @@ class MediaLibraryMigrateCommand extends Command
             return;
         }
 
-        $item->addMedia($absolute)
+        $media = $item->addMedia($absolute)
             ->preservingOriginal()
             ->toMediaCollection('file');
+
+        $item->update([
+            'disk' => $media->disk,
+            'path' => $media->getPathRelativeToRoot(),
+            'file_name' => $media->file_name,
+            'size' => $media->size,
+            'mime_type' => $media->mime_type,
+        ]);
 
         DB::table('media_item_attachments')->insert([
             'id' => (string) Str::uuid(),
