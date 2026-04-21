@@ -16,8 +16,8 @@ return new class extends Migration
                 role VARCHAR(64) NOT NULL,
                 sort_order INTEGER NOT NULL DEFAULT 0,
 
-                created_at TIMESTAMPTZ,
-                updated_at TIMESTAMPTZ,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
                 UNIQUE (attachable_id, attachable_type, role, media_item_id)
             )

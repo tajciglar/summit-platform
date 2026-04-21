@@ -25,8 +25,8 @@ return new class extends Migration
                 created_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
                 legacy_spatie_media_id BIGINT,
 
-                created_at TIMESTAMPTZ,
-                updated_at TIMESTAMPTZ
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
         ");
 
