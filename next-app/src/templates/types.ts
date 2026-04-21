@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { z } from 'zod';
+import type { Palette } from '@/lib/palette';
 
 export type TemplateTag =
   | 'editorial'
@@ -42,8 +43,21 @@ export interface TemplateDefinition<TContent = unknown> {
   thumbnail: string;
   /** Zod schema that validates TContent */
   schema: z.ZodType<TContent>;
-  /** component accepting { content, speakers, funnelId } */
-  Component: ComponentType<{ content: TContent; speakers: Record<string, Speaker>; funnelId: string }>;
+  /**
+   * Component accepting { content, speakers, funnelId, enabledSections?, palette? }.
+   * `enabledSections` and `palette` are shared across every template. Each
+   * template decides what to do with them — templates that are already
+   * catalog-aware (ochre-ink) or section-toggle-aware (indigo-gold) honor them;
+   * the remaining monolithic templates accept the props but render everything
+   * until they are refactored. See Phase 2b.
+   */
+  Component: ComponentType<{
+    content: TContent;
+    speakers: Record<string, Speaker>;
+    funnelId: string;
+    enabledSections?: string[];
+    palette?: Palette | null;
+  }>;
   /** descriptive tags for filtering */
   tags: readonly TemplateTag[];
   /**
