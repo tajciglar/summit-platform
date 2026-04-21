@@ -115,11 +115,21 @@ it('returns section metadata for ochre-ink in the real manifest', function () {
     expect($reg->sectionSchemas('ochre-ink')['hero'])->toHaveKey('type');
 });
 
-it('returns false and empty arrays for templates without section metadata in the real manifest', function () {
+it('distinguishes monolithic templates (toggle-only) from catalog-backed templates (editable)', function () {
     $reg = new TemplateRegistry(base_path('next-app/public/template-manifest.json'));
-    expect($reg->supportsSections('lime-ink'))->toBeFalse();
-    expect($reg->supportedSections('lime-ink'))->toBe([]);
-    expect($reg->sectionOrder('lime-ink'))->toBe([]);
-    expect($reg->defaultEnabledSections('lime-ink'))->toBe([]);
-    expect($reg->sectionSchemas('lime-ink'))->toBe([]);
+
+    // ochre-ink is catalog-backed → both flags true.
+    expect($reg->supportsSections('ochre-ink'))->toBeTrue();
+    expect($reg->supportsSectionEditing('ochre-ink'))->toBeTrue();
+
+    // indigo-gold is monolithic → advertises section keys for the toggle UI
+    // but has no per-section schemas, so per-section editing is unavailable.
+    expect($reg->supportsSections('indigo-gold'))->toBeTrue();
+    expect($reg->supportsSectionEditing('indigo-gold'))->toBeFalse();
+    expect($reg->supportedSections('indigo-gold'))
+        ->toBeArray()
+        ->toContain('hero')
+        ->toContain('faq')
+        ->toContain('footer');
+    expect($reg->sectionSchemas('indigo-gold'))->toBe([]);
 });

@@ -27,19 +27,20 @@ it('template manifest covers every key from next-app registry', function () {
     expect($manifestKeys)->toEqualCanonicalizing($registryKeys);
 });
 
-it('every core landing section in the catalog is supported by every section-aware template', function () {
+it('every core landing section in the catalog is supported by every catalog-backed template', function () {
     // Core sections are scoped per pageType; this test covers landing templates
-    // (the only section-aware templates today). Sales-page cores like
-    // `price-card` live in the same catalog but belong to sales templates.
+    // that participate in the shared catalog (those that emit `sectionSchemas`).
+    // Monolithic templates (e.g. indigo-gold) advertise template-private section
+    // keys for the enable/disable toggle and are intentionally excluded.
     $coreKeys = collect($this->manifest['catalog'] ?? [])
         ->filter(fn ($v) => ($v['tier'] ?? null) === 'core' && in_array('landing', $v['pageTypes'] ?? [], true))
         ->keys()
         ->all();
 
-    $sectionAware = collect($this->manifest['templates'] ?? [])
-        ->filter(fn ($t) => ! empty($t['supportedSections']));
+    $catalogBacked = collect($this->manifest['templates'] ?? [])
+        ->filter(fn ($t) => ! empty($t['sectionSchemas']));
 
-    foreach ($sectionAware as $t) {
+    foreach ($catalogBacked as $t) {
         foreach ($coreKeys as $ck) {
             expect($t['supportedSections'], "{$t['key']} missing core section {$ck}")
                 ->toContain($ck);
@@ -60,9 +61,14 @@ it('defaultEnabledSections is a subset of supportedSections for every section-aw
     }
 });
 
-it('every supportedSection key exists in the catalog', function () {
+it('every supportedSection key of a catalog-backed template exists in the catalog', function () {
+    // Monolithic templates (those without `sectionSchemas`) use template-private
+    // section keys for toggling and are exempt from catalog-key alignment.
     $catalogKeys = array_keys($this->manifest['catalog'] ?? []);
     foreach ($this->manifest['templates'] ?? [] as $t) {
+        if (empty($t['sectionSchemas'])) {
+            continue;
+        }
         foreach ($t['supportedSections'] ?? [] as $ss) {
             expect($catalogKeys)->toContain($ss);
         }

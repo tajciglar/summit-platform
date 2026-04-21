@@ -52,6 +52,22 @@ class TemplateRegistry
         return isset($t['supportedSections']) && is_array($t['supportedSections']);
     }
 
+    /**
+     * A template supports per-section editing when the manifest carries
+     * `sectionSchemas` (catalog-backed). Monolithic templates like
+     * `indigo-gold` advertise `supportedSections` for the enable/disable
+     * toggle + render-time ordering, but their section bodies are still
+     * edited through the legacy whole-schema form.
+     */
+    public function supportsSectionEditing(string $key): bool
+    {
+        $t = $this->get($key);
+
+        return isset($t['sectionSchemas'])
+            && is_array($t['sectionSchemas'])
+            && $t['sectionSchemas'] !== [];
+    }
+
     /** @return list<string> */
     public function supportedSections(string $key): array
     {

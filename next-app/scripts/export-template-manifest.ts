@@ -54,14 +54,23 @@ const manifestTemplates = templateKeys.map((key) => {
 
   // Per-template section metadata — additive. Templates without
   // `supportedSections` continue to emit only `jsonSchema`.
+  //
+  // Two shapes are supported:
+  //  1. Catalog-backed templates (ochre-ink): every section key resolves to a
+  //     shared catalog entry, so we also emit `sectionSchemas` for per-section
+  //     editing in Filament.
+  //  2. Monolithic templates with section toggles (indigo-gold): keys are
+  //     template-private. We emit the key list + ordering + default enabled set
+  //     so Filament can render an enable/disable toggle UI, but no
+  //     `sectionSchemas` block (per-section editing isn't available yet).
   if (t.supportedSections) {
     const sectionSchemas: Record<string, unknown> = {};
+    let allInCatalog = true;
     for (const sectionKey of t.supportedSections) {
       const entry = catalog[sectionKey];
       if (!entry) {
-        throw new Error(
-          `Template ${t.key} references unknown catalog section "${sectionKey}"`,
-        );
+        allInCatalog = false;
+        continue;
       }
       sectionSchemas[sectionKey] = z.toJSONSchema(entry.schema);
     }
@@ -70,7 +79,9 @@ const manifestTemplates = templateKeys.map((key) => {
     base.defaultEnabledSections = t.defaultEnabledSections
       ? [...t.defaultEnabledSections]
       : [...t.supportedSections];
-    base.sectionSchemas = sectionSchemas;
+    if (allInCatalog) {
+      base.sectionSchemas = sectionSchemas;
+    }
   }
 
   return base;
