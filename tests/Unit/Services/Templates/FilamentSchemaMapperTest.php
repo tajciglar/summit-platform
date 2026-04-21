@@ -143,6 +143,28 @@ it('returns an empty array when the schema is not an object', function () {
     expect((new FilamentSchemaMapper)->map([]))->toBe([]);
 });
 
+it('unwraps Zod nullable enums (anyOf [enum, null]) and still maps to Select', function () {
+    // `.nullable()` / `.optional().nullable()` in Zod exports as
+    // `anyOf: [{ type: string, enum: [...] }, { type: null }]`. The mapper
+    // must see through that to emit a Select instead of falling through to
+    // a plain TextInput.
+    $schema = [
+        'type' => 'object',
+        'properties' => [
+            'eventStatus' => [
+                'anyOf' => [
+                    ['type' => 'string', 'enum' => ['before', 'live', 'ended']],
+                    ['type' => 'null'],
+                ],
+            ],
+        ],
+    ];
+
+    $components = (new FilamentSchemaMapper)->map($schema);
+
+    expect($components[0])->toBeInstanceOf(Select::class);
+});
+
 it('turns speaker-id arrays into a multi-select when a summit id is given', function () {
     $schema = [
         'type' => 'object',

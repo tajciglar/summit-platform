@@ -59,6 +59,11 @@ class FilamentSchemaMapper
      */
     private function mapProperty(string $name, array $schema, bool $required, ?string $summitId): Component
     {
+        // Zod's `.nullable()` / `.optional().nullable()` exports as
+        // `anyOf: [<real schema>, {type: null}]`. Unwrap to the real branch so
+        // enums (and other typed schemas) still map to their proper widgets.
+        $schema = $this->unwrapNullableAnyOf($schema);
+
         $label = $this->humanizeLabel($name);
         $type = $schema['type'] ?? null;
         $enforceRequired = $required && $this->enforceRequired;
@@ -171,6 +176,31 @@ class FilamentSchemaMapper
         }
 
         return ($items['format'] ?? null) === 'uuid';
+    }
+
+    /**
+     * @param  array<string, mixed>  $schema
+     * @return array<string, mixed>
+     */
+    private function unwrapNullableAnyOf(array $schema): array
+    {
+        $anyOf = $schema['anyOf'] ?? null;
+        if (! is_array($anyOf) || count($anyOf) !== 2) {
+            return $schema;
+        }
+
+        $nonNull = null;
+        foreach ($anyOf as $branch) {
+            if (! is_array($branch)) {
+                return $schema;
+            }
+            if (($branch['type'] ?? null) === 'null') {
+                continue;
+            }
+            $nonNull = $branch;
+        }
+
+        return is_array($nonNull) ? $nonNull : $schema;
     }
 
     private function humanizeLabel(string $name): string
