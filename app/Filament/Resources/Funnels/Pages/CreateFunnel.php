@@ -4,9 +4,7 @@ namespace App\Filament\Resources\Funnels\Pages;
 
 use App\Filament\Pages\Concerns\InjectsCurrentSummitOnCreate;
 use App\Filament\Resources\Funnels\FunnelResource;
-use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Funnel;
-use App\Models\LandingPageBatch;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -35,9 +33,9 @@ class CreateFunnel extends CreateRecord
 
     /**
      * For every step type that has sections selected in `section_config`,
-     * create the matching FunnelStep. If a skin was picked, also dispatch
-     * a landing-page batch per step so operators land on a funnel that
-     * already has steps + pages queued, not an empty shell.
+     * create the matching FunnelStep and seed its `page_content` with the
+     * funnel skin + enabled sections and empty content. Copywriters fill the
+     * sections from the block editor — no AI call, no queue dependency.
      */
     protected function afterCreate(): void
     {
@@ -45,7 +43,7 @@ class CreateFunnel extends CreateRecord
         $funnel = $this->record;
 
         $sectionConfig = $funnel->section_config ?? [];
-        $dispatched = 0;
+        $created = 0;
 
         foreach (self::AUTO_STEP_TYPES as $stepType => $defaults) {
             $sections = $sectionConfig[$stepType] ?? [];
@@ -53,35 +51,30 @@ class CreateFunnel extends CreateRecord
                 continue;
             }
 
-            $step = $funnel->steps()->create([
+            $pageContent = null;
+            if ($funnel->template_key) {
+                $pageContent = [
+                    'template_key' => $funnel->template_key,
+                    'enabled_sections' => array_values($sections),
+                    'content' => (object) [],
+                ];
+            }
+
+            $funnel->steps()->create([
                 'step_type' => $stepType,
                 'slug' => $defaults['slug'],
                 'name' => $defaults['name'],
                 'sort_order' => $defaults['sort_order'],
                 'is_published' => false,
+                'page_content' => $pageContent,
             ]);
-
-            if ($funnel->template_key) {
-                $batch = LandingPageBatch::create([
-                    'summit_id' => $funnel->summit_id,
-                    'funnel_id' => $funnel->id,
-                    'funnel_step_id' => $step->id,
-                    'status' => 'queued',
-                    'template_pool' => [$funnel->template_key],
-                    'versions_per_template' => [$funnel->template_key => 1],
-                    'version_count' => 1,
-                    'auto_publish' => true,
-                    'published_by_user_id' => auth()->id(),
-                ]);
-                GenerateLandingPageBatchJob::dispatch($batch->id);
-                $dispatched++;
-            }
+            $created++;
         }
 
-        if ($dispatched > 0) {
+        if ($created > 0) {
             Notification::make()
-                ->title('Generating '.$dispatched.' step'.($dispatched === 1 ? '' : 's'))
-                ->body('Pages appear under each step when ready.')
+                ->title('Created '.$created.' step'.($created === 1 ? '' : 's'))
+                ->body('Open a step to add or edit section content.')
                 ->success()
                 ->send();
         }
