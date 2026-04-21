@@ -4,6 +4,7 @@ namespace App\Filament\Resources\MediaItems;
 
 use App\Enums\MediaCategory;
 use App\Filament\Resources\Concerns\ScopesTenantViaDomainId;
+use App\Filament\Resources\MediaItems\Pages\CreateMediaItem;
 use App\Filament\Resources\MediaItems\Pages\ListMediaItems;
 use App\Models\MediaItem;
 use Filament\Actions\DeleteAction;
@@ -66,14 +67,7 @@ class MediaItemResource extends Resource
                 ])
                 ->preserveFilenames()
                 ->required()
-                ->dehydrated(false)
-                ->afterStateUpdated(function ($state, $record) {
-                    if ($record && $state) {
-                        $record->clearMediaCollection('file');
-                        $record->addMediaFromDisk($state, config('media-library.disk_name'))
-                            ->toMediaCollection('file');
-                    }
-                }),
+                ->dehydrated(false),
         ]);
     }
 
@@ -122,6 +116,7 @@ class MediaItemResource extends Resource
     {
         return [
             'index' => ListMediaItems::route('/'),
+            'create' => CreateMediaItem::route('/create'),
         ];
     }
 }
