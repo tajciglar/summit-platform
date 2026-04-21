@@ -132,7 +132,7 @@ async function main() {
     console.log('✓ typecheck passed')
   }
 
-  console.log(`\nNext: add '${name}' to src/blocks/_register.ts, review in Storybook.`)
+  console.log(`\nNext: add '${name}' to src/blocks/_register.ts.`)
 }
 
 main().catch((err) => {
