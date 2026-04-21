@@ -10,7 +10,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -33,9 +33,8 @@ class SpeakersRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('photo')
-                    ->collection('photo')
-                    ->conversion('thumb')
+                ImageColumn::make('photo')
+                    ->state(fn (Speaker $record): ?string => $record->mediaFor('photo')?->thumbUrl())
                     ->label('')
                     ->circular()
                     ->size(40),
