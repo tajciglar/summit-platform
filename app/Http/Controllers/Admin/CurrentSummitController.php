@@ -27,7 +27,9 @@ class CurrentSummitController extends Controller
         if ($s = Summit::find($summit)) {
             CurrentSummit::set($s);
 
-            return redirect(SummitResource::getUrl('view', ['record' => $s]));
+            $domain = $s->domains()->first();
+
+            return redirect(SummitResource::getUrl('view', ['record' => $s], tenant: $domain));
         }
 
         return redirect($request->header('Referer') ?: url('/admin'));
