@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Speaker extends Model implements HasMedia
 {
-    use HasFactory, HasUuid, InteractsWithMedia;
+    use HasFactory, HasMediaAttachments, HasUuid, InteractsWithMedia;
 
     protected $fillable = [
         'summit_id',

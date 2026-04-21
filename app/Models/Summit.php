@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SummitAudience;
+use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Summit extends Model implements HasMedia, HasName
 {
-    use HasFactory, HasUuid, InteractsWithMedia;
+    use HasFactory, HasMediaAttachments, HasUuid, InteractsWithMedia;
 
     public function getFilamentName(): string
     {
