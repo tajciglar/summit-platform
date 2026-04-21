@@ -77,11 +77,7 @@ class MediaItem extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('file')
-            ->singleFile()
-            ->acceptsMimeTypes([
-                'image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml',
-                'application/pdf',
-            ]);
+            ->singleFile();
     }
 
     public function registerMediaConversions(?Media $media = null): void
