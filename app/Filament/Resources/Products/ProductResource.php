@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products;
 
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Product;
 use App\Support\CurrentSummit;
@@ -14,7 +15,6 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -23,7 +23,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -91,13 +90,10 @@ class ProductResource extends Resource
                         }),
                     TextInput::make('slug')->required()->maxLength(255),
                     Textarea::make('description')->rows(3)->columnSpanFull(),
-                    SpatieMediaLibraryFileUpload::make('image')
-                        ->collection('image')
-                        ->image()
-                        ->imageEditor()
-                        ->imageCropAspectRatio('1:1')
-                        ->maxSize(5120)
-                        ->helperText('Square thumbnail, shown in cards and order bumps.')
+                    MediaPickerInput::make('image_media_item_id')
+                        ->category('product')
+                        ->role('image')
+                        ->label('Product image')
                         ->columnSpanFull(),
                 ]),
 
@@ -276,12 +272,6 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->collection('image')
-                    ->conversion('thumb')
-                    ->label('')
-                    ->square()
-                    ->size(40),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable()
