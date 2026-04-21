@@ -16,6 +16,40 @@
         ->with(['bumps.product', 'product'])
         ->get();
 
+    // Preview URL per step = Next `/preview/{token}` from the latest published draft
+    // on that step's batch. Null if no draft has been published yet.
+    $previewTokens = \App\Models\LandingPageBatch::query()
+        ->where('funnel_id', $funnel->id)
+        ->whereIn('funnel_step_id', $steps->pluck('id'))
+        ->with([
+            'drafts' => fn ($q) => $q
+                ->where('status', \App\Enums\LandingPageDraftStatus::Published)
+                ->latest('created_at')
+                ->limit(1),
+        ])
+        ->get()
+        ->mapWithKeys(fn ($b) => [$b->funnel_step_id => $b->drafts->first()?->preview_token]);
+
+    $nextBase = rtrim(config('next.url'), '/');
+
+    // Per-step static-HTML overrides for demo/preview pages we host in next-app/public.
+    // Shape: [funnel_slug][step_slug] => static path relative to the Next host.
+    $staticPreviewOverrides = [
+        'aps-post' => [
+            'optin' => '/aps-parenting.html',
+        ],
+    ];
+
+    $previewUrl = function ($s) use ($funnel, $staticPreviewOverrides, $nextBase, $previewTokens) {
+        $override = $staticPreviewOverrides[$funnel->slug][$s->slug] ?? null;
+        if ($override) {
+            return $nextBase.$override;
+        }
+        $token = $previewTokens->get($s->id);
+
+        return $token ? "{$nextBase}/preview/{$token}" : null;
+    };
+
     // Revenue per step: completed orders × total_cents
     $revenueByStep = \App\Models\Order::query()
         ->where('funnel_id', $funnel->id)
@@ -96,16 +130,32 @@
                 </div>
 
                 <div class="flex shrink-0 items-center gap-2">
-                    <a
-                        href="{{ $viewUrl($step) }}"
-                        class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/5 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/10"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
-                            <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-                            <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd" />
-                        </svg>
-                        Preview
-                    </a>
+                    @php $previewHref = $previewUrl($step); @endphp
+                    @if ($previewHref)
+                        <a
+                            href="{{ $previewHref }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/5 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-white/10"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                                <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd" />
+                            </svg>
+                            Preview
+                        </a>
+                    @else
+                        <span
+                            class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-400 shadow-sm ring-1 ring-inset ring-gray-200 dark:bg-white/5 dark:text-gray-500 dark:ring-white/5"
+                            title="No published draft yet"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                                <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd" />
+                            </svg>
+                            Preview
+                        </span>
+                    @endif
                     <a
                         href="{{ $editUrl($step) }}"
                         class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-white/5 dark:hover:text-gray-300"
