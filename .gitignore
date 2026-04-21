@@ -29,3 +29,9 @@ Thumbs.db
 
 # Git worktrees created by superpowers skills
 .worktrees/
+
+# Scratch artifacts from debugging sessions (playwright dumps, reference PNGs).
+# Kept on disk for reference but excluded from git.
+.playwright-mcp/
+/*.png
+/*.jpg
