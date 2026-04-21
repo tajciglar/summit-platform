@@ -34,7 +34,8 @@ class SummitsWidget extends TableWidget
             ->columns([
                 TextColumn::make('title')
                     ->weight('bold')
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn (Summit $record): string => SummitResource::getUrl('view', ['record' => $record])),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
