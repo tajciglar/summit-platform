@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\FunnelSteps\Pages;
 
 use App\Filament\Concerns\ManagesLandingPageDrafts;
+use App\Filament\Resources\Funnels\FunnelResource;
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use App\Models\FunnelStep;
 use App\Services\Templates\TemplateBlockFactory;
@@ -38,6 +39,30 @@ class ViewFunnelStep extends ViewRecord
         return [
             EditAction::make()->url(fn () => FunnelStepResource::getUrl('edit', ['record' => $step])),
             DeleteAction::make(),
+        ];
+    }
+
+    /**
+     * Breadcrumb parent links to the step's funnel View page, matching the
+     * step edit page. Operators pop one level up to the funnel overview
+     * (steps + drafts) rather than the global FunnelStep list.
+     *
+     * @return array<string, string>
+     */
+    public function getBreadcrumbs(): array
+    {
+        /** @var FunnelStep $step */
+        $step = $this->record;
+        $funnel = $step->funnel;
+
+        if (! $funnel) {
+            return parent::getBreadcrumbs();
+        }
+
+        return [
+            FunnelResource::getUrl('view', ['record' => $funnel]) => $funnel->name,
+            $step->name,
+            $this->getBreadcrumb(),
         ];
     }
 }

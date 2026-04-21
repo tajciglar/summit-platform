@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\FunnelSteps\Pages;
 
 use App\Filament\Concerns\ManagesLandingPageDrafts;
+use App\Filament\Resources\Funnels\FunnelResource;
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
+use App\Models\FunnelStep;
 use App\Services\Templates\GoldenTemplates;
 use App\Services\Templates\TemplateBlockFactory;
 use Filament\Actions\DeleteAction;
@@ -24,6 +26,31 @@ class EditFunnelStep extends EditRecord
     {
         return [
             DeleteAction::make(),
+        ];
+    }
+
+    /**
+     * Breadcrumb parent links to the step's funnel View page, so operators
+     * can pop one level up from the block editor back to the funnel overview
+     * (which shows all steps + landing-page drafts) rather than the global
+     * FunnelStep list.
+     *
+     * @return array<string, string>
+     */
+    public function getBreadcrumbs(): array
+    {
+        /** @var FunnelStep $step */
+        $step = $this->record;
+        $funnel = $step->funnel;
+
+        if (! $funnel) {
+            return parent::getBreadcrumbs();
+        }
+
+        return [
+            FunnelResource::getUrl('view', ['record' => $funnel]) => $funnel->name,
+            $step->name,
+            $this->getBreadcrumb(),
         ];
     }
 
