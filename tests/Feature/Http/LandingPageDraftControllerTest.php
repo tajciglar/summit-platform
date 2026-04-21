@@ -1,6 +1,9 @@
 <?php
 
-use App\Models\{LandingPageBatch, LandingPageDraft, Summit, Funnel};
+use App\Models\Funnel;
+use App\Models\LandingPageBatch;
+use App\Models\LandingPageDraft;
+use App\Models\Summit;
 
 it('returns draft content by preview token', function () {
     $summit = Summit::factory()->create();
@@ -11,16 +14,16 @@ it('returns draft content by preview token', function () {
     ]);
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 1,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'sections' => ['summit' => ['name' => 'Preview']],
         'status' => 'ready',
         'preview_token' => 'tok-abc-123',
     ]);
 
-    $response = $this->getJson("/api/landing-page-drafts/tok-abc-123");
+    $response = $this->getJson('/api/landing-page-drafts/tok-abc-123');
 
     $response->assertOk();
-    $response->assertJsonPath('template_key', 'opus-v1');
+    $response->assertJsonPath('template_key', 'ochre-ink');
     $response->assertJsonPath('content.summit.name', 'Preview');
     $response->assertJsonStructure(['speakers']);
     $response->assertJsonPath('status', 'ready');

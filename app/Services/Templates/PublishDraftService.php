@@ -7,6 +7,7 @@ use App\Models\FunnelStep;
 use App\Models\FunnelStepRevision;
 use App\Models\LandingPageDraft;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class PublishDraftService
@@ -15,11 +16,13 @@ class PublishDraftService
     {
         DB::transaction(function () use ($draft, $user) {
             $batch = $draft->batch;
-            $step = FunnelStep::where('funnel_id', $batch->funnel_id)
-                ->where('step_type', 'optin')
-                ->firstOrFail();
+            $step = $batch->funnelStep;
 
-            // Snapshot previous content if non-empty
+            if (! $step) {
+                throw (new ModelNotFoundException)
+                    ->setModel(FunnelStep::class, [$batch->funnel_step_id]);
+            }
+
             if (! empty($step->page_content)) {
                 FunnelStepRevision::create([
                     'funnel_step_id' => $step->id,
@@ -29,7 +32,6 @@ class PublishDraftService
                 ]);
             }
 
-            // Write new content
             $step->update([
                 'page_content' => [
                     'template_key' => $draft->template_key,
@@ -40,9 +42,10 @@ class PublishDraftService
                 ],
             ]);
 
-            // Archive previously-published drafts for this funnel
+            // Archive any other published drafts on this same batch so each batch
+            // has a single live version. Other batches (other steps) are untouched.
             LandingPageDraft::query()
-                ->whereHas('batch', fn ($q) => $q->where('funnel_id', $batch->funnel_id))
+                ->where('batch_id', $batch->id)
                 ->where('status', LandingPageDraftStatus::Published)
                 ->where('id', '!=', $draft->id)
                 ->update(['status' => LandingPageDraftStatus::Archived]);

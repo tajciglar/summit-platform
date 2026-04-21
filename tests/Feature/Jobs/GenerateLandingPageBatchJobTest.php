@@ -18,14 +18,14 @@ it('selects N templates and dispatches a version job per template', function () 
         'funnel_id' => $funnel->id,
         'version_count' => 3,
         'status' => 'queued',
-        'template_pool' => ['opus-v1', 'opus-v2'],
+        'template_pool' => ['ochre-ink', 'lime-ink'],
     ]);
 
     $this->mock(TemplateSelector::class, function ($m) {
         $m->shouldReceive('pick')
             ->once()
-            ->with(['opus-v1', 'opus-v2'], 3)
-            ->andReturn(['opus-v1', 'opus-v2']);
+            ->with(['ochre-ink', 'lime-ink'], 3)
+            ->andReturn(['ochre-ink', 'lime-ink']);
     });
 
     GenerateLandingPageBatchJob::dispatchSync($batch->id);

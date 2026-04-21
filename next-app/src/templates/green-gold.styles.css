@@ -1,0 +1,177 @@
+/* Variant 3 — template-scoped styles.
+ * Ported verbatim from next-app/public/green-gold.html <style> block.
+ * Brand-green + gold + soft-cream palette. Poppins + Source Sans 3.
+ *
+ * All selectors are scoped to .green-gold-root / .green-gold-body to avoid
+ * collisions with other templates or host app CSS.
+ */
+
+.green-gold-root { scroll-behavior: smooth; }
+.green-gold-body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background: #FFFFFF;
+  color: #1A2E1A;
+}
+
+.green-gold-body h1,
+.green-gold-body h2,
+.green-gold-body h3,
+.green-gold-body h4,
+.green-gold-body h5,
+.green-gold-body h6,
+.green-gold-body .green-gold-heading {
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/* Avatars */
+.green-gold-body .green-gold-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  border: 4px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.green-gold-body .green-gold-avatar-sm {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 2px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* FAQ details — bordered card with green left border */
+.green-gold-body details summary { cursor: pointer; list-style: none; }
+.green-gold-body details summary::-webkit-details-marker { display: none; }
+.green-gold-body details[open] summary .green-gold-chevron { transform: rotate(180deg); }
+.green-gold-body .green-gold-chevron { transition: transform 0.2s; }
+
+/* CTA pulse */
+@keyframes green-gold-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(22,163,74,0); }
+}
+@keyframes green-gold-pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234,179,8,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(234,179,8,0); }
+}
+.green-gold-body .green-gold-pulse-glow { animation: green-gold-pulse-glow 2s infinite; }
+.green-gold-body .green-gold-pulse-gold { animation: green-gold-pulse-gold 2s infinite; }
+
+/* Logo marquee */
+.green-gold-body .green-gold-marquee-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.green-gold-body .green-gold-marquee-wrap::before,
+.green-gold-body .green-gold-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.green-gold-body .green-gold-marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #fff 0%, transparent 100%);
+}
+.green-gold-body .green-gold-marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(270deg, #fff 0%, transparent 100%);
+}
+.green-gold-body .green-gold-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: green-gold-marquee-scroll 35s linear infinite;
+}
+.green-gold-body .green-gold-marquee-item {
+  white-space: nowrap;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  flex-shrink: 0;
+  padding: 0 1.75rem;
+  color: #1A2E1A;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+.green-gold-body .green-gold-marquee-item:hover { opacity: 0.85; }
+@keyframes green-gold-marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Timeline vertical line */
+.green-gold-body .green-gold-timeline {
+  position: relative;
+}
+.green-gold-body .green-gold-timeline::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #16A34A 0%, #EAB308 100%);
+  border-radius: 2px;
+}
+.green-gold-body .green-gold-timeline-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #16A34A, #14532D);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 6px #F0FDF4;
+}
+.green-gold-body .green-gold-timeline-dot-last {
+  background: linear-gradient(135deg, #EAB308, #CA8A04);
+}
+
+/* Focus */
+.green-gold-body :focus-visible {
+  outline: 2px solid #16A34A;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip nav */
+.green-gold-body .green-gold-skip-nav { position: absolute; left: -9999px; }
+.green-gold-body .green-gold-skip-nav:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: #14532D;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  z-index: 200;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .green-gold-body .green-gold-marquee-track,
+  .green-gold-body .green-gold-pulse-glow,
+  .green-gold-body .green-gold-pulse-gold { animation: none !important; }
+  .green-gold-root { scroll-behavior: auto; }
+}

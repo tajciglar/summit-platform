@@ -27,15 +27,15 @@ beforeEach(function () {
     ];
 
     $this->registry = Mockery::mock(TemplateRegistry::class);
-    $this->registry->shouldReceive('get')->with('opus-v1')->andReturn([
-        'key' => 'opus-v1',
+    $this->registry->shouldReceive('get')->with('ochre-ink')->andReturn([
+        'key' => 'ochre-ink',
         'label' => 'Editorial',
         'thumbnail' => '/x.jpg',
         'tags' => [],
         'jsonSchema' => $this->schema,
     ]);
     // Legacy unit tests exercise the whole-template schema path only.
-    $this->registry->shouldReceive('supportsSections')->with('opus-v1')->andReturn(false);
+    $this->registry->shouldReceive('supportsSections')->with('ochre-ink')->andReturn(false);
 });
 
 it('calls anthropic with schema in system prompt and returns validated content', function () {
@@ -52,7 +52,7 @@ it('calls anthropic with schema in system prompt and returns validated content',
 
     $result = $filler->fill(
         summit: $summit,
-        templateKey: 'opus-v1',
+        templateKey: 'ochre-ink',
         speakers: collect(),
         notes: null,
         styleReferenceUrl: null,
@@ -73,7 +73,7 @@ it('retries once when response is invalid JSON', function () {
 
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $client);
-    $result = $filler->fill($summit, 'opus-v1', collect(), null, null);
+    $result = $filler->fill($summit, 'ochre-ink', collect(), null, null);
     expect($result['content']['summit']['name'])->toBe('OK');
 });
 
@@ -85,7 +85,7 @@ it('throws after two failed attempts', function () {
 
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $client);
-    expect(fn () => $filler->fill($summit, 'opus-v1', collect(), null, null))
+    expect(fn () => $filler->fill($summit, 'ochre-ink', collect(), null, null))
         ->toThrow(RuntimeException::class);
 });
 
@@ -97,6 +97,6 @@ it('throws when schema validation fails twice', function () {
 
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $client);
-    expect(fn () => $filler->fill($summit, 'opus-v1', collect(), null, null))
+    expect(fn () => $filler->fill($summit, 'ochre-ink', collect(), null, null))
         ->toThrow(RuntimeException::class, 'schema validation');
 });

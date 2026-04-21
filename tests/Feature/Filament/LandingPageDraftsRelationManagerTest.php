@@ -107,15 +107,15 @@ it('generate action creates batch and dispatches job', function () {
         ->set('mountedActions.0.data.audience_override', SummitAudience::AdhdParenting->value)
         ->set('mountedActions.0.data.style_reference_url', 'https://parenting-summits.com')
         ->set('mountedActions.0.data.template_selections', [
-            $uuid1 => ['template_key' => 'opus-v1', 'count' => '2'],
-            $uuid2 => ['template_key' => 'opus-v2', 'count' => '1'],
+            $uuid1 => ['template_key' => 'ochre-ink', 'count' => '2'],
+            $uuid2 => ['template_key' => 'lime-ink', 'count' => '1'],
         ])
         ->callMountedAction()
         ->assertHasNoActionErrors();
 
     $batch = LandingPageBatch::where('funnel_id', $funnel->id)->first();
     expect($batch)->not->toBeNull();
-    expect($batch->versions_per_template)->toBe(['opus-v1' => 2, 'opus-v2' => 1]);
+    expect($batch->versions_per_template)->toBe(['ochre-ink' => 2, 'lime-ink' => 1]);
     expect($batch->style_reference_url)->toBe('https://parenting-summits.com');
     Queue::assertPushed(GenerateLandingPageBatchJob::class);
 });

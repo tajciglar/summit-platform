@@ -1,23 +1,50 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+/* shadcn/tailwind.css — inlined to avoid Turbopack workspace-root resolution bug */
+@theme inline {
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
+    to { height: 0; }
+  }
+}
 
-/* opus-v1 template styles */
-@import "../templates/opus-v1.styles.css";
-/* opus-v2 template styles */
-@import "../templates/opus-v2.styles.css";
-/* opus-v3 template styles */
-@import "../templates/opus-v3.styles.css";
-/* opus-v4 template styles */
-@import "../templates/opus-v4.styles.css";
-/* variant-1 template styles */
-@import "../templates/variant-1.styles.css";
-/* variant-2 template styles */
-@import "../templates/variant-2.styles.css";
-/* variant-3 template styles */
-@import "../templates/variant-3.styles.css";
-/* adhd-summit template styles */
-@import "../templates/adhd-summit.styles.css";
+@custom-variant data-open {
+  &:where([data-state="open"]), &:where([data-open]:not([data-open="false"])) { @slot; }
+}
+@custom-variant data-closed {
+  &:where([data-state="closed"]), &:where([data-closed]:not([data-closed="false"])) { @slot; }
+}
+@custom-variant data-checked {
+  &:where([data-state="checked"]), &:where([data-checked]:not([data-checked="false"])) { @slot; }
+}
+@custom-variant data-unchecked {
+  &:where([data-state="unchecked"]), &:where([data-unchecked]:not([data-unchecked="false"])) { @slot; }
+}
+@custom-variant data-selected {
+  &:where([data-selected="true"]) { @slot; }
+}
+@custom-variant data-disabled {
+  &:where([data-disabled="true"]), &:where([data-disabled]:not([data-disabled="false"])) { @slot; }
+}
+@custom-variant data-active {
+  &:where([data-state="active"]), &:where([data-active]:not([data-active="false"])) { @slot; }
+}
+@custom-variant data-horizontal {
+  &:where([data-orientation="horizontal"]) { @slot; }
+}
+@custom-variant data-vertical {
+  &:where([data-orientation="vertical"]) { @slot; }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -44,9 +71,9 @@
 
   /* Opus V1 template tokens — mapped to the universal 8-token palette
    * vocabulary (Phase 3a-1). Every Tailwind utility like `bg-paper-100` or
-   * `text-ochre-600` used in opus-v1 skins resolves through these aliases
-   * into the palette custom properties applied on `.opus-v1-root`. See
-   * opus-v1.styles.css for the fallback palette when no audience palette
+   * `text-ochre-600` used in ochre-ink skins resolves through these aliases
+   * into the palette custom properties applied on `.ochre-ink-root`. See
+   * ochre-ink.styles.css for the fallback palette when no audience palette
    * is supplied, and src/lib/palette.ts for the 8-token shape. */
   --color-paper-50: var(--paper);
   --color-paper-100: var(--paper-alt);
@@ -71,25 +98,25 @@
   --font-ui: 'Inter', system-ui, sans-serif;
 
   /* Opus V2 template tokens — technical / dev-console aesthetic.
-   * Namespaced with opus-v2- to avoid Tailwind default and opus-v1 collisions.
+   * Namespaced with lime-ink- to avoid Tailwind default and ochre-ink collisions.
    * Inter + JetBrains Mono; lime + indigo + zinc-ink palette. */
-  --color-opus-v2-paper-50: #FFFFFF;
-  --color-opus-v2-paper-100: #FAFAFA;
-  --color-opus-v2-paper-200: #F4F4F5;
-  --color-opus-v2-paper-300: #E4E4E7;
-  --color-opus-v2-ink-950: #050506;
-  --color-opus-v2-ink-900: #0A0A0B;
-  --color-opus-v2-ink-800: #18181B;
-  --color-opus-v2-ink-700: #27272A;
-  --color-opus-v2-mute-500: #71717A;
-  --color-opus-v2-mute-600: #52525B;
-  --color-opus-v2-lime-400: #DCFF6B;
-  --color-opus-v2-lime-500: #C4F245;
-  --color-opus-v2-lime-600: #AEE02B;
-  --color-opus-v2-indigo-500: #6366F1;
-  --color-opus-v2-indigo-600: #4F46E5;
-  --font-opus-v2-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-opus-v2-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --color-lime-ink-paper-50: #FFFFFF;
+  --color-lime-ink-paper-100: #FAFAFA;
+  --color-lime-ink-paper-200: #F4F4F5;
+  --color-lime-ink-paper-300: #E4E4E7;
+  --color-lime-ink-ink-950: #050506;
+  --color-lime-ink-ink-900: #0A0A0B;
+  --color-lime-ink-ink-800: #18181B;
+  --color-lime-ink-ink-700: #27272A;
+  --color-lime-ink-mute-500: #71717A;
+  --color-lime-ink-mute-600: #52525B;
+  --color-lime-ink-lime-400: #DCFF6B;
+  --color-lime-ink-lime-500: #C4F245;
+  --color-lime-ink-lime-600: #AEE02B;
+  --color-lime-ink-indigo-500: #6366F1;
+  --color-lime-ink-indigo-600: #4F46E5;
+  --font-lime-ink-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-lime-ink-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 /* shadcn/ui tokens — Tailwind CSS variable mappings */
@@ -199,6 +226,48 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/* tw-animate-css replacements — inlined to avoid @utility infinite-recompile loop */
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
+      rotate(var(--tw-enter-rotate, 0));
+  }
+}
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
+      scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
+      rotate(var(--tw-exit-rotate, 0));
+  }
+}
+.animate-in {
+  animation: enter 0.15s ease;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
+}
+.animate-out {
+  animation: exit 0.15s ease;
+  --tw-exit-opacity: initial;
+  --tw-exit-scale: initial;
+  --tw-exit-rotate: initial;
+  --tw-exit-translate-x: initial;
+  --tw-exit-translate-y: initial;
+}
+.fade-in-0 { --tw-enter-opacity: 0; }
+.fade-out-0 { --tw-exit-opacity: 0; }
+.zoom-in-95 { --tw-enter-scale: 0.95; }
+.zoom-out-95 { --tw-exit-scale: 0.95; }
+.slide-in-from-top-2 { --tw-enter-translate-y: -0.5rem; }
+.slide-in-from-bottom-2 { --tw-enter-translate-y: 0.5rem; }
+.slide-in-from-left-2 { --tw-enter-translate-x: -0.5rem; }
+.slide-in-from-right-2 { --tw-enter-translate-x: 0.5rem; }
 
 /* Shared block animations */
 @keyframes marquee-scroll {

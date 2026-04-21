@@ -10,7 +10,7 @@ beforeEach(function () {
 });
 
 it('template manifest covers every key from next-app registry', function () {
-    $registryFile = base_path('next-app/src/templates/registry.ts');
+    $registryFile = base_path('next-app/src/templates/registry.metadata.ts');
     expect(is_file($registryFile))->toBeTrue();
 
     $registrySource = file_get_contents($registryFile);
@@ -27,9 +27,12 @@ it('template manifest covers every key from next-app registry', function () {
     expect($manifestKeys)->toEqualCanonicalizing($registryKeys);
 });
 
-it('every core section in the catalog is supported by every section-aware template', function () {
+it('every core landing section in the catalog is supported by every section-aware template', function () {
+    // Core sections are scoped per pageType; this test covers landing templates
+    // (the only section-aware templates today). Sales-page cores like
+    // `price-card` live in the same catalog but belong to sales templates.
     $coreKeys = collect($this->manifest['catalog'] ?? [])
-        ->filter(fn ($v) => ($v['tier'] ?? null) === 'core')
+        ->filter(fn ($v) => ($v['tier'] ?? null) === 'core' && in_array('landing', $v['pageTypes'] ?? [], true))
         ->keys()
         ->all();
 

@@ -1,0 +1,216 @@
+/* Variant 2 — template-scoped styles.
+ * Ported from next-app/public/blue-coral.html <style> block.
+ * Friendly blue + coral palette with Poppins (heading) and
+ * Source Sans 3 (body) type system.
+ *
+ * All selectors are scoped to .blue-coral-root / .blue-coral-body to
+ * avoid collisions with other templates or host app CSS.
+ */
+
+.blue-coral-root { scroll-behavior: smooth; }
+.blue-coral-body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background: #FFFFFF;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+.blue-coral-body h1,
+.blue-coral-body h2,
+.blue-coral-body h3,
+.blue-coral-body h4,
+.blue-coral-body h5,
+.blue-coral-body h6,
+.blue-coral-body .blue-coral-heading {
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/* Avatars */
+.blue-coral-body .blue-coral-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  border: 4px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.blue-coral-body .blue-coral-avatar-sm {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 2px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.blue-coral-body .blue-coral-avatar-xs {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 2px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.blue-coral-body .blue-coral-avatar-hero {
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.blue-coral-body .blue-coral-avatar-md {
+  width: 100px;
+  height: 100px;
+  border-radius: 9999px;
+  border: 4px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* CTA pulses */
+@keyframes blue-coral-pulse-coral {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(248, 113, 113, 0); }
+}
+.blue-coral-body .blue-coral-pulse-coral {
+  animation: blue-coral-pulse-coral 2s infinite;
+}
+
+/* Logo marquee */
+.blue-coral-body .blue-coral-marquee-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.blue-coral-body .blue-coral-marquee-wrap::before,
+.blue-coral-body .blue-coral-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.blue-coral-body .blue-coral-marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #fff 0%, transparent 100%);
+}
+.blue-coral-body .blue-coral-marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(270deg, #fff 0%, transparent 100%);
+}
+.blue-coral-body .blue-coral-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+}
+.blue-coral-body .blue-coral-marquee-set {
+  display: flex;
+  align-items: center;
+  animation: blue-coral-marquee-scroll 35s linear infinite;
+}
+@keyframes blue-coral-marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+.blue-coral-body .blue-coral-logo-item {
+  white-space: nowrap;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+  flex-shrink: 0;
+  padding: 0 1.75rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #1F2937;
+  letter-spacing: 0.02em;
+}
+.blue-coral-body .blue-coral-logo-item:hover {
+  opacity: 0.75;
+}
+
+/* FAQ */
+.blue-coral-body details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+.blue-coral-body details > summary::-webkit-details-marker {
+  display: none;
+}
+.blue-coral-body .blue-coral-chevron {
+  transition: transform 0.2s;
+}
+.blue-coral-body details[open] > summary .blue-coral-chevron {
+  transform: rotate(180deg);
+}
+
+/* Skip nav */
+.blue-coral-body .blue-coral-skip-nav {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.blue-coral-body .blue-coral-skip-nav:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 12px 24px;
+  background: #1B3A5C;
+  color: #fff;
+  z-index: 9999;
+  font-weight: 700;
+}
+
+/* Focus */
+.blue-coral-body :focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .blue-coral-body .blue-coral-marquee-set,
+  .blue-coral-body .blue-coral-pulse-coral {
+    animation: none !important;
+  }
+  .blue-coral-body .blue-coral-marquee-set {
+    transform: none !important;
+  }
+  .blue-coral-root { scroll-behavior: auto; }
+}

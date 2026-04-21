@@ -21,11 +21,12 @@ it('writes template_key + content to the optin step and snapshots the previous c
     ]);
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
         'version_count' => 1, 'status' => 'running',
     ]);
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 1,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'sections' => ['summit' => ['name' => 'New']],
         'enabled_sections' => ['hero', 'faq'],
         'audience' => SummitAudience::AdhdWomen,
@@ -39,7 +40,7 @@ it('writes template_key + content to the optin step and snapshots the previous c
 
     $step->refresh();
     expect($step->page_content)->toEqual([
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'content' => ['summit' => ['name' => 'New']],
         'enabled_sections' => ['hero', 'faq'],
         'audience' => 'adhd-women',
@@ -60,14 +61,15 @@ it('archives previously-published drafts for the same funnel', function () {
     $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'page_content' => []]);
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
         'version_count' => 2, 'status' => 'running',
     ]);
     $old = LandingPageDraft::create([
-        'batch_id' => $batch->id, 'version_number' => 1, 'template_key' => 'opus-v1',
+        'batch_id' => $batch->id, 'version_number' => 1, 'template_key' => 'ochre-ink',
         'sections' => [], 'status' => 'published', 'preview_token' => 't1',
     ]);
     $new = LandingPageDraft::create([
-        'batch_id' => $batch->id, 'version_number' => 2, 'template_key' => 'opus-v2',
+        'batch_id' => $batch->id, 'version_number' => 2, 'template_key' => 'lime-ink',
         'sections' => [], 'status' => 'ready', 'preview_token' => 't2',
     ]);
 
@@ -86,10 +88,11 @@ it('skips snapshot when page_content is empty', function () {
     ]);
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
         'version_count' => 1, 'status' => 'running',
     ]);
     $draft = LandingPageDraft::create([
-        'batch_id' => $batch->id, 'version_number' => 1, 'template_key' => 'opus-v1',
+        'batch_id' => $batch->id, 'version_number' => 1, 'template_key' => 'ochre-ink',
         'sections' => ['x' => 1], 'status' => 'ready', 'preview_token' => 't',
     ]);
 
@@ -97,7 +100,7 @@ it('skips snapshot when page_content is empty', function () {
 
     expect(FunnelStepRevision::count())->toBe(0);
     expect($step->fresh()->page_content)->toEqual([
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'content' => ['x' => 1],
         'enabled_sections' => null,
         'audience' => null,
@@ -111,11 +114,12 @@ it('snapshots null audience + null palette when draft has no audience', function
     $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin']);
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id, 'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
         'version_count' => 1, 'status' => 'running',
     ]);
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id, 'version_number' => 1,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'sections' => ['hero' => ['headline' => 'X']],
         'enabled_sections' => ['hero', 'footer'],
         'audience' => null,

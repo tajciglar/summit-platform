@@ -5,7 +5,7 @@ import type { Palette } from '@/lib/palette';
 import { getTemplate } from '@/templates/registry';
 import type { Speaker } from '@/templates/types';
 
-type OpusV1ComponentProps = {
+type OchreInkComponentProps = {
   content: unknown;
   speakers: Record<string, Speaker>;
   funnelId: string;
@@ -47,16 +47,16 @@ export default async function PreviewPage({
 
   const speakers = speakersById(draft.speakers);
   const Component = template.Component;
-  // Only opus-v1 currently accepts `enabledSections` and `palette`. Other
+  // Only ochre-ink currently accepts `enabledSections` and `palette`. Other
   // templates render their full content as-is (Phase 2a + 3a-1 scope).
   // Normalize null → undefined for enabledSections so the layout falls back
   // to its default enabled set for legacy drafts. palette stays null/Palette
   // because `paletteStyle(null)` returns undefined on purpose.
   const enabledSections = draft.enabled_sections ?? undefined;
-  if (draft.template_key === 'opus-v1') {
-    const OpusV1Component = Component as ComponentType<OpusV1ComponentProps>;
+  if (draft.template_key === 'ochre-ink') {
+    const OchreInkComponent = Component as ComponentType<OchreInkComponentProps>;
     return (
-      <OpusV1Component
+      <OchreInkComponent
         content={parsed.data}
         enabledSections={enabledSections}
         speakers={speakers}

@@ -1,0 +1,194 @@
+/* Variant 1 — template-scoped styles.
+ * Warm editorial summit aesthetic: brown/tan/rust palette with Poppins + Source Sans 3.
+ * Ported from next-app/public/rust-cream.html <style> block.
+ *
+ * All selectors are scoped to .rust-cream-root / .rust-cream-body to avoid
+ * collisions with other templates or the host app CSS.
+ */
+
+.rust-cream-root { scroll-behavior: smooth; }
+.rust-cream-body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background-color: #FDF8F3;
+  color: #3D2B1F;
+}
+
+.rust-cream-body h1,
+.rust-cream-body h2,
+.rust-cream-body h3,
+.rust-cream-body h4,
+.rust-cream-body h5,
+.rust-cream-body h6,
+.rust-cream-body .rust-cream-heading {
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/* Avatars */
+.rust-cream-body .rust-cream-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  border: 4px solid #E8C4A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.rust-cream-body .rust-cream-avatar-lg {
+  width: 100px;
+  height: 100px;
+  font-size: 1.5rem;
+}
+.rust-cream-body .rust-cream-avatar-sm {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 2px solid #E8C4A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* FAQ pill style */
+.rust-cream-body details summary {
+  cursor: pointer;
+  list-style: none;
+}
+.rust-cream-body details summary::-webkit-details-marker { display: none; }
+.rust-cream-body details[open] summary .rust-cream-chevron { transform: rotate(180deg); }
+.rust-cream-body .rust-cream-chevron { transition: transform 0.2s; }
+
+/* CTA pulse */
+@keyframes rust-cream-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(194, 112, 62, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(194, 112, 62, 0); }
+}
+@keyframes rust-cream-pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 160, 74, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(212, 160, 74, 0); }
+}
+.rust-cream-body .rust-cream-pulse-glow { animation: rust-cream-pulse-glow 2s infinite; }
+.rust-cream-body .rust-cream-pulse-gold { animation: rust-cream-pulse-gold 2s infinite; }
+
+/* Logo marquee */
+.rust-cream-body .rust-cream-marquee-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.rust-cream-body .rust-cream-marquee-wrap::before,
+.rust-cream-body .rust-cream-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.rust-cream-body .rust-cream-marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #FDF8F3 0%, transparent 100%);
+}
+.rust-cream-body .rust-cream-marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(270deg, #FDF8F3 0%, transparent 100%);
+}
+.rust-cream-body .rust-cream-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+}
+.rust-cream-body .rust-cream-marquee-set {
+  display: flex;
+  align-items: center;
+  animation: rust-cream-marquee-scroll 35s linear infinite;
+}
+@keyframes rust-cream-marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+.rust-cream-body .rust-cream-logo-item {
+  white-space: nowrap;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+  flex-shrink: 0;
+  padding: 0 1.75rem;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #3D2B1F;
+}
+.rust-cream-body .rust-cream-logo-item:hover { opacity: 0.75; }
+
+/* Speaker horizontal scroll */
+.rust-cream-body .rust-cream-speaker-scroll {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+}
+.rust-cream-body .rust-cream-speaker-scroll::-webkit-scrollbar { height: 6px; }
+.rust-cream-body .rust-cream-speaker-scroll::-webkit-scrollbar-track {
+  background: #F5EDE4;
+  border-radius: 3px;
+}
+.rust-cream-body .rust-cream-speaker-scroll::-webkit-scrollbar-thumb {
+  background: #C2703E;
+  border-radius: 3px;
+}
+.rust-cream-body .rust-cream-speaker-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 160px;
+}
+
+/* Skip nav */
+.rust-cream-body .rust-cream-skip-nav {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.rust-cream-body .rust-cream-skip-nav:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 12px 24px;
+  background: #3D2B1F;
+  color: #fff;
+  z-index: 9999;
+  font-weight: 700;
+}
+
+/* Focus */
+.rust-cream-body :focus-visible {
+  outline: 2px solid #C2703E;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .rust-cream-body .rust-cream-marquee-set,
+  .rust-cream-body .rust-cream-pulse-glow,
+  .rust-cream-body .rust-cream-pulse-gold {
+    animation: none !important;
+  }
+  .rust-cream-body .rust-cream-marquee-set { transform: none !important; }
+  .rust-cream-root { scroll-behavior: auto; }
+}

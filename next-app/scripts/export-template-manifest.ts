@@ -2,8 +2,11 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { templates, templateKeys } from '../src/templates/registry';
-import type { TemplateDefinition } from '../src/templates/types';
+import {
+  templateMetadata,
+  templateKeys,
+  type TemplateMetadata,
+} from '../src/templates/registry.metadata';
 import { catalog, catalogKeys } from '../src/sections/catalog';
 
 // Note on the JSON Schema conversion library choice:
@@ -35,11 +38,11 @@ for (const key of catalogKeys) {
 }
 
 const manifestTemplates = templateKeys.map((key) => {
-  // Narrow to the shared TemplateDefinition interface so optional
-  // section fields are visible. The registry uses `satisfies` to preserve
+  // Narrow to the shared TemplateMetadata interface so optional
+  // section fields are visible. The metadata uses `satisfies` to preserve
   // each concrete TContent, which hides the optional fields from the union.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const t = templates[key] as TemplateDefinition<any>;
+  const t = templateMetadata[key] as TemplateMetadata<any>;
   // Base manifest entry — unchanged from Phase 1.
   const base: Record<string, unknown> = {
     key: t.key,

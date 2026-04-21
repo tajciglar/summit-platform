@@ -1,0 +1,90 @@
+/* Opus V1 — template-scoped styles.
+ * Ported from the ochre-ink.html <style> block and rewritten in Phase 3a-1 to
+ * read from the universal 8-token palette vocabulary (`--primary`, `--ink`,
+ * `--paper`, etc.). The template's layout injects the palette as inline CSS
+ * custom properties on `.ochre-ink-root`; the fallback block below mirrors
+ * `AudiencePalettes::NEUTRAL` in app/Services/Templates/AudiencePalettes.php
+ * so the template still renders when no palette is supplied.
+ */
+
+.ochre-ink-root {
+  /* Fallback palette — mirrors AudiencePalettes::NEUTRAL. Overridden by the
+   * inline style={paletteStyle(palette)} on the layout root whenever the
+   * API response includes a palette. */
+  --primary: #C9812A;
+  --primary-contrast: #F5F1EA;
+  --ink: #2A0F17;
+  --paper: #F5F1EA;
+  --paper-alt: #EDE7DD;
+  --muted: #6B5B4E;
+  --accent: #D9963F;
+  --border: #DDD2C3;
+
+  scroll-behavior: smooth;
+}
+
+.ochre-ink-root body,
+.ochre-ink-body {
+  font-family: 'Source Serif 4', 'Georgia', serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-feature-settings: "kern", "liga", "ss01";
+}
+
+.ochre-ink-body h1,
+.ochre-ink-body h2,
+.ochre-ink-body h3,
+.ochre-ink-body h4,
+.ochre-ink-body .font-display { font-family: 'Fraunces', 'serif'; letter-spacing: -0.01em; font-optical-sizing: auto; }
+
+.ochre-ink-body .eyebrow { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 600; font-size: 0.7rem; }
+.ochre-ink-body .dropcap::first-letter { font-family: 'Fraunces', 'serif'; font-weight: 900; font-size: 4.5rem; float: left; line-height: 0.88; padding: 0.3rem 0.6rem 0 0; color: var(--ink); font-style: normal; }
+.ochre-ink-body .rule { border-top: 1px solid var(--border); }
+.ochre-ink-body .figure-label { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.65rem; color: var(--muted); font-weight: 600; }
+.ochre-ink-body .portrait { border-radius: 2px; overflow: hidden; position: relative; }
+/* Portrait inner shadow uses a semi-transparent hardcoded ink-tint — keeping
+ * literal rgba because CSS cannot derive alpha-channel variants from a hex
+ * custom property. The visual weight is intentionally constant across
+ * palettes (a thin vignette on speaker portraits). */
+.ochre-ink-body .portrait::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(74, 31, 45, 0.15); pointer-events: none; }
+.ochre-ink-body .pullmark { font-family: 'Fraunces', 'serif'; font-size: 8rem; line-height: 0.75; color: var(--primary); font-weight: 900; }
+.ochre-ink-body .roman { font-family: 'Fraunces', 'serif'; font-weight: 500; font-style: italic; color: var(--primary); }
+.ochre-ink-body .deckle { border-image: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px) 1; border-style: solid; border-width: 0 0 1px 0; }
+
+/* Marquee */
+.ochre-ink-body .marquee-wrap { overflow: hidden; position: relative; }
+.ochre-ink-body .marquee-wrap::before,
+.ochre-ink-body .marquee-wrap::after { content: ''; position: absolute; top: 0; height: 100%; width: 100px; z-index: 2; pointer-events: none; }
+.ochre-ink-body .marquee-wrap::before { left: 0; background: linear-gradient(90deg, var(--paper), transparent); }
+.ochre-ink-body .marquee-wrap::after { right: 0; background: linear-gradient(-90deg, var(--paper), transparent); }
+.ochre-ink-body .marquee-track { display: flex; width: max-content; animation: ochre-ink-marq 38s linear infinite; }
+.ochre-ink-body .marquee-item { padding: 0 2rem; white-space: nowrap; color: var(--muted); font-family: 'Fraunces', 'serif'; font-style: italic; font-weight: 500; }
+@keyframes ochre-ink-marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* FAQ */
+.ochre-ink-body details { border-bottom: 1px solid var(--border); }
+.ochre-ink-body details summary { cursor: pointer; list-style: none; padding: 1.5rem 0; font-family: 'Fraunces', 'serif'; font-weight: 700; font-size: 1.2rem; color: var(--ink); }
+.ochre-ink-body details summary::-webkit-details-marker { display: none; }
+.ochre-ink-body details summary::after { content: '+'; float: right; font-family: 'Fraunces', 'serif'; font-weight: 500; font-size: 1.6rem; line-height: 1; color: var(--primary); transition: transform 0.2s; }
+.ochre-ink-body details[open] summary::after { content: '—'; }
+
+/* Modal */
+/* Backdrop uses semi-transparent ink overlay — kept as hardcoded rgba for the
+ * same reason as the portrait shadow (alpha channel can't be derived from a
+ * hex custom property). */
+.ochre-ink-body .modal-backdrop { position: fixed; inset: 0; background: rgba(42, 15, 23, 0.65); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+.ochre-ink-body .modal-backdrop.open { display: flex; }
+.ochre-ink-body .modal-card { background: var(--paper); max-width: 560px; width: 100%; border-radius: 4px; box-shadow: 0 40px 80px -20px rgba(42, 15, 23, 0.4); border: 1px solid var(--border); }
+.ochre-ink-body.modal-open { overflow: hidden; }
+
+/* Focus */
+.ochre-ink-body :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+/* Skip nav */
+.ochre-ink-body .skip-nav { position: absolute; left: -9999px; }
+.ochre-ink-body .skip-nav:focus { position: fixed; top: 1rem; left: 1rem; background: var(--ink); color: var(--primary-contrast); padding: 0.75rem 1.25rem; z-index: 200; font-family: 'Inter', sans-serif; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ochre-ink-body .marquee-track { animation: none !important; }
+  .ochre-ink-root { scroll-behavior: auto; }
+}

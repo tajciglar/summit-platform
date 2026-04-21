@@ -39,7 +39,7 @@ function makeDraft(array $overrides = []): array
     $attrs = array_merge([
         'batch_id' => $batch->id,
         'version_number' => 1,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'sections' => ['hero' => ['headline' => 'Hello world', 'subheadline' => 'A subtitle']],
         'enabled_sections' => ['hero', 'footer'],
         'status' => 'shortlisted',
@@ -60,7 +60,7 @@ function normalizeBlocks(array $blocks): array
     ));
 }
 
-it('renders Builder blocks for opus-v1 drafts', function () {
+it('renders Builder blocks for ochre-ink drafts', function () {
     [$funnel, $draft] = makeDraft();
 
     livewire(EditLandingPageDraftPage::class, [
@@ -143,7 +143,7 @@ it('reordering blocks persists the new enabled_sections order', function () {
 
 it('falls back to a whole-schema form when the template does not support sections', function () {
     [$funnel, $draft] = makeDraft([
-        'template_key' => 'opus-v2',
+        'template_key' => 'lime-ink',
         'enabled_sections' => null,
         'sections' => ['summit' => ['name' => 'My Summit']],
     ]);

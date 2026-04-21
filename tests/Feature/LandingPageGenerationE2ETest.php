@@ -16,12 +16,12 @@ use App\Services\Templates\TemplateRegistry;
 it('runs the full generate → approve → publish flow', function () {
     // Registry fake — override with a minimal schema so any content with summit.name passes
     $this->mock(TemplateRegistry::class, function ($m) {
-        $m->shouldReceive('allKeys')->andReturn(['opus-v1']);
-        $m->shouldReceive('exists')->with('opus-v1')->andReturn(true);
-        $m->shouldReceive('get')->with('opus-v1')->andReturn([
-            'key' => 'opus-v1',
+        $m->shouldReceive('allKeys')->andReturn(['ochre-ink']);
+        $m->shouldReceive('exists')->with('ochre-ink')->andReturn(true);
+        $m->shouldReceive('get')->with('ochre-ink')->andReturn([
+            'key' => 'ochre-ink',
             'label' => 'Editorial',
-            'thumbnail' => '/template-thumbs/opus-v1.jpg',
+            'thumbnail' => '/template-thumbs/ochre-ink.jpg',
             'tags' => ['editorial'],
             'jsonSchema' => [
                 'type' => 'object',
@@ -35,6 +35,9 @@ it('runs the full generate → approve → publish flow', function () {
                 ],
             ],
         ]);
+        $m->shouldReceive('supportsSections')->with('ochre-ink')->andReturn(false);
+        $m->shouldReceive('supportedSections')->with('ochre-ink')->andReturn([]);
+        $m->shouldReceive('defaultEnabledSections')->with('ochre-ink')->andReturn([]);
     });
 
     // Anthropic mock — returns a valid JSON payload
@@ -49,7 +52,7 @@ it('runs the full generate → approve → publish flow', function () {
     // Setup
     $summit = Summit::factory()->create(['title' => 'Integration Summit']);
     $funnel = Funnel::factory()->for($summit)->create();
-    FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'page_content' => []]);
+    $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'page_content' => []]);
     Speaker::factory()->for($summit)->create(['goes_live_at' => now()]);
     $user = User::factory()->create();
 
@@ -57,8 +60,9 @@ it('runs the full generate → approve → publish flow', function () {
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id,
         'funnel_id' => $funnel->id,
+        'funnel_step_id' => $step->id,
         'version_count' => 1,
-        'template_pool' => ['opus-v1'],
+        'template_pool' => ['ochre-ink'],
         'status' => 'queued',
     ]);
 
@@ -66,7 +70,7 @@ it('runs the full generate → approve → publish flow', function () {
 
     $draft = LandingPageDraft::where('batch_id', $batch->id)->firstOrFail();
     expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
-    expect($draft->template_key)->toBe('opus-v1');
+    expect($draft->template_key)->toBe('ochre-ink');
     expect($draft->sections)->toEqual(['summit' => ['name' => 'Integration Summit']]);
 
     // Approve + publish
@@ -76,6 +80,6 @@ it('runs the full generate → approve → publish flow', function () {
     // Verify live
     $response = $this->getJson("/api/funnels/{$funnel->id}/published-content");
     $response->assertOk();
-    $response->assertJsonPath('template_key', 'opus-v1');
+    $response->assertJsonPath('template_key', 'ochre-ink');
     $response->assertJsonPath('content.summit.name', 'Integration Summit');
 });

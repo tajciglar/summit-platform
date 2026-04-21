@@ -29,7 +29,7 @@ describe('template registry', () => {
     // Load fixture dynamically — conventionally at __fixtures__/<key>.fixture.ts
     const fixturePath = `./__fixtures__/${key}.fixture.ts`;
     const fixtureModule: Record<string, unknown> = await import(fixturePath);
-    // Fixture exports follow the convention <key-camel>Fixture, e.g. opusV1Fixture
+    // Fixture exports follow the convention <key-camel>Fixture, e.g. ochreInkFixture
     const camelKey = key.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
     const fixtureName = `${camelKey}Fixture`;
     const fixture = fixtureModule[fixtureName];
@@ -42,9 +42,9 @@ describe('template registry', () => {
   });
 
   it('getTemplate returns the matching template for a known key', () => {
-    const t = getTemplate('opus-v1');
+    const t = getTemplate('ochre-ink');
     expect(t).not.toBeNull();
-    expect(t?.key).toBe('opus-v1');
+    expect(t?.key).toBe('ochre-ink');
     expect(t?.label).toBeTruthy();
   });
 });

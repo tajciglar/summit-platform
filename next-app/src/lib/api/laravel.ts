@@ -29,10 +29,9 @@ export async function fetchDraft(token: string): Promise<DraftPayload | null> {
   return res.json();
 }
 
-export async function fetchPublished(funnelId: string): Promise<PublicPayload | null> {
-  const res = await fetch(`${BASE}/api/funnels/${encodeURIComponent(funnelId)}/published-content`, {
-    next: { revalidate: 60 },
-  });
+export async function fetchPublished(funnelId: string, stepType = 'optin'): Promise<PublicPayload | null> {
+  const url = `${BASE}/api/funnels/${encodeURIComponent(funnelId)}/published-content?step_type=${encodeURIComponent(stepType)}`;
+  const res = await fetch(url, { next: { revalidate: 60 } });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Published fetch failed: ${res.status}`);
   return res.json();

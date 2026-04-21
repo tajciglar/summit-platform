@@ -20,7 +20,7 @@ class LandingPageDraftFactory extends Factory
         return [
             'batch_id' => LandingPageBatch::factory(),
             'version_number' => 1,
-            'template_key' => 'opus-v1',
+            'template_key' => 'ochre-ink',
             'blocks' => null,
             'sections' => ['hero' => ['headline' => fake()->sentence()]],
             'enabled_sections' => null,

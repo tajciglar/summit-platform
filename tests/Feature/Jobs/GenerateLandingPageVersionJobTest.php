@@ -32,10 +32,10 @@ it('creates a draft with content from TemplateFiller', function () {
             ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::first();
-    expect($draft->template_key)->toBe('opus-v1');
+    expect($draft->template_key)->toBe('ochre-ink');
     expect($draft->sections)->toEqual(['summit' => ['name' => $summit->title], 'hero' => ['headline' => 'H']]);
     expect($draft->status)->toBe(LandingPageDraftStatus::Ready);
     expect($draft->token_count)->toBe(300);
@@ -56,7 +56,7 @@ it('marks draft as failed when filler throws', function () {
         $m->shouldReceive('fill')->andThrow(new RuntimeException('oops'));
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::first();
     expect($draft->status)->toBe(LandingPageDraftStatus::Failed);
@@ -79,7 +79,7 @@ it('re-throws 429 rate-limit errors and keeps draft in generating state for retr
         );
     });
 
-    expect(fn () => GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1))
+    expect(fn () => GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1))
         ->toThrow(RuntimeException::class);
 
     $draft = LandingPageDraft::first();
@@ -106,7 +106,7 @@ it('marks draft as failed on final 429 after all retries exhausted', function ()
     // Simulate being on the final attempt — the job's attempts() returns 4
     // via job->release() accounting, but for dispatchSync we trigger the
     // post-tries branch by maxing out tries to 1.
-    $job = new GenerateLandingPageVersionJob($batch->id, 'opus-v1', 1);
+    $job = new GenerateLandingPageVersionJob($batch->id, 'ochre-ink', 1);
     $job->tries = 1;
 
     dispatch_sync($job);
@@ -116,7 +116,7 @@ it('marks draft as failed on final 429 after all retries exhausted', function ()
     expect($draft->error_message)->toContain('429');
 });
 
-it('seeds enabled_sections from defaultEnabledSections for opus-v1', function () {
+it('seeds enabled_sections from defaultEnabledSections for ochre-ink', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
     $batch = LandingPageBatch::create([
@@ -135,7 +135,7 @@ it('seeds enabled_sections from defaultEnabledSections for opus-v1', function ()
             ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft)->not->toBeNull();
@@ -151,7 +151,7 @@ it('seeds enabled_sections from defaultEnabledSections for opus-v1', function ()
 it('uses funnel section_config for the step_type when present', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create([
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'section_config' => [
             'optin' => ['hero', 'speakers-by-day', 'closing-cta', 'footer'],
             'sales_page' => ['stats-hero', 'value-prop', 'testimonials-attendees', 'faq', 'closing-cta', 'footer'],
@@ -176,7 +176,7 @@ it('uses funnel section_config for the step_type when present', function () {
             ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->enabled_sections)->toEqual(['hero', 'speakers-by-day', 'closing-cta', 'footer']);
@@ -185,7 +185,7 @@ it('uses funnel section_config for the step_type when present', function () {
 it('falls back to template defaults when funnel section_config lacks this step_type', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create([
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'section_config' => ['optin' => ['hero', 'footer']],
     ]);
     $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'sales_page']);
@@ -204,7 +204,7 @@ it('falls back to template defaults when funnel section_config lacks this step_t
         ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->enabled_sections)->toBeArray()->toHaveCount(10);
@@ -213,7 +213,7 @@ it('falls back to template defaults when funnel section_config lacks this step_t
 it('filters section_config entries down to sections the template actually supports', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create([
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'section_config' => [
             'optin' => ['hero', 'bogus-section', 'footer'],
         ],
@@ -234,13 +234,13 @@ it('filters section_config entries down to sections the template actually suppor
         ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->enabled_sections)->toEqual(['hero', 'footer']);
 });
 
-it('leaves enabled_sections null for legacy templates like opus-v2', function () {
+it('leaves enabled_sections null for legacy templates like lime-ink', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
     $batch = LandingPageBatch::create([
@@ -259,7 +259,7 @@ it('leaves enabled_sections null for legacy templates like opus-v2', function ()
             ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v2', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'lime-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft)->not->toBeNull();
@@ -284,7 +284,7 @@ it('stores audience and palette on the draft when summit has audience', function
         ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft)->not->toBeNull();
@@ -310,7 +310,7 @@ it('stores audience from batch override when present (overrides summit default)'
         ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->audience)->toBe(SummitAudience::Ai);
@@ -334,7 +334,7 @@ it('stores NEUTRAL palette when summit has no audience', function () {
         ]);
     });
 
-    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'opus-v1', 1);
+    GenerateLandingPageVersionJob::dispatchSync($batch->id, 'ochre-ink', 1);
 
     $draft = LandingPageDraft::firstWhere('batch_id', $batch->id);
     expect($draft->audience)->toBeNull();

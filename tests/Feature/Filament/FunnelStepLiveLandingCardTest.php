@@ -42,14 +42,14 @@ it('shows the live landing card with template key and version for optin step wit
     LandingPageDraft::factory()->create([
         'batch_id' => $batch->id,
         'status' => LandingPageDraftStatus::Published,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'version_number' => 3,
         'palette' => ['#0f172a', '#f8f1e7', '#d97706', '#475569', '#fef3c7'],
     ]);
 
     livewire(EditFunnelStep::class, ['record' => $step->id])
         ->call('partiallyRenderSchemaComponent', 'form.live_landing_card')
-        ->assertSee('opus-v1')
+        ->assertSee('ochre-ink')
         ->assertSee('v3');
 });
 
@@ -88,7 +88,7 @@ it('shows the generated-content card instead of the Builder when page_content ca
         'slug' => 'sales',
         'step_type' => 'sales_page',
         'page_content' => [
-            'template_key' => 'opus-v1',
+            'template_key' => 'ochre-ink',
             'content' => ['masthead' => ['headline' => 'Hi']],
             'enabled_sections' => ['masthead', 'faq'],
             'palette' => ['#0f172a', '#f8f1e7'],
@@ -102,7 +102,7 @@ it('shows the generated-content card instead of the Builder when page_content ca
     LandingPageDraft::factory()->create([
         'batch_id' => $batch->id,
         'status' => LandingPageDraftStatus::Published,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
     ]);
 
     livewire(EditFunnelStep::class, ['record' => $step->id])

@@ -53,12 +53,12 @@ function extractSchemaFromSystemPrompt(string $prompt): array
     return $decoded;
 }
 
-it('builds a section-keyed schema for opus-v1 (section-aware template)', function () {
+it('builds a section-keyed schema for ochre-ink (section-aware template)', function () {
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $this->client);
 
     try {
-        $filler->fill($summit, 'opus-v1', collect(), null, null);
+        $filler->fill($summit, 'ochre-ink', collect(), null, null);
     } catch (RuntimeException) {
         // Expected — the mocked response fails validation. We only care about
         // the schema sent to Claude.
@@ -83,23 +83,23 @@ it('builds a section-keyed schema for opus-v1 (section-aware template)', functio
     expect($props)->toHaveCount(17);
 
     // Legacy whole-template wrapper keys must not leak in — `summit` was the
-    // summit-metadata wrapper in the old OpusV1Content shape, and is NOT a
+    // summit-metadata wrapper in the old OchreInkContent shape, and is NOT a
     // catalog section.
     expect($props)->not->toHaveKey('summit');
 
     // Required should mirror supportedSections.
-    expect($schema['required'])->toBe($this->registry->supportedSections('opus-v1'));
+    expect($schema['required'])->toBe($this->registry->supportedSections('ochre-ink'));
 
     // Section prompt hint should also be present.
     expect($this->captured['system'])->toContain('top-level keys are each section name');
 });
 
-it('uses legacy whole-template schema for templates without sections (opus-v2)', function () {
+it('uses legacy whole-template schema for templates without sections (lime-ink)', function () {
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $this->client);
 
     try {
-        $filler->fill($summit, 'opus-v2', collect(), null, null);
+        $filler->fill($summit, 'lime-ink', collect(), null, null);
     } catch (RuntimeException) {
         // Expected — mocked response fails validation.
     }
@@ -109,7 +109,7 @@ it('uses legacy whole-template schema for templates without sections (opus-v2)',
 
     $props = $schema['properties'];
 
-    // Legacy OpusV2 shape has `summit` as a top-level metadata wrapper, not a
+    // Legacy LimeInk shape has `summit` as a top-level metadata wrapper, not a
     // section-keyed map.
     expect($props)->toHaveKey('summit');
 

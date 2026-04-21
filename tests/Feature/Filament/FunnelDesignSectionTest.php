@@ -47,7 +47,7 @@ it('persists template_key and section_config on save', function () {
             'summit_id' => $funnel->summit_id,
             'name' => $funnel->name,
             'slug' => $funnel->slug,
-            'template_key' => 'opus-v1',
+            'template_key' => 'ochre-ink',
             'section_config.optin' => ['masthead', 'hero', 'footer'],
             'section_config.sales_page' => ['masthead', 'value-prop', 'closing-cta', 'footer'],
             'section_config.thank_you' => ['masthead', 'closing-cta', 'footer'],
@@ -56,14 +56,14 @@ it('persists template_key and section_config on save', function () {
         ->assertHasNoFormErrors();
 
     $fresh = $funnel->fresh();
-    expect($fresh->template_key)->toBe('opus-v1');
+    expect($fresh->template_key)->toBe('ochre-ink');
     expect($fresh->section_config['optin'])->toBe(['masthead', 'hero', 'footer']);
     expect($fresh->section_config['sales_page'])->toBe(['masthead', 'value-prop', 'closing-cta', 'footer']);
     expect($fresh->section_config['thank_you'])->toBe(['masthead', 'closing-cta', 'footer']);
 });
 
 it('shows the generate-all-steps action on View Funnel when a skin is picked', function () {
-    $funnel = Funnel::factory()->for(Summit::factory())->create(['template_key' => 'opus-v1']);
+    $funnel = Funnel::factory()->for(Summit::factory())->create(['template_key' => 'ochre-ink']);
 
     livewire(ViewFunnel::class, ['record' => $funnel->id])
         ->assertActionVisible('generate_all_steps');
@@ -80,7 +80,7 @@ it('dispatches one batch per generable step when generate-all-steps fires', func
     Queue::fake();
 
     $summit = Summit::factory()->create();
-    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'opus-v1']);
+    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'ochre-ink']);
     FunnelStep::factory()->create(['funnel_id' => $funnel->id, 'step_type' => 'optin', 'slug' => 'optin']);
     FunnelStep::factory()->create(['funnel_id' => $funnel->id, 'step_type' => 'sales_page', 'slug' => 'sales']);
     FunnelStep::factory()->create(['funnel_id' => $funnel->id, 'step_type' => 'thank_you', 'slug' => 'thanks']);
@@ -105,7 +105,7 @@ it('dispatches one batch per generable step when generate-all-steps fires', func
 
 it('warns when there are no generable steps', function () {
     $summit = Summit::factory()->create();
-    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'opus-v1']);
+    $funnel = Funnel::factory()->for($summit)->create(['template_key' => 'ochre-ink']);
     FunnelStep::factory()->create(['funnel_id' => $funnel->id, 'step_type' => 'checkout', 'slug' => 'checkout']);
 
     livewire(ViewFunnel::class, ['record' => $funnel->id])

@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Models\Funnel;
 use App\Models\Speaker;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class PublicFunnelController extends Controller
 {
-    public function show(string $funnelId): JsonResponse
+    public function show(Request $request, string $funnelId): JsonResponse
     {
-        $funnel = Funnel::with(['steps' => fn ($q) => $q->where('step_type', 'optin')])
+        $stepType = $request->query('step_type', 'optin');
+
+        $funnel = Funnel::with(['steps' => fn ($q) => $q->where('step_type', $stepType)])
             ->findOrFail($funnelId);
 
         $step = $funnel->steps->first();

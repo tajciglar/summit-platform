@@ -11,7 +11,7 @@ it('returns the published page_content for an optin step', function () {
     FunnelStep::factory()->for($funnel)->create([
         'step_type' => 'optin',
         'page_content' => [
-            'template_key' => 'opus-v1',
+            'template_key' => 'ochre-ink',
             'content' => ['summit' => ['name' => 'Test']],
         ],
     ]);
@@ -19,7 +19,7 @@ it('returns the published page_content for an optin step', function () {
     $response = $this->getJson("/api/funnels/{$funnel->id}/published-content");
 
     $response->assertOk();
-    $response->assertJsonPath('template_key', 'opus-v1');
+    $response->assertJsonPath('template_key', 'ochre-ink');
     $response->assertJsonPath('content.summit.name', 'Test');
     $response->assertJsonStructure(['speakers']);
     $response->assertJsonPath('funnel_id', $funnel->id);
@@ -38,7 +38,7 @@ it('includes speaker summary in camelCase', function () {
     $funnel = Funnel::factory()->for($summit)->create();
     FunnelStep::factory()->for($funnel)->create([
         'step_type' => 'optin',
-        'page_content' => ['template_key' => 'opus-v1', 'content' => []],
+        'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
     ]);
     $speaker = Speaker::factory()->for($summit)->create(['goes_live_at' => now()]);
 

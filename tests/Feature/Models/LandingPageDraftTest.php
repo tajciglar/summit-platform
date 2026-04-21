@@ -17,7 +17,7 @@ it('casts enabled_sections to array', function () {
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id,
         'version_number' => 1,
-        'template_key' => 'opus-v1',
+        'template_key' => 'ochre-ink',
         'sections' => ['hero' => ['headline' => 'X']],
         'enabled_sections' => ['hero', 'footer'],
         'status' => 'ready',
@@ -41,7 +41,7 @@ it('allows null enabled_sections for legacy drafts', function () {
     $draft = LandingPageDraft::create([
         'batch_id' => $batch->id,
         'version_number' => 1,
-        'template_key' => 'opus-v2',
+        'template_key' => 'lime-ink',
         'sections' => ['hero' => ['headline' => 'Y']],
         'enabled_sections' => null,
         'status' => 'ready',

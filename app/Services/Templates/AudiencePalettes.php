@@ -9,7 +9,7 @@ use App\Enums\SummitAudience;
 class AudiencePalettes
 {
     /**
-     * Neutral fallback — matches opus-v1's current warm editorial look.
+     * Neutral fallback — matches ochre-ink's current warm editorial look.
      * Used when a summit has no audience assigned.
      */
     public const NEUTRAL = [

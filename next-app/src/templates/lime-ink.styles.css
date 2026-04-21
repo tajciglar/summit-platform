@@ -1,0 +1,188 @@
+/* Opus V2 — template-scoped styles.
+ * Ported verbatim from next-app/public/lime-ink.html <style> block.
+ * Technical / dev-console aesthetic: Inter sans + JetBrains Mono mono,
+ * lime + indigo + zinc-ink palette.
+ *
+ * All selectors are scoped to .lime-ink-root / .lime-ink-body to avoid
+ * collisions with ochre-ink template or host app CSS.
+ */
+
+.lime-ink-root { scroll-behavior: smooth; }
+.lime-ink-body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #FFFFFF;
+  color: #0A0A0B;
+  font-feature-settings: "cv11","ss01","ss03";
+  letter-spacing: -0.005em;
+}
+
+.lime-ink-body h1,
+.lime-ink-body h2,
+.lime-ink-body h3,
+.lime-ink-body h4 {
+  letter-spacing: -0.025em;
+  font-weight: 800;
+}
+
+.lime-ink-body .lime-ink-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.lime-ink-body .lime-ink-hairline { border-top: 1px solid #E4E4E7; }
+.lime-ink-body .lime-ink-hairline-b { border-bottom: 1px solid #E4E4E7; }
+.lime-ink-body .lime-ink-hairline-dark { border-top: 1px solid rgba(255,255,255,0.1); }
+
+/* Grid texture for hero / final CTA */
+.lime-ink-body .lime-ink-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.lime-ink-body .lime-ink-noise {
+  background-image: radial-gradient(circle at 30% 30%, rgba(196,242,69,0.08), transparent 55%);
+}
+
+/* Lime CTA */
+.lime-ink-body .lime-ink-cta-primary {
+  background: #C4F245;
+  color: #0A0A0B;
+  transition: transform 0.15s, background 0.15s;
+}
+.lime-ink-body .lime-ink-cta-primary:hover {
+  background: #DCFF6B;
+  transform: translateY(-1px);
+}
+.lime-ink-body .lime-ink-cta-ghost {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #FFFFFF;
+}
+.lime-ink-body .lime-ink-cta-ghost:hover {
+  border-color: #C4F245;
+  color: #C4F245;
+}
+
+/* Section number label */
+.lime-ink-body .lime-ink-sec-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #71717A;
+}
+
+/* Marquee */
+.lime-ink-body .lime-ink-marquee-wrap { overflow: hidden; position: relative; }
+.lime-ink-body .lime-ink-marquee-wrap::before,
+.lime-ink-body .lime-ink-marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+.lime-ink-body .lime-ink-marquee-wrap::before { left: 0; background: linear-gradient(90deg, #FFFFFF, transparent); }
+.lime-ink-body .lime-ink-marquee-wrap::after { right: 0; background: linear-gradient(-90deg, #FFFFFF, transparent); }
+.lime-ink-body .lime-ink-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: lime-ink-marq 40s linear infinite;
+}
+.lime-ink-body .lime-ink-marquee-item {
+  padding: 0 2rem;
+  white-space: nowrap;
+  color: #52525B;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: 1.15rem;
+}
+@keyframes lime-ink-marq {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* FAQ */
+.lime-ink-body details { border-bottom: 1px solid #E4E4E7; }
+.lime-ink-body details summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.5rem 0;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #0A0A0B;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.lime-ink-body details summary::-webkit-details-marker { display: none; }
+.lime-ink-body .lime-ink-plus-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #F4F4F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #0A0A0B;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.lime-ink-body details[open] .lime-ink-plus-icon {
+  transform: rotate(45deg);
+  background: #C4F245;
+}
+
+/* Speaker avatar ring on hover */
+.lime-ink-body .lime-ink-spk-avatar {
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.lime-ink-body .lime-ink-spk-avatar:hover {
+  box-shadow: 0 0 0 3px #C4F245;
+  transform: scale(1.02);
+}
+
+/* Spark bars for stats */
+.lime-ink-body .lime-ink-spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+.lime-ink-body .lime-ink-spark span {
+  background: #C4F245;
+  width: 5px;
+  border-radius: 1px;
+}
+
+/* Focus */
+.lime-ink-body :focus-visible {
+  outline: 2px solid #C4F245;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip nav */
+.lime-ink-body .lime-ink-skip-nav { position: absolute; left: -9999px; }
+.lime-ink-body .lime-ink-skip-nav:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: #C4F245;
+  color: #0A0A0B;
+  padding: 0.75rem 1.25rem;
+  z-index: 200;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lime-ink-body .lime-ink-marquee-track { animation: none !important; }
+  .lime-ink-root { scroll-behavior: auto; }
+}
