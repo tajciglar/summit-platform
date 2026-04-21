@@ -35,6 +35,8 @@ class EditLandingPageDraftPage extends Page implements HasForms
 
     protected string $view = 'filament.pages.edit-landing-page-draft';
 
+    protected static string $layout = 'filament.layouts.focused';
+
     protected static ?string $title = 'Edit Landing Page';
 
     public Funnel $funnel;
