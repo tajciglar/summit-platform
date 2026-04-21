@@ -87,10 +87,19 @@ class FunnelStepResource extends Resource
                     Toggle::make('is_published')->default(false),
                 ]),
 
+            Section::make('Generated landing page')
+                ->description('This page was built by the AI landing-page pipeline. Edit sections in the draft editor.')
+                ->visible(fn (?FunnelStep $record): bool => $record !== null && self::isGeneratedContent($record->page_content))
+                ->components([
+                    ViewField::make('generated_content_card')
+                        ->view('filament.components.step-generated-content-card'),
+                ]),
+
             Section::make('Page content blocks')
                 ->description(fn (Get $get): string => is_array($get('page_content'))
                     ? count($get('page_content')).' blocks'
                     : 'empty')
+                ->visible(fn (?FunnelStep $record): bool => $record === null || ! self::isGeneratedContent($record->page_content))
                 ->collapsed()
                 ->components([
                     Builder::make('page_content')
@@ -237,5 +246,18 @@ class FunnelStepResource extends Resource
 
         // Associative map → not Builder-compatible (likely generator output)
         return [];
+    }
+
+    /**
+     * Generator-published pages store `page_content` as an associative array
+     * with a `template_key`. Hand-built pages use a sequential Builder list.
+     * This lets the form swap the Builder out for an info card + link to the
+     * draft editor so operators get the rich per-section editing experience.
+     *
+     * @param  mixed  $state
+     */
+    public static function isGeneratedContent($state): bool
+    {
+        return is_array($state) && ! empty($state) && isset($state['template_key']);
     }
 }
