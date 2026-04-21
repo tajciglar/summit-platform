@@ -52,7 +52,7 @@
     $views = 0; // TODO: wire page-view analytics; currently not tracked.
 
     $funnelsIndexUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('index');
-    $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('edit', ['record' => $funnel->id]);
+    $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]);
     $stepEditUrl = fn (\App\Models\FunnelStep $s) =>
         \App\Filament\Resources\FunnelSteps\FunnelStepResource::getUrl('edit', ['record' => $s->id]);
     $stepCreateUrl = \App\Filament\Resources\FunnelSteps\FunnelStepResource::getUrl('create')

@@ -101,6 +101,25 @@ class ViewFunnel extends EditRecord
         return [];
     }
 
+    /**
+     * ViewFunnel extends EditRecord so Filament's default breadcrumb tail
+     * reads "Edit", which is misleading — this page is the funnel overview.
+     * Collapse the trail to just `Funnels > {name}` so operators can tell
+     * they've landed on the view page rather than the edit form.
+     *
+     * @return array<string, string>
+     */
+    public function getBreadcrumbs(): array
+    {
+        /** @var Funnel $funnel */
+        $funnel = $this->record;
+
+        return [
+            FunnelResource::getUrl('index') => FunnelResource::getBreadcrumb(),
+            $funnel->name,
+        ];
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema->components([

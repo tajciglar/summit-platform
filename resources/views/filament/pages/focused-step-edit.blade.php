@@ -21,7 +21,7 @@
         ? "{$nextBase}/preview/step/{$record->id}"
         : null;
 
-    $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('edit', ['record' => $funnel->id]);
+    $funnelEditUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]);
     $funnelsIndexUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('index');
 @endphp
 

@@ -12,7 +12,7 @@
         $label = $registry->get($draft->template_key)['label'] ?? $draft->template_key;
         $palette = array_slice(array_values((array) ($draft->palette ?? [])), 0, 5);
         $previewUrl = $draft->preview_token ? "{$previewBase}/preview/{$draft->preview_token}" : null;
-        $driveTabUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('edit', ['record' => $funnel->id]);
+        $driveTabUrl = \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]);
     @endphp
 
     <div style="display:flex;gap:20px;align-items:center;justify-content:space-between;padding:20px;border:1px solid #e9d5ff;border-radius:12px;background:linear-gradient(135deg,#faf5ff 0%,#ffffff 60%)">
@@ -48,7 +48,7 @@
     </div>
 @else
     @php
-        $driveTabUrl = $funnel ? \App\Filament\Resources\Funnels\FunnelResource::getUrl('edit', ['record' => $funnel->id]) : '#';
+        $driveTabUrl = $funnel ? \App\Filament\Resources\Funnels\FunnelResource::getUrl('view', ['record' => $funnel->id]) : '#';
     @endphp
     <div style="padding:32px;border:1px dashed #cbd5e1;border-radius:12px;background:repeating-linear-gradient(45deg,#fafafa 0 6px,#f4f4f5 6px 12px);text-align:center">
         <h4 style="margin:0 0 4px;font-size:15px;font-weight:600;color:#0f172a">No live landing page yet</h4>

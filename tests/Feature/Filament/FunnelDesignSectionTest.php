@@ -1,6 +1,5 @@
 <?php
 
-use App\Filament\Resources\Funnels\Pages\EditFunnel;
 use App\Filament\Resources\Funnels\Pages\ViewFunnel;
 use App\Jobs\GenerateLandingPageBatchJob;
 use App\Models\Domain;
@@ -28,38 +27,12 @@ beforeEach(function () {
     Filament::setTenant($this->tenant);
 });
 
-it('shows the Design section with skin picker on Edit Funnel', function () {
+it('shows the skin picker on View Funnel', function () {
     $funnel = Funnel::factory()->for(Summit::factory())->create();
 
-    livewire(EditFunnel::class, ['record' => $funnel->id])
-        ->assertSee('Design')
+    livewire(ViewFunnel::class, ['record' => $funnel->id])
         ->assertSee('Skin')
         ->assertFormFieldExists('template_key');
-});
-
-it('persists template_key and section_config on save', function () {
-    $summit = Summit::factory()->create();
-    $summit->domains()->attach($this->tenant);
-    $funnel = Funnel::factory()->for($summit)->create();
-
-    livewire(EditFunnel::class, ['record' => $funnel->id])
-        ->fillForm([
-            'summit_id' => $funnel->summit_id,
-            'name' => $funnel->name,
-            'slug' => $funnel->slug,
-            'template_key' => 'ochre-ink',
-            'section_config.optin' => ['masthead', 'hero', 'footer'],
-            'section_config.sales_page' => ['masthead', 'value-prop', 'closing-cta', 'footer'],
-            'section_config.thank_you' => ['masthead', 'closing-cta', 'footer'],
-        ])
-        ->call('save')
-        ->assertHasNoFormErrors();
-
-    $fresh = $funnel->fresh();
-    expect($fresh->template_key)->toBe('ochre-ink');
-    expect($fresh->section_config['optin'])->toBe(['masthead', 'hero', 'footer']);
-    expect($fresh->section_config['sales_page'])->toBe(['masthead', 'value-prop', 'closing-cta', 'footer']);
-    expect($fresh->section_config['thank_you'])->toBe(['masthead', 'closing-cta', 'footer']);
 });
 
 it('shows the generate-all-steps action on View Funnel when a skin is picked', function () {

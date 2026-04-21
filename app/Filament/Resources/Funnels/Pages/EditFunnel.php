@@ -12,6 +12,15 @@ class EditFunnel extends EditRecord
 {
     protected static string $resource = FunnelResource::class;
 
+    /**
+     * The funnel View page is the real editor (inline-editing + steps + design).
+     * Stale bookmarks to `/funnels/{id}/edit` land here; bounce them to view.
+     */
+    public function mount(int|string $record): void
+    {
+        $this->redirect(static::$resource::getUrl('view', ['record' => $record]));
+    }
+
     protected function getHeaderActions(): array
     {
         return [

@@ -88,10 +88,6 @@ class FunnelsRelationManager extends RelationManager
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
-                Action::make('edit')
-                    ->label('Edit')
-                    ->icon('heroicon-o-pencil-square')
-                    ->url(fn (Funnel $record): string => FunnelResource::getUrl('edit', ['record' => $record])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
