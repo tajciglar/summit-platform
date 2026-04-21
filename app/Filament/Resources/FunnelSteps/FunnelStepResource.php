@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\FunnelSteps;
 
 use App\Enums\BlockType;
+use App\Filament\Resources\FunnelSteps\RelationManagers\BumpsRelationManager;
 use App\Models\FunnelStep;
 use App\Services\Templates\TemplateBlockFactory;
 use App\Support\CurrentSummit;
@@ -87,14 +88,17 @@ class FunnelStepResource extends Resource
                         ->default(false)
                         ->columnSpan(['default' => 1, 'md' => 4]),
                     // Product linkage is optional per step_type. Hidden for
-                    // optin/sales/thank-you; shown for checkout/upsell/downsell.
+                    // optin / thank-you; shown for any step that actually
+                    // sells something: checkout (the main offer), sales_page
+                    // (e.g. a VIP upgrade page), upsell, downsell.
                     Select::make('product_id')
-                        ->label('Product (for checkout / upsell)')
+                        ->label('Product')
+                        ->helperText('Checkout = main offer. Sales page = VIP upgrade. Upsell / downsell = the single product being offered.')
                         ->relationship('product', 'name')
                         ->searchable()
                         ->preload()
                         ->placeholder('No product linked')
-                        ->visible(fn (Get $get): bool => in_array($get('step_type'), ['checkout', 'upsell', 'downsell'], true))
+                        ->visible(fn (Get $get): bool => in_array($get('step_type'), ['checkout', 'sales_page', 'upsell', 'downsell'], true))
                         ->columnSpan(['default' => 1, 'md' => 4]),
                 ]),
 
@@ -209,6 +213,13 @@ class FunnelStepResource extends Resource
             'create' => Pages\CreateFunnelStep::route('/create'),
             'view' => Pages\ViewFunnelStep::route('/{record}'),
             'edit' => Pages\EditFunnelStep::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            BumpsRelationManager::class,
         ];
     }
 
