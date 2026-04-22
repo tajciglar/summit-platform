@@ -57,6 +57,14 @@ class PublicFunnelController extends Controller
         }
 
         $funnel = $step->funnel;
+
+        if (! isset($content['enabled_sections']) && $funnel && is_array($funnel->section_config ?? null)) {
+            $forStep = $funnel->section_config[$step->step_type] ?? null;
+            if (is_array($forStep) && $forStep !== []) {
+                $content['enabled_sections'] = array_values($forStep);
+            }
+        }
+
         $wpUrl = $step->step_type === 'sales_page' ? $funnel?->wp_checkout_redirect_url : null;
 
         return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $wpUrl));
