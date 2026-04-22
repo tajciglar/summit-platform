@@ -13,7 +13,9 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SpeakersRelationManager extends RelationManager
 {
@@ -62,11 +64,17 @@ class SpeakersRelationManager extends RelationManager
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('sort_order')
-                    ->label('Order')
-                    ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->groups([
+                Group::make('pivot.day_number')
+                    ->label('Day')
+                    ->getTitleFromRecordUsing(fn (Speaker $record): string => $record->pivot?->day_number
+                        ? "Day {$record->pivot->day_number}"
+                        : 'Unassigned')
+                    ->getKeyFromRecordUsing(fn (Speaker $record): int => $record->pivot?->day_number ?? 0)
+                    ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('speaker_summit.day_number', $direction)),
+            ])
+            ->defaultGroup('pivot.day_number')
             ->filters([
                 TernaryFilter::make('is_featured'),
             ])
@@ -89,8 +97,11 @@ class SpeakersRelationManager extends RelationManager
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->reorderable('sort_order')
-            ->defaultSort('sort_order')
+            // Reordering is disabled here because drag-to-reorder would update
+            // speakers.sort_order (a global column), while the display order
+            // comes from the pivot's sort_order. Reorder via the Speaker form's
+            // per-summit Repeater instead.
+            ->defaultSort('speaker_summit.day_number')
             ->emptyStateHeading('No speakers yet')
             ->emptyStateDescription('Add the first speaker to populate this summit\'s lineup.')
             ->emptyStateIcon('heroicon-o-microphone');
