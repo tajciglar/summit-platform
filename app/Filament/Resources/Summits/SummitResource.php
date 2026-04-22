@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Summits;
 
 use App\Actions\DuplicateSummit;
 use App\Enums\SummitAudience;
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
 use App\Filament\Resources\Summits\RelationManagers\SpeakersRelationManager;
 use App\Models\Summit;
@@ -18,7 +19,6 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -48,8 +48,8 @@ class SummitResource extends Resource
 
     /**
      * Tenant is Domain — scope summits to those hosted on the active domain
-     * via the domains many-to-many (see scopeEloquentQueryToTenant at the
-     * bottom of this file).
+     * via the `domain_id` foreign key (see scopeEloquentQueryToTenant at the
+     * bottom of this file). A summit belongs to exactly one domain.
      */
 
     /**
@@ -158,23 +158,21 @@ class SummitResource extends Resource
                                 ->seconds(false),
                         ]),
 
-                    SpatieMediaLibraryFileUpload::make('hero')
-                        ->collection('hero')
-                        ->image()
-                        ->imageEditor()
-                        ->imageCropAspectRatio('16:9')
-                        ->maxSize(8192)
-                        ->helperText('Recommended 1920×1080. JPEG / PNG / WebP / AVIF.')
+                    MediaPickerInput::make('hero_media_item_id')
+                        ->category('hero')
+                        ->role('hero')
+                        ->label('Hero image')
                         ->columnSpanFull(),
 
-                    Select::make('domains')
-                        ->label('Published on domains')
-                        ->relationship('domains', 'name')
-                        ->multiple()
+                    Select::make('domain_id')
+                        ->label('Published on domain')
+                        ->relationship('domain', 'name')
+                        ->required()
                         ->preload()
                         ->searchable()
+                        ->default(fn () => Filament::getTenant()?->getKey())
                         ->columnSpanFull()
-                        ->helperText('Which brand sites host this summit. One summit can be on multiple domains.'),
+                        ->helperText('Which brand site hosts this summit. One summit belongs to exactly one domain.'),
                 ]),
         ]);
     }
@@ -293,8 +291,8 @@ class SummitResource extends Resource
     }
 
     /**
-     * Summit scopes to domain via its M2M `domains` relation. Also narrows
-     * to the picked summit when one is selected in the tenant dropdown.
+     * Summit scopes to domain via its `domain_id` FK. Also narrows to the
+     * picked summit when one is selected in the tenant dropdown.
      */
     public static function scopeEloquentQueryToTenant(
         Builder $query,
@@ -305,7 +303,7 @@ class SummitResource extends Resource
             return $query;
         }
 
-        $query->whereHas('domains', fn ($q) => $q->whereKey($tenant->getKey()));
+        $query->where('domain_id', $tenant->getKey());
 
         if ($summitId = CurrentSummit::getId()) {
             $query->whereKey($summitId);
@@ -316,6 +314,6 @@ class SummitResource extends Resource
 
     public static function getTenantOwnershipRelationshipName(): string
     {
-        return 'domains';
+        return 'domain';
     }
 }

@@ -175,3 +175,31 @@
   .green-gold-body .green-gold-pulse-gold { animation: none !important; }
   .green-gold-root { scroll-behavior: auto; }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+ * SALES SECTIONS — scoped affordances for the sales-style section skins
+ * (sales-speakers <details> cards, etc.). Palette tokens reuse the
+ * brand-green + warm-gold vocabulary already in use above.
+ * ───────────────────────────────────────────────────────────────── */
+
+/* Sales speaker <details> cards — "View More" / "View Less" toggle so the
+ * bio-expansion affordance is discoverable without a dedicated button. */
+.green-gold-body details.green-gold-sales-spk summary::-webkit-details-marker {
+  display: none;
+}
+.green-gold-body details.green-gold-sales-spk summary::after {
+  content: 'View More';
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #15803D;
+}
+.green-gold-body details.green-gold-sales-spk[open] summary::after {
+  content: 'View Less';
+}

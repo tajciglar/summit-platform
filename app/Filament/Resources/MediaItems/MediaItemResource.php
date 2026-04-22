@@ -1,0 +1,122 @@
+<?php
+
+namespace App\Filament\Resources\MediaItems;
+
+use App\Enums\MediaCategory;
+use App\Filament\Resources\Concerns\ScopesTenantViaDomainId;
+use App\Filament\Resources\MediaItems\Pages\CreateMediaItem;
+use App\Filament\Resources\MediaItems\Pages\ListMediaItems;
+use App\Models\MediaItem;
+use Filament\Actions\DeleteAction;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+class MediaItemResource extends Resource
+{
+    use ScopesTenantViaDomainId;
+
+    protected static ?string $model = MediaItem::class;
+
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::Photo;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Content';
+
+    protected static ?string $navigationLabel = 'Media library';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $tenant = Filament::getTenant();
+
+        if (! $tenant) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $q) use ($tenant): void {
+            $q->where('domain_id', $tenant->getKey())->orWhereNull('domain_id');
+        });
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema->components([
+            Select::make('category')
+                ->options(MediaCategory::options())
+                ->required(),
+            TextInput::make('sub_category')->maxLength(64),
+            TextInput::make('caption')->maxLength(255),
+            TextInput::make('alt_text')->maxLength(500),
+            FileUpload::make('file_upload')
+                ->label('File')
+                ->disk(config('media-library.disk_name'))
+                ->image()
+                ->acceptedFileTypes([
+                    'image/jpeg', 'image/png', 'image/webp', 'image/avif',
+                    'image/svg+xml', 'application/pdf',
+                ])
+                ->preserveFilenames()
+                ->required()
+                ->dehydrated(false),
+        ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                ImageColumn::make('thumb')
+                    ->state(fn (MediaItem $r) => $r->thumbUrl()),
+                TextColumn::make('category')->badge()->sortable(),
+                TextColumn::make('sub_category')->toggleable(),
+                TextColumn::make('caption')->searchable(),
+                TextColumn::make('usage_count')
+                    ->label('Used in')
+                    ->state(fn (MediaItem $r) => $r->attachments()->count().' places'),
+                TextColumn::make('created_at')->dateTime()->sortable(),
+            ])
+            ->filters([
+                SelectFilter::make('category')->options(MediaCategory::options()),
+                SelectFilter::make('scope')
+                    ->options(['mine' => 'This domain', 'global' => 'Global'])
+                    ->query(function (Builder $query, array $data) {
+                        if (($data['value'] ?? null) === 'global') {
+                            $query->whereNull('domain_id');
+                        } elseif (($data['value'] ?? null) === 'mine') {
+                            $query->whereNotNull('domain_id');
+                        }
+                    }),
+            ])
+            ->recordActions([
+                DeleteAction::make()
+                    ->before(function (MediaItem $record, DeleteAction $action) {
+                        if ($record->attachments()->count() > 0) {
+                            Notification::make()
+                                ->title('In use')
+                                ->body('This item is attached to one or more records. Detach it first.')
+                                ->danger()
+                                ->send();
+                            $action->cancel();
+                        }
+                    }),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListMediaItems::route('/'),
+            'create' => CreateMediaItem::route('/create'),
+        ];
+    }
+}

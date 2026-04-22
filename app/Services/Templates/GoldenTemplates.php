@@ -6,8 +6,11 @@ use App\Models\Speaker;
 
 /**
  * Canonical starter content for the two golden templates we ship:
- *   - aps-parenting (optin / landing) → indigo-gold renderer
- *   - aps-vip (upsell / sales) → lavender-gold renderer
+ *   - aps-parenting (optin / landing) → indigo-gold renderer (optin sections)
+ *   - aps-vip (upsell / sales) → indigo-gold renderer (sales sections)
+ *
+ * Both keys route through the same `indigo-gold` template family; the step
+ * picks its layout by enabling the optin- or sales-style sections.
  *
  * Used to seed FunnelStep.page_content with every section pre-filled so the
  * operator sees a full editable Builder on first open. Speaker UUIDs are
@@ -41,7 +44,7 @@ class GoldenTemplates
                 'content' => self::optinContent(self::speakerIds($summitId)),
             ],
             self::VIP_KEY => [
-                'template_key' => 'lavender-gold',
+                'template_key' => 'indigo-gold',
                 'content' => self::vipContent(),
             ],
             default => throw new \InvalidArgumentException("Unknown golden template: {$goldenKey}"),
@@ -240,8 +243,8 @@ class GoldenTemplates
     private static function vipContent(): array
     {
         return [
-            'topBar' => ['name' => 'ADHD Parenting Summit', 'ctaLabel' => 'Upgrade Now'],
-            'hero' => [
+            'topBar' => ['name' => 'ADHD Parenting Summit'],
+            'salesHero' => [
                 'badge' => 'Special One-Time Offer',
                 'headline' => 'You Can Keep The Invaluable Lessons From All 40+ Summit Experts FOREVER',
                 'subheadline' => 'Watch or re-watch at your own pace with your own VIP Pass.',
@@ -316,7 +319,7 @@ class GoldenTemplates
                 'ctaLabel' => 'Upgrade to VIP Now',
                 'guarantee' => '14-day money-back guarantee',
             ],
-            'speakersSection' => [
+            'salesSpeakers' => [
                 'eyebrow' => 'Learn From These',
                 'headline' => '40+ World-Leading Experts',
             ],
@@ -350,6 +353,8 @@ class GoldenTemplates
             ],
             'footer' => [
                 'brandName' => 'StrategicParenting ADHD',
+                'tagline' => 'Parenting you can rely on',
+                'brandInitial' => 'S',
                 'links' => [
                     ['label' => 'Privacy policy', 'href' => '/privacy'],
                     ['label' => 'Cookies', 'href' => '/cookies'],

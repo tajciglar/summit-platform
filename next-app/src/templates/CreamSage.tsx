@@ -1335,6 +1335,1180 @@ function Footer({ content }: { content: CreamSageContent }) {
   );
 }
 
+/* =======================================================================
+ * ==================  SALES-PAGE SECTIONS  ==============================
+ * -----------------------------------------------------------------------
+ * Styled as a hand-letterpress "members-only" special edition: cream
+ * backgrounds, sage-green accents, rose/clay highlights, Fraunces serif
+ * display and Nunito accents. Each component guards with
+ * `if (!content.xxx) return null;` so optin pages render cleanly.
+ * ======================================================================= */
+
+const CS_SALES = {
+  CREAM: '#FAF7F2',
+  CREAM_DEEP: '#F4EDE2',
+  SAGE: '#4A6B5D',
+  SAGE_DEEP: '#2F4A40',
+  SAGE_SOFT: '#E9EEEA',
+  SAGE_LINE: 'rgba(74,107,93,0.15)',
+  ROSE: '#E8B9A0',
+  ROSE_DEEP: '#D89878',
+  CLAY: '#A85430',
+  CLAY_DEEP: '#C4663D',
+  INK: '#2A2419',
+  INK_SOFT: '#3A3221',
+  INK_MUTED: '#6B5E4C',
+};
+
+const csSalesIconLabels: Record<string, string> = {
+  'infinity': 'Unlimited Access',
+  'clipboard': 'Action Blueprints',
+  'headphones': 'Audio Edition',
+  'captions': 'Subtitles',
+  'file-text': 'Transcripts',
+  'book': 'Workbook',
+};
+
+function CsSalesBonusIcon({ icon }: { icon: string }) {
+  const label = csSalesIconLabels[icon] ?? icon;
+  const color = CS_SALES.SAGE_DEEP;
+  const common = {
+    width: 40,
+    height: 40,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: color,
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-label': label,
+  };
+  if (icon === 'infinity') {
+    return (
+      <svg {...common}>
+        <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      </svg>
+    );
+  }
+  if (icon === 'clipboard') {
+    return (
+      <svg {...common}>
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    );
+  }
+  if (icon === 'headphones') {
+    return (
+      <svg {...common}>
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
+    );
+  }
+  if (icon === 'captions') {
+    return (
+      <svg {...common}>
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
+      </svg>
+    );
+  }
+  if (icon === 'file-text') {
+    return (
+      <svg {...common}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    );
+  }
+  if (icon === 'book') {
+    return (
+      <svg {...common}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+function CsSalesCheckIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={CS_SALES.SAGE_DEEP}
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0, marginTop: 3 }}
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function CsSalesXIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={CS_SALES.CLAY}
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function CsSalesGiftIcon({ size = 20, color = CS_SALES.CLAY }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
+/* SALES HERO — cream letterpress "special edition" cover. */
+function SalesHero({ content }: { content: CreamSageContent }) {
+  if (!content.salesHero) return null;
+  const h = content.salesHero;
+  const brand = content.topBar.brandName;
+  return (
+    <section
+      className="relative overflow-hidden py-20 md:py-24"
+      style={{ background: CS_SALES.CREAM }}
+    >
+      <div
+        className="cream-sage-blob cream-sage-blob-sage"
+        style={{ width: 500, height: 500, top: -150, left: -120, opacity: 0.35 }}
+      />
+      <div
+        className="cream-sage-blob cream-sage-blob-rose"
+        style={{ width: 420, height: 420, bottom: -140, right: -100, opacity: 0.35 }}
+      />
+      <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <span
+          className="inline-flex items-center gap-2 px-4 py-2 mb-8"
+          style={{
+            background: CS_SALES.SAGE_DEEP,
+            color: CS_SALES.CREAM,
+            borderRadius: 999,
+            fontFamily: "'Nunito', 'DM Sans', sans-serif",
+            fontSize: '0.78rem',
+            fontWeight: 700,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+          }}
+        >
+          <span
+            style={{
+              width: 7,
+              height: 7,
+              borderRadius: '50%',
+              background: CS_SALES.ROSE,
+              display: 'inline-block',
+            }}
+          />
+          {h.badge}
+        </span>
+
+        <h1
+          className="font-black text-4xl md:text-5xl lg:text-6xl leading-[1.08] mb-6"
+          style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+        >
+          {h.headline}
+        </h1>
+
+        <p
+          className="text-xl md:text-2xl mb-10 max-w-xl mx-auto"
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontStyle: 'italic',
+            color: CS_SALES.SAGE,
+            lineHeight: 1.55,
+          }}
+        >
+          {h.subheadline}
+        </p>
+
+        {/* Letterpress "book cover" mockup */}
+        <div
+          className="relative mx-auto mb-10 overflow-hidden"
+          style={{
+            width: '100%',
+            maxWidth: 520,
+            aspectRatio: '16/10',
+            borderRadius: '2rem',
+            background: `linear-gradient(160deg,${CS_SALES.SAGE},${CS_SALES.SAGE_DEEP})`,
+            border: `6px solid ${CS_SALES.CREAM_DEEP}`,
+            boxShadow: '0 30px 60px -25px rgba(74,107,93,0.45)',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: 10,
+              background: CS_SALES.ROSE,
+            }}
+          />
+          <div
+            className="h-full w-full flex flex-col items-center justify-center px-8 text-center"
+            style={{ color: CS_SALES.CREAM }}
+          >
+            <p
+              className="mb-3"
+              style={{
+                fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                fontSize: '0.7rem',
+                letterSpacing: '0.35em',
+                textTransform: 'uppercase',
+                opacity: 0.8,
+              }}
+            >
+              Special Edition
+            </p>
+            <p
+              style={{
+                fontFamily: "'Fraunces', serif",
+                fontStyle: 'italic',
+                fontSize: 'clamp(2.2rem,5vw,3.6rem)',
+                lineHeight: 1.05,
+                margin: 0,
+              }}
+            >
+              {h.productLabel}
+            </p>
+            <p
+              className="mt-4"
+              style={{
+                fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                fontSize: '0.75rem',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                opacity: 0.85,
+              }}
+            >
+              {brand}
+            </p>
+          </div>
+        </div>
+
+        <p className="text-base mb-5" style={{ color: CS_SALES.INK_SOFT }}>
+          Total value:{' '}
+          <span
+            style={{
+              fontWeight: 700,
+              color: CS_SALES.CLAY,
+              textDecoration: 'line-through',
+            }}
+          >
+            {h.totalValue}
+          </span>
+        </p>
+
+        <a
+          href="#purchase"
+          id="purchase"
+          className="cream-sage-btn-primary"
+          style={{ fontSize: '1.15rem' }}
+        >
+          {h.ctaLabel}
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <p
+          className="mt-5 text-sm md:text-base"
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontStyle: 'italic',
+            color: CS_SALES.SAGE_DEEP,
+          }}
+        >
+          <strong>{h.ctaNote}</strong>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* INTRO — centered editorial lead-in. */
+function Intro({ content }: { content: CreamSageContent }) {
+  if (!content.intro) return null;
+  const i = content.intro;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM }}>
+      <div className="max-w-2xl mx-auto px-6 text-center">
+        <span
+          className="cream-sage-eyebrow mb-3 inline-block"
+          style={{ color: CS_SALES.CLAY }}
+        >
+          {i.eyebrow}
+        </span>
+        <h2
+          className="font-black text-4xl md:text-5xl leading-tight mb-8"
+          style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+        >
+          {i.headline}
+        </h2>
+        {i.paragraphs.map((p, idx) => (
+          <p
+            key={`intro-p-${idx}`}
+            className={`text-xl md:text-2xl leading-[1.7] mb-6 ${idx === 0 ? 'cream-sage-dropcap' : ''}`}
+            style={{ color: CS_SALES.INK_SOFT }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* VIP BONUSES — soft-card grid with sage-outlined icon tiles. */
+function VipBonuses({ content }: { content: CreamSageContent }) {
+  if (!content.vipBonuses) return null;
+  const v = content.vipBonuses;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM_DEEP }}>
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span
+            className="cream-sage-eyebrow mb-3 inline-block"
+            style={{ color: CS_SALES.CLAY }}
+          >
+            {v.eyebrow}
+          </span>
+          <h2
+            className="font-black text-4xl md:text-5xl leading-tight"
+            style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+          >
+            {v.headline}
+          </h2>
+        </div>
+        <div
+          className="grid gap-6"
+          style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))' }}
+        >
+          {v.items.map((item, idx) => (
+            <article
+              key={`vip-bonus-${idx}`}
+              className="cream-sage-soft-card overflow-hidden"
+            >
+              <div
+                className="flex flex-col items-center justify-center gap-3 py-10 px-5"
+                style={{
+                  background: CS_SALES.SAGE_SOFT,
+                  borderBottom: `1px solid ${CS_SALES.SAGE_LINE}`,
+                }}
+              >
+                <CsSalesBonusIcon icon={item.icon} />
+                <span
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontStyle: 'italic',
+                    color: CS_SALES.SAGE_DEEP,
+                    fontSize: '1.05rem',
+                  }}
+                >
+                  {csSalesIconLabels[item.icon] ?? item.icon}
+                </span>
+              </div>
+              <div className="px-7 py-6">
+                <h3
+                  className="font-bold text-xl mb-2"
+                  style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-base mb-4 leading-relaxed"
+                  style={{ color: CS_SALES.INK_SOFT }}
+                >
+                  {item.description}
+                </p>
+                <span
+                  className="inline-block"
+                  style={{
+                    background: CS_SALES.CREAM,
+                    border: `1px solid ${CS_SALES.SAGE_LINE}`,
+                    color: CS_SALES.SAGE_DEEP,
+                    fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                    fontWeight: 700,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    padding: '0.35rem 0.85rem',
+                    borderRadius: 999,
+                  }}
+                >
+                  {item.valueLabel}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* FREE GIFTS — rose-tinted "gift tag" card grid. */
+function FreeGifts({ content }: { content: CreamSageContent }) {
+  if (!content.freeGifts) return null;
+  const fg = content.freeGifts;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM }}>
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span
+            className="cream-sage-eyebrow mb-3 inline-block"
+            style={{ color: CS_SALES.CLAY }}
+          >
+            {fg.eyebrow}
+          </span>
+          <h2
+            className="font-black text-4xl md:text-5xl leading-tight"
+            style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+          >
+            {fg.headline}
+          </h2>
+        </div>
+        <div
+          className="grid gap-6"
+          style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))' }}
+        >
+          {fg.items.map((gift, idx) => (
+            <article
+              key={`free-gift-${idx}`}
+              className="cream-sage-soft-card overflow-hidden"
+              style={{ background: CS_SALES.CREAM }}
+            >
+              <div
+                className="flex flex-col items-center justify-center gap-3 py-10 px-5"
+                style={{
+                  background: `linear-gradient(160deg,${CS_SALES.ROSE},${CS_SALES.ROSE_DEEP})`,
+                  color: CS_SALES.CREAM,
+                }}
+              >
+                <CsSalesGiftIcon size={40} color={CS_SALES.CREAM} />
+                <span
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontStyle: 'italic',
+                    fontSize: '1.05rem',
+                  }}
+                >
+                  Free Gift №{gift.giftNumber}
+                </span>
+              </div>
+              <div className="px-7 py-6">
+                <p
+                  className="mb-1"
+                  style={{
+                    fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                    color: CS_SALES.CLAY,
+                    fontWeight: 700,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Free Gift №{gift.giftNumber}
+                </p>
+                <h3
+                  className="font-bold text-xl mb-2"
+                  style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+                >
+                  {gift.title}
+                </h3>
+                <p
+                  className="text-base mb-4 leading-relaxed"
+                  style={{ color: CS_SALES.INK_SOFT }}
+                >
+                  {gift.description}
+                </p>
+                <span
+                  className="inline-block"
+                  style={{
+                    background: CS_SALES.CREAM_DEEP,
+                    border: `1px solid ${CS_SALES.SAGE_LINE}`,
+                    color: CS_SALES.CLAY,
+                    fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                    fontWeight: 700,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    padding: '0.35rem 0.85rem',
+                    borderRadius: 999,
+                  }}
+                >
+                  {gift.valueLabel}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p
+          className="text-center mt-10 text-base"
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontStyle: 'italic',
+            color: CS_SALES.SAGE_DEEP,
+          }}
+        >
+          {fg.deliveryNote}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* UPGRADE SECTION — editorial preamble to the PriceCard. */
+function UpgradeSection({ content }: { content: CreamSageContent }) {
+  if (!content.upgradeSection) return null;
+  const u = content.upgradeSection;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM_DEEP }}>
+      <div className="max-w-2xl mx-auto px-6 text-center">
+        <span
+          className="cream-sage-eyebrow mb-3 inline-block"
+          style={{ color: CS_SALES.CLAY }}
+        >
+          {u.eyebrow}
+        </span>
+        <h2
+          className="font-black text-4xl md:text-5xl leading-tight mb-8"
+          style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+        >
+          {u.headline}
+        </h2>
+        {u.paragraphs.map((p, idx) => (
+          <p
+            key={`upgrade-p-${idx}`}
+            className="text-xl leading-[1.7] mb-5"
+            style={{ color: CS_SALES.INK_SOFT }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* PRICE CARD — cream soft-card with sage accents, rose spine, single render. */
+function PriceCard({ content }: { content: CreamSageContent }) {
+  if (!content.priceCard) return null;
+  const p = content.priceCard;
+  return (
+    <section
+      className="py-20 md:py-24"
+      style={{ background: CS_SALES.CREAM }}
+      id="purchase"
+    >
+      <div className="max-w-6xl mx-auto px-6">
+        <div
+          className="relative mx-auto overflow-hidden"
+          style={{
+            maxWidth: 520,
+            width: '100%',
+            background: CS_SALES.CREAM,
+            border: `1px solid ${CS_SALES.SAGE_LINE}`,
+            borderRadius: 28,
+            boxShadow: '0 30px 70px -30px rgba(74,107,93,0.35)',
+            padding: '2rem 1.75rem',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: 8,
+              background: `linear-gradient(180deg,${CS_SALES.ROSE},${CS_SALES.CLAY})`,
+            }}
+          />
+
+          <div
+            className="inline-flex items-center gap-2 mb-4"
+            style={{
+              background: CS_SALES.SAGE_DEEP,
+              color: CS_SALES.CREAM,
+              padding: '0.35rem 0.9rem',
+              borderRadius: 999,
+              fontFamily: "'Nunito', 'DM Sans', sans-serif",
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+            }}
+          >
+            {p.badge}
+          </div>
+
+          <h3
+            className="font-bold text-2xl mb-2 leading-tight"
+            style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+          >
+            {p.headline}
+          </h3>
+          <p
+            className="text-base mb-4"
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontStyle: 'italic',
+              color: CS_SALES.INK_MUTED,
+            }}
+          >
+            {p.note}
+          </p>
+
+          <ul
+            className="space-y-2 mb-6"
+            style={{ listStyle: 'none', padding: 0 }}
+          >
+            {p.features.map((f, i) => (
+              <li
+                key={`pc-feat-${i}`}
+                className="flex gap-3 items-start text-base"
+                style={{ color: CS_SALES.INK_SOFT, lineHeight: 1.5 }}
+              >
+                <CsSalesCheckIcon />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div
+            className="mb-6"
+            style={{
+              background: CS_SALES.CREAM_DEEP,
+              border: `1px solid ${CS_SALES.SAGE_LINE}`,
+              borderRadius: 16,
+              padding: '1rem 1.1rem',
+            }}
+          >
+            <p
+              className="mb-3 flex items-center gap-2"
+              style={{
+                fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: CS_SALES.SAGE_DEEP,
+              }}
+            >
+              <CsSalesGiftIcon size={16} color={CS_SALES.SAGE_DEEP} /> {p.giftsBoxTitle}
+            </p>
+            {p.giftItems.map((g, i) => (
+              <div
+                key={`pc-gift-${i}`}
+                className="flex gap-2 items-start py-1 text-base"
+                style={{ color: CS_SALES.INK_SOFT }}
+              >
+                <CsSalesCheckIcon />
+                <span>{g}</span>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="text-center pt-6"
+            style={{ borderTop: `1px solid ${CS_SALES.SAGE_LINE}` }}
+          >
+            <p
+              className="text-base mb-1"
+              style={{
+                color: CS_SALES.INK_MUTED,
+                textDecoration: 'line-through',
+              }}
+            >
+              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+            </p>
+            <p
+              className="font-black leading-none mb-1"
+              style={{
+                fontFamily: "'Fraunces', serif",
+                fontSize: '2.8rem',
+                color: CS_SALES.SAGE_DEEP,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {p.currentPrice}
+            </p>
+            <p
+              className="font-semibold text-sm mb-5"
+              style={{
+                fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                color: CS_SALES.SAGE,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}
+            >
+              {p.savings}
+            </p>
+            <a
+              href="#purchase"
+              className="cream-sage-btn-primary"
+              style={{ fontSize: '1.1rem' }}
+            >
+              {p.ctaLabel}
+              <span aria-hidden="true">→</span>
+            </a>
+            <p
+              className="mt-3 text-sm"
+              style={{
+                fontFamily: "'Fraunces', serif",
+                fontStyle: 'italic',
+                color: CS_SALES.INK_MUTED,
+              }}
+            >
+              {p.guarantee}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* SALES SPEAKERS — expandable <details> cards with gradient/photo avatars. */
+function SalesSpeakers({
+  content,
+  speakers,
+}: {
+  content: CreamSageContent;
+  speakers: Record<string, Speaker>;
+}) {
+  if (!content.salesSpeakers) return null;
+  const s = content.salesSpeakers;
+  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  if (sortedSpeakers.length === 0) return null;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM }}>
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span
+            className="cream-sage-eyebrow mb-3 inline-block"
+            style={{ color: CS_SALES.CLAY }}
+          >
+            {s.eyebrow}
+          </span>
+          <h2
+            className="font-black text-4xl md:text-5xl leading-tight"
+            style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+          >
+            {s.headline}
+          </h2>
+        </div>
+        <div
+          className="grid gap-5"
+          style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))' }}
+        >
+          {sortedSpeakers.map((spk, idx) => (
+            <details
+              key={spk.id}
+              className="cream-sage-soft-card overflow-hidden"
+            >
+              <summary
+                style={{
+                  listStyle: 'none',
+                  cursor: 'pointer',
+                  padding: '1.75rem 1.25rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  gap: '0.85rem',
+                }}
+              >
+                {spk.photoUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={spk.photoUrl}
+                    alt={displayName(spk)}
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `3px solid ${CS_SALES.CREAM}`,
+                      boxShadow: `0 0 0 4px ${CS_SALES.CREAM_DEEP}, 0 10px 24px -10px rgba(74,107,93,0.4)`,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      background: SPEAKER_GRADIENTS[idx % SPEAKER_GRADIENTS.length],
+                      display: 'grid',
+                      placeItems: 'center',
+                      color: 'rgba(250,247,242,0.85)',
+                      fontFamily: "'Fraunces', serif",
+                      fontStyle: 'italic',
+                      fontSize: '1.9rem',
+                    }}
+                  >
+                    {initialsFromSpeaker(spk)}
+                  </div>
+                )}
+                <div className="flex flex-col gap-1">
+                  <p
+                    className="font-bold text-base"
+                    style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.SAGE_DEEP, margin: 0 }}
+                  >
+                    {displayName(spk)}
+                  </p>
+                  {spk.title ? (
+                    <p
+                      className="text-sm"
+                      style={{ color: CS_SALES.INK_MUTED, margin: 0 }}
+                    >
+                      {spk.title}
+                    </p>
+                  ) : null}
+                  {spk.masterclassTitle ? (
+                    <p
+                      className="text-sm"
+                      style={{
+                        fontFamily: "'Fraunces', serif",
+                        fontStyle: 'italic',
+                        color: CS_SALES.INK_SOFT,
+                        margin: 0,
+                      }}
+                    >
+                      {spk.masterclassTitle}
+                    </p>
+                  ) : null}
+                </div>
+              </summary>
+              {spk.shortBio ? (
+                <p
+                  className="px-6 pb-6 text-base leading-relaxed text-center"
+                  style={{ color: CS_SALES.INK_SOFT, margin: 0 }}
+                >
+                  {spk.shortBio}
+                </p>
+              ) : null}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* COMPARISON TABLE — Free Pass vs VIP Pass, cream palette. */
+function ComparisonTable({ content }: { content: CreamSageContent }) {
+  if (!content.comparisonTable) return null;
+  const c = content.comparisonTable;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM_DEEP }}>
+      <div className="max-w-3xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span
+            className="cream-sage-eyebrow mb-3 inline-block"
+            style={{ color: CS_SALES.CLAY }}
+          >
+            {c.eyebrow}
+          </span>
+          <h2
+            className="font-black text-4xl md:text-5xl leading-tight"
+            style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+          >
+            {c.headline}
+          </h2>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'separate',
+              borderSpacing: 0,
+              borderRadius: 20,
+              overflow: 'hidden',
+              background: CS_SALES.CREAM,
+              border: `1px solid ${CS_SALES.SAGE_LINE}`,
+              fontFamily: "'Nunito', 'DM Sans', sans-serif",
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    background: CS_SALES.SAGE_SOFT,
+                    color: CS_SALES.SAGE_DEEP,
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    padding: '1rem 1.1rem',
+                    textAlign: 'left',
+                  }}
+                >
+                  Feature
+                </th>
+                <th
+                  style={{
+                    background: CS_SALES.SAGE_SOFT,
+                    color: CS_SALES.SAGE_DEEP,
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    padding: '1rem 1.1rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  Free Pass
+                </th>
+                <th
+                  style={{
+                    background: CS_SALES.SAGE_SOFT,
+                    color: CS_SALES.SAGE_DEEP,
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    padding: '1rem 1.1rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  VIP Pass
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {c.rows.map((row, i) => (
+                <tr key={`cmp-row-${i}`}>
+                  <td
+                    style={{
+                      padding: '1rem 1.1rem',
+                      borderTop: `1px solid ${CS_SALES.SAGE_LINE}`,
+                      fontWeight: 600,
+                      fontSize: '0.95rem',
+                      color: CS_SALES.INK,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {row.label}
+                  </td>
+                  <td
+                    style={{
+                      padding: '1rem 1.1rem',
+                      borderTop: `1px solid ${CS_SALES.SAGE_LINE}`,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {row.freePass ? (
+                      <span
+                        style={{
+                          display: 'inline-grid',
+                          placeItems: 'center',
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: CS_SALES.SAGE_SOFT,
+                        }}
+                      >
+                        <CsSalesCheckIcon />
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'inline-grid',
+                          placeItems: 'center',
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: 'rgba(168,84,48,0.12)',
+                        }}
+                      >
+                        <CsSalesXIcon />
+                      </span>
+                    )}
+                  </td>
+                  <td
+                    style={{
+                      padding: '1rem 1.1rem',
+                      borderTop: `1px solid ${CS_SALES.SAGE_LINE}`,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {row.vipPass ? (
+                      <span
+                        style={{
+                          display: 'inline-grid',
+                          placeItems: 'center',
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: CS_SALES.SAGE_SOFT,
+                        }}
+                      >
+                        <CsSalesCheckIcon />
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'inline-grid',
+                          placeItems: 'center',
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: 'rgba(168,84,48,0.12)',
+                        }}
+                      >
+                        <CsSalesXIcon />
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* GUARANTEE — sage-on-cream "seal of reassurance" card. */
+function Guarantee({ content }: { content: CreamSageContent }) {
+  if (!content.guarantee) return null;
+  const g = content.guarantee;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM }}>
+      <div className="max-w-2xl mx-auto px-6">
+        <div
+          className="flex flex-col md:flex-row items-center gap-6 p-8"
+          style={{
+            background: CS_SALES.CREAM_DEEP,
+            border: `2px dashed ${CS_SALES.SAGE}`,
+            borderRadius: 24,
+          }}
+        >
+          <div
+            className="shrink-0 flex items-center justify-center"
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: '50%',
+              background: CS_SALES.SAGE_DEEP,
+              color: CS_SALES.CREAM,
+              fontFamily: "'Fraunces', serif",
+            }}
+          >
+            <div className="text-center leading-none">
+              <p
+                className="font-black"
+                style={{ fontSize: '2rem', color: CS_SALES.ROSE }}
+              >
+                {g.days}
+              </p>
+              <p
+                className="uppercase"
+                style={{
+                  fontFamily: "'Nunito', 'DM Sans', sans-serif",
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.22em',
+                  marginTop: 4,
+                }}
+              >
+                Days
+              </p>
+            </div>
+          </div>
+          <div className="text-center md:text-left">
+            <h3
+              className="font-bold text-2xl mb-2 leading-tight"
+              style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+            >
+              {g.heading}
+            </h3>
+            <p
+              className="text-base leading-relaxed"
+              style={{ color: CS_SALES.INK_SOFT, margin: 0 }}
+            >
+              {g.body}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* WHY SECTION — editorial essay close-out. */
+function WhySection({ content }: { content: CreamSageContent }) {
+  if (!content.whySection) return null;
+  const w = content.whySection;
+  return (
+    <section className="py-20 md:py-24" style={{ background: CS_SALES.CREAM_DEEP }}>
+      <div className="max-w-2xl mx-auto px-6 text-center">
+        <h2
+          className="font-black text-4xl md:text-5xl leading-tight mb-4"
+          style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
+        >
+          {w.headline}
+        </h2>
+        <p
+          className="text-xl md:text-2xl mb-8 max-w-xl mx-auto"
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontStyle: 'italic',
+            color: CS_SALES.SAGE,
+            lineHeight: 1.5,
+          }}
+        >
+          {w.subheadline}
+        </p>
+        {w.paragraphs.map((p, idx) => (
+          <p
+            key={`why-p-${idx}`}
+            className="text-lg md:text-xl leading-[1.7] mb-5"
+            style={{ color: CS_SALES.INK_SOFT }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ============== ROOT COMPONENT ============== */
 export function CreamSage({ content, speakers, funnelId, enabledSections }: RootProps) {
   const enabled = new Set(enabledSections ?? creamSageDefaultEnabledSections);
@@ -1362,11 +2536,24 @@ export function CreamSage({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('shifts') && <Shifts content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
+
+        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('intro') && <Intro content={content} />}
+        {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
+        {enabled.has('free-gifts') && <FreeGifts content={content} />}
+        {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
+        {enabled.has('comparison-table') && <ComparisonTable content={content} />}
+        {enabled.has('guarantee') && <Guarantee content={content} />}
+        {enabled.has('why-section') && <WhySection content={content} />}
       </main>
 
       {enabled.has('footer') && <Footer content={content} />}
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      {enabled.has('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      )}
     </div>
   );
 }

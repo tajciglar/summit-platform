@@ -2,6 +2,7 @@
 // renders this template. Fonts (Poppins / Source Sans 3) must be loaded by
 // the page — see preview/public routes wiring.
 import './green-gold.styles.css';
+import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
 import type { GreenGoldContent } from './green-gold.schema';
 import { greenGoldDefaultEnabledSections } from './green-gold.sections';
@@ -1218,6 +1219,540 @@ function Footer({ content }: { content: GreenGoldContent }) {
   );
 }
 
+/* =======================================================================
+ * SALES SECTIONS — heartland-green + warm gold editorial skin.
+ *
+ * These components render when sales-style sections are enabled. They share
+ * the green-gold palette (brand-green + gold + cream) and typography
+ * (Poppins headings, Source Sans 3 body) with the optin sections, so a
+ * funnel that jumps optin → sales_page preserves the same brand voice.
+ *
+ * Each component short-circuits with `if (!content.xxx) return null;` so
+ * optin pages (which omit these fields) render cleanly.
+ * ======================================================================= */
+
+const GG_SALES = {
+  GREEN50: '#F0FDF4',
+  GREEN100: '#DCFCE7',
+  GREEN200: '#BBF7D0',
+  GREEN300: '#86EFAC',
+  GREEN400: '#4ADE80',
+  GREEN500: '#22C55E',
+  GREEN600: '#16A34A',
+  GREEN700: '#15803D',
+  GREEN800: '#166534',
+  GREEN900: '#14532D',
+  GOLD300: '#FDE68A',
+  GOLD400: '#FACC15',
+  GOLD500: '#EAB308',
+  GOLD600: '#CA8A04',
+  GOLD700: '#A16207',
+  CREAM: '#FFF9E6',
+  CREAM_BORDER: '#F0E1A8',
+  INK900: '#1A2E1A',
+  INK800: '#1F3520',
+  INK700: '#2A3E2B',
+  INK600: 'rgba(26,46,26,0.7)',
+  INK500: 'rgba(26,46,26,0.55)',
+};
+
+const salesIconLabels: Record<string, string> = {
+  'infinity': 'Unlimited Access',
+  'clipboard': 'Action Blueprints',
+  'headphones': 'Audio Edition',
+  'captions': 'Subtitles',
+  'file-text': 'Transcripts',
+  'book': 'Workbook',
+};
+
+function SalesBonusIcon({ icon }: { icon: string }) {
+  const label = salesIconLabels[icon] ?? icon;
+  const color = GG_SALES.GREEN700;
+  if (icon === 'infinity') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      </svg>
+    );
+  }
+  if (icon === 'clipboard') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    );
+  }
+  if (icon === 'headphones') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
+    );
+  }
+  if (icon === 'captions') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
+      </svg>
+    );
+  }
+  if (icon === 'file-text') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    );
+  }
+  if (icon === 'book') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+function SalesCheckIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GG_SALES.GREEN600} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function SalesXIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function SalesArrowRight({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function SalesGiftIcon({ size = 20, color = GG_SALES.GOLD700 }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
+/* Sales CTA button — warm-gold filled pill, matches the optin FreeGift CTA
+ * so the visual rhyme between step types is preserved. */
+const salesBtnCta: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+  padding: '1rem 2rem',
+  background: GG_SALES.GOLD500,
+  color: GG_SALES.INK900,
+  fontFamily: 'Poppins, sans-serif',
+  fontWeight: 800,
+  fontSize: '1.05rem',
+  borderRadius: '9999px',
+  boxShadow: '0 10px 24px -8px rgba(234,179,8,.6), inset 0 -3px 0 rgba(0,0,0,.08)',
+  letterSpacing: '.04em',
+  textTransform: 'uppercase',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+};
+
+const salesBtnCtaLg: CSSProperties = { ...salesBtnCta, padding: '1.15rem 2.4rem', fontSize: '1.15rem' };
+
+/* Shared section eyebrow style: bold, uppercase, letter-spaced green —
+ * matches optin sections (Press / Outcomes) so the sales page reads like
+ * the same publication. */
+const salesEyebrow: CSSProperties = {
+  fontFamily: 'Poppins, sans-serif',
+  fontWeight: 700,
+  fontSize: '0.8rem',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: GG_SALES.GREEN600,
+  marginBottom: '0.6rem',
+};
+
+const salesHeadline: CSSProperties = {
+  fontFamily: 'Poppins, sans-serif',
+  fontWeight: 900,
+  fontSize: 'clamp(1.75rem,3vw,2.5rem)',
+  color: GG_SALES.INK900,
+  lineHeight: 1.15,
+  letterSpacing: '-0.01em',
+};
+
+/* SALES HERO — soft green gradient wash, red live badge, warm-gold product
+ * mockup, pulsing gold CTA. */
+function SalesHero({ content }: { content: GreenGoldContent }) {
+  if (!content.salesHero) return null;
+  const h = content.salesHero;
+  const topName = content.topBar.title;
+  return (
+    <section style={{ padding: '2.5rem 1.25rem 4rem', background: `linear-gradient(180deg,${GG_SALES.GREEN50} 0%,#FFFFFF 60%)` }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', fontFamily: 'Poppins, sans-serif', fontWeight: 800, letterSpacing: '0.22em', color: '#fff', background: '#dc2626', borderRadius: 9999, padding: '0.5rem 1rem', marginBottom: '1.5rem', textTransform: 'uppercase', boxShadow: '0 4px 14px rgba(220,38,38,.35)' }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
+          {h.badge}
+        </span>
+
+        <h1 className="green-gold-heading" style={{ fontWeight: 900, fontSize: 'clamp(1.75rem,3.8vw,2.6rem)', lineHeight: 1.15, letterSpacing: '-0.01em', color: GG_SALES.INK900, marginBottom: '1rem' }}>
+          {h.headline.split('40+').map((part, i, arr) =>
+            i < arr.length - 1
+              ? <span key={i}>{part}<span style={{ background: GG_SALES.GOLD300, padding: '0 0.35rem', borderRadius: 6 }}>40+</span></span>
+              : <span key={i}>{part}</span>
+          )}
+        </h1>
+
+        <p style={{ fontFamily: 'Source Sans 3, system-ui, sans-serif', fontSize: 'clamp(1.05rem,2vw,1.3rem)', color: GG_SALES.INK600, maxWidth: 680, margin: '0 auto 2rem', lineHeight: 1.55 }}>
+          {h.subheadline}
+        </p>
+
+        {/* Product mockup — heartland green radial with warm-gold highlights */}
+        <div style={{ maxWidth: 560, margin: '0 auto 2rem', borderRadius: 20, overflow: 'hidden', boxShadow: '0 28px 56px -18px rgba(20,83,45,.45)', aspectRatio: '16/9', background: `linear-gradient(135deg,${GG_SALES.GREEN900},${GG_SALES.GREEN700})`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.4, background: `radial-gradient(circle at 20% 50%,${GG_SALES.GREEN400},transparent 55%),radial-gradient(circle at 80% 55%,${GG_SALES.GOLD400},transparent 45%)` }} />
+          <div style={{ position: 'relative', textAlign: 'center', color: '#fff', padding: '1.5rem' }}>
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.42em', textTransform: 'uppercase', opacity: 0.8, marginBottom: '0.6rem' }}>Full Access</p>
+            <p className="green-gold-heading" style={{ fontSize: 'clamp(2rem,5vw,3.6rem)', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1, margin: 0 }}>{h.productLabel}</p>
+            <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.72rem', fontWeight: 600, opacity: 0.85, marginTop: '0.75rem', letterSpacing: '0.24em', textTransform: 'uppercase' }}>{topName}</p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: '0.88rem', color: GG_SALES.INK700, marginBottom: '0.75rem' }}>
+          Total value: <span style={{ fontWeight: 800, color: GG_SALES.GREEN700, textDecoration: 'line-through' }}>{h.totalValue}</span>
+        </p>
+        <a href="#purchase" id="purchase" className="green-gold-pulse-gold" style={salesBtnCtaLg}>
+          {h.ctaLabel} <SalesArrowRight size={20} />
+        </a>
+        <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: GG_SALES.GREEN700, fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
+          <strong>{h.ctaNote}</strong>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* INTRO — bold green eyebrow + black headline + generous body paragraphs. */
+function Intro({ content }: { content: GreenGoldContent }) {
+  if (!content.intro) return null;
+  const i = content.intro;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <p className="green-gold-heading" style={salesEyebrow}>{i.eyebrow}</p>
+        <h2 className="green-gold-heading" style={{ ...salesHeadline, marginBottom: '1.5rem' }}>{i.headline}</h2>
+        {i.paragraphs.map((p, idx) => (
+          <p key={idx} style={{ color: GG_SALES.INK700, fontSize: '1.1rem', lineHeight: 1.75, marginBottom: '1rem' }}>{p}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* VIP BONUSES — soft-green tinted background, white cards with gradient
+ * green icon tiles and cream gold value pills. */
+function VipBonuses({ content }: { content: GreenGoldContent }) {
+  if (!content.vipBonuses) return null;
+  const v = content.vipBonuses;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: GG_SALES.GREEN50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p className="green-gold-heading" style={salesEyebrow}>{v.eyebrow}</p>
+          <h2 className="green-gold-heading" style={salesHeadline}>{v.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.25rem' }}>
+          {v.items.map((item, i) => (
+            <div key={i} style={{ background: '#fff', border: `1px solid ${GG_SALES.GREEN200}`, borderRadius: 20, boxShadow: '0 10px 26px -14px rgba(20,83,45,.3)', overflow: 'hidden', position: 'relative' }}>
+              <div style={{ background: `linear-gradient(135deg,${GG_SALES.GREEN100},${GG_SALES.GREEN200})`, aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: GG_SALES.GREEN700, padding: '1.25rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                  <SalesBonusIcon icon={item.icon} />
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '0.95rem', letterSpacing: '0.02em' }}>{salesIconLabels[item.icon]}</span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <h3 className="green-gold-heading" style={{ fontWeight: 800, fontSize: '1.05rem', color: GG_SALES.INK900, marginBottom: '0.45rem' }}>{item.title}</h3>
+                <p style={{ fontSize: '0.92rem', color: GG_SALES.INK700, lineHeight: 1.6, marginBottom: '0.85rem' }}>{item.description}</p>
+                <span className="green-gold-heading" style={{ display: 'inline-block', background: GG_SALES.CREAM, border: `1px solid ${GG_SALES.CREAM_BORDER}`, color: GG_SALES.GOLD700, fontWeight: 800, fontSize: '.7rem', letterSpacing: '.14em', padding: '.35rem .75rem', borderRadius: 9999 }}>{item.valueLabel}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* FREE GIFTS — cream/gold card grid with gift icon tiles and red "Free Gift #n"
+ * eyebrows. Feels like a boxed present. */
+function FreeGifts({ content }: { content: GreenGoldContent }) {
+  if (!content.freeGifts) return null;
+  const fg = content.freeGifts;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p className="green-gold-heading" style={salesEyebrow}>{fg.eyebrow}</p>
+          <h2 className="green-gold-heading" style={salesHeadline}>{fg.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: '1.25rem' }}>
+          {fg.items.map((gift, i) => (
+            <div key={i} style={{ background: GG_SALES.CREAM, border: `1px solid ${GG_SALES.CREAM_BORDER}`, borderRadius: 20, boxShadow: '0 10px 26px -14px rgba(234,179,8,.3)', overflow: 'hidden' }}>
+              <div style={{ background: `linear-gradient(135deg,#FFF6D6,${GG_SALES.GOLD300})`, aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: GG_SALES.GOLD700, padding: '1.25rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                  <SalesGiftIcon size={40} color={GG_SALES.GOLD700} />
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '0.95rem' }}>Free Gift #{gift.giftNumber}</span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <p className="green-gold-heading" style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '.18em', color: '#dc2626', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Free Gift #{gift.giftNumber}</p>
+                <h3 className="green-gold-heading" style={{ fontWeight: 800, fontSize: '1.05rem', color: GG_SALES.INK900, marginBottom: '0.45rem' }}>{gift.title}</h3>
+                <p style={{ fontSize: '0.92rem', color: GG_SALES.INK700, lineHeight: 1.6, marginBottom: '0.85rem' }}>{gift.description}</p>
+                <span className="green-gold-heading" style={{ display: 'inline-block', background: '#fff', border: `1px solid ${GG_SALES.CREAM_BORDER}`, color: GG_SALES.GOLD700, fontWeight: 800, fontSize: '.7rem', letterSpacing: '.14em', padding: '.35rem .75rem', borderRadius: 9999 }}>{gift.valueLabel}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ textAlign: 'center', marginTop: '1.75rem', fontSize: '0.92rem', color: GG_SALES.INK600 }}>{fg.deliveryNote}</p>
+      </div>
+    </section>
+  );
+}
+
+/* UPGRADE SECTION — green-tinted preamble before the PriceCard. */
+function UpgradeSection({ content }: { content: GreenGoldContent }) {
+  if (!content.upgradeSection) return null;
+  const u = content.upgradeSection;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: GG_SALES.GREEN50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p className="green-gold-heading" style={salesEyebrow}>{u.eyebrow}</p>
+          <h2 className="green-gold-heading" style={{ ...salesHeadline, marginBottom: '1.5rem' }}>{u.headline}</h2>
+          {u.paragraphs.map((p, i) => (
+            <p key={i} style={{ color: GG_SALES.INK700, fontSize: '1.05rem', lineHeight: 1.75, marginBottom: '0.85rem', maxWidth: 680, margin: '0 auto 0.85rem' }}>{p}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* PRICE CARD — white card with green border, top gradient bar, bullet
+ * features, cream gift box, strikethrough value, large green price, gold
+ * pulse CTA. Renders ONCE. */
+function PriceCard({ content }: { content: GreenGoldContent }) {
+  if (!content.priceCard) return null;
+  const p = content.priceCard;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }} id="purchase">
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{
+          background: '#fff',
+          border: `2px solid ${GG_SALES.GREEN500}`,
+          borderRadius: 24,
+          boxShadow: '0 26px 48px -22px rgba(20,83,45,.4)',
+          padding: '1.75rem 1.5rem',
+          position: 'relative',
+          overflow: 'hidden',
+          maxWidth: 480,
+          width: '100%',
+          margin: '0 auto',
+        }}>
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 6, background: `linear-gradient(90deg,${GG_SALES.GREEN600},${GG_SALES.GOLD400},${GG_SALES.GREEN600})` }} />
+
+          <div className="green-gold-heading" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#dc2626', color: '#fff', padding: '.4rem .9rem', borderRadius: 9999, fontWeight: 800, fontSize: '.72rem', letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+            {p.badge}
+          </div>
+
+          <h3 className="green-gold-heading" style={{ fontWeight: 800, fontSize: '1.25rem', color: GG_SALES.INK900, marginBottom: '0.5rem', lineHeight: 1.3 }}>{p.headline}</h3>
+          <p style={{ fontSize: '0.92rem', color: GG_SALES.INK600, marginBottom: '0.75rem' }}>{p.note}</p>
+
+          <ul style={{ padding: 0, listStyle: 'none', margin: '1rem 0 1.25rem' }}>
+            {p.features.map((f, i) => (
+              <li key={i} style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start', padding: '0.4rem 0', fontSize: '0.95rem', color: GG_SALES.INK700, lineHeight: 1.5 }}>
+                <SalesCheckIcon />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div style={{ background: GG_SALES.CREAM, border: `1px solid ${GG_SALES.CREAM_BORDER}`, borderRadius: 14, padding: '0.95rem 1rem', marginBottom: '1.25rem' }}>
+            <p className="green-gold-heading" style={{ fontWeight: 800, fontSize: '0.85rem', color: GG_SALES.GOLD700, marginBottom: '0.55rem', display: 'flex', alignItems: 'center', gap: '0.45rem', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+              <SalesGiftIcon size={16} /> {p.giftsBoxTitle}
+            </p>
+            {p.giftItems.map((g, i) => (
+              <div key={i} style={{ display: 'flex', gap: '0.55rem', alignItems: 'flex-start', fontSize: '0.9rem', padding: '0.3rem 0', color: GG_SALES.INK700 }}>
+                <SalesCheckIcon />
+                <span>{g}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', borderTop: `1px solid ${GG_SALES.GREEN100}`, paddingTop: '1.25rem' }}>
+            <p style={{ color: GG_SALES.INK500, textDecoration: 'line-through', fontWeight: 500, fontSize: '0.9rem', marginBottom: '0.35rem' }}>
+              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+            </p>
+            <p className="green-gold-heading" style={{ fontSize: '2.75rem', fontWeight: 900, color: GG_SALES.GREEN600, letterSpacing: '-0.025em', lineHeight: 1 }}>{p.currentPrice}</p>
+            <p className="green-gold-heading" style={{ fontSize: '0.85rem', color: GG_SALES.GREEN700, fontWeight: 700, marginTop: '0.3rem', marginBottom: '1rem', letterSpacing: '.02em' }}>{p.savings}</p>
+            <a href="#purchase" className="green-gold-pulse-gold" style={salesBtnCtaLg}>
+              {p.ctaLabel} <SalesArrowRight size={20} />
+            </a>
+            <p style={{ marginTop: '0.85rem', fontSize: '0.78rem', color: GG_SALES.INK600 }}>{p.guarantee}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* SALES SPEAKERS — <details> cards with photo or gradient-initials avatar
+ * and an expandable bio. Uses green-tinted shadows to feel on-brand. */
+function SalesSpeakers({ content, speakers }: { content: GreenGoldContent; speakers: Record<string, Speaker> }) {
+  if (!content.salesSpeakers) return null;
+  const s = content.salesSpeakers;
+  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  if (sortedSpeakers.length === 0) return null;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p className="green-gold-heading" style={salesEyebrow}>{s.eyebrow}</p>
+          <h2 className="green-gold-heading" style={salesHeadline}>{s.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
+          {sortedSpeakers.map((spk, idx) => (
+            <details key={spk.id} className="green-gold-sales-spk" style={{ background: '#fff', border: `1px solid ${GG_SALES.GREEN200}`, borderRadius: 16, boxShadow: '0 6px 18px -10px rgba(20,83,45,.28)', marginBottom: 0, overflow: 'hidden' }}>
+              <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '1.5rem 1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
+                {spk.photoUrl
+                  ? /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${GG_SALES.GREEN200}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(20,83,45,.35)` }} />
+                  : <div className="green-gold-heading" style={{ width: 84, height: 84, borderRadius: '50%', background: SPEAKER_GRADIENTS[idx % SPEAKER_GRADIENTS.length], border: `3px solid ${GG_SALES.GREEN200}`, display: 'grid', placeItems: 'center', color: '#fff', fontSize: '1.6rem', fontWeight: 800, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(20,83,45,.35)` }}>
+                      {(spk.firstName?.[0] ?? '') + (spk.lastName?.[0] ?? '')}
+                    </div>
+                }
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                  <p className="green-gold-heading" style={{ fontWeight: 800, fontSize: '0.98rem', color: GG_SALES.INK900, margin: 0 }}>{spk.firstName} {spk.lastName}</p>
+                  <p style={{ fontSize: '0.78rem', color: GG_SALES.GREEN700, margin: 0, fontWeight: 600 }}>{spk.title}</p>
+                  <p style={{ fontSize: '0.78rem', color: GG_SALES.INK600, margin: 0, fontStyle: 'italic' }}>{spk.masterclassTitle}</p>
+                </div>
+              </summary>
+              {spk.shortBio && (
+                <p style={{ padding: '0 1.5rem 1.5rem', color: GG_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.65, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
+              )}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* COMPARISON TABLE — Free Pass vs VIP Pass side-by-side. Green header bar,
+ * cream-tinted VIP column to emphasize the upgrade. */
+function ComparisonTable({ content }: { content: GreenGoldContent }) {
+  if (!content.comparisonTable) return null;
+  const c = content.comparisonTable;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: GG_SALES.GREEN50 }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p className="green-gold-heading" style={salesEyebrow}>{c.eyebrow}</p>
+          <h2 className="green-gold-heading" style={salesHeadline}>{c.headline}</h2>
+        </div>
+        <div style={{ overflowX: 'auto', borderRadius: 16, boxShadow: '0 14px 32px -18px rgba(20,83,45,.35)' }}>
+          <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${GG_SALES.GREEN200}`, background: '#fff' }}>
+            <thead>
+              <tr>
+                <th className="green-gold-heading" style={{ background: GG_SALES.GREEN100, color: GG_SALES.GREEN800, fontWeight: 800, fontSize: '.78rem', letterSpacing: '.16em', textTransform: 'uppercase', padding: '1rem', textAlign: 'left' }}>Feature</th>
+                <th className="green-gold-heading" style={{ background: GG_SALES.GREEN200, color: GG_SALES.GREEN800, fontWeight: 800, fontSize: '.78rem', letterSpacing: '.16em', textTransform: 'uppercase', padding: '1rem', textAlign: 'center' }}>Free Pass</th>
+                <th className="green-gold-heading" style={{ background: GG_SALES.GOLD300, color: GG_SALES.GOLD700, fontWeight: 800, fontSize: '.78rem', letterSpacing: '.16em', textTransform: 'uppercase', padding: '1rem', textAlign: 'center' }}>VIP Pass</th>
+              </tr>
+            </thead>
+            <tbody>
+              {c.rows.map((row, i) => (
+                <tr key={i}>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${GG_SALES.GREEN100}`, fontWeight: 600, color: GG_SALES.INK900, fontSize: '0.95rem', lineHeight: 1.45 }}>{row.label}</td>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${GG_SALES.GREEN100}`, textAlign: 'center' }}>
+                    {row.freePass
+                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: GG_SALES.GREEN100, color: GG_SALES.GREEN600 }}><SalesCheckIcon /></span>
+                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
+                    }
+                  </td>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${GG_SALES.GREEN100}`, background: 'rgba(253,230,138,0.22)', textAlign: 'center' }}>
+                    {row.vipPass
+                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: GG_SALES.GREEN100, color: GG_SALES.GREEN600 }}><SalesCheckIcon /></span>
+                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* GUARANTEE — dashed-gold cream card with shield + copy. */
+function Guarantee({ content }: { content: GreenGoldContent }) {
+  if (!content.guarantee) return null;
+  const g = content.guarantee;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: GG_SALES.GREEN50 }}>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ background: GG_SALES.CREAM, border: `2px dashed ${GG_SALES.CREAM_BORDER}`, borderRadius: 22, padding: '1.85rem', display: 'flex', gap: '1.25rem', alignItems: 'center', boxShadow: '0 10px 26px -16px rgba(234,179,8,.35)' }}>
+          <div style={{ fontSize: '3rem', flexShrink: 0 }}>🛡️</div>
+          <div>
+            <h3 className="green-gold-heading" style={{ fontWeight: 800, fontSize: '1.15rem', color: GG_SALES.INK900, marginBottom: '0.5rem' }}>{g.heading}</h3>
+            <p style={{ fontSize: '0.95rem', color: GG_SALES.INK700, lineHeight: 1.65, margin: 0 }}>{g.body}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* WHY SECTION — centered headline + green subtitle + body paragraphs. */
+function WhySection({ content }: { content: GreenGoldContent }) {
+  if (!content.whySection) return null;
+  const w = content.whySection;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <h2 className="green-gold-heading" style={{ ...salesHeadline, marginBottom: '0.6rem' }}>{w.headline}</h2>
+        <p className="green-gold-heading" style={{ fontSize: '1.2rem', fontWeight: 700, color: GG_SALES.GREEN700, marginBottom: '1.5rem', letterSpacing: '.01em' }}>{w.subheadline}</p>
+        {w.paragraphs.map((p, i) => (
+          <p key={i} style={{ color: GG_SALES.INK700, fontSize: '1.05rem', lineHeight: 1.75, marginBottom: '1rem' }}>{p}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ============== ROOT COMPONENT ============== */
 export function GreenGold({ content, speakers, funnelId, enabledSections }: RootProps) {
   const enabled = new Set(enabledSections ?? greenGoldDefaultEnabledSections);
@@ -1246,11 +1781,25 @@ export function GreenGold({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('shifts') && <Shifts content={content} />}
         {enabled.has('closing-cta') && <ClosingCTA content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
+
+        {/* Sales-page sections — optional, only rendered when enabled. */}
+        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('intro') && <Intro content={content} />}
+        {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
+        {enabled.has('free-gifts') && <FreeGifts content={content} />}
+        {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
+        {enabled.has('comparison-table') && <ComparisonTable content={content} />}
+        {enabled.has('guarantee') && <Guarantee content={content} />}
+        {enabled.has('why-section') && <WhySection content={content} />}
       </main>
 
       {enabled.has('footer') && <Footer content={content} />}
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      {enabled.has('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      )}
     </div>
   );
 }

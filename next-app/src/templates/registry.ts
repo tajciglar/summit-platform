@@ -8,7 +8,6 @@ import { RustCream } from './RustCream';
 import { BlueCoral } from './BlueCoral';
 import { GreenGold } from './GreenGold';
 import { IndigoGold } from './IndigoGold';
-import { LavenderGold } from './LavenderGold';
 
 export const templates = {
   'ochre-ink': { ...templateMetadata['ochre-ink'], Component: OchreInk },
@@ -19,7 +18,6 @@ export const templates = {
   'blue-coral': { ...templateMetadata['blue-coral'], Component: BlueCoral },
   'green-gold': { ...templateMetadata['green-gold'], Component: GreenGold },
   'indigo-gold': { ...templateMetadata['indigo-gold'], Component: IndigoGold },
-  'lavender-gold': { ...templateMetadata['lavender-gold'], Component: LavenderGold },
   // Each entry is a TemplateDefinition parameterized on its own content shape.
   // Using `TemplateDefinition<any>` in the satisfies constraint lets each entry
   // preserve its concrete TContent while still enforcing the shape (key, label,

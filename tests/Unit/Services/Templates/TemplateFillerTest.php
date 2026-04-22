@@ -89,6 +89,61 @@ it('throws after two failed attempts', function () {
         ->toThrow(RuntimeException::class);
 });
 
+it('scopes whole-template schema to sales keys when step_type is sales_page', function () {
+    // Whole-template schema with both optin keys (required) and sales keys (optional).
+    $schema = [
+        'type' => 'object',
+        'required' => ['hero', 'press'],
+        'properties' => [
+            'hero' => ['type' => 'object', 'required' => ['headline'], 'properties' => ['headline' => ['type' => 'string', 'minLength' => 1]]],
+            'press' => ['type' => 'object', 'required' => ['eyebrow'], 'properties' => ['eyebrow' => ['type' => 'string', 'minLength' => 1]]],
+            'salesHero' => ['type' => 'object', 'required' => ['headline'], 'properties' => ['headline' => ['type' => 'string', 'minLength' => 1]]],
+            'priceCard' => ['type' => 'object', 'required' => ['ctaLabel'], 'properties' => ['ctaLabel' => ['type' => 'string', 'minLength' => 1]]],
+        ],
+    ];
+
+    $registry = Mockery::mock(TemplateRegistry::class);
+    $registry->shouldReceive('get')->with('test-skin')->andReturn([
+        'key' => 'test-skin',
+        'label' => 'Test',
+        'thumbnail' => '/x.jpg',
+        'tags' => [],
+        'jsonSchema' => $schema,
+    ]);
+    $registry->shouldReceive('supportsSections')->with('test-skin')->andReturn(false);
+    $registry->shouldReceive('defaultSalesSections')->with('test-skin')->andReturn(['sales-hero', 'price-card']);
+
+    $captured = null;
+    $client = Mockery::mock(AnthropicClient::class);
+    $client->shouldReceive('complete')
+        ->once()
+        ->andReturnUsing(function (string $system) use (&$captured) {
+            $captured = $system;
+
+            return ['text' => '{"salesHero":{"headline":"H"},"priceCard":{"ctaLabel":"Buy"}}', 'tokens' => 100];
+        });
+
+    $summit = Summit::factory()->create();
+    $filler = new TemplateFiller($registry, $client);
+
+    $result = $filler->fill(
+        summit: $summit,
+        templateKey: 'test-skin',
+        speakers: collect(),
+        notes: null,
+        styleReferenceUrl: null,
+        stepType: 'sales_page',
+    );
+
+    // The system prompt the AI sees must require ONLY the sales keys.
+    expect($captured)->toContain('"required": [')
+        ->and($captured)->toContain('salesHero')
+        ->and($captured)->toContain('priceCard');
+
+    // And the filler returns the validated sales content, not the optin shape.
+    expect($result['content'])->toHaveKey('salesHero');
+});
+
 it('throws when schema validation fails twice', function () {
     $client = Mockery::mock(AnthropicClient::class);
     $client->shouldReceive('complete')

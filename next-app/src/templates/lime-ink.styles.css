@@ -186,3 +186,47 @@
   .lime-ink-body .lime-ink-marquee-track { animation: none !important; }
   .lime-ink-root { scroll-behavior: auto; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+ * Sales-page sub-components — "upgrade to Pro" dev-tool aesthetic
+ * ───────────────────────────────────────────────────────────── */
+
+/* Pulse ring on sales CTA */
+.lime-ink-body .lime-ink-sales-pulse {
+  position: relative;
+  animation: lime-ink-sales-pulse 2.2s ease-out infinite;
+}
+@keyframes lime-ink-sales-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(196,242,69,0.55); }
+  70%  { box-shadow: 0 0 0 18px rgba(196,242,69,0); }
+  100% { box-shadow: 0 0 0 0 rgba(196,242,69,0); }
+}
+
+/* Live dot on sales hero badge */
+.lime-ink-body .lime-ink-sales-live-dot {
+  animation: lime-ink-sales-live 1.6s ease-in-out infinite;
+}
+@keyframes lime-ink-sales-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
+}
+
+/* Comparison table row hover */
+.lime-ink-body .lime-ink-sales-cmp-row { transition: background 0.15s; }
+.lime-ink-body .lime-ink-sales-cmp-row:hover { background: rgba(196,242,69,0.06); }
+
+/* Speaker card details toggle */
+.lime-ink-body details.lime-ink-sales-spk {
+  border-bottom: none;
+}
+.lime-ink-body details.lime-ink-sales-spk summary {
+  padding: 0;
+  display: block;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lime-ink-body .lime-ink-sales-pulse,
+  .lime-ink-body .lime-ink-sales-live-dot { animation: none !important; }
+}

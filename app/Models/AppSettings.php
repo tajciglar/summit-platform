@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class AppSettings extends Model implements HasMedia
+class AppSettings extends Model
 {
-    use HasUuid, InteractsWithMedia;
+    use HasMediaAttachments, HasUuid;
 
     protected $table = 'app_settings';
 
@@ -32,19 +29,5 @@ class AppSettings extends Model implements HasMedia
     public static function current(): self
     {
         return self::query()->first() ?? self::create([]);
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('logo')
-            ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']);
-    }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion('small')
-            ->fit(Fit::Contain, 200, 200)
-            ->nonQueued();
     }
 }

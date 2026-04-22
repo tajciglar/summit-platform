@@ -15,6 +15,7 @@
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
         "opis/json-schema": "^2.3",
+        "platformcommunity/flysystem-bunnycdn": "^3.3",
         "spatie/laravel-medialibrary": "*",
         "spatie/laravel-permission": "^7.3",
         "stripe/stripe-php": "^20.0",

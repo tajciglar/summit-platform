@@ -1,6 +1,7 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Poppins / Source Sans 3) must be loaded by
 // the page — see Task 19/20 (preview/public routes) for wiring.
+import type { CSSProperties } from 'react';
 import './blue-coral.styles.css';
 import { OptinModal } from '@/components/OptinModal';
 import type { BlueCoralContent } from './blue-coral.schema';
@@ -1230,6 +1231,510 @@ function Footer({ content }: { content: BlueCoralContent }) {
   );
 }
 
+/* =======================================================================
+ * ============  SALES-PAGE SECTIONS — friendly blue + coral  ============
+ * -----------------------------------------------------------------------
+ * All sales sections are optional in the schema; each component guards
+ * with `if (!content.xxx) return null;` so optin pages render cleanly.
+ * Visual language: navy ink + blue brand, coral accents, rounded soft
+ * surfaces, warm cream-white backgrounds. Modern/SaaS friendly feel.
+ * ======================================================================= */
+
+const BC_SALES = {
+  SKY50: '#F1F6FE',
+  SKY100: '#E0EBFA',
+  SKY200: '#C7DCF5',
+  SKY300: '#93C5FD',
+  BLUE400: '#60A5FA',
+  BLUE500: '#2563EB',
+  BLUE600: '#1D4ED8',
+  BLUE700: '#1E40AF',
+  NAVY900: '#0F172A',
+  NAVY800: '#152E4A',
+  NAVY700: '#1B3A5C',
+  CORAL300: '#FCA5A5',
+  CORAL400: '#F87171',
+  CORAL500: '#EF4444',
+  CORAL600: '#DC2626',
+  CREAM: '#FFF7F4',
+  CREAM_LINE: '#FBD9CD',
+  INK700: '#334155',
+  INK800: '#1E293B',
+};
+
+const blueCoralSalesIconLabels: Record<string, string> = {
+  'infinity': 'Unlimited Access',
+  'clipboard': 'Action Blueprints',
+  'headphones': 'Audio Edition',
+  'captions': 'Subtitles',
+  'file-text': 'Transcripts',
+  'book': 'Workbook',
+};
+
+function BcSalesBonusIcon({ icon }: { icon: string }) {
+  const label = blueCoralSalesIconLabels[icon] ?? icon;
+  const color = BC_SALES.BLUE600;
+  if (icon === 'infinity') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      </svg>
+    );
+  }
+  if (icon === 'clipboard') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    );
+  }
+  if (icon === 'headphones') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
+    );
+  }
+  if (icon === 'captions') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
+      </svg>
+    );
+  }
+  if (icon === 'file-text') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    );
+  }
+  if (icon === 'book') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+function BcSalesCheckIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function BcSalesXIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={BC_SALES.CORAL600} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function BcSalesArrowRight({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function BcSalesGiftIcon({ size = 20, color = BC_SALES.CORAL600 }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
+/* Primary sales CTA — coral pill with rounded friendly feel. */
+const bcSalesBtnCta: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+  padding: '1rem 2rem',
+  background: BC_SALES.CORAL500,
+  color: '#fff',
+  fontWeight: 700,
+  fontSize: '1.05rem',
+  borderRadius: '9999px',
+  boxShadow: '0 10px 24px -6px rgba(239,68,68,.45), inset 0 -3px 0 rgba(0,0,0,.08)',
+  letterSpacing: '.01em',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+};
+
+const bcSalesBtnCtaLg: CSSProperties = { ...bcSalesBtnCta, padding: '1.15rem 2.4rem', fontSize: '1.15rem' };
+
+/* SALES HERO — friendly coral live badge, blue gradient product mockup,
+ * pulsing coral CTA, soft sky bg. */
+function SalesHero({ content }: { content: BlueCoralContent }) {
+  if (!content.salesHero) return null;
+  const h = content.salesHero;
+  const topTitle = content.topBar.title;
+  return (
+    <section style={{ padding: '2.5rem 1.25rem 4rem', background: `linear-gradient(180deg,${BC_SALES.SKY50} 0%,#FFFFFF 60%)` }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.16em', color: '#fff', background: BC_SALES.CORAL500, borderRadius: 9999, padding: '0.5rem 1rem', marginBottom: '1.5rem', textTransform: 'uppercase', boxShadow: '0 6px 18px rgba(239,68,68,.35)' }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
+          {h.badge}
+        </span>
+
+        <h1 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.7rem,3.6vw,2.5rem)', lineHeight: 1.2, letterSpacing: '-0.01em', color: BC_SALES.NAVY900, marginBottom: '1rem' }}>
+          {h.headline.split('40+').map((part, i, arr) =>
+            i < arr.length - 1
+              ? <span key={i}>{part}<span style={{ background: BC_SALES.CORAL300, color: BC_SALES.NAVY900, padding: '0 0.35rem', borderRadius: 8 }}>40+</span></span>
+              : <span key={i}>{part}</span>
+          )}
+        </h1>
+
+        <p style={{ fontSize: 'clamp(1.05rem,1.9vw,1.25rem)', color: BC_SALES.INK700, maxWidth: 680, margin: '0 auto 2rem', lineHeight: 1.55 }}>
+          {h.subheadline}
+        </p>
+
+        {/* Product mockup — blue gradient with coral glow */}
+        <div style={{ maxWidth: 560, margin: '0 auto 2rem', borderRadius: 20, overflow: 'hidden', boxShadow: '0 28px 54px -20px rgba(15,23,42,.35)', aspectRatio: '16/9', background: `linear-gradient(135deg,${BC_SALES.NAVY700},${BC_SALES.BLUE500})`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.45, background: `radial-gradient(circle at 20% 50%,${BC_SALES.BLUE400},transparent 50%),radial-gradient(circle at 80% 60%,${BC_SALES.CORAL400},transparent 45%)` }} />
+          <div style={{ position: 'relative', textAlign: 'center', color: '#fff', padding: '1.5rem' }}>
+            <p style={{ fontSize: '0.6rem', letterSpacing: '0.4em', textTransform: 'uppercase', opacity: 0.75, marginBottom: '0.5rem' }}>Full Access</p>
+            <p className="blue-coral-heading" style={{ fontSize: 'clamp(2rem,5vw,3.75rem)', margin: 0, fontWeight: 800, letterSpacing: '-0.02em' }}>{h.productLabel}</p>
+            <p style={{ fontSize: '0.7rem', opacity: 0.85, marginTop: '0.5rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}>{topTitle}</p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, marginBottom: '0.6rem' }}>
+          Total value: <span style={{ fontWeight: 700, color: BC_SALES.NAVY700, textDecoration: 'line-through' }}>{h.totalValue}</span>
+        </p>
+        <a href="#purchase" id="purchase" className="blue-coral-sales-pulse" style={bcSalesBtnCtaLg}>
+          {h.ctaLabel} <BcSalesArrowRight size={20} />
+        </a>
+        <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: BC_SALES.NAVY700 }}>
+          <strong>{h.ctaNote}</strong>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* INTRO — friendly eyebrow + body paragraphs, centered. */
+function Intro({ content }: { content: BlueCoralContent }) {
+  if (!content.intro) return null;
+  const i = content.intro;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <p style={{ color: BC_SALES.CORAL600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{i.eyebrow}</p>
+        <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15, marginBottom: '1.5rem' }}>{i.headline}</h2>
+        {i.paragraphs.map((p, idx) => (
+          <p key={idx} style={{ color: BC_SALES.INK700, fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '1rem' }}>{p}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* VIP BONUSES — soft sky card grid with blue icon tiles. */
+function VipBonuses({ content }: { content: BlueCoralContent }) {
+  if (!content.vipBonuses) return null;
+  const v = content.vipBonuses;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: BC_SALES.SKY50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p style={{ color: BC_SALES.BLUE600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{v.eyebrow}</p>
+          <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15 }}>{v.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.25rem' }}>
+          {v.items.map((item, i) => (
+            <div key={i} style={{ background: '#fff', border: `1px solid ${BC_SALES.SKY200}`, borderRadius: 20, boxShadow: '0 12px 28px -16px rgba(29,78,216,.25)', overflow: 'hidden' }}>
+              <div style={{ background: `linear-gradient(135deg,${BC_SALES.SKY50},${BC_SALES.SKY200})`, aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: BC_SALES.BLUE700, padding: '1.25rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                  <BcSalesBonusIcon icon={item.icon} />
+                  <span className="blue-coral-heading" style={{ fontWeight: 600, fontSize: '0.95rem' }}>{blueCoralSalesIconLabels[item.icon]}</span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <h3 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: '1.05rem', color: BC_SALES.NAVY900, marginBottom: '0.4rem' }}>{item.title}</h3>
+                <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, lineHeight: 1.6, marginBottom: '0.75rem' }}>{item.description}</p>
+                <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${BC_SALES.SKY300}`, color: BC_SALES.BLUE700, fontWeight: 700, fontSize: '.7rem', letterSpacing: '.1em', padding: '.3rem .7rem', borderRadius: 9999 }}>{item.valueLabel}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* FREE GIFTS — coral-tinted card grid with gift icon tiles. */
+function FreeGifts({ content }: { content: BlueCoralContent }) {
+  if (!content.freeGifts) return null;
+  const fg = content.freeGifts;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p style={{ color: BC_SALES.CORAL600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{fg.eyebrow}</p>
+          <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15 }}>{fg.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: '1.25rem' }}>
+          {fg.items.map((gift, i) => (
+            <div key={i} style={{ background: BC_SALES.CREAM, border: `1px solid ${BC_SALES.CREAM_LINE}`, borderRadius: 20, boxShadow: '0 12px 28px -16px rgba(239,68,68,.22)', overflow: 'hidden' }}>
+              <div style={{ background: `linear-gradient(135deg,#FFE6DD,${BC_SALES.CORAL300})`, aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: BC_SALES.CORAL600, padding: '1.25rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                  <BcSalesGiftIcon size={40} color={BC_SALES.CORAL600} />
+                  <span className="blue-coral-heading" style={{ fontWeight: 600, fontSize: '0.95rem' }}>Free Gift #{gift.giftNumber}</span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '.15em', color: BC_SALES.CORAL600, textTransform: 'uppercase', marginBottom: '0.3rem' }}>Free Gift #{gift.giftNumber}</p>
+                <h3 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: '1.05rem', color: BC_SALES.NAVY900, marginBottom: '0.4rem' }}>{gift.title}</h3>
+                <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, lineHeight: 1.6, marginBottom: '0.75rem' }}>{gift.description}</p>
+                <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${BC_SALES.CREAM_LINE}`, color: BC_SALES.CORAL600, fontWeight: 700, fontSize: '.7rem', letterSpacing: '.1em', padding: '.3rem .7rem', borderRadius: 9999 }}>{gift.valueLabel}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ textAlign: 'center', marginTop: '1.75rem', fontSize: '0.9rem', color: BC_SALES.INK700 }}>{fg.deliveryNote}</p>
+      </div>
+    </section>
+  );
+}
+
+/* UPGRADE SECTION — eyebrow/headline + intro paragraphs, sky bg. */
+function UpgradeSection({ content }: { content: BlueCoralContent }) {
+  if (!content.upgradeSection) return null;
+  const u = content.upgradeSection;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: BC_SALES.SKY50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ color: BC_SALES.BLUE600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{u.eyebrow}</p>
+          <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15, marginBottom: '1.5rem' }}>{u.headline}</h2>
+          <div style={{ maxWidth: 680, margin: '0 auto' }}>
+            {u.paragraphs.map((p, i) => (
+              <p key={i} style={{ color: BC_SALES.INK700, fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.75rem' }}>{p}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* PRICE CARD — modern SaaS-style card, blue accent bar, coral savings
+ * badge, big green current price, pulse coral CTA. */
+function PriceCard({ content }: { content: BlueCoralContent }) {
+  if (!content.priceCard) return null;
+  const p = content.priceCard;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }} id="purchase">
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{
+          background: '#fff',
+          border: `2px solid ${BC_SALES.SKY200}`,
+          borderRadius: 28,
+          boxShadow: '0 32px 56px -24px rgba(15,23,42,.25)',
+          padding: '1.9rem 1.65rem',
+          position: 'relative',
+          overflow: 'hidden',
+          maxWidth: 480,
+          width: '100%',
+          margin: '0 auto',
+        }}>
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 6, background: `linear-gradient(90deg,${BC_SALES.BLUE500},${BC_SALES.CORAL400},${BC_SALES.BLUE500})` }} />
+
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: BC_SALES.CORAL500, color: '#fff', padding: '.4rem .9rem', borderRadius: 9999, fontWeight: 700, fontSize: '.72rem', letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: '0.85rem' }}>
+            {p.badge}
+          </div>
+
+          <h3 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: '1.25rem', color: BC_SALES.NAVY900, marginBottom: '0.5rem', lineHeight: 1.3 }}>{p.headline}</h3>
+          <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, marginBottom: '0.5rem' }}>{p.note}</p>
+
+          <ul style={{ padding: 0, listStyle: 'none', margin: '1rem 0 1.25rem' }}>
+            {p.features.map((f, i) => (
+              <li key={i} style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start', padding: '0.4rem 0', fontSize: '0.95rem', color: BC_SALES.INK800, lineHeight: 1.5 }}>
+                <BcSalesCheckIcon />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div style={{ background: BC_SALES.CREAM, border: `1px solid ${BC_SALES.CREAM_LINE}`, borderRadius: 14, padding: '0.95rem 1.05rem', marginBottom: '1.25rem' }}>
+            <p style={{ fontWeight: 700, fontSize: '0.85rem', color: BC_SALES.CORAL600, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <BcSalesGiftIcon size={16} /> {p.giftsBoxTitle}
+            </p>
+            {p.giftItems.map((g, i) => (
+              <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', fontSize: '0.9rem', padding: '0.3rem 0', color: BC_SALES.INK700 }}>
+                <BcSalesCheckIcon />
+                <span>{g}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', borderTop: `1px solid ${BC_SALES.SKY100}`, paddingTop: '1.25rem' }}>
+            <p style={{ color: BC_SALES.NAVY700, textDecoration: 'line-through', fontWeight: 500, fontSize: '0.95rem', marginBottom: '0.25rem' }}>
+              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+            </p>
+            <p className="blue-coral-heading" style={{ fontSize: '2.75rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
+            <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
+            <a href="#purchase" style={bcSalesBtnCtaLg}>
+              {p.ctaLabel} <BcSalesArrowRight size={20} />
+            </a>
+            <p style={{ marginTop: '0.85rem', fontSize: '0.8rem', color: BC_SALES.NAVY700 }}>{p.guarantee}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* SALES SPEAKERS — rounded cards w/ sky avatar border + bio toggle. */
+function SalesSpeakers({ content, speakers }: { content: BlueCoralContent; speakers: Record<string, Speaker> }) {
+  if (!content.salesSpeakers) return null;
+  const s = content.salesSpeakers;
+  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  if (sortedSpeakers.length === 0) return null;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p style={{ color: BC_SALES.BLUE600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{s.eyebrow}</p>
+          <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15 }}>{s.headline}</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
+          {sortedSpeakers.map((spk, idx) => (
+            <details key={spk.id} className="blue-coral-sales-spk" style={{ background: '#fff', border: `1px solid ${BC_SALES.SKY200}`, borderRadius: 18, boxShadow: '0 8px 20px -12px rgba(15,23,42,.2)', marginBottom: 0, overflow: 'hidden' }}>
+              <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '1.5rem 1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
+                {spk.photoUrl
+                  ? /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${BC_SALES.SKY300}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(15,23,42,.3)` }} />
+                  : <div style={{ width: 84, height: 84, borderRadius: '50%', background: SPEAKER_GRADIENTS[idx % SPEAKER_GRADIENTS.length], border: `3px solid ${BC_SALES.SKY300}`, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'Poppins,sans-serif', fontSize: '1.4rem', fontWeight: 700 }}>
+                      {initialsFromSpeaker(spk)}
+                    </div>
+                }
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                  <p className="blue-coral-heading" style={{ fontWeight: 700, fontSize: '0.95rem', color: BC_SALES.NAVY900, margin: 0 }}>{displayName(spk)}</p>
+                  <p style={{ fontSize: '0.78rem', color: BC_SALES.BLUE600, margin: 0 }}>{spk.title}</p>
+                  <p style={{ fontSize: '0.78rem', color: BC_SALES.INK700, margin: 0 }}>{spk.masterclassTitle}</p>
+                </div>
+              </summary>
+              {spk.shortBio && (
+                <p style={{ padding: '0 1.5rem 1.5rem', color: BC_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
+              )}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* COMPARISON TABLE — Free Pass vs VIP Pass side-by-side, sky header. */
+function ComparisonTable({ content }: { content: BlueCoralContent }) {
+  if (!content.comparisonTable) return null;
+  const c = content.comparisonTable;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: BC_SALES.SKY50 }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <p style={{ color: BC_SALES.BLUE600, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{c.eyebrow}</p>
+          <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15 }}>{c.headline}</h2>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, borderRadius: 18, overflow: 'hidden', border: `1px solid ${BC_SALES.SKY200}`, background: '#fff' }}>
+            <thead>
+              <tr>
+                <th className="blue-coral-heading" style={{ background: BC_SALES.SKY100, color: BC_SALES.BLUE700, fontWeight: 700, fontSize: '.8rem', letterSpacing: '.14em', textTransform: 'uppercase', padding: '1rem', textAlign: 'left' }}>Feature</th>
+                <th className="blue-coral-heading" style={{ background: BC_SALES.SKY200, color: BC_SALES.BLUE700, fontWeight: 700, fontSize: '.8rem', letterSpacing: '.14em', textTransform: 'uppercase', padding: '1rem', textAlign: 'center' }}>Free Pass</th>
+                <th className="blue-coral-heading" style={{ background: BC_SALES.SKY200, color: BC_SALES.BLUE700, fontWeight: 700, fontSize: '.8rem', letterSpacing: '.14em', textTransform: 'uppercase', padding: '1rem', textAlign: 'center' }}>VIP Pass</th>
+              </tr>
+            </thead>
+            <tbody>
+              {c.rows.map((row, i) => (
+                <tr key={i}>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${BC_SALES.SKY100}`, fontWeight: 600, color: BC_SALES.NAVY900, fontSize: '0.95rem', lineHeight: 1.4 }}>{row.label}</td>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${BC_SALES.SKY100}`, textAlign: 'center' }}>
+                    {row.freePass
+                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><BcSalesCheckIcon /></span>
+                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: BC_SALES.CORAL600 }}><BcSalesXIcon /></span>
+                    }
+                  </td>
+                  <td style={{ padding: '1rem', borderTop: `1px solid ${BC_SALES.SKY100}`, textAlign: 'center' }}>
+                    {row.vipPass
+                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><BcSalesCheckIcon /></span>
+                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: BC_SALES.CORAL600 }}><BcSalesXIcon /></span>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* GUARANTEE — dashed coral shield card. */
+function Guarantee({ content }: { content: BlueCoralContent }) {
+  if (!content.guarantee) return null;
+  const g = content.guarantee;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: BC_SALES.SKY50 }}>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ background: BC_SALES.CREAM, border: `2px dashed ${BC_SALES.CORAL300}`, borderRadius: 22, padding: '1.85rem', display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+          <div aria-hidden="true" style={{ flexShrink: 0, width: 64, height: 64, borderRadius: '50%', background: '#fff', border: `2px solid ${BC_SALES.CORAL300}`, display: 'grid', placeItems: 'center' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={BC_SALES.CORAL600} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: '1.15rem', color: BC_SALES.NAVY900, marginBottom: '0.5rem' }}>{g.heading}</h3>
+            <p style={{ fontSize: '0.95rem', color: BC_SALES.INK700, lineHeight: 1.65, margin: 0 }}>{g.body}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* WHY SECTION — centered subtitle + body paragraphs. */
+function WhySection({ content }: { content: BlueCoralContent }) {
+  if (!content.whySection) return null;
+  const w = content.whySection;
+  return (
+    <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <h2 className="blue-coral-heading" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: BC_SALES.NAVY900, lineHeight: 1.15, marginBottom: '0.6rem' }}>{w.headline}</h2>
+        <p style={{ fontSize: '1.25rem', color: BC_SALES.CORAL600, fontWeight: 600, marginBottom: '1.5rem' }}>{w.subheadline}</p>
+        {w.paragraphs.map((p, i) => (
+          <p key={i} style={{ color: BC_SALES.INK700, fontSize: '1rem', lineHeight: 1.75, marginBottom: '1rem' }}>{p}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ============== ROOT COMPONENT ============== */
 export function BlueCoral({ content, speakers, funnelId, enabledSections }: RootProps) {
   const enabled = new Set(enabledSections ?? blueCoralDefaultEnabledSections);
@@ -1258,11 +1763,24 @@ export function BlueCoral({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('shifts') && <Shifts content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
+
+        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('intro') && <Intro content={content} />}
+        {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
+        {enabled.has('free-gifts') && <FreeGifts content={content} />}
+        {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
+        {enabled.has('comparison-table') && <ComparisonTable content={content} />}
+        {enabled.has('guarantee') && <Guarantee content={content} />}
+        {enabled.has('why-section') && <WhySection content={content} />}
       </main>
 
       {enabled.has('footer') && <Footer content={content} />}
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
+      {enabled.has('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
+      )}
     </div>
   );
 }

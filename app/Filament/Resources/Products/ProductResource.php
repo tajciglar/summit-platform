@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products;
 
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Product;
 use App\Support\CurrentSummit;
@@ -14,16 +15,15 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -53,7 +53,9 @@ class ProductResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Product')
+            Section::make('Basics')
+                ->description('Name, URL slug, copy, and thumbnail. This is what buyers see.')
+                ->icon(Heroicon::OutlinedCube)
                 ->columns(2)
                 ->components([
                     Select::make('summit_id')
@@ -64,10 +66,7 @@ class ProductResource extends Resource
                             modifyQueryUsing: function ($query) {
                                 $domain = Filament::getTenant();
                                 if ($domain) {
-                                    $query->whereHas(
-                                        'domains',
-                                        fn ($q) => $q->whereKey($domain->getKey()),
-                                    );
+                                    $query->where('domain_id', $domain->getKey());
                                 }
                             },
                         )
@@ -76,11 +75,8 @@ class ProductResource extends Resource
                         ->searchable()
                         ->preload()
                         ->placeholder('Cross-summit product')
-                        ->helperText('Leave empty if this product is sold across multiple summits.'),
-                    TextInput::make('category')
-                        ->maxLength(100)
-                        ->datalist(['vip_pass', 'bundle', 'recording', 'masterclass', 'coaching'])
-                        ->helperText('Free-text: vip_pass, bundle, recording, etc.'),
+                        ->helperText('Leave empty if this product is sold across multiple summits.')
+                        ->columnSpanFull(),
                     TextInput::make('name')
                         ->required()->maxLength(500)
                         ->live(onBlur: true)
@@ -90,19 +86,27 @@ class ProductResource extends Resource
                             }
                         }),
                     TextInput::make('slug')->required()->maxLength(255),
+                    TextInput::make('category')
+                        ->maxLength(100)
+                        ->datalist(['vip_pass', 'bundle', 'recording', 'masterclass', 'coaching'])
+                        ->placeholder('vip_pass')
+                        ->helperText('Free-text tag. Common values: vip_pass, bundle, recording, masterclass.'),
+                    TextInput::make('tier')
+                        ->maxLength(100)
+                        ->datalist(['basic', 'vip'])
+                        ->placeholder('basic')
+                        ->helperText('Access tier. Usually basic or vip.'),
                     Textarea::make('description')->rows(3)->columnSpanFull(),
-                    SpatieMediaLibraryFileUpload::make('image')
-                        ->collection('image')
-                        ->image()
-                        ->imageEditor()
-                        ->imageCropAspectRatio('1:1')
-                        ->maxSize(5120)
-                        ->helperText('Square thumbnail, shown in cards and order bumps.')
+                    MediaPickerInput::make('image_media_item_id')
+                        ->category('product')
+                        ->role('image')
+                        ->label('Product image')
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('Role in the funnel')
-                ->description('How this product is sold.')
+            Section::make('How it sells')
+                ->description("The product's role in the funnel and how it's billed.")
+                ->icon(Heroicon::OutlinedShoppingCart)
                 ->columns(2)
                 ->components([
                     Select::make('kind')
@@ -116,8 +120,39 @@ class ProductResource extends Resource
                         ->default('standalone')
                         ->required()
                         ->native(false)
-                        ->live()
-                        ->columnSpanFull(),
+                        ->live(),
+                    Select::make('product_type')
+                        ->label('Billing')
+                        ->options([
+                            'one_time' => 'One-time purchase',
+                            'subscription' => 'Subscription',
+                        ])
+                        ->default('one_time')
+                        ->required()
+                        ->native(false)
+                        ->live(),
+                    Select::make('billing_interval')
+                        ->options([
+                            'month' => 'Monthly',
+                            'year' => 'Yearly',
+                        ])
+                        ->native(false)
+                        ->visible(fn (callable $get): bool => $get('product_type') === 'subscription'),
+                    Toggle::make('is_active')
+                        ->default(true)
+                        ->helperText('When off, the product is hidden everywhere.')
+                        ->inline(false),
+                    Toggle::make('grants_vip_access')
+                        ->label('Grants VIP access')
+                        ->helperText('Buyer unlocks VIP videos on purchase.')
+                        ->inline(false),
+                ]),
+
+            Section::make('Combo contents')
+                ->description('Bundle two or more products. Stripe still charges one line item per child at checkout.')
+                ->icon(Heroicon::OutlinedSquares2x2)
+                ->visible(fn (callable $get): bool => $get('kind') === 'combo')
+                ->components([
                     Select::make('bundled_product_ids')
                         ->label('Products in this combo')
                         ->helperText('Pick 2+ products to bundle. At checkout, Stripe receives one line item per child product using its own stripe_price_id.')
@@ -125,8 +160,6 @@ class ProductResource extends Resource
                         ->searchable()
                         ->preload()
                         ->live()
-                        ->columnSpanFull()
-                        ->visible(fn (callable $get): bool => $get('kind') === 'combo')
                         ->options(function () {
                             return Product::query()
                                 ->where('kind', '!=', 'combo')
@@ -134,19 +167,11 @@ class ProductResource extends Resource
                                 ->pluck('name', 'id')
                                 ->all();
                         }),
-                    TextInput::make('combo_discount_cents')
-                        ->label('Combo discount (cents)')
-                        ->helperText('Optional. Subtracted from the sum of children\'s current-phase prices.')
-                        ->numeric()
-                        ->prefix('¢')
-                        ->minValue(0)
-                        ->live(onBlur: true)
-                        ->columnSpan(1)
-                        ->visible(fn (callable $get): bool => $get('kind') === 'combo'),
+                    self::dollarInput('combo_discount_cents', 'Combo discount')
+                        ->helperText("Optional. Subtracted from the sum of children's current-phase prices.")
+                        ->live(onBlur: true),
                     Placeholder::make('combo_pricing_preview')
                         ->label('Pricing preview')
-                        ->columnSpanFull()
-                        ->visible(fn (callable $get): bool => $get('kind') === 'combo')
                         ->content(function (callable $get): HtmlString {
                             $ids = (array) ($get('bundled_product_ids') ?? []);
                             if (empty($ids)) {
@@ -198,90 +223,104 @@ class ProductResource extends Resource
                         }),
                 ]),
 
-            Section::make('Type & access')
-                ->columns(3)
-                ->components([
-                    Select::make('product_type')
-                        ->options([
-                            'one_time' => 'One-time purchase',
-                            'subscription' => 'Subscription',
-                        ])
-                        ->default('one_time')
-                        ->required()
-                        ->native(false)
-                        ->live(),
-                    Select::make('billing_interval')
-                        ->options([
-                            'month' => 'Monthly',
-                            'year' => 'Yearly',
-                        ])
-                        ->native(false)
-                        ->visible(fn (callable $get): bool => $get('product_type') === 'subscription'),
-                    TextInput::make('tier')
-                        ->maxLength(100)
-                        ->datalist(['basic', 'vip'])
-                        ->helperText('basic, vip, etc.'),
-                    Toggle::make('grants_vip_access')
-                        ->label('Grants VIP access')
-                        ->helperText('Buyer unlocks VIP videos on purchase.'),
-                    Toggle::make('is_active')->default(true),
-                    TextInput::make('stripe_product_id')
-                        ->maxLength(255)
-                        ->prefix('prod_')
-                        ->visible(fn (callable $get): bool => $get('kind') !== 'combo')
-                        ->helperText(fn (callable $get): ?string => $get('kind') === 'combo'
-                            ? 'Combos have no Stripe product of their own.'
-                            : null),
-                ]),
-
-            Section::make('Phase pricing (USD cents)')
-                ->description('Leave a phase blank if the product isn\'t sold during that phase.')
-                ->columns(4)
+            Section::make('Phase pricing')
+                ->description('Price per summit phase. Leave blank to skip selling during that phase. "Compare" is the strike-through price buyers see.')
+                ->icon(Heroicon::OutlinedTag)
+                ->columns(2)
                 ->visible(fn (callable $get): bool => $get('kind') !== 'combo')
                 ->components([
-                    TextInput::make('price_pre_summit_cents')->label('Pre-summit')->numeric()->prefix('¢'),
-                    TextInput::make('price_late_pre_cents')->label('Late pre-summit')->numeric()->prefix('¢'),
-                    TextInput::make('price_during_cents')->label('During summit')->numeric()->prefix('¢'),
-                    TextInput::make('price_post_summit_cents')->label('Post-summit')->numeric()->prefix('¢'),
-                    TextInput::make('compare_pre_summit_cents')->label('Compare pre')->numeric()->prefix('¢')
-                        ->helperText('Strikethrough price (optional).'),
-                    TextInput::make('compare_late_pre_cents')->label('Compare late')->numeric()->prefix('¢'),
-                    TextInput::make('compare_during_cents')->label('Compare during')->numeric()->prefix('¢'),
-                    TextInput::make('compare_post_summit_cents')->label('Compare post')->numeric()->prefix('¢'),
+                    Fieldset::make('Pre-summit')
+                        ->columns(2)
+                        ->schema([
+                            self::dollarInput('price_pre_summit_cents', 'Price'),
+                            self::dollarInput('compare_pre_summit_cents', 'Compare at'),
+                        ]),
+                    Fieldset::make('Late pre-summit')
+                        ->columns(2)
+                        ->schema([
+                            self::dollarInput('price_late_pre_cents', 'Price'),
+                            self::dollarInput('compare_late_pre_cents', 'Compare at'),
+                        ]),
+                    Fieldset::make('During summit')
+                        ->columns(2)
+                        ->schema([
+                            self::dollarInput('price_during_cents', 'Price'),
+                            self::dollarInput('compare_during_cents', 'Compare at'),
+                        ]),
+                    Fieldset::make('Post-summit')
+                        ->columns(2)
+                        ->schema([
+                            self::dollarInput('price_post_summit_cents', 'Price'),
+                            self::dollarInput('compare_post_summit_cents', 'Compare at'),
+                        ]),
                 ]),
 
-            Section::make('Stripe price IDs')
-                ->collapsed()
-                ->columns(4)
-                ->visible(fn (callable $get): bool => $get('kind') !== 'combo')
-                ->components([
-                    TextInput::make('stripe_price_pre_id')->label('Pre')->maxLength(255),
-                    TextInput::make('stripe_price_late_id')->label('Late')->maxLength(255),
-                    TextInput::make('stripe_price_during_id')->label('During')->maxLength(255),
-                    TextInput::make('stripe_price_post_id')->label('Post')->maxLength(255),
-                ]),
-
-            Section::make('Subscription intro pricing (optional)')
+            Section::make('Subscription intro pricing')
+                ->description('Optional promotional pricing for the first N months.')
+                ->icon(Heroicon::OutlinedSparkles)
                 ->collapsed()
                 ->columns(2)
                 ->visible(fn (callable $get): bool => $get('product_type') === 'subscription')
                 ->components([
-                    TextInput::make('intro_price_cents')->numeric()->prefix('¢')->helperText('Promotional intro price.'),
-                    TextInput::make('intro_period_months')->numeric()->helperText('Months the intro price applies.'),
+                    self::dollarInput('intro_price_cents', 'Intro price')
+                        ->helperText('Promotional intro price.'),
+                    TextInput::make('intro_period_months')
+                        ->label('Intro period (months)')
+                        ->numeric()
+                        ->minValue(1)
+                        ->helperText('Months the intro price applies.'),
+                ]),
+
+            Section::make('Stripe integration')
+                ->description('Product and price IDs from Stripe. Leave phases blank if you don\'t sell during that phase.')
+                ->icon(Heroicon::OutlinedCreditCard)
+                ->collapsed()
+                ->visible(fn (callable $get): bool => $get('kind') !== 'combo')
+                ->components([
+                    TextInput::make('stripe_product_id')
+                        ->label('Stripe product ID')
+                        ->maxLength(255)
+                        ->placeholder('prod_...'),
+                    Fieldset::make('Stripe price IDs')
+                        ->columns(4)
+                        ->schema([
+                            TextInput::make('stripe_price_pre_id')->label('Pre')->maxLength(255)->placeholder('price_...'),
+                            TextInput::make('stripe_price_late_id')->label('Late pre')->maxLength(255)->placeholder('price_...'),
+                            TextInput::make('stripe_price_during_id')->label('During')->maxLength(255)->placeholder('price_...'),
+                            TextInput::make('stripe_price_post_id')->label('Post')->maxLength(255)->placeholder('price_...'),
+                        ]),
                 ]),
         ]);
+    }
+
+    /**
+     * Money input that stores cents but shows dollars to the operator.
+     */
+    private static function dollarInput(string $name, string $label): TextInput
+    {
+        return TextInput::make($name)
+            ->label($label)
+            ->numeric()
+            ->prefix('$')
+            ->step('0.01')
+            ->minValue(0)
+            ->placeholder('0.00')
+            ->formatStateUsing(
+                fn (?int $state): ?string => $state !== null
+                    ? number_format($state / 100, 2, '.', '')
+                    : null,
+            )
+            ->dehydrateStateUsing(
+                fn ($state): ?int => ($state === null || $state === '')
+                    ? null
+                    : (int) round(((float) $state) * 100),
+            );
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->collection('image')
-                    ->conversion('thumb')
-                    ->label('')
-                    ->square()
-                    ->size(40),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable()

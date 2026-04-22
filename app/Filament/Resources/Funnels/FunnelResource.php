@@ -21,6 +21,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -58,10 +59,7 @@ class FunnelResource extends Resource
                             modifyQueryUsing: function ($query) {
                                 $domain = Filament::getTenant();
                                 if ($domain) {
-                                    $query->whereHas(
-                                        'domains',
-                                        fn ($q) => $q->whereKey($domain->getKey()),
-                                    );
+                                    $query->where('domain_id', $domain->getKey());
                                 }
                             },
                         )
@@ -96,6 +94,12 @@ class FunnelResource extends Resource
                     TextInput::make('slug')->required()->maxLength(255)
                         ->helperText('Auto-fills from summit initials + funnel purpose. Edit freely.'),
                     Textarea::make('description')->rows(3)->columnSpanFull(),
+                    TextInput::make('wp_checkout_redirect_url')
+                        ->label('WordPress checkout URL')
+                        ->url()
+                        ->maxLength(2048)
+                        ->helperText('Interim checkout redirect to the legacy WP cart. Leave blank once native checkout is live.')
+                        ->columnSpanFull(),
                     Toggle::make('is_active')->default(true),
                 ]),
 
@@ -108,23 +112,38 @@ class FunnelResource extends Resource
                         ->helperText('The visual language (typography, spacing, layout). All steps share this skin.')
                         ->native(false)
                         ->searchable()
-                        ->live(),
+                        ->live()
+                        ->afterStateUpdated(function (?string $state, Set $set, Get $get): void {
+                            // Auto-seed section_config with the template's defaults
+                            // so new funnels get distinct optin vs sales layouts
+                            // without the operator having to pick every section.
+                            if (! $state) {
+                                return;
+                            }
+                            $current = $get('section_config') ?? [];
+                            if (empty($current['optin'])) {
+                                $set('section_config.optin', self::defaultOptinSectionsFor($state));
+                            }
+                            if (empty($current['sales_page'])) {
+                                $set('section_config.sales_page', self::defaultSalesSectionsFor($state));
+                            }
+                        }),
 
                     CheckboxList::make('section_config.optin')
                         ->label('Optin sections')
-                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->options(fn (Get $get) => self::optinSectionOptionsFor($get('template_key')))
                         ->columns(2)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Selected sections will be generated on optin steps.'),
+                        ->helperText('Sections rendered on optin steps (lead capture).'),
 
                     CheckboxList::make('section_config.sales_page')
                         ->label('Sales page sections')
-                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->options(fn (Get $get) => self::salesSectionOptionsFor($get('template_key')))
                         ->columns(2)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Selected sections will be generated on sales-page steps.'),
+                        ->helperText('Sections rendered on sales-page steps (VIP / upgrade).'),
 
                     CheckboxList::make('section_config.thank_you')
                         ->label('Thank-you sections')
@@ -132,7 +151,7 @@ class FunnelResource extends Resource
                         ->columns(2)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Selected sections will be generated on thank-you steps.'),
+                        ->helperText('Sections rendered on thank-you steps.'),
                 ])
                 ->collapsed(fn (?Funnel $record): bool => $record !== null),
         ]);
@@ -165,6 +184,74 @@ class FunnelResource extends Resource
                 $key => ucwords(str_replace(['-', '_'], ' ', $key)),
             ])
             ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function optinSectionOptionsFor(?string $templateKey): array
+    {
+        if (! $templateKey) {
+            return [];
+        }
+
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        $sales = array_flip($registry->defaultSalesSections($templateKey));
+
+        return collect($registry->supportedSections($templateKey))
+            ->reject(fn (string $key) => isset($sales[$key]))
+            ->mapWithKeys(fn (string $key) => [
+                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function salesSectionOptionsFor(?string $templateKey): array
+    {
+        if (! $templateKey) {
+            return [];
+        }
+
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        $sales = $registry->defaultSalesSections($templateKey);
+        if ($sales === []) {
+            return self::sectionOptionsFor($templateKey);
+        }
+
+        return collect($sales)
+            ->mapWithKeys(fn (string $key) => [
+                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ])
+            ->all();
+    }
+
+    /** @return list<string> */
+    private static function defaultOptinSectionsFor(string $templateKey): array
+    {
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        return $registry->defaultEnabledSections($templateKey);
+    }
+
+    /** @return list<string> */
+    private static function defaultSalesSectionsFor(string $templateKey): array
+    {
+        $registry = app(TemplateRegistry::class);
+        if (! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        return $registry->defaultSalesSections($templateKey);
     }
 
     private static function skinSupportsSections(?string $templateKey): bool

@@ -2,12 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Models\AppSettings;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -51,11 +51,10 @@ class Settings extends Page
                             ->maxLength(255),
                         ColorPicker::make('brand_color')
                             ->placeholder('#4F46E5'),
-                        SpatieMediaLibraryFileUpload::make('logo')
-                            ->collection('logo')
-                            ->image()
-                            ->imageEditor()
-                            ->maxSize(2048)
+                        MediaPickerInput::make('logo_media_item_id')
+                            ->category('brand')
+                            ->role('logo')
+                            ->label('Logo')
                             ->columnSpanFull(),
                     ]),
 

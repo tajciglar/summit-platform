@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class FunnelStepBump extends Model implements HasMedia
+class FunnelStepBump extends Model
 {
-    use HasUuid, InteractsWithMedia;
+    use HasMediaAttachments, HasUuid;
 
     protected $fillable = [
         'funnel_step_id',
@@ -43,19 +40,5 @@ class FunnelStepBump extends Model implements HasMedia
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('image')
-            ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
-    }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion('preview')
-            ->fit(Fit::Contain, 480, 480)
-            ->nonQueued();
     }
 }

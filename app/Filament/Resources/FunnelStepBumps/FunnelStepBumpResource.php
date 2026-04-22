@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\FunnelStepBumps;
 
+use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use App\Models\FunnelStepBump;
 use App\Support\CurrentSummit;
@@ -9,7 +10,6 @@ use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -70,15 +70,10 @@ class FunnelStepBumpResource extends Resource
 
             Section::make('Image')
                 ->components([
-                    SpatieMediaLibraryFileUpload::make('image')
-                        ->collection('image')
-                        ->image()
-                        ->imageEditor()
-                        ->imageCropAspectRatio('1:1')
-                        ->maxSize(5120)
-                        ->label('Bump image')
-                        ->helperText('Square image works best; shown next to the copy on checkout.')
-                        ->live(),
+                    MediaPickerInput::make('image_media_item_id')
+                        ->category('product')
+                        ->role('image')
+                        ->label('Bump image'),
                 ]),
 
             Section::make('Settings')
@@ -128,8 +123,8 @@ class FunnelStepBumpResource extends Resource
         }
 
         $query->whereHas(
-            'funnelStep.funnel.summit.domains',
-            fn ($q) => $q->whereKey($tenant->getKey()),
+            'funnelStep.funnel.summit',
+            fn ($q) => $q->where('domain_id', $tenant->getKey()),
         );
 
         if ($summitId = CurrentSummit::getId()) {

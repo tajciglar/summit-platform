@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Domain;
 use App\Models\Summit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -18,6 +19,7 @@ class SummitFactory extends Factory
         $title = fake()->unique()->catchPhrase().' Summit';
 
         return [
+            'domain_id' => Domain::factory(),
             'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1000, 9999),
             'title' => $title,
             'description' => fake()->paragraph(),

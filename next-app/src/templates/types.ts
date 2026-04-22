@@ -57,6 +57,12 @@ export interface TemplateDefinition<TContent = unknown> {
     funnelId: string;
     enabledSections?: string[];
     palette?: Palette | null;
+    /**
+     * Per-funnel WordPress cart URL used as the interim checkout handoff for
+     * sales/upsell steps. When null, templates should fall back to the
+     * in-progress native Stripe checkout (TBD).
+     */
+    wpCheckoutRedirectUrl?: string | null;
   }>;
   /** descriptive tags for filtering */
   tags: readonly TemplateTag[];
