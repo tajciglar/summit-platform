@@ -35,7 +35,7 @@ beforeEach(function () {
         'jsonSchema' => $this->schema,
     ]);
     // Legacy unit tests exercise the whole-template schema path only.
-    $this->registry->shouldReceive('supportsSections')->with('ochre-ink')->andReturn(false);
+    $this->registry->shouldReceive('supportsSectionEditing')->with('ochre-ink')->andReturn(false);
 });
 
 it('calls anthropic with schema in system prompt and returns validated content', function () {
@@ -110,7 +110,7 @@ it('scopes whole-template schema to sales keys when step_type is sales_page', fu
         'tags' => [],
         'jsonSchema' => $schema,
     ]);
-    $registry->shouldReceive('supportsSections')->with('test-skin')->andReturn(false);
+    $registry->shouldReceive('supportsSectionEditing')->with('test-skin')->andReturn(false);
     $registry->shouldReceive('defaultSalesSections')->with('test-skin')->andReturn(['sales-hero', 'price-card']);
 
     $captured = null;

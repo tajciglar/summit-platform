@@ -36,8 +36,10 @@ it('runs the full generate → approve → publish flow', function () {
             ],
         ]);
         $m->shouldReceive('supportsSections')->with('ochre-ink')->andReturn(false);
+        $m->shouldReceive('supportsSectionEditing')->with('ochre-ink')->andReturn(false);
         $m->shouldReceive('supportedSections')->with('ochre-ink')->andReturn([]);
         $m->shouldReceive('defaultEnabledSections')->with('ochre-ink')->andReturn([]);
+        $m->shouldReceive('defaultSalesSections')->with('ochre-ink')->andReturn([]);
     });
 
     // Anthropic mock — returns a valid JSON payload

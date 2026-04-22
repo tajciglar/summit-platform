@@ -103,7 +103,10 @@ it('builds a section-keyed schema for ochre-ink (section-aware template)', funct
     expect($this->captured['system'])->toContain('top-level keys are each section name');
 });
 
-it('uses legacy whole-template schema for templates without sections (lime-ink)', function () {
+it('uses whole-template schema for monolithic templates without catalog-backed section schemas (lime-ink)', function () {
+    // Monolithic templates (lime-ink et al.) advertise `supportedSections` for
+    // operator enable/disable toggles but ship no catalog-backed per-section
+    // JSON schemas — so the AI must fill the whole-template shape.
     $summit = Summit::factory()->create();
     $filler = new TemplateFiller($this->registry, $this->client);
 
@@ -118,8 +121,7 @@ it('uses legacy whole-template schema for templates without sections (lime-ink)'
 
     $props = $schema['properties'];
 
-    // Legacy LimeInk shape has `summit` as a top-level metadata wrapper, not a
-    // section-keyed map.
+    // Whole-template LimeInk shape has `summit` as a top-level metadata wrapper.
     expect($props)->toHaveKey('summit');
 
     // And no section-mode hint in the system prompt.

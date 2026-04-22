@@ -45,7 +45,7 @@ class TemplateFiller
         // salesHero/vipBonuses/etc. We fall back to the whole jsonSchema for
         // sales_page steps across every template and scope `required` to the
         // sales keys so the AI fills the sales body.
-        $useSectionMode = $this->registry->supportsSections($templateKey)
+        $useSectionMode = $this->registry->supportsSectionEditing($templateKey)
             && $stepType !== 'sales_page';
 
         if ($useSectionMode) {

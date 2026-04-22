@@ -38,7 +38,7 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
             'slug' => 'tf',
             'template_key' => 'ochre-ink',
             'section_config.optin' => ['masthead', 'hero', 'footer'],
-            'section_config.sales_page' => ['masthead', 'hero', 'closing-cta', 'footer'],
+            'section_config.sales_page' => ['sales-hero', 'intro', 'price-card', 'guarantee'],
         ])
         ->call('create')
         ->assertHasNoFormErrors();

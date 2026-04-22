@@ -13,8 +13,8 @@ class ActiveCampaignService
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(config('services.activecampaign.url', ''), '/');
-        $this->apiKey = config('services.activecampaign.key', '');
+        $this->baseUrl = rtrim((string) config('services.activecampaign.url'), '/');
+        $this->apiKey = (string) config('services.activecampaign.key');
     }
 
     /**

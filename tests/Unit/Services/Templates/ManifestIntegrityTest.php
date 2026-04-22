@@ -61,15 +61,21 @@ it('defaultEnabledSections is a subset of supportedSections for every section-aw
     }
 });
 
-it('every supportedSection key of a catalog-backed template exists in the catalog', function () {
+it('every catalog-backed section of a catalog-backed template exists in the catalog', function () {
     // Monolithic templates (those without `sectionSchemas`) use template-private
     // section keys for toggling and are exempt from catalog-key alignment.
+    //
+    // Catalog-backed templates may also declare template-private sections in
+    // `supportedSections` — typically sales-page specific sections that don't
+    // belong in the shared landing catalog. We treat any key that is NOT in
+    // `sectionSchemas` as template-private and exempt it from this check.
     $catalogKeys = array_keys($this->manifest['catalog'] ?? []);
     foreach ($this->manifest['templates'] ?? [] as $t) {
         if (empty($t['sectionSchemas'])) {
             continue;
         }
-        foreach ($t['supportedSections'] ?? [] as $ss) {
+        $catalogBackedKeys = array_keys($t['sectionSchemas']);
+        foreach ($catalogBackedKeys as $ss) {
             expect($catalogKeys)->toContain($ss);
         }
     }
