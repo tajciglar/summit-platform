@@ -1,4 +1,5 @@
 import { resolveCheckoutHref } from '../../lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import type { SectionContentMap } from '../bridge';
 import type { TemplateContext } from './shared';
 
@@ -95,13 +96,13 @@ export function PriceCard({ content, context }: Props) {
               </p>
               <p className="font-opus-serif italic text-ochre-700 text-lg mb-8">{content.savings}</p>
 
-              <a
+              <TrackedCheckoutLink
                 href={ctaHref}
                 className="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold text-base md:text-lg px-10 py-4 rounded-full transition"
               >
                 {content.ctaLabel}
                 <span className="text-ochre-400 text-xl leading-none">→</span>
-              </a>
+              </TrackedCheckoutLink>
 
               <p className="figure-label mt-6 text-taupe-600">{content.guarantee}</p>
             </div>

@@ -7,6 +7,7 @@ import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { LimeInkContent } from './lime-ink.schema';
 import { limeInkDefaultEnabledSections } from './lime-ink.sections';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 
@@ -1568,14 +1569,14 @@ function SalesHero({
           </span>
         </p>
 
-        <a
+        <TrackedCheckoutLink
           href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           id="purchase"
           className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-5 rounded-full text-lg"
         >
           {h.ctaLabel}
           <SalesArrowRight size={20} />
-        </a>
+        </TrackedCheckoutLink>
 
         <p
           className="lime-ink-mono mt-6"
@@ -1978,13 +1979,13 @@ function PriceCard({
               >
                 {p.savings}
               </p>
-              <a
+              <TrackedCheckoutLink
                 href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
                 className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-4 rounded-full text-base"
               >
                 {p.ctaLabel}
                 <SalesArrowRight size={18} />
-              </a>
+              </TrackedCheckoutLink>
               <p
                 className="lime-ink-mono mt-4"
                 style={{ fontSize: '0.72rem', color: SALES_INK.INK400 }}

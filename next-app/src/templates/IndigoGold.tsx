@@ -11,6 +11,7 @@ import { EventStatusBadge } from '@/components/EventStatusBadge';
 import { paletteStyle, type Palette } from '@/lib/palette';
 import type { IndigoGoldContent } from './indigo-gold.schema';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 import { indigoGoldDefaultEnabledSections } from './indigo-gold.sections';
@@ -1266,9 +1267,9 @@ function SalesHero({
         <p style={{ fontSize: '0.88rem', color: LAV_SALES.INK700, marginBottom: '0.5rem' }}>
           Total value: <span style={{ fontWeight: 700, color: LAV_SALES.LAV700, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="indigo-gold-sales-pulse" style={salesBtnCtaLg}>
+        <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="indigo-gold-sales-pulse" style={salesBtnCtaLg}>
           {h.ctaLabel} <SalesArrowRight size={20} />
-        </a>
+        </TrackedCheckoutLink>
         <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: LAV_SALES.LAV700 }}>
           <strong>{h.ctaNote}</strong>
         </p>
@@ -1441,9 +1442,9 @@ function PriceCard({
             </p>
             <p style={{ fontSize: '2.6rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
-            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={salesBtnCtaLg}>
+            <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={salesBtnCtaLg}>
               {p.ctaLabel} <SalesArrowRight size={20} />
-            </a>
+            </TrackedCheckoutLink>
             <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: LAV_SALES.LAV700 }}>{p.guarantee}</p>
           </div>
         </div>

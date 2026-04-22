@@ -7,6 +7,7 @@ import { OptinModal } from '@/components/OptinModal';
 import type { BlueCoralContent } from './blue-coral.schema';
 import { blueCoralDefaultEnabledSections } from './blue-coral.sections';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 
@@ -1462,9 +1463,9 @@ function SalesHero({
         <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, marginBottom: '0.6rem' }}>
           Total value: <span style={{ fontWeight: 700, color: BC_SALES.NAVY700, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="blue-coral-sales-pulse" style={bcSalesBtnCtaLg}>
+        <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="blue-coral-sales-pulse" style={bcSalesBtnCtaLg}>
           {h.ctaLabel} <BcSalesArrowRight size={20} />
-        </a>
+        </TrackedCheckoutLink>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: BC_SALES.NAVY700 }}>
           <strong>{h.ctaNote}</strong>
         </p>
@@ -1638,9 +1639,9 @@ function PriceCard({
             </p>
             <p className="blue-coral-heading" style={{ fontSize: '2.75rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
-            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={bcSalesBtnCtaLg}>
+            <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={bcSalesBtnCtaLg}>
               {p.ctaLabel} <BcSalesArrowRight size={20} />
-            </a>
+            </TrackedCheckoutLink>
             <p style={{ marginTop: '0.85rem', fontSize: '0.8rem', color: BC_SALES.NAVY700 }}>{p.guarantee}</p>
           </div>
         </div>

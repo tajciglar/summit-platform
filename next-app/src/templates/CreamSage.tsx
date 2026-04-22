@@ -7,6 +7,7 @@ import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { CreamSageContent } from './cream-sage.schema';
 import { creamSageDefaultEnabledSections } from './cream-sage.sections';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 
@@ -1651,7 +1652,7 @@ function SalesHero({
           </span>
         </p>
 
-        <a
+        <TrackedCheckoutLink
           href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           id="purchase"
           className="cream-sage-btn-primary"
@@ -1659,7 +1660,7 @@ function SalesHero({
         >
           {h.ctaLabel}
           <span aria-hidden="true">→</span>
-        </a>
+        </TrackedCheckoutLink>
 
         <p
           className="mt-5 text-sm md:text-base"
@@ -2097,14 +2098,14 @@ function PriceCard({
             >
               {p.savings}
             </p>
-            <a
+            <TrackedCheckoutLink
               href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
               className="cream-sage-btn-primary"
               style={{ fontSize: '1.1rem' }}
             >
               {p.ctaLabel}
               <span aria-hidden="true">→</span>
-            </a>
+            </TrackedCheckoutLink>
             <p
               className="mt-3 text-sm"
               style={{

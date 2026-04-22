@@ -6,6 +6,7 @@ import { OptinModal } from '@/components/OptinModal';
 import type { VioletSunContent } from './violet-sun.schema';
 import { violetSunDefaultEnabledSections } from './violet-sun.sections';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 
@@ -1658,13 +1659,13 @@ function SalesHero({
             {h.totalValue}
           </span>
         </p>
-        <a
+        <TrackedCheckoutLink
           href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
           style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
         >
           {h.ctaLabel} <VsArrowRight size={20} />
-        </a>
+        </TrackedCheckoutLink>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: VS_SALES.VIO_700, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>
           {h.ctaNote}
         </p>
@@ -2154,13 +2155,13 @@ function PriceCard({
             >
               {p.savings}
             </p>
-            <a
+            <TrackedCheckoutLink
               href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
               className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
               style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
             >
               {p.ctaLabel} <VsArrowRight size={20} />
-            </a>
+            </TrackedCheckoutLink>
             <p
               style={{
                 marginTop: '0.85rem',
