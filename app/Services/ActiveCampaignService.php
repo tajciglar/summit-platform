@@ -45,7 +45,7 @@ class ActiveCampaignService
         }
     }
 
-    private function findOrCreateContact(string $email, string $name): int
+    public function findOrCreateContact(string $email, string $name): int
     {
         $parts = explode(' ', $name, 2);
         $firstName = $parts[0] ?? '';
@@ -62,7 +62,7 @@ class ActiveCampaignService
         return $response['contact']['id'];
     }
 
-    private function addTag(int $contactId, int|string $tagId): void
+    public function addTag(int $contactId, int|string $tagId): void
     {
         $this->request('POST', '/api/3/contactTags', [
             'contactTag' => [
@@ -72,7 +72,38 @@ class ActiveCampaignService
         ]);
     }
 
-    private function request(string $method, string $path, array $data = []): array
+    public function findOrCreateTagByName(string $tagName): string
+    {
+        $response = $this->request('GET', '/api/3/tags?search='.urlencode($tagName));
+
+        foreach ($response['tags'] ?? [] as $tag) {
+            if (strcasecmp($tag['tag'], $tagName) === 0) {
+                return (string) $tag['id'];
+            }
+        }
+
+        $created = $this->request('POST', '/api/3/tags', [
+            'tag' => [
+                'tag' => $tagName,
+                'tagType' => 'contact',
+            ],
+        ]);
+
+        return (string) $created['tag']['id'];
+    }
+
+    public function addContactToList(string $contactId, string $listId): void
+    {
+        $this->request('POST', '/api/3/contactLists', [
+            'contactList' => [
+                'contact' => $contactId,
+                'list' => $listId,
+                'status' => 1,
+            ],
+        ]);
+    }
+
+    public function request(string $method, string $path, array $data = []): array
     {
         $response = Http::withHeaders(['Api-Token' => $this->apiKey])
             ->$method($this->baseUrl.$path, $data);
