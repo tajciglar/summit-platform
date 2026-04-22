@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\FunnelResolveController;
 use App\Http\Controllers\Api\LandingPageDraftController;
 use App\Http\Controllers\Api\OptinController;
 use App\Http\Controllers\Api\PublicFunnelController;
+use App\Http\Controllers\Api\TrackPageViewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/funnels/{funnelId}/published-content', [PublicFunnelController::class, 'show']);
@@ -18,3 +19,6 @@ Route::get('/landing-page-drafts/{token}', [LandingPageDraftController::class, '
     ->middleware('throttle:120,1');
 
 Route::post('/optins', [OptinController::class, 'store'])->middleware('throttle:5,1');
+
+Route::post('/track/page-view', TrackPageViewController::class)
+    ->middleware('throttle:120,1');
