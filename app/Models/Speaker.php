@@ -7,7 +7,6 @@ use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,7 +15,6 @@ class Speaker extends Model
     use HasFactory, HasMediaAttachments, HasUuid;
 
     protected $fillable = [
-        'summit_id',
         'slug',
         'first_name',
         'last_name',
@@ -36,7 +34,6 @@ class Speaker extends Model
         'sort_order',
         'is_featured',
         'free_access_window_hours',
-        'day_number',
     ];
 
     protected function casts(): array
@@ -48,17 +45,7 @@ class Speaker extends Model
             'rating' => 'integer',
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
-            'day_number' => 'integer',
         ];
-    }
-
-    /**
-     * Legacy single-summit relation — kept only until the `speakers.summit_id`
-     * column is dropped (C4). Prefer `summits()` for new code.
-     */
-    public function summit(): BelongsTo
-    {
-        return $this->belongsTo(Summit::class);
     }
 
     /**

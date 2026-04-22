@@ -26,8 +26,7 @@ function makeAttachedMediaItem(array $attrs = []): MediaItem
 
 it('Speaker.photo_url falls back to the mediaFor(photo) URL when set', function () {
     $summit = Summit::factory()->create();
-    $speaker = Speaker::factory()->create([
-        'summit_id' => $summit->id,
+    $speaker = Speaker::factory()->forSummit($summit)->create([
         'photo_url' => 'https://legacy.example/old.jpg',
     ]);
 
@@ -43,8 +42,7 @@ it('Speaker.photo_url falls back to the mediaFor(photo) URL when set', function 
 
 it('Speaker.photo_url keeps the legacy column when no picker attachment exists', function () {
     $summit = Summit::factory()->create();
-    $speaker = Speaker::factory()->create([
-        'summit_id' => $summit->id,
+    $speaker = Speaker::factory()->forSummit($summit)->create([
         'photo_url' => 'https://legacy.example/kept.jpg',
     ]);
 
@@ -68,7 +66,7 @@ it('Summit.hero_image_url prefers the picker attachment', function () {
 
 it('mediaFor helper on the trait exposes a URL shortcut', function () {
     $summit = Summit::factory()->create();
-    $speaker = Speaker::factory()->create(['summit_id' => $summit->id]);
+    $speaker = Speaker::factory()->forSummit($summit->id)->create();
 
     expect($speaker->imageUrl('photo'))->toBeNull();
 

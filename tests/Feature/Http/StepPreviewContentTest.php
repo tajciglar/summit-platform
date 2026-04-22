@@ -49,7 +49,7 @@ it('includes summit speakers in camelCase', function () {
     $step = FunnelStep::factory()->for($funnel)->create([
         'page_content' => ['template_key' => 'indigo-gold', 'content' => []],
     ]);
-    $speaker = Speaker::factory()->for($summit)->create();
+    $speaker = Speaker::factory()->forSummit($summit)->create();
 
     $response = $this->getJson("/api/funnel-steps/{$step->id}/preview-content");
 

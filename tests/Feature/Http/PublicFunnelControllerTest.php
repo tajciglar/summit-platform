@@ -105,7 +105,7 @@ it('includes speaker summary in camelCase', function () {
         'step_type' => 'optin',
         'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
     ]);
-    $speaker = Speaker::factory()->for($summit)->create(['goes_live_at' => now()]);
+    $speaker = Speaker::factory()->forSummit($summit)->create(['goes_live_at' => now()]);
 
     $response = $this->getJson("/api/funnels/{$funnel->id}/published-content");
 

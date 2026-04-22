@@ -86,8 +86,8 @@ it('attaches a speaker to multiple summits at create time', function () {
 });
 
 it('shows an All tab plus one tab per domain summit on the list page', function () {
-    Speaker::factory()->create(['summit_id' => $this->summitA->id]);
-    Speaker::factory()->create(['summit_id' => $this->summitB->id]);
+    Speaker::factory()->forSummit($this->summitA->id)->create();
+    Speaker::factory()->forSummit($this->summitB->id)->create();
 
     $tabs = livewire(ListSpeakers::class)->instance()->getTabs();
 
@@ -97,18 +97,16 @@ it('shows an All tab plus one tab per domain summit on the list page', function 
 });
 
 it('summit tab filters speakers to only that summit', function () {
-    Speaker::factory()->create([
-        'summit_id' => $this->summitA->id,
+    Speaker::factory()->forSummit($this->summitA)->create([
         'first_name' => 'Alice',
         'last_name' => 'One',
     ]);
-    Speaker::factory()->create([
-        'summit_id' => $this->summitB->id,
+    Speaker::factory()->forSummit($this->summitB)->create([
         'first_name' => 'Bob',
         'last_name' => 'Two',
     ]);
 
     livewire(ListSpeakers::class, ['activeTab' => $this->summitA->id])
-        ->assertCanSeeTableRecords(Speaker::where('summit_id', $this->summitA->id)->get())
-        ->assertCanNotSeeTableRecords(Speaker::where('summit_id', $this->summitB->id)->get());
+        ->assertCanSeeTableRecords($this->summitA->speakers)
+        ->assertCanNotSeeTableRecords($this->summitB->speakers);
 });

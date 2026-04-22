@@ -37,9 +37,9 @@ function byDaySectionSchema(): array
 }
 
 it('expands speakersByDay to one entry per assigned day', function () {
-    $day1a = Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 1, 'sort_order' => 0]);
-    $day1b = Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 1, 'sort_order' => 1]);
-    $day2a = Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 2, 'sort_order' => 0]);
+    $day1a = Speaker::factory()->forSummit($this->summit, day: 1)->create(['sort_order' => 0]);
+    $day1b = Speaker::factory()->forSummit($this->summit, day: 1)->create(['sort_order' => 1]);
+    $day2a = Speaker::factory()->forSummit($this->summit, day: 2)->create(['sort_order' => 0]);
 
     $byDay = SectionPlaceholderFiller::speakersByDayFor($this->summit->id);
     $flat = SectionPlaceholderFiller::speakerIdsFor($this->summit->id);
@@ -54,10 +54,7 @@ it('expands speakersByDay to one entry per assigned day', function () {
 });
 
 it('falls back to a single entry when no speakers have day_number', function () {
-    Speaker::factory()->count(2)->create([
-        'summit_id' => $this->summit->id,
-        'day_number' => null,
-    ]);
+    Speaker::factory()->count(2)->forSummit($this->summit)->create();
 
     $byDay = SectionPlaceholderFiller::speakersByDayFor($this->summit->id);
     $flat = SectionPlaceholderFiller::speakerIdsFor($this->summit->id);
@@ -71,8 +68,8 @@ it('falls back to a single entry when no speakers have day_number', function () 
 });
 
 it('ignores day grouping on plain single-object speaker sections', function () {
-    Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 1, 'sort_order' => 0]);
-    Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 2, 'sort_order' => 0]);
+    Speaker::factory()->forSummit($this->summit, day: 1)->create(['sort_order' => 0]);
+    Speaker::factory()->forSummit($this->summit, day: 2)->create(['sort_order' => 0]);
 
     $singleDaySchema = [
         'type' => 'object',
@@ -101,9 +98,9 @@ it('ignores day grouping on plain single-object speaker sections', function () {
 });
 
 it('speakersByDayFor groups by day_number and skips unassigned speakers', function () {
-    Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 1]);
-    Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => null]);
-    Speaker::factory()->create(['summit_id' => $this->summit->id, 'day_number' => 3]);
+    Speaker::factory()->forSummit($this->summit, day: 1)->create();
+    Speaker::factory()->forSummit($this->summit)->create();
+    Speaker::factory()->forSummit($this->summit, day: 3)->create();
 
     $byDay = SectionPlaceholderFiller::speakersByDayFor($this->summit->id);
 

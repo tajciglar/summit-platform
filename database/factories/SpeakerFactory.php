@@ -21,7 +21,6 @@ class SpeakerFactory extends Factory
         $last = fake()->lastName();
 
         return [
-            'summit_id' => Summit::factory(),
             'slug' => Str::slug("{$first}-{$last}").'-'.fake()->unique()->numberBetween(100, 999),
             'first_name' => $first,
             'last_name' => $last,
@@ -44,23 +43,19 @@ class SpeakerFactory extends Factory
     }
 
     /**
-     * Mirror every factory-created speaker into the `speaker_summit` pivot so
-     * the new belongsToMany relation picks it up alongside the legacy
-     * `speakers.summit_id` column. This keeps existing test callsites
-     * like `Speaker::factory()->create(['summit_id' => X])` working through
-     * the M2M transition (C1–C3). Dropped once the legacy column is gone.
+     * Attach the created speaker to a summit via the `speaker_summit` pivot.
+     * Replaces the old pattern `Speaker::factory()->create(['summit_id' => X,
+     * 'day_number' => Y])` now that those columns are gone.
      */
-    public function configure(): static
+    public function forSummit(Summit|string $summit, ?int $day = null): static
     {
-        return $this->afterCreating(function (Speaker $speaker): void {
-            if ($speaker->summit_id === null) {
-                return;
-            }
+        $summitId = $summit instanceof Summit ? $summit->id : $summit;
 
+        return $this->afterCreating(function (Speaker $speaker) use ($summitId, $day): void {
             DB::table('speaker_summit')->updateOrInsert(
-                ['speaker_id' => $speaker->id, 'summit_id' => $speaker->summit_id],
+                ['speaker_id' => $speaker->id, 'summit_id' => $summitId],
                 [
-                    'day_number' => $speaker->day_number,
+                    'day_number' => $day,
                     'sort_order' => $speaker->sort_order ?? 0,
                     'created_at' => now(),
                     'updated_at' => now(),

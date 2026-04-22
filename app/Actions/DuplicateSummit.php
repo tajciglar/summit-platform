@@ -54,13 +54,13 @@ class DuplicateSummit
 
     private function cloneSpeakers(Summit $src, Summit $dest): void
     {
-        // Speakers are now M2M via `speaker_summit`; pivot carries per-summit
-        // day_number + sort_order. We duplicate each speaker as an independent
-        // record (so destination summit edits don't mutate the source speaker)
-        // and attach to the destination with the source's pivot values.
+        // Speakers are M2M via `speaker_summit`; pivot carries per-summit
+        // day_number + sort_order. We duplicate each speaker as an
+        // independent record (so destination summit edits don't mutate
+        // the source speaker) and attach to the destination with the
+        // source's pivot values.
         foreach ($src->speakers as $speaker) {
             $clone = $speaker->replicate(['created_at', 'updated_at']);
-            $clone->summit_id = $dest->id; // legacy NOT-NULL-less column; dropped in C4
             $clone->save();
 
             $dest->speakers()->attach($clone->id, [

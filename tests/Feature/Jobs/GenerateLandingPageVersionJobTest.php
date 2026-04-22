@@ -16,7 +16,7 @@ use App\Services\Templates\TemplateFiller;
 it('creates a draft with content from TemplateFiller', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
-    Speaker::factory()->for($summit)->create(['goes_live_at' => now()]);
+    Speaker::factory()->forSummit($summit)->create(['goes_live_at' => now()]);
     $batch = LandingPageBatch::create([
         'summit_id' => $summit->id,
         'funnel_id' => $funnel->id,

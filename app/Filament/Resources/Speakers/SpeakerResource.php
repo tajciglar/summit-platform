@@ -174,13 +174,14 @@ class SpeakerResource extends Resource
                     ->searchable(['first_name', 'last_name'])
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('summit.title')->label('Summit')->searchable()->toggleable(),
-                TextColumn::make('day_number')
-                    ->label('Day')
-                    ->formatStateUsing(fn (?int $state): string => $state === null ? '—' : "Day {$state}")
-                    ->badge()
-                    ->color('gray')
-                    ->sortable()
+                TextColumn::make('summits_list')
+                    ->label('Summits')
+                    ->state(fn (Speaker $record): string => $record->summits
+                        ->map(fn (Summit $s): string => $s->pivot->day_number
+                            ? "{$s->title} (Day {$s->pivot->day_number})"
+                            : $s->title)
+                        ->implode(', '))
+                    ->wrap()
                     ->toggleable(),
                 TextColumn::make('masterclass_title')
                     ->label('Masterclass')
@@ -200,9 +201,9 @@ class SpeakerResource extends Resource
                 TextColumn::make('sort_order')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('summit_id')
+                SelectFilter::make('summit')
                     ->label('Summit')
-                    ->relationship('summit', 'title')
+                    ->relationship('summits', 'title')
                     ->preload(),
                 TernaryFilter::make('is_featured'),
             ])
