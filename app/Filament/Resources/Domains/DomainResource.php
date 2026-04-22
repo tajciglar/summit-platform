@@ -80,6 +80,7 @@ class DomainResource extends Resource
                         ->columnSpanFull(),
                     MediaPickerInput::make('logo_media_item_id')
                         ->category('brand')
+                        ->subCategory('logo')
                         ->role('logo')
                         ->label('Logo')
                         ->columnSpanFull(),

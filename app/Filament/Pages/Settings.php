@@ -53,6 +53,7 @@ class Settings extends Page
                             ->placeholder('#4F46E5'),
                         MediaPickerInput::make('logo_media_item_id')
                             ->category('brand')
+                            ->subCategory('logo')
                             ->role('logo')
                             ->label('Logo')
                             ->columnSpanFull(),

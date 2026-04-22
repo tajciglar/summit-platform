@@ -25,6 +25,11 @@ trait HasMediaAttachments
             ->first();
     }
 
+    public function imageUrl(string $role): ?string
+    {
+        return $this->mediaFor($role)?->url();
+    }
+
     public function galleryFor(string $role): Collection
     {
         return $this->mediaAttachments()

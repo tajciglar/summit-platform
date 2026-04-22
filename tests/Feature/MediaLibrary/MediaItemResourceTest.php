@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\MediaCategory;
 use App\Filament\Resources\MediaItems\Pages\ListMediaItems;
 use App\Models\Domain;
 use App\Models\MediaItem;
@@ -36,6 +37,14 @@ it('lists own-domain and global items, hides other domains', function () {
         ->loadTable()
         ->assertCanSeeTableRecords([$mine, $global])
         ->assertCanNotSeeTableRecords([$hidden]);
+});
+
+it('renders the landing_page tab without erroring', function () {
+    MediaItem::factory()->create(['domain_id' => $this->domain->id, 'category' => MediaCategory::LandingPage]);
+
+    livewire(ListMediaItems::class, ['activeTab' => 'landing_page'])
+        ->loadTable()
+        ->assertSuccessful();
 });
 
 it('guards delete when item has attachments', function () {

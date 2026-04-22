@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('casts category to the enum', function () {
-    $item = MediaItem::factory()->create(['category' => MediaCategory::Hero]);
-    expect($item->fresh()->category)->toBe(MediaCategory::Hero);
+    $item = MediaItem::factory()->create(['category' => MediaCategory::LandingPage]);
+    expect($item->fresh()->category)->toBe(MediaCategory::LandingPage);
 });
 
 it('scopes to a single domain', function () {

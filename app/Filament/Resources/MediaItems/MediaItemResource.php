@@ -14,6 +14,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
@@ -53,8 +54,16 @@ class MediaItemResource extends Resource
         return $schema->components([
             Select::make('category')
                 ->options(MediaCategory::options())
+                ->required()
+                ->live()
+                ->afterStateUpdated(fn (callable $set) => $set('sub_category', null)),
+            Select::make('sub_category')
+                ->label('Sub-category')
+                ->options(fn (Get $get): array => ($cat = $get('category'))
+                    ? MediaCategory::from($cat)->subCategoryOptions()
+                    : [])
+                ->disabled(fn (Get $get): bool => blank($get('category')))
                 ->required(),
-            TextInput::make('sub_category')->maxLength(64),
             TextInput::make('caption')->maxLength(255),
             TextInput::make('alt_text')->maxLength(500),
             FileUpload::make('file_upload')

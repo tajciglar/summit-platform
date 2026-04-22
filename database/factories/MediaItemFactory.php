@@ -17,8 +17,8 @@ class MediaItemFactory extends Factory
     {
         return [
             'domain_id' => null,
-            'category' => MediaCategory::Hero,
-            'sub_category' => null,
+            'category' => MediaCategory::LandingPage,
+            'sub_category' => 'hero',
             'disk' => 'bunny',
             'path' => "media/{$this->faker->uuid()}.png",
             'file_name' => "{$this->faker->word()}.png",

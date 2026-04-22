@@ -159,7 +159,8 @@ class SummitResource extends Resource
                         ]),
 
                     MediaPickerInput::make('hero_media_item_id')
-                        ->category('hero')
+                        ->category('landing_page')
+                        ->subCategory('hero')
                         ->role('hero')
                         ->label('Hero image')
                         ->columnSpanFull(),

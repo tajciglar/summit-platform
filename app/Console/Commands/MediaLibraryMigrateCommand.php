@@ -40,12 +40,12 @@ class MediaLibraryMigrateCommand extends Command
         });
 
         $this->map = [
-            Summit::class => ['category' => MediaCategory::Hero, 'subCategory' => 'summit', 'role' => 'hero'],
-            Product::class => ['category' => MediaCategory::Product, 'subCategory' => 'main', 'role' => 'image'],
+            Summit::class => ['category' => MediaCategory::LandingPage, 'subCategory' => 'hero', 'role' => 'hero'],
+            Product::class => ['category' => MediaCategory::Product, 'subCategory' => 'product', 'role' => 'image'],
             FunnelStepBump::class => ['category' => MediaCategory::Product, 'subCategory' => 'bump', 'role' => 'image'],
-            Speaker::class => ['category' => MediaCategory::People, 'subCategory' => 'speaker', 'role' => 'photo'],
-            Domain::class => ['category' => MediaCategory::Brand, 'subCategory' => 'primary', 'role' => 'logo'],
-            AppSettings::class => ['category' => MediaCategory::Brand, 'subCategory' => 'primary', 'role' => 'logo'],
+            Speaker::class => ['category' => MediaCategory::Speakers, 'subCategory' => 'headshot', 'role' => 'photo'],
+            Domain::class => ['category' => MediaCategory::Brand, 'subCategory' => 'logo', 'role' => 'logo'],
+            AppSettings::class => ['category' => MediaCategory::Brand, 'subCategory' => 'logo', 'role' => 'logo'],
         ];
 
         $modelFilter = $this->option('model');

@@ -99,6 +99,7 @@ class ProductResource extends Resource
                     Textarea::make('description')->rows(3)->columnSpanFull(),
                     MediaPickerInput::make('image_media_item_id')
                         ->category('product')
+                        ->subCategory('product')
                         ->role('image')
                         ->label('Product image')
                         ->columnSpanFull(),

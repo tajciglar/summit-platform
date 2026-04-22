@@ -72,6 +72,7 @@ class FunnelStepBumpResource extends Resource
                 ->components([
                     MediaPickerInput::make('image_media_item_id')
                         ->category('product')
+                        ->subCategory('bump')
                         ->role('image')
                         ->label('Bump image'),
                 ]),

@@ -9,12 +9,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('exposes role and category getters after configuration', function (): void {
-    $field = MediaPickerInput::make('hero_media_item_id')
-        ->role('hero')
-        ->category('speaker');
+    $field = MediaPickerInput::make('photo_media_item_id')
+        ->role('photo')
+        ->category('speakers');
 
-    expect($field->getRole())->toBe('hero')
-        ->and($field->getCategory())->toBe('speaker');
+    expect($field->getRole())->toBe('photo')
+        ->and($field->getCategory())->toBe('speakers');
 });
 
 it('defaults role to image and category to product', function (): void {

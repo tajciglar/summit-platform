@@ -30,8 +30,8 @@ it('creates a MediaItem and attaches the uploaded file via addMedia', function (
 
     livewire(CreateMediaItem::class)
         ->fillForm([
-            'category' => MediaCategory::Hero->value,
-            'sub_category' => 'summit',
+            'category' => MediaCategory::LandingPage->value,
+            'sub_category' => 'hero',
             'caption' => 'Test hero',
             'alt_text' => 'A test hero image',
             'file_upload' => $file,
@@ -41,7 +41,7 @@ it('creates a MediaItem and attaches the uploaded file via addMedia', function (
 
     $item = MediaItem::first();
     expect($item)->not->toBeNull();
-    expect($item->category)->toBe(MediaCategory::Hero);
+    expect($item->category)->toBe(MediaCategory::LandingPage);
     expect($item->domain_id)->toBe($domain->id);
     expect($item->created_by_user_id)->toBe($user->id);
     expect($item->path)->not->toBe('');

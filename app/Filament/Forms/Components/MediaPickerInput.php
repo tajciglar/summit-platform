@@ -13,6 +13,8 @@ class MediaPickerInput extends Field
 
     protected string $role = 'image';
 
+    protected ?string $subCategoryFilter = null;
+
     public function category(string $category): static
     {
         $this->category = $category;
@@ -27,6 +29,17 @@ class MediaPickerInput extends Field
         return $this;
     }
 
+    /**
+     * Narrow the picker list to a single sub_category within the category.
+     * Matches the fixed vocabulary in MediaCategory::subCategoryOptions().
+     */
+    public function subCategory(string $subCategory): static
+    {
+        $this->subCategoryFilter = $subCategory;
+
+        return $this;
+    }
+
     public function getCategory(): string
     {
         return $this->category;
@@ -35,6 +48,11 @@ class MediaPickerInput extends Field
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    public function getSubCategoryFilter(): ?string
+    {
+        return $this->subCategoryFilter;
     }
 
     protected function setUp(): void
