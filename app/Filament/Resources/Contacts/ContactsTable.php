@@ -26,6 +26,12 @@ class ContactsTable
                 TextColumn::make('ac_contact_id')
                     ->label('AC ID')
                     ->placeholder('—'),
+                TextColumn::make('optins_failed_count')
+                    ->label('Failed syncs')
+                    ->state(fn ($record) => $record->optins()->where('ac_sync_status', 'failed')->count())
+                    ->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'danger' : 'gray')
+                    ->placeholder('0'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

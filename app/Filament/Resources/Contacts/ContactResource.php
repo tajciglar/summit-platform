@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\Contacts;
 
 use App\Filament\Resources\Contacts\Pages\ListContacts;
+use App\Filament\Resources\Contacts\RelationManagers\OptinsRelationManager;
 use App\Models\Contact;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class ContactResource extends Resource
 {
@@ -28,10 +30,18 @@ class ContactResource extends Resource
         return ContactsTable::configure($table);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            OptinsRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => ListContacts::route('/'),
+            'view' => Pages\ViewContact::route('/{record}'),
         ];
     }
 
@@ -40,12 +50,12 @@ class ContactResource extends Resource
         return false;
     }
 
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canEdit(Model $record): bool
     {
         return false;
     }
 
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canDelete(Model $record): bool
     {
         return false;
     }
