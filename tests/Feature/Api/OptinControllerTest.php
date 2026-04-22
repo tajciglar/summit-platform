@@ -31,7 +31,9 @@ it('creates contact and optin, returns redirect url', function () {
     expect($contact)->not->toBeNull();
     expect($contact->first_name)->toBe('Jane');
 
-    expect(Optin::where('contact_id', $contact->id)->exists())->toBeTrue();
+    $optin = Optin::where('contact_id', $contact->id)->first();
+    expect($optin)->not->toBeNull();
+    expect($optin->ac_sync_status)->toBe('pending');
 
     Queue::assertPushed(\App\Jobs\SyncOptinToActiveCampaign::class);
 });
