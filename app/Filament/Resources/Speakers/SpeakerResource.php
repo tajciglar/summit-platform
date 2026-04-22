@@ -180,8 +180,10 @@ class SpeakerResource extends Resource
                         ->map(fn (Summit $s): string => $s->pivot->day_number
                             ? "{$s->title} (Day {$s->pivot->day_number})"
                             : $s->title)
-                        ->implode(', '))
+                        ->implode(' · '))
                     ->wrap()
+                    ->lineClamp(2)
+                    ->extraAttributes(['style' => 'min-width: 280px; max-width: 420px;'])
                     ->toggleable(),
                 TextColumn::make('masterclass_title')
                     ->label('Masterclass')
