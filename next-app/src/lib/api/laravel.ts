@@ -7,6 +7,8 @@ export interface DraftPayload extends PublishedContent {
   speakers: Speaker[];
   status: string;
   funnel_id: string;
+  funnel_step_id: string | null;
+  summit_id: string | null;
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;
@@ -16,6 +18,8 @@ export interface DraftPayload extends PublishedContent {
 export interface PublicPayload extends PublishedContent {
   speakers: Speaker[];
   funnel_id: string;
+  funnel_step_id: string | null;
+  summit_id: string | null;
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;

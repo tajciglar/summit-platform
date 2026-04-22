@@ -40,7 +40,7 @@ class PublicFunnelController extends Controller
         // keep their native CTAs (e.g. optin → modal).
         $wpUrl = $stepType === 'sales_page' ? $funnel->wp_checkout_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $wpUrl));
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl));
     }
 
     /**
@@ -67,14 +67,14 @@ class PublicFunnelController extends Controller
 
         $wpUrl = $step->step_type === 'sales_page' ? $funnel?->wp_checkout_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $wpUrl));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl));
     }
 
     /**
      * @param  array<string, mixed>  $content
      * @return array<string, mixed>
      */
-    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $wpCheckoutRedirectUrl = null): array
+    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null): array
     {
         $summit = $summitId ? Summit::query()->find($summitId) : null;
         $speakers = $summit
@@ -104,6 +104,8 @@ class PublicFunnelController extends Controller
             'palette' => $content['palette'] ?? null,
             'speakers' => $speakers,
             'funnel_id' => $funnelId,
+            'funnel_step_id' => $funnelStepId,
+            'summit_id' => $summitId,
             'wp_checkout_redirect_url' => $wpCheckoutRedirectUrl,
         ];
     }
