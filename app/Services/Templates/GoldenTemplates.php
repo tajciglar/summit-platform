@@ -41,10 +41,7 @@ class GoldenTemplates
         return match ($goldenKey) {
             self::OPTIN_KEY => [
                 'template_key' => 'indigo-gold',
-                'content' => self::optinContent(
-                    self::speakerIds($summitId),
-                    self::dayNumbers($summitId),
-                ),
+                'content' => self::optinContent(self::speakerIds($summitId)),
             ],
             self::VIP_KEY => [
                 'template_key' => 'indigo-gold',
@@ -68,67 +65,8 @@ class GoldenTemplates
             ->all();
     }
 
-    /**
-     * Distinct day numbers assigned to this summit's speakers (sorted
-     * ascending, nulls excluded). Drives how many `speakersByDay` entries
-     * we seed into a fresh funnel — one per real day, or a single DAY 1
-     * stub when the summit has no speakers yet.
-     *
-     * @return list<int>
-     */
-    private static function dayNumbers(?string $summitId): array
-    {
-        if ($summitId === null) {
-            return [];
-        }
-
-        return Speaker::query()
-            ->where('summit_id', $summitId)
-            ->whereNotNull('day_number')
-            ->distinct()
-            ->orderBy('day_number')
-            ->pluck('day_number')
-            ->map(fn ($n) => (int) $n)
-            ->all();
-    }
-
-    /**
-     * Seed `speakersByDay` entries — one per distinct day_number on the
-     * summit's speakers. The renderer later filters the summit's full
-     * speaker list by `dayNumber` at render time, so adding a speaker with
-     * `day_number=3` later automatically populates the DAY 3 block as long
-     * as the operator has configured a DAY 3 entry here. When the summit
-     * has no speakers yet we seed a single DAY 1 stub — the renderer shows
-     * placeholder cards under it until real speakers arrive.
-     *
-     * @param  list<int>  $dayNumbers
-     * @return list<array{dayNumber: int, dayLabel: string, headline: string}>
-     */
-    private static function speakersByDayEntries(array $dayNumbers): array
-    {
-        if ($dayNumbers === []) {
-            return [[
-                'dayNumber' => 1,
-                'dayLabel' => 'DAY 1',
-                'headline' => "Understanding Your Child's Brain",
-            ]];
-        }
-
-        return array_map(
-            static fn (int $n): array => [
-                'dayNumber' => $n,
-                'dayLabel' => "DAY {$n}",
-                'headline' => "Day {$n} Sessions",
-            ],
-            $dayNumbers,
-        );
-    }
-
-    /**
-     * @param  list<string>  $speakerIds
-     * @param  list<int>  $dayNumbers  distinct summit day_numbers; empty = single DAY 1 stub
-     */
-    private static function optinContent(array $speakerIds, array $dayNumbers = []): array
+    /** @param list<string> $speakerIds */
+    private static function optinContent(array $speakerIds): array
     {
         return [
             'summit' => [
@@ -187,7 +125,6 @@ class GoldenTemplates
                 'cardHeadline' => '5 Days. 40+ Experts. On Demand.',
                 'cardSubhead' => 'Watch all replays at your own pace',
             ],
-            'speakersByDay' => self::speakersByDayEntries($dayNumbers),
             'outcomes' => [
                 'eyebrow' => "What You'll Walk Away With",
                 'headline' => 'Six Transformations By The End Of Day 5',

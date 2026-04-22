@@ -79,13 +79,6 @@ export const indigoGoldFixture: IndigoGoldContent = {
     cardHeadline: '5 Days. 40+ Experts. 100% Free.',
     cardSubhead: 'Watch live or catch the replays',
   },
-  speakersByDay: [
-    {
-      dayNumber: 1,
-      dayLabel: 'DAY 1',
-      headline: "Understanding Your Child's Brain",
-    },
-  ],
   outcomes: {
     eyebrow: "What You'll Walk Away With",
     headline: 'Six Transformations By The End Of Day 5',

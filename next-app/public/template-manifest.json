@@ -12179,34 +12179,6 @@
             ],
             "additionalProperties": false
           },
-          "speakersByDay": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "dayNumber": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
-                },
-                "dayLabel": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "headline": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              },
-              "required": [
-                "dayNumber",
-                "dayLabel",
-                "headline"
-              ],
-              "additionalProperties": false
-            }
-          },
           "outcomes": {
             "type": "object",
             "properties": {
@@ -13140,7 +13112,6 @@
           "trustBadges",
           "stats",
           "overview",
-          "speakersByDay",
           "outcomes",
           "freeGift",
           "bonuses",

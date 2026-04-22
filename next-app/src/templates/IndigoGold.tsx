@@ -477,27 +477,31 @@ function Overview({ content }: { content: IndigoGoldContent }) {
 }
 
 /* =======================================================================
- * SPEAKER GRID — late-binds to the summit's speaker table. For each day
- * configured in page_content.speakersByDay we pull `speakers` matching that
- * `dayNumber` and render them in a 3-col grid. Empty days are hidden. If
- * the summit has zero speakers overall, we fall back to a single
- * "Speakers coming soon" placeholder block so preview layouts don't
- * collapse.
+ * SPEAKER GRID — fully derived from the summit's Speaker table. Distinct
+ * `speaker.dayNumber` values become day blocks; labels are generated as
+ * "DAY N". Adding a speaker with a new day_number makes a new block
+ * appear without touching the funnel. If the summit has zero speakers,
+ * we render a single placeholder block so preview layouts don't collapse.
  * ======================================================================= */
-function SpeakersGrid({ content, speakers }: Props) {
-  const days = content.speakersByDay;
-  const allSpeakers = Object.values(speakers);
+function groupSpeakersByDay(speakers: Record<string, Speaker>): Array<{ dayNumber: number; speakers: Speaker[] }> {
+  const grouped = new Map<number, Speaker[]>();
+  for (const s of Object.values(speakers)) {
+    if (s.dayNumber === null) continue;
+    const bucket = grouped.get(s.dayNumber) ?? [];
+    bucket.push(s);
+    grouped.set(s.dayNumber, bucket);
+  }
+  return [...grouped.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([dayNumber, list]) => ({
+      dayNumber,
+      speakers: list.sort((a, b) => a.sortOrder - b.sortOrder),
+    }));
+}
 
-  const dayBlocks = days
-    .map((day) => ({
-      day,
-      daySpeakers: allSpeakers
-        .filter((s) => s.dayNumber === day.dayNumber)
-        .sort((a, b) => a.sortOrder - b.sortOrder),
-    }))
-    .filter((block) => block.daySpeakers.length > 0);
-
-  const showPlaceholder = dayBlocks.length === 0 && allSpeakers.length === 0;
+function SpeakersGrid({ speakers }: Props) {
+  const dayBlocks = groupSpeakersByDay(speakers);
+  const showPlaceholder = dayBlocks.length === 0;
 
   return (
     <section className="py-16 bg-white">
@@ -506,14 +510,11 @@ function SpeakersGrid({ content, speakers }: Props) {
         <h2 className="indigo-gold-h2-head mb-12">40+ World-Leading Experts and Authorities</h2>
 
         {showPlaceholder ? (
-          <PlaceholderDayBlock day={days[0]} count={6} />
+          <PlaceholderDayBlock dayNumber={1} count={6} />
         ) : (
-          dayBlocks.map(({ day, daySpeakers }) => (
-            <div key={`day-${day.dayNumber}`} className="mb-16">
-              <p className="indigo-gold-eyebrow-head mb-1">{day.dayLabel}</p>
-              <h3 className="text-xl md:text-2xl font-bold mb-8" style={{ color: INK.c900 }}>
-                {day.headline}
-              </h3>
+          dayBlocks.map(({ dayNumber, speakers: daySpeakers }) => (
+            <div key={`day-${dayNumber}`} className="mb-16">
+              <p className="indigo-gold-eyebrow-head mb-1">DAY {dayNumber}</p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
                 {daySpeakers.map((s) => (
                   <SpeakerCard key={s.id} speaker={s} />
@@ -527,13 +528,10 @@ function SpeakersGrid({ content, speakers }: Props) {
   );
 }
 
-function PlaceholderDayBlock({ day, count }: { day: IndigoGoldContent['speakersByDay'][number]; count: number }) {
+function PlaceholderDayBlock({ dayNumber, count }: { dayNumber: number; count: number }) {
   return (
     <div className="mb-16">
-      <p className="indigo-gold-eyebrow-head mb-1">{day.dayLabel}</p>
-      <h3 className="text-xl md:text-2xl font-bold mb-8" style={{ color: INK.c900 }}>
-        {day.headline}
-      </h3>
+      <p className="indigo-gold-eyebrow-head mb-1">DAY {dayNumber}</p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
         {Array.from({ length: count }).map((_, idx) => (
           <div
@@ -1467,12 +1465,15 @@ function PriceCard({
   );
 }
 
-/* SALES SPEAKERS — <details> cards with photo/initials avatar + bio toggle. */
+/* SALES SPEAKERS — grouped by day. Uses the same day-derivation logic as
+ * the optin SpeakersGrid: distinct `speaker.dayNumber` values become day
+ * sub-blocks under the section's operator-editable eyebrow/headline. New
+ * day_number on a speaker = new sub-block, no funnel edit. */
 function SalesSpeakers({ content, speakers }: { content: IndigoGoldContent; speakers: Record<string, Speaker> }) {
   if (!content.salesSpeakers) return null;
   const s = content.salesSpeakers;
-  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
-  if (sortedSpeakers.length === 0) return null;
+  const dayBlocks = groupSpeakersByDay(speakers);
+  if (dayBlocks.length === 0) return null;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
       <div style={{ maxWidth: 1152, margin: '0 auto' }}>
@@ -1480,29 +1481,36 @@ function SalesSpeakers({ content, speakers }: { content: IndigoGoldContent; spea
           <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{s.eyebrow}</p>
           <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}>{s.headline}</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
-          {sortedSpeakers.map((spk) => (
-            <details key={spk.id} className="indigo-gold-sales-spk" style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 16, boxShadow: '0 6px 18px -10px rgba(90,69,137,.25)', marginBottom: 0, overflow: 'hidden' }}>
-              <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '1.5rem 1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
-                {spk.photoUrl
-                  ? /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${LAV_SALES.LAV300}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(90,69,137,.35)` }} />
-                  : <div style={{ width: 84, height: 84, borderRadius: '50%', background: `linear-gradient(135deg,${LAV_SALES.LAV200},${LAV_SALES.LAV400})`, border: `3px solid ${LAV_SALES.LAV300}`, display: 'grid', placeItems: 'center', color: LAV_SALES.LAV700, fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '1.8rem', fontStyle: 'italic' }}>
-                      {spk.firstName[0]}{spk.lastName[0]}
+        {dayBlocks.map(({ dayNumber, speakers: daySpeakers }) => (
+          <div key={`sales-day-${dayNumber}`} style={{ marginBottom: '2.5rem' }}>
+            <p style={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.15em', textTransform: 'uppercase', color: LAV_SALES.LAV700, marginBottom: '1rem' }}>
+              DAY {dayNumber}
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
+              {daySpeakers.map((spk) => (
+                <details key={spk.id} className="indigo-gold-sales-spk" style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 16, boxShadow: '0 6px 18px -10px rgba(90,69,137,.25)', marginBottom: 0, overflow: 'hidden' }}>
+                  <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '1.5rem 1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
+                    {spk.photoUrl
+                      ? /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${LAV_SALES.LAV300}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(90,69,137,.35)` }} />
+                      : <div style={{ width: 84, height: 84, borderRadius: '50%', background: `linear-gradient(135deg,${LAV_SALES.LAV200},${LAV_SALES.LAV400})`, border: `3px solid ${LAV_SALES.LAV300}`, display: 'grid', placeItems: 'center', color: LAV_SALES.LAV700, fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '1.8rem', fontStyle: 'italic' }}>
+                          {spk.firstName[0]}{spk.lastName[0]}
+                        </div>
+                    }
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                      <p style={{ fontWeight: 700, fontSize: '0.95rem', color: LAV_SALES.INK900, margin: 0 }}>{spk.firstName} {spk.lastName}</p>
+                      <p style={{ fontSize: '0.78rem', color: LAV_SALES.LAV700, margin: 0 }}>{spk.title}</p>
+                      <p style={{ fontSize: '0.78rem', color: LAV_SALES.INK700, margin: 0, fontStyle: 'italic' }}>{spk.masterclassTitle}</p>
                     </div>
-                }
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <p style={{ fontWeight: 700, fontSize: '0.95rem', color: LAV_SALES.INK900, margin: 0 }}>{spk.firstName} {spk.lastName}</p>
-                  <p style={{ fontSize: '0.78rem', color: LAV_SALES.LAV700, margin: 0 }}>{spk.title}</p>
-                  <p style={{ fontSize: '0.78rem', color: LAV_SALES.INK700, margin: 0, fontStyle: 'italic' }}>{spk.masterclassTitle}</p>
-                </div>
-              </summary>
-              {spk.shortBio && (
-                <p style={{ padding: '0 1.5rem 1.5rem', color: LAV_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
-              )}
-            </details>
-          ))}
-        </div>
+                  </summary>
+                  {spk.shortBio && (
+                    <p style={{ padding: '0 1.5rem 1.5rem', color: LAV_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
+                  )}
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -253,13 +253,6 @@ class AdhdParentingSummitSeeder extends Seeder
                     'cardHeadline' => '5 Days. 40+ Experts. On Demand.',
                     'cardSubhead' => 'Watch all replays at your own pace',
                 ],
-                'speakersByDay' => [
-                    [
-                        'dayNumber' => 1,
-                        'dayLabel' => 'DAY 1',
-                        'headline' => "Understanding Your Child's Brain",
-                    ],
-                ],
                 'outcomes' => [
                     'eyebrow' => "What You'll Walk Away With",
                     'headline' => 'Six Transformations By The End Of Day 5',
