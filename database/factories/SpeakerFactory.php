@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Speaker;
 use App\Models\Summit;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -40,5 +41,31 @@ class SpeakerFactory extends Factory
             'is_featured' => fake()->boolean(25),
             'free_access_window_hours' => 24,
         ];
+    }
+
+    /**
+     * Mirror every factory-created speaker into the `speaker_summit` pivot so
+     * the new belongsToMany relation picks it up alongside the legacy
+     * `speakers.summit_id` column. This keeps existing test callsites
+     * like `Speaker::factory()->create(['summit_id' => X])` working through
+     * the M2M transition (C1–C3). Dropped once the legacy column is gone.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Speaker $speaker): void {
+            if ($speaker->summit_id === null) {
+                return;
+            }
+
+            DB::table('speaker_summit')->updateOrInsert(
+                ['speaker_id' => $speaker->id, 'summit_id' => $speaker->summit_id],
+                [
+                    'day_number' => $speaker->day_number,
+                    'sort_order' => $speaker->sort_order ?? 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            );
+        });
     }
 }

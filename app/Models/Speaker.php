@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Speaker extends Model
@@ -50,9 +52,25 @@ class Speaker extends Model
         ];
     }
 
+    /**
+     * Legacy single-summit relation — kept only until the `speakers.summit_id`
+     * column is dropped (C4). Prefer `summits()` for new code.
+     */
     public function summit(): BelongsTo
     {
         return $this->belongsTo(Summit::class);
+    }
+
+    /**
+     * Summits this speaker is attached to. The pivot carries per-summit
+     * `day_number` and `sort_order`, so a reused speaker video can sit on
+     * Day 2 of one summit and Day 5 of another.
+     */
+    public function summits(): BelongsToMany
+    {
+        return $this->belongsToMany(Summit::class, 'speaker_summit')
+            ->withPivot('day_number', 'sort_order')
+            ->withTimestamps();
     }
 
     public function videoViewSessions(): HasMany
@@ -63,5 +81,10 @@ class Speaker extends Model
     public function fullName(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    protected function photoUrl(): Attribute
+    {
+        return Attribute::get(fn ($value) => $this->imageUrl('photo') ?: $value);
     }
 }

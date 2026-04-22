@@ -6,6 +6,7 @@ use App\Enums\SummitAudience;
 use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Filament\Models\Contracts\HasName;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,11 @@ class Summit extends Model implements HasName
             ->filter()
             ->map(fn (string $word) => strtolower(substr($word, 0, 1)))
             ->implode('');
+    }
+
+    protected function heroImageUrl(): Attribute
+    {
+        return Attribute::get(fn ($value) => $this->imageUrl('hero') ?: $value);
     }
 
     protected $fillable = [
@@ -71,9 +77,19 @@ class Summit extends Model implements HasName
         return $this->hasMany(SummitPage::class);
     }
 
-    public function speakers(): HasMany
+    /**
+     * Speakers attached to this summit. Many-to-many via `speaker_summit`,
+     * where the pivot carries the per-attachment `day_number` and
+     * `sort_order`. Callers that need the day number should use
+     * `$speaker->pivot->day_number` (or preload with `->with('summits')`
+     * on a speaker query).
+     */
+    public function speakers(): BelongsToMany
     {
-        return $this->hasMany(Speaker::class);
+        return $this->belongsToMany(Speaker::class, 'speaker_summit')
+            ->withPivot('day_number', 'sort_order')
+            ->withTimestamps()
+            ->orderByPivot('sort_order');
     }
 
     public function products(): HasMany
