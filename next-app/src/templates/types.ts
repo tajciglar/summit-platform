@@ -32,6 +32,12 @@ export interface Speaker {
   goesLiveAt: string | null;   // ISO datetime
   sortOrder: number;
   isFeatured: boolean;
+  /**
+   * Operator-assigned day of the summit (1, 2, 3, ...). Null if the speaker
+   * hasn't been slotted yet. Templates that render per-day speaker grids
+   * filter by this field to show each speaker under the correct day.
+   */
+  dayNumber: number | null;
 }
 
 export interface TemplateDefinition<TContent = unknown> {

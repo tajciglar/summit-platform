@@ -81,13 +81,19 @@ export const IndigoGoldSchema = z.object({
     cardSubhead: z.string().min(1),             // "Watch live or catch the replays"
     imageUrl: z.string().url().nullish(),        // optional hero-right image
   }),
-  // Multi-day speaker grid. One entry per summit day; SectionPlaceholderFiller
-  // expands the `speakers.day_number` assignments into one entry per day when
-  // the schema item has a `dayLabel` + uuid-array `speakerIds` shape.
+  // Multi-day speaker grid. Each entry declares a summit day by `dayNumber`;
+  // the actual speakers on that day are NOT stored in `page_content` — the
+  // renderer filters the full summit speaker list by `speaker.day_number`
+  // at render time, so adding/removing speakers in the Speaker admin flows
+  // through automatically without editing the funnel.
+  //
+  // Empty-day handling (render): days with zero matching speakers are
+  // hidden. If the summit has zero speakers overall, the renderer falls
+  // back to a single placeholder day so the layout doesn't collapse.
   speakersByDay: z.array(z.object({
+    dayNumber: z.number().int().min(1),         // maps to speakers.day_number
     dayLabel: z.string().min(1),                // "DAY 1"
     headline: z.string().min(1),                // "Understanding Your Child's Brain"
-    speakerIds: z.array(z.string().uuid()).min(1),
   })).min(1),
   outcomes: z.object({
     eyebrow: z.string().min(1),                 // "What You'll Walk Away With"

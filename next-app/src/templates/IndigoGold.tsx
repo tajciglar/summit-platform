@@ -10,6 +10,7 @@ import { OptinModal } from '@/components/OptinModal';
 import { EventStatusBadge } from '@/components/EventStatusBadge';
 import { paletteStyle, type Palette } from '@/lib/palette';
 import type { IndigoGoldContent } from './indigo-gold.schema';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 import { indigoGoldDefaultEnabledSections } from './indigo-gold.sections';
 
@@ -22,6 +23,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 /* =======================================================================
@@ -475,11 +477,27 @@ function Overview({ content }: { content: IndigoGoldContent }) {
 }
 
 /* =======================================================================
- * SPEAKER GRID — one day block per speakersByDay entry. Each card is a
- * vertical stack: photo → name → credentials → quote → view-more toggle.
+ * SPEAKER GRID — late-binds to the summit's speaker table. For each day
+ * configured in page_content.speakersByDay we pull `speakers` matching that
+ * `dayNumber` and render them in a 3-col grid. Empty days are hidden. If
+ * the summit has zero speakers overall, we fall back to a single
+ * "Speakers coming soon" placeholder block so preview layouts don't
+ * collapse.
  * ======================================================================= */
 function SpeakersGrid({ content, speakers }: Props) {
   const days = content.speakersByDay;
+  const allSpeakers = Object.values(speakers);
+
+  const dayBlocks = days
+    .map((day) => ({
+      day,
+      daySpeakers: allSpeakers
+        .filter((s) => s.dayNumber === day.dayNumber)
+        .sort((a, b) => a.sortOrder - b.sortOrder),
+    }))
+    .filter((block) => block.daySpeakers.length > 0);
+
+  const showPlaceholder = dayBlocks.length === 0 && allSpeakers.length === 0;
 
   return (
     <section className="py-16 bg-white">
@@ -487,13 +505,11 @@ function SpeakersGrid({ content, speakers }: Props) {
         <p className="indigo-gold-eyebrow-head mb-2">Learn From These</p>
         <h2 className="indigo-gold-h2-head mb-12">40+ World-Leading Experts and Authorities</h2>
 
-        {days.map((day, dayIdx) => {
-          const daySpeakers = day.speakerIds
-            .map((id) => speakers[id])
-            .filter((s): s is Speaker => Boolean(s));
-          if (daySpeakers.length === 0) return null;
-          return (
-            <div key={`day-${dayIdx}`} className="mb-16">
+        {showPlaceholder ? (
+          <PlaceholderDayBlock day={days[0]} count={6} />
+        ) : (
+          dayBlocks.map(({ day, daySpeakers }) => (
+            <div key={`day-${day.dayNumber}`} className="mb-16">
               <p className="indigo-gold-eyebrow-head mb-1">{day.dayLabel}</p>
               <h3 className="text-xl md:text-2xl font-bold mb-8" style={{ color: INK.c900 }}>
                 {day.headline}
@@ -504,10 +520,46 @@ function SpeakersGrid({ content, speakers }: Props) {
                 ))}
               </div>
             </div>
-          );
-        })}
+          ))
+        )}
       </div>
     </section>
+  );
+}
+
+function PlaceholderDayBlock({ day, count }: { day: IndigoGoldContent['speakersByDay'][number]; count: number }) {
+  return (
+    <div className="mb-16">
+      <p className="indigo-gold-eyebrow-head mb-1">{day.dayLabel}</p>
+      <h3 className="text-xl md:text-2xl font-bold mb-8" style={{ color: INK.c900 }}>
+        {day.headline}
+      </h3>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+        {Array.from({ length: count }).map((_, idx) => (
+          <div
+            key={`placeholder-${idx}`}
+            className="indigo-gold-spk"
+            style={{ opacity: 0.45 }}
+            aria-hidden="true"
+          >
+            <div className="flex gap-4 items-start p-4">
+              <div
+                className="indigo-gold-spk-ava"
+                style={{ background: '#E5E7EB', flexShrink: 0 }}
+              />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 rounded" style={{ background: '#E5E7EB', width: '70%' }} />
+                <div className="h-3 rounded" style={{ background: '#F3F4F6', width: '50%' }} />
+                <div className="h-3 rounded mt-3" style={{ background: '#F3F4F6', width: '85%' }} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-6 text-sm" style={{ color: INK.c700 }}>
+        Speakers coming soon — assign them a day in the admin to see them here.
+      </p>
+    </div>
   );
 }
 
@@ -1189,7 +1241,10 @@ const salesBtnCta: CSSProperties = {
 const salesBtnCtaLg: CSSProperties = { ...salesBtnCta, padding: '1.15rem 2.4rem', fontSize: '1.15rem' };
 
 /* SALES HERO — red live badge, gradient product mockup, pulsing gold CTA. */
-function SalesHero({ content }: { content: IndigoGoldContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.name;
@@ -1226,7 +1281,7 @@ function SalesHero({ content }: { content: IndigoGoldContent }) {
         <p style={{ fontSize: '0.88rem', color: LAV_SALES.INK700, marginBottom: '0.5rem' }}>
           Total value: <span style={{ fontWeight: 700, color: LAV_SALES.LAV700, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href="#purchase" id="purchase" className="indigo-gold-sales-pulse" style={salesBtnCtaLg}>
+        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="indigo-gold-sales-pulse" style={salesBtnCtaLg}>
           {h.ctaLabel} <SalesArrowRight size={20} />
         </a>
         <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: LAV_SALES.LAV700 }}>
@@ -1344,7 +1399,10 @@ function UpgradeSection({ content }: { content: IndigoGoldContent }) {
 
 /* PRICE CARD — white card with lavender border, bullet features, gift box,
  * strikethrough value, large green price, pulse CTA. */
-function PriceCard({ content }: { content: IndigoGoldContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1398,7 +1456,7 @@ function PriceCard({ content }: { content: IndigoGoldContent }) {
             </p>
             <p style={{ fontSize: '2.6rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
-            <a href="#purchase" style={salesBtnCtaLg}>
+            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={salesBtnCtaLg}>
               {p.ctaLabel} <SalesArrowRight size={20} />
             </a>
             <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: LAV_SALES.LAV700 }}>{p.guarantee}</p>
@@ -1541,6 +1599,7 @@ export function IndigoGold({
   funnelId,
   enabledSections,
   palette,
+  wpCheckoutRedirectUrl,
 }: RootProps) {
   const enabled = new Set(enabledSections ?? indigoGoldDefaultEnabledSections);
   return (
@@ -1570,12 +1629,12 @@ export function IndigoGold({
         {enabled.has('faq') && <FAQ content={content} />}
 
         {/* Sales-page sections — optional, only rendered when enabled. */}
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

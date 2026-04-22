@@ -255,9 +255,9 @@ class AdhdParentingSummitSeeder extends Seeder
                 ],
                 'speakersByDay' => [
                     [
+                        'dayNumber' => 1,
                         'dayLabel' => 'DAY 1',
                         'headline' => "Understanding Your Child's Brain",
-                        'speakerIds' => $speakerIds,
                     ],
                 ],
                 'outcomes' => [

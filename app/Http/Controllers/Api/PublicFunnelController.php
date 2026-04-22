@@ -36,7 +36,11 @@ class PublicFunnelController extends Controller
             }
         }
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $funnel->wp_checkout_redirect_url));
+        // WP checkout redirect is a sales-page concept; other step types must
+        // keep their native CTAs (e.g. optin → modal).
+        $wpUrl = $stepType === 'sales_page' ? $funnel->wp_checkout_redirect_url : null;
+
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $wpUrl));
     }
 
     /**
@@ -53,8 +57,9 @@ class PublicFunnelController extends Controller
         }
 
         $funnel = $step->funnel;
+        $wpUrl = $step->step_type === 'sales_page' ? $funnel?->wp_checkout_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $funnel?->wp_checkout_redirect_url));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $wpUrl));
     }
 
     /**
@@ -78,6 +83,7 @@ class PublicFunnelController extends Controller
                 'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
                 'sortOrder' => $s->sort_order,
                 'isFeatured' => $s->is_featured,
+                'dayNumber' => $s->day_number,
             ])
             : collect();
 

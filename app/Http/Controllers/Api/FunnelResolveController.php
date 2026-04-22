@@ -35,9 +35,15 @@ class FunnelResolveController extends Controller
             : null;
 
         $speakers = $summit->speakers->map(function ($s) use ($starts) {
-            $dayNumber = ($starts && $s->goes_live_at)
-                ? (int) ($starts->diffInDays(Carbon::parse($s->goes_live_at)->startOfDay()) + 1)
-                : 0;
+            // Prefer the operator-managed `day_number` column; fall back to
+            // the date-derived day (goes_live_at vs pre_summit_starts_at + 1)
+            // for legacy summits that haven't populated day_number yet.
+            $dayNumber = $s->day_number;
+            if ($dayNumber === null) {
+                $dayNumber = ($starts && $s->goes_live_at)
+                    ? (int) ($starts->diffInDays(Carbon::parse($s->goes_live_at)->startOfDay()) + 1)
+                    : null;
+            }
 
             return [
                 'id' => $s->id,

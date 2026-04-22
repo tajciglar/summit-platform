@@ -37,6 +37,7 @@ class LandingPageDraftController extends Controller
                     'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
                     'sortOrder' => $s->sort_order,
                     'isFeatured' => $s->is_featured,
+                    'dayNumber' => $s->day_number,
                 ])
                 ->values()
             : collect();
