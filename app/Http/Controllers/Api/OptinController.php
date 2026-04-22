@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\RecordPageView;
 use App\Http\Controllers\Controller;
 use App\Jobs\SyncOptinToActiveCampaign;
 use App\Models\Contact;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 
 class OptinController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, RecordPageView $recorder): JsonResponse
     {
         $data = $request->validate([
             'first_name' => ['required', 'string', 'max:100'],
@@ -42,6 +43,13 @@ class OptinController extends Controller
             'utm_content' => $request->input('utm_content'),
             'utm_term' => $request->input('utm_term'),
         ]);
+
+        $recorder->handle(
+            $request,
+            summitId: $funnel->summit->id,
+            funnelId: $funnel->id,
+            pageType: 'optin_submit',
+        );
 
         SyncOptinToActiveCampaign::dispatch($optin);
 
