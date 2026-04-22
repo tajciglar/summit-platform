@@ -47,6 +47,41 @@ it('renders the landing_page tab without erroring', function () {
         ->assertSuccessful();
 });
 
+it('filters by sub-category when drilled into a product tab', function () {
+    $productImage = MediaItem::factory()->create([
+        'domain_id' => $this->domain->id,
+        'category' => MediaCategory::Product,
+        'sub_category' => 'product',
+    ]);
+    $bumpImage = MediaItem::factory()->create([
+        'domain_id' => $this->domain->id,
+        'category' => MediaCategory::Product,
+        'sub_category' => 'bump',
+    ]);
+    $upsellImage = MediaItem::factory()->create([
+        'domain_id' => $this->domain->id,
+        'category' => MediaCategory::Product,
+        'sub_category' => 'upsell',
+    ]);
+
+    livewire(ListMediaItems::class, ['activeTab' => 'product'])
+        ->set('activeSubCategory', 'bump')
+        ->loadTable()
+        ->assertCanSeeTableRecords([$bumpImage])
+        ->assertCanNotSeeTableRecords([$productImage, $upsellImage]);
+});
+
+it('resets sub-category when switching top-level tabs', function () {
+    $component = livewire(ListMediaItems::class, ['activeTab' => 'product'])
+        ->set('activeSubCategory', 'bump');
+
+    expect($component->get('activeSubCategory'))->toBe('bump');
+
+    $component->set('activeTab', 'landing_page');
+
+    expect($component->get('activeSubCategory'))->toBeNull();
+});
+
 it('guards delete when item has attachments', function () {
     $item = MediaItem::factory()->create(['domain_id' => $this->domain->id]);
     DB::table('media_item_attachments')->insert([
