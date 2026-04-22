@@ -11,6 +11,14 @@ import { EventStatusSchema } from '../components/event-status';
  *
  * Every visible rendered string is a schema slot so operators can override
  * per-summit.
+ *
+ * The template is a family: optin-style sections (hero, press, bonuses,
+ * founders, testimonials, faqs, etc.) and sales-style sections (salesHero,
+ * vipBonuses, freeGifts, priceCard, comparisonTable, guarantee, whySection)
+ * live in the same schema. Each step type enables a subset via
+ * `enabled_sections`; the rendered pages share brand/typography/palette but
+ * differ structurally because different sections render. Sales sections are
+ * all optional so optin steps validate without supplying them.
  */
 export const IndigoGoldSchema = z.object({
   summit: z.object({
@@ -190,6 +198,89 @@ export const IndigoGoldSchema = z.object({
     })).min(1).max(6),
     copyright: z.string().min(1),
   }),
+
+  // ─────────────────────────────────────────────────────────────────
+  // Sales-page sections (all optional — only sales_page steps enable them).
+  // Visually styled to match the former `lavender-gold` template so
+  // existing sales pages render identically after the family merge.
+  // ─────────────────────────────────────────────────────────────────
+  salesHero: z.object({
+    badge: z.string().min(1),
+    headline: z.string().min(1),
+    subheadline: z.string().min(1),
+    productLabel: z.string().min(1),
+    totalValue: z.string().min(1),
+    ctaLabel: z.string().min(1),
+    ctaNote: z.string().min(1),
+  }).optional(),
+  intro: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+    paragraphs: z.array(z.string().min(1)).min(1).max(4),
+  }).optional(),
+  vipBonuses: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+    items: z.array(z.object({
+      icon: z.enum(['infinity', 'clipboard', 'headphones', 'captions', 'file-text', 'book']),
+      title: z.string().min(1),
+      description: z.string().min(1),
+      valueLabel: z.string().min(1),
+    })).min(1).max(8),
+  }).optional(),
+  freeGifts: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+    items: z.array(z.object({
+      giftNumber: z.number().int().min(1),
+      title: z.string().min(1),
+      description: z.string().min(1),
+      valueLabel: z.string().min(1),
+    })).min(1).max(6),
+    deliveryNote: z.string().min(1),
+  }).optional(),
+  upgradeSection: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+    paragraphs: z.array(z.string().min(1)).min(1).max(6),
+  }).optional(),
+  priceCard: z.object({
+    badge: z.string().min(1),
+    headline: z.string().min(1),
+    note: z.string().min(1),
+    features: z.array(z.string().min(1)).min(1).max(10),
+    giftsBoxTitle: z.string().min(1),
+    giftItems: z.array(z.string().min(1)).min(1).max(6),
+    totalValue: z.string().min(1),
+    regularPrice: z.string().min(1),
+    currentPrice: z.string().min(1),
+    savings: z.string().min(1),
+    ctaLabel: z.string().min(1),
+    guarantee: z.string().min(1),
+  }).optional(),
+  salesSpeakers: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+  }).optional(),
+  comparisonTable: z.object({
+    eyebrow: z.string().min(1),
+    headline: z.string().min(1),
+    rows: z.array(z.object({
+      label: z.string().min(1),
+      freePass: z.boolean(),
+      vipPass: z.boolean(),
+    })).min(1).max(12),
+  }).optional(),
+  guarantee: z.object({
+    heading: z.string().min(1),
+    body: z.string().min(1),
+    days: z.number().int().min(1),
+  }).optional(),
+  whySection: z.object({
+    headline: z.string().min(1),
+    subheadline: z.string().min(1),
+    paragraphs: z.array(z.string().min(1)).min(1).max(6),
+  }).optional(),
 });
 
 export type IndigoGoldContent = z.infer<typeof IndigoGoldSchema>;

@@ -28,20 +28,50 @@ class TemplateFiller
         Collection $speakers,
         ?string $notes,
         ?string $styleReferenceUrl,
+        ?string $stepType = null,
     ): array {
         $template = $this->registry->get($templateKey);
 
         // Section-aware templates build the effective schema from per-section schemas
         // keyed by section name; legacy templates use the whole-template jsonSchema.
-        $sectionMode = $this->registry->supportsSections($templateKey);
-        $schema = $sectionMode
-            ? [
+        // When a catalog-backed template has sections outside the shared catalog
+        // (e.g. template-specific sales sections), we limit the AI-facing schema
+        // to the catalog-backed subset so `required` always references keys that
+        // have a schema under `properties`.
+        //
+        // Sales pages are the exception: the shared catalog only covers a
+        // handful of sales sections (price-card, comparison-table, guarantee),
+        // so a catalog-scoped schema would leave the AI unable to populate
+        // salesHero/vipBonuses/etc. We fall back to the whole jsonSchema for
+        // sales_page steps across every template and scope `required` to the
+        // sales keys so the AI fills the sales body.
+        $useSectionMode = $this->registry->supportsSections($templateKey)
+            && $stepType !== 'sales_page';
+
+        if ($useSectionMode) {
+            $sectionSchemas = $this->registry->sectionSchemas($templateKey);
+            $schema = [
                 'type' => 'object',
-                'properties' => $this->registry->sectionSchemas($templateKey),
-                'required' => $this->registry->supportedSections($templateKey),
+                'properties' => $sectionSchemas,
+                'required' => array_values(array_intersect(
+                    $this->registry->supportedSections($templateKey),
+                    array_keys($sectionSchemas),
+                )),
                 'additionalProperties' => false,
-            ]
-            : $template['jsonSchema'];
+            ];
+        } else {
+            $schema = $template['jsonSchema'];
+        }
+
+        // Whole-schema templates carry both optin and sales keys in one schema.
+        // Without scoping, the AI fills required (optin) and skips optional
+        // (sales) — so sales_page steps render empty. For sales_page we flip
+        // which keys are required so the AI populates the sales sections.
+        if ($stepType === 'sales_page') {
+            $schema = $this->scopeWholeSchemaForSales($schema, $templateKey);
+        }
+
+        $sectionMode = $useSectionMode;
 
         $systemPrompt = $this->buildSystemPrompt($schema, $sectionMode);
         $userPrompt = $this->buildUserPrompt($summit, $speakers, $notes, $styleReferenceUrl);
@@ -145,6 +175,37 @@ Speakers (use only these IDs):
 
 Fill the template slots for this summit.
 PROMPT;
+    }
+
+    /**
+     * Rewrite a whole-template jsonSchema so only sales-section keys are
+     * required. Keeps the full property set so operators can still hand-edit
+     * optin copy later; the AI just knows to fill the sales body.
+     *
+     * @param  array<string, mixed>  $schema
+     * @return array<string, mixed>
+     */
+    private function scopeWholeSchemaForSales(array $schema, string $templateKey): array
+    {
+        $salesKebab = $this->registry->defaultSalesSections($templateKey);
+        if ($salesKebab === []) {
+            return $schema;
+        }
+
+        $salesCamel = array_map(
+            static fn (string $key): string => lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key)))),
+            $salesKebab,
+        );
+        $properties = array_keys($schema['properties'] ?? []);
+        $required = array_values(array_intersect($properties, $salesCamel));
+
+        if ($required === []) {
+            return $schema;
+        }
+
+        $schema['required'] = $required;
+
+        return $schema;
     }
 
     /** Extract the first JSON object from a string that may have surrounding text. */

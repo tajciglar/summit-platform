@@ -6,6 +6,7 @@ use App\Models\Domain;
 use App\Models\LandingPageBatch;
 use App\Models\Summit;
 use App\Models\User;
+use App\Services\Templates\TemplateRegistry;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
@@ -24,8 +25,7 @@ beforeEach(function () {
     ]);
     Filament::setTenant($this->tenant);
 
-    $this->summit = Summit::factory()->create();
-    $this->summit->domains()->attach($this->tenant);
+    $this->summit = Summit::factory()->create(['domain_id' => $this->tenant->id]);
 });
 
 it('seeds steps with empty page_content and dispatches no AI jobs', function () {
@@ -68,6 +68,64 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
     expect($optin->page_content['content']['masthead']['volume'])->toBeString()->not->toBeEmpty();
     expect($optin->page_content['content']['footer'])->toHaveKeys(['tagline', 'volume', 'copyright']);
 });
+
+it('seeds sales_page steps with sales-section content, not optin content', function (string $templateKey) {
+    // The whole-template jsonSchema's `required` list is the optin body. Without
+    // step-type-aware scoping, a sales_page step would get optin placeholder
+    // content (hero/masthead/faqs/...) while its `enabled_sections` points at
+    // sales keys (sales-hero/price-card/...), so nothing renders and the page
+    // goes blank. The CreateFunnel flow must rewrite `required` for sales_page
+    // steps so placeholder content covers the sales camelCase keys.
+    Queue::fake();
+
+    $registry = app(TemplateRegistry::class);
+    $salesKebab = $registry->defaultSalesSections($templateKey);
+    $enabledSales = array_slice($salesKebab, 0, 5);
+    $salesCamel = array_map(
+        static fn (string $k): string => lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $k)))),
+        $enabledSales,
+    );
+    $slug = 'sf-'.str_replace('-', '', $templateKey);
+
+    livewire(CreateFunnel::class)
+        ->fillForm([
+            'summit_id' => $this->summit->id,
+            'name' => "Sales {$templateKey}",
+            'slug' => $slug,
+            'template_key' => $templateKey,
+            'section_config.optin' => ['hero'],
+            'section_config.sales_page' => $enabledSales,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $funnel = $this->summit->funnels()->where('slug', $slug)->firstOrFail();
+    $sales = $funnel->steps()->where('step_type', 'sales_page')->firstOrFail();
+
+    expect($sales->page_content['enabled_sections'])->toEqualCanonicalizing($enabledSales);
+
+    // Seeded content must contain the sales camelCase keys the skin actually
+    // reads — otherwise the sales page renders blank.
+    $contentKeys = array_keys($sales->page_content['content']);
+    expect($contentKeys)->toContain(...$salesCamel);
+
+    // And each seeded section must be a populated object (not an empty stub),
+    // so the rendered sales page has something to show.
+    foreach ($salesCamel as $key) {
+        expect($sales->page_content['content'][$key])
+            ->toBeArray()
+            ->not->toBeEmpty();
+    }
+})->with([
+    'ochre-ink' => ['ochre-ink'],
+    'lime-ink' => ['lime-ink'],
+    'cream-sage' => ['cream-sage'],
+    'violet-sun' => ['violet-sun'],
+    'rust-cream' => ['rust-cream'],
+    'blue-coral' => ['blue-coral'],
+    'green-gold' => ['green-gold'],
+    'indigo-gold' => ['indigo-gold'],
+]);
 
 it('creates no steps when no skin is picked', function () {
     // Section CheckboxLists are hidden until a skin is chosen, so a

@@ -22,6 +22,7 @@ class Funnel extends Model
         'target_phase',
         'template_key',
         'section_config',
+        'wp_checkout_redirect_url',
         'is_active',
     ];
 

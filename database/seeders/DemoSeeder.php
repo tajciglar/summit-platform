@@ -61,6 +61,7 @@ class DemoSeeder extends Seeder
         ]);
 
         $summit = Summit::factory()->create([
+            'domain_id' => $parentingSummits->id,
             'slug' => 'adhd-parenting-summit-2026',
             'title' => 'ADHD Parenting Summit 2026',
             'topic' => 'ADHD parenting',
@@ -72,14 +73,9 @@ class DemoSeeder extends Seeder
         // Legacy pivot (kept for back-compat).
         $admin->summits()->syncWithoutDetaching([$summit->id]);
 
-        // ADHD summit hosted on Parenting Summits + Althea Academy.
-        $summit->domains()->syncWithoutDetaching([
-            $parentingSummits->id,
-            $althea->id,
-        ]);
-
         // Second demo summit so the tenant switcher has something to switch to.
         $secondSummit = Summit::factory()->create([
+            'domain_id' => $vzgoja->id,
             'slug' => 'productivity-summit-2026',
             'title' => 'Productivity Summit 2026',
             'topic' => 'productivity',
@@ -88,9 +84,6 @@ class DemoSeeder extends Seeder
             'current_phase' => 'pre',
         ]);
         $admin->summits()->syncWithoutDetaching([$secondSummit->id]);
-
-        // Productivity summit hosted on Vzgoja only.
-        $secondSummit->domains()->syncWithoutDetaching([$vzgoja->id]);
 
         Speaker::factory()->count(4)->create(['summit_id' => $secondSummit->id]);
 

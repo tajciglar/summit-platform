@@ -72,7 +72,8 @@ it('builds a section-keyed schema for ochre-ink (section-aware template)', funct
 
     $props = $schema['properties'];
 
-    // Expect every catalog section (17 total) as a top-level key.
+    // Expect every catalog-backed section (20 total: 17 optin + 3 shared sales keys)
+    // as a top-level key.
     expect($props)->toHaveKey('hero');
     expect($props)->toHaveKey('masthead');
     expect($props)->toHaveKey('marquee');
@@ -80,15 +81,23 @@ it('builds a section-keyed schema for ochre-ink (section-aware template)', funct
     expect($props)->toHaveKey('speakers-by-day');
     expect($props)->toHaveKey('faq');
     expect($props)->toHaveKey('footer');
-    expect($props)->toHaveCount(17);
+    expect($props)->toHaveKey('price-card');
+    expect($props)->toHaveKey('comparison-table');
+    expect($props)->toHaveKey('guarantee');
+    expect($props)->toHaveCount(20);
+
+    // Template-private sales keys (not in the shared catalog) must NOT appear
+    // in the AI-facing schema — they are template-only placeholders.
+    expect($props)->not->toHaveKey('sales-hero');
+    expect($props)->not->toHaveKey('vip-bonuses');
 
     // Legacy whole-template wrapper keys must not leak in — `summit` was the
     // summit-metadata wrapper in the old OchreInkContent shape, and is NOT a
     // catalog section.
     expect($props)->not->toHaveKey('summit');
 
-    // Required should mirror supportedSections.
-    expect($schema['required'])->toBe($this->registry->supportedSections('ochre-ink'));
+    // Required should mirror the catalog-backed subset of supportedSections.
+    expect($schema['required'])->toBe(array_keys($props));
 
     // Section prompt hint should also be present.
     expect($this->captured['system'])->toContain('top-level keys are each section name');

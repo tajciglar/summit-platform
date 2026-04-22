@@ -147,8 +147,8 @@ class MediaLibraryMigrateCommand extends Command
     private function resolveDomainId(object $owner, string $class): ?string
     {
         return match ($class) {
-            Summit::class => $owner->domains()->first()?->id,
-            Product::class, Speaker::class, FunnelStepBump::class => $owner->summit?->domains()->first()?->id,
+            Summit::class => $owner->domain_id,
+            Product::class, Speaker::class, FunnelStepBump::class => $owner->summit?->domain_id,
             Domain::class => $owner->id,
             AppSettings::class => null,
             default => null,

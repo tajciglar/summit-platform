@@ -34,6 +34,7 @@ class Speaker extends Model
         'sort_order',
         'is_featured',
         'free_access_window_hours',
+        'day_number',
     ];
 
     protected function casts(): array
@@ -45,6 +46,7 @@ class Speaker extends Model
             'rating' => 'integer',
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
+            'day_number' => 'integer',
         ];
     }
 

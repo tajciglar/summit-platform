@@ -478,8 +478,53 @@
 @media (prefers-reduced-motion: reduce) {
   .indigo-gold-body .indigo-gold-marquee-track,
   .indigo-gold-body .indigo-gold-btn-pulse,
-  .indigo-gold-body .indigo-gold-ping::before {
+  .indigo-gold-body .indigo-gold-ping::before,
+  .indigo-gold-body .indigo-gold-sales-pulse {
     animation: none !important;
   }
   .indigo-gold-root { scroll-behavior: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * SALES SECTIONS — namespaced styles ported from LavenderGold.
+ * Only used when sales-style sections (sales-hero, vip-bonuses,
+ * price-card, comparison-table, etc.) are enabled on a step.
+ * ───────────────────────────────────────────────────────────────── */
+@keyframes indigo-gold-sales-pulse-cta {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+.indigo-gold-body .indigo-gold-sales-pulse {
+  animation: indigo-gold-sales-pulse-cta 2.4s infinite;
+}
+
+/* Sales speaker details cards — "View More" / "View Less" toggle */
+.indigo-gold-body details.indigo-gold-sales-spk summary::-webkit-details-marker {
+  display: none;
+}
+.indigo-gold-body details.indigo-gold-sales-spk summary::after {
+  content: 'View More';
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #5A4589;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 0.5rem;
+  border-top: 1px solid #ECE6F7;
+  width: 100%;
+  justify-content: center;
+}
+.indigo-gold-body details.indigo-gold-sales-spk[open] summary::after {
+  content: 'View Less';
+}
+
+/* Sales mobile sticky CTA — overrides base `display: none` on mobile only */
+@media (max-width: 767px) {
+  .indigo-gold-body .indigo-gold-sales-stick {
+    display: flex !important;
+  }
 }

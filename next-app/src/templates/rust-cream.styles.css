@@ -186,9 +186,47 @@
 @media (prefers-reduced-motion: reduce) {
   .rust-cream-body .rust-cream-marquee-set,
   .rust-cream-body .rust-cream-pulse-glow,
-  .rust-cream-body .rust-cream-pulse-gold {
+  .rust-cream-body .rust-cream-pulse-gold,
+  .rust-cream-body .rust-cream-sales-pulse {
     animation: none !important;
   }
   .rust-cream-body .rust-cream-marquee-set { transform: none !important; }
   .rust-cream-root { scroll-behavior: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * SALES SECTIONS — namespaced styles for the rust-cream family.
+ * Only used when sales-style sections (sales-hero, vip-bonuses,
+ * price-card, comparison-table, etc.) are enabled on a step.
+ * ───────────────────────────────────────────────────────────────── */
+@keyframes rust-cream-sales-pulse-cta {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+.rust-cream-body .rust-cream-sales-pulse {
+  animation: rust-cream-sales-pulse-cta 2.4s infinite;
+}
+
+/* Sales speaker details cards — "View More" / "View Less" toggle */
+.rust-cream-body details.rust-cream-sales-spk summary::-webkit-details-marker {
+  display: none;
+}
+.rust-cream-body details.rust-cream-sales-spk summary::after {
+  content: 'View More';
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #8B4513;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 0.5rem;
+  border-top: 1px solid #E8C4A8;
+  width: 100%;
+  justify-content: center;
+}
+.rust-cream-body details.rust-cream-sales-spk[open] summary::after {
+  content: 'View Less';
 }

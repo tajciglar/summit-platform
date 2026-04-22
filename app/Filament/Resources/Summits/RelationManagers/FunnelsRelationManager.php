@@ -6,6 +6,7 @@ use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
@@ -88,6 +89,9 @@ class FunnelsRelationManager extends RelationManager
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
+                DeleteAction::make()
+                    ->label('Delete')
+                    ->icon('heroicon-o-trash'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

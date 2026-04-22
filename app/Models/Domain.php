@@ -8,6 +8,7 @@ use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Filament tenant. A domain represents a public-facing brand / website
@@ -40,11 +41,9 @@ class Domain extends Model implements HasName
         return $this->name ?: $this->hostname ?: 'Untitled domain';
     }
 
-    public function summits(): BelongsToMany
+    public function summits(): HasMany
     {
-        return $this->belongsToMany(Summit::class, 'domain_summit')
-            ->withPivot('created_at')
-            ->orderBy('title');
+        return $this->hasMany(Summit::class)->orderBy('title');
     }
 
     public function users(): BelongsToMany

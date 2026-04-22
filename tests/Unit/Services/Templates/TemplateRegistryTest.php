@@ -105,12 +105,12 @@ it('returns section metadata for ochre-ink in the real manifest', function () {
         ->toContain('hero')
         ->toContain('footer')
         ->toContain('faq');
-    expect($reg->supportedSections('ochre-ink'))->toHaveCount(17);
+    expect($reg->supportedSections('ochre-ink'))->toHaveCount(27);
     expect($reg->defaultEnabledSections('ochre-ink'))
         ->toContain('hero')
         ->toContain('footer');
     expect($reg->defaultEnabledSections('ochre-ink'))->toHaveCount(10);
-    expect($reg->sectionOrder('ochre-ink'))->toHaveCount(17);
+    expect($reg->sectionOrder('ochre-ink'))->toHaveCount(27);
     expect($reg->sectionSchemas('ochre-ink'))->toHaveKey('hero');
     expect($reg->sectionSchemas('ochre-ink')['hero'])->toHaveKey('type');
 });

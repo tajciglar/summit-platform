@@ -15,6 +15,16 @@ import { ReasonsToAttend } from './skins/ReasonsToAttend';
 import { Faq } from './skins/Faq';
 import { ClosingCta } from './skins/ClosingCta';
 import { Footer } from './skins/Footer';
+import { SalesHero } from './skins/SalesHero';
+import { Intro } from './skins/Intro';
+import { VipBonuses } from './skins/VipBonuses';
+import { FreeGifts } from './skins/FreeGifts';
+import { UpgradeSection } from './skins/UpgradeSection';
+import { PriceCard } from './skins/PriceCard';
+import { SalesSpeakers } from './skins/SalesSpeakers';
+import { ComparisonTable } from './skins/ComparisonTable';
+import { Guarantee } from './skins/Guarantee';
+import { WhySection } from './skins/WhySection';
 
 export const opusV1Sections = {
   masthead: Masthead,
@@ -34,6 +44,16 @@ export const opusV1Sections = {
   faq: Faq,
   'closing-cta': ClosingCta,
   footer: Footer,
+  'sales-hero': SalesHero,
+  intro: Intro,
+  'vip-bonuses': VipBonuses,
+  'free-gifts': FreeGifts,
+  'upgrade-section': UpgradeSection,
+  'price-card': PriceCard,
+  'sales-speakers': SalesSpeakers,
+  'comparison-table': ComparisonTable,
+  guarantee: Guarantee,
+  'why-section': WhySection,
 } as const;
 
 export const opusV1SupportedSections = Object.keys(opusV1Sections) as (keyof typeof opusV1Sections)[];
@@ -55,6 +75,16 @@ export const opusV1SectionOrder: string[] = [
   'reasons-to-attend',
   'faq',
   'closing-cta',
+  'sales-hero',
+  'intro',
+  'vip-bonuses',
+  'free-gifts',
+  'upgrade-section',
+  'price-card',
+  'sales-speakers',
+  'comparison-table',
+  'guarantee',
+  'why-section',
   'footer',
 ];
 
@@ -69,4 +99,21 @@ export const opusV1DefaultEnabledSections: string[] = [
   'faq',
   'closing-cta',
   'footer',
+];
+
+/**
+ * Sales-page defaults — enabled automatically on `sales_page` steps so
+ * new funnels render a distinct sales layout without manual configuration.
+ */
+export const opusV1DefaultSalesSections: string[] = [
+  'sales-hero',
+  'intro',
+  'vip-bonuses',
+  'free-gifts',
+  'upgrade-section',
+  'price-card',
+  'sales-speakers',
+  'comparison-table',
+  'guarantee',
+  'why-section',
 ];

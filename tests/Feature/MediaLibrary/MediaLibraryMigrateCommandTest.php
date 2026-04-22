@@ -16,9 +16,8 @@ beforeEach(function () {
 });
 
 it('migrates a Summit hero media row into the library', function () {
-    $summit = Summit::factory()->create();
     $domain = Domain::factory()->create();
-    $summit->domains()->attach($domain);
+    $summit = Summit::factory()->create(['domain_id' => $domain->id]);
 
     DB::table('media')->insert([
         'id' => 9999,

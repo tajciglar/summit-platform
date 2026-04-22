@@ -29,9 +29,12 @@ export function OchreInkLayout({
   const sections = opusV1ContentToSections(content);
   const ordered = opusV1SectionOrder.filter((k) => enabled.includes(k));
 
+  // Sales pages share this template family but only carry sales-section
+  // content, so `content.summit` / `content.hero` may be absent. Fall back
+  // to safe defaults so the page still renders.
   const context: TemplateContext = {
-    summitName: content.summit.name,
-    heroCtaLabel: content.hero.ctaLabel,
+    summitName: content.summit?.name ?? '',
+    heroCtaLabel: content.hero?.ctaLabel ?? 'Get Started',
   };
 
   return (
@@ -63,7 +66,9 @@ export function OchreInkLayout({
         })}
       </main>
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
+      {enabled.includes('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
+      )}
     </div>
   );
 }

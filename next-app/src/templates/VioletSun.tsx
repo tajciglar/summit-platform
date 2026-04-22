@@ -1390,6 +1390,1123 @@ function Footer({ content }: { content: VioletSunContent }) {
   );
 }
 
+/* =======================================================================
+ * ============  SALES-PAGE SECTIONS  ====================================
+ * -----------------------------------------------------------------------
+ * All sales sections are optional in the schema; each component guards
+ * with `if (!content.xxx) return null;` so optin pages (which omit these
+ * fields) render cleanly. Visual styling uses violet-sun's editorial
+ * palette — violet gradients, sun-yellow accents, DM Serif Display italic
+ * highlights, Space Grotesk display, Inter body.
+ * ======================================================================= */
+
+const VS_SALES = {
+  VIO_DARK: '#23135F',
+  VIO_900: '#110833',
+  VIO_700: '#4A2FB8',
+  VIO_600: '#5C3BDF',
+  VIO_500: '#6F4EE6',
+  VIO_400: '#8A6EEB',
+  VIO_300: '#A08CEF',
+  VIO_200: '#C5B8F7',
+  VIO_100: '#E6E0FD',
+  VIO_50: '#F3F0FE',
+  MIST_300: '#C6C1DB',
+  MIST_200: '#DCD7E6',
+  MIST_100: '#EBE8F0',
+  MIST_50: '#F5F3F8',
+  SUN_500: '#FFC300',
+  SUN_400: '#FFD347',
+  SUN_300: '#FFE07A',
+  SUN_100: '#FFF6D6',
+  INK_900: '#110833',
+  INK_700: '#3C2E54',
+  INK_600: '#544B75',
+};
+
+const vsSalesIconLabels: Record<string, string> = {
+  'infinity': 'Unlimited Access',
+  'clipboard': 'Action Blueprints',
+  'headphones': 'Audio Edition',
+  'captions': 'Subtitles',
+  'file-text': 'Transcripts',
+  'book': 'Workbook',
+};
+
+function VsSalesBonusIcon({ icon }: { icon: string }) {
+  const label = vsSalesIconLabels[icon] ?? icon;
+  const color = VS_SALES.VIO_700;
+  if (icon === 'infinity') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      </svg>
+    );
+  }
+  if (icon === 'clipboard') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    );
+  }
+  if (icon === 'headphones') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
+    );
+  }
+  if (icon === 'captions') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
+      </svg>
+    );
+  }
+  if (icon === 'file-text') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    );
+  }
+  if (icon === 'book') {
+    return (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+function VsCheckIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function VsXIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function VsArrowRight({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function VsGiftIcon({ size = 20, color = VS_SALES.VIO_700 }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
+/* SALES HERO — violet-on-violet editorial hero with sun CTA + mist product card. */
+function SalesHero({ content }: { content: VioletSunContent }) {
+  if (!content.salesHero) return null;
+  const h = content.salesHero;
+  const topName = content.topBar.brandName;
+  return (
+    <section
+      style={{
+        padding: '3rem 1.25rem 4.5rem',
+        background: `linear-gradient(180deg, ${VS_SALES.MIST_50} 0%, #FFFFFF 70%)`,
+      }}
+    >
+      <div style={{ maxWidth: 920, margin: '0 auto', textAlign: 'center' }}>
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            letterSpacing: '0.2em',
+            color: '#FFFFFF',
+            background: '#DC2626',
+            borderRadius: 9999,
+            padding: '0.5rem 1.1rem',
+            marginBottom: '1.75rem',
+            textTransform: 'uppercase',
+            fontFamily: "'Inter', sans-serif",
+            boxShadow: '0 6px 18px -6px rgba(220,38,38,.45)',
+          }}
+        >
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFFFFF' }} />
+          {h.badge}
+        </span>
+
+        <h1
+          className="violet-sun-display"
+          style={{
+            fontWeight: 700,
+            fontSize: 'clamp(1.9rem, 4vw, 2.8rem)',
+            lineHeight: 1.12,
+            color: VS_SALES.INK_900,
+            marginBottom: '1.1rem',
+          }}
+        >
+          {h.headline}
+        </h1>
+
+        <p
+          className="violet-sun-italic-serif"
+          style={{
+            fontSize: 'clamp(1.15rem, 2.2vw, 1.55rem)',
+            color: VS_SALES.VIO_700,
+            maxWidth: 700,
+            margin: '0 auto 2.25rem',
+            lineHeight: 1.4,
+          }}
+        >
+          {h.subheadline}
+        </p>
+
+        {/* Product mockup card — violet gradient with sun dot accents */}
+        <div
+          style={{
+            maxWidth: 580,
+            margin: '0 auto 2.25rem',
+            borderRadius: 24,
+            overflow: 'hidden',
+            boxShadow: '0 30px 60px -24px rgba(74,47,184,.45)',
+            aspectRatio: '16/9',
+            background: `linear-gradient(135deg, ${VS_SALES.VIO_DARK} 0%, ${VS_SALES.VIO_700} 55%, ${VS_SALES.VIO_500} 100%)`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: 0.35,
+              background: `radial-gradient(circle at 18% 30%, ${VS_SALES.SUN_400}, transparent 45%), radial-gradient(circle at 82% 70%, ${VS_SALES.VIO_200}, transparent 45%)`,
+            }}
+          />
+          <div style={{ position: 'relative', textAlign: 'center', color: '#FFFFFF', padding: '1.5rem' }}>
+            <p
+              className="violet-sun-eyebrow"
+              style={{ color: VS_SALES.SUN_400, marginBottom: '0.5rem' }}
+            >
+              Full Access
+            </p>
+            <p
+              className="violet-sun-italic-serif"
+              style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.2rem)', margin: 0, lineHeight: 1.1 }}
+            >
+              {h.productLabel}
+            </p>
+            <p
+              className="violet-sun-eyebrow"
+              style={{ marginTop: '0.75rem', color: VS_SALES.VIO_200 }}
+            >
+              {topName}
+            </p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: '0.9rem', color: VS_SALES.INK_700, marginBottom: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
+          Total value:{' '}
+          <span style={{ fontWeight: 700, color: VS_SALES.VIO_700, textDecoration: 'line-through' }}>
+            {h.totalValue}
+          </span>
+        </p>
+        <a
+          href="#purchase"
+          className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
+          style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
+        >
+          {h.ctaLabel} <VsArrowRight size={20} />
+        </a>
+        <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: VS_SALES.VIO_700, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>
+          {h.ctaNote}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* INTRO — serif italic eyebrow + display headline + body paragraphs. */
+function Intro({ content }: { content: VioletSunContent }) {
+  if (!content.intro) return null;
+  const i = content.intro;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: '#FFFFFF' }}>
+      <div style={{ maxWidth: 740, margin: '0 auto', textAlign: 'center' }}>
+        <p
+          className="violet-sun-italic-serif"
+          style={{ color: VS_SALES.VIO_700, fontSize: '1.4rem', marginBottom: '0.6rem' }}
+        >
+          {i.eyebrow}
+        </p>
+        <h2
+          className="violet-sun-display"
+          style={{
+            fontWeight: 700,
+            fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+            color: VS_SALES.INK_900,
+            lineHeight: 1.14,
+            marginBottom: '1.75rem',
+          }}
+        >
+          {i.headline}
+        </h2>
+        {i.paragraphs.map((p, idx) => (
+          <p
+            key={idx}
+            style={{
+              color: VS_SALES.INK_700,
+              fontSize: '1.1rem',
+              lineHeight: 1.72,
+              marginBottom: '1rem',
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* VIP BONUSES — mist-50 background, mist-gradient icon tiles, white cards. */
+function VipBonuses({ content }: { content: VioletSunContent }) {
+  if (!content.vipBonuses) return null;
+  const v = content.vipBonuses;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: VS_SALES.MIST_50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+          <p
+            className="violet-sun-italic-serif"
+            style={{ color: VS_SALES.VIO_700, fontSize: '1.35rem', marginBottom: '0.35rem' }}
+          >
+            {v.eyebrow}
+          </p>
+          <h2
+            className="violet-sun-display"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+              color: VS_SALES.INK_900,
+              lineHeight: 1.14,
+            }}
+          >
+            {v.headline}
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.35rem' }}>
+          {v.items.map((item, i) => (
+            <div
+              key={i}
+              className="violet-sun-card-light"
+              style={{
+                overflow: 'hidden',
+                position: 'relative',
+                background: '#FFFFFF',
+                borderRadius: 20,
+                border: `1px solid ${VS_SALES.MIST_100}`,
+              }}
+            >
+              <div
+                style={{
+                  background: `linear-gradient(135deg, ${VS_SALES.MIST_50}, ${VS_SALES.MIST_300})`,
+                  aspectRatio: '16/10',
+                  display: 'grid',
+                  placeItems: 'center',
+                  color: VS_SALES.VIO_700,
+                  padding: '1.25rem',
+                }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.55rem' }}>
+                  <VsSalesBonusIcon icon={item.icon} />
+                  <span
+                    className="violet-sun-italic-serif"
+                    style={{ fontSize: '1.15rem', textAlign: 'center' }}
+                  >
+                    {vsSalesIconLabels[item.icon]}
+                  </span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <h3
+                  className="violet-sun-display"
+                  style={{ fontWeight: 700, fontSize: '1.05rem', color: VS_SALES.INK_900, marginBottom: '0.45rem' }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '0.9rem',
+                    color: VS_SALES.INK_600,
+                    lineHeight: 1.6,
+                    marginBottom: '0.85rem',
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  {item.description}
+                </p>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    background: VS_SALES.VIO_50,
+                    border: `1px solid ${VS_SALES.VIO_200}`,
+                    color: VS_SALES.VIO_700,
+                    fontWeight: 700,
+                    fontSize: '.7rem',
+                    letterSpacing: '.12em',
+                    padding: '.35rem .75rem',
+                    borderRadius: 9999,
+                    fontFamily: "'Inter', sans-serif",
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {item.valueLabel}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* FREE GIFTS — sun-100 background tiles, deep-red gift-number label. */
+function FreeGifts({ content }: { content: VioletSunContent }) {
+  if (!content.freeGifts) return null;
+  const fg = content.freeGifts;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: '#FFFFFF' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+          <p
+            className="violet-sun-italic-serif"
+            style={{ color: VS_SALES.VIO_700, fontSize: '1.35rem', marginBottom: '0.35rem' }}
+          >
+            {fg.eyebrow}
+          </p>
+          <h2
+            className="violet-sun-display"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+              color: VS_SALES.INK_900,
+              lineHeight: 1.14,
+            }}
+          >
+            {fg.headline}
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: '1.35rem' }}>
+          {fg.items.map((gift, i) => (
+            <div
+              key={i}
+              style={{
+                background: VS_SALES.SUN_100,
+                border: `1px solid ${VS_SALES.SUN_300}`,
+                borderRadius: 20,
+                boxShadow: '0 12px 28px -16px rgba(255,195,0,.4)',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  background: `linear-gradient(135deg, ${VS_SALES.SUN_100}, ${VS_SALES.SUN_400})`,
+                  aspectRatio: '16/10',
+                  display: 'grid',
+                  placeItems: 'center',
+                  color: VS_SALES.INK_900,
+                  padding: '1.25rem',
+                }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.55rem' }}>
+                  <VsGiftIcon size={40} color={VS_SALES.INK_900} />
+                  <span className="violet-sun-italic-serif" style={{ fontSize: '1.15rem' }}>
+                    Free Gift #{gift.giftNumber}
+                  </span>
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
+                <p
+                  className="violet-sun-eyebrow"
+                  style={{ color: '#DC2626', marginBottom: '0.35rem' }}
+                >
+                  Free Gift #{gift.giftNumber}
+                </p>
+                <h3
+                  className="violet-sun-display"
+                  style={{ fontWeight: 700, fontSize: '1.05rem', color: VS_SALES.INK_900, marginBottom: '0.45rem' }}
+                >
+                  {gift.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '0.9rem',
+                    color: VS_SALES.INK_600,
+                    lineHeight: 1.6,
+                    marginBottom: '0.85rem',
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  {gift.description}
+                </p>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    background: '#FFFFFF',
+                    border: `1px solid ${VS_SALES.SUN_300}`,
+                    color: VS_SALES.INK_900,
+                    fontWeight: 700,
+                    fontSize: '.7rem',
+                    letterSpacing: '.12em',
+                    padding: '.35rem .75rem',
+                    borderRadius: 9999,
+                    fontFamily: "'Inter', sans-serif",
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {gift.valueLabel}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p
+          style={{
+            textAlign: 'center',
+            marginTop: '1.75rem',
+            fontSize: '0.9rem',
+            color: VS_SALES.INK_700,
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          {fg.deliveryNote}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* UPGRADE SECTION — centered preamble on mist background. */
+function UpgradeSection({ content }: { content: VioletSunContent }) {
+  if (!content.upgradeSection) return null;
+  const u = content.upgradeSection;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: VS_SALES.MIST_50 }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p
+            className="violet-sun-italic-serif"
+            style={{ color: VS_SALES.VIO_700, fontSize: '1.35rem', marginBottom: '0.35rem' }}
+          >
+            {u.eyebrow}
+          </p>
+          <h2
+            className="violet-sun-display"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+              color: VS_SALES.INK_900,
+              lineHeight: 1.14,
+              marginBottom: '1.75rem',
+            }}
+          >
+            {u.headline}
+          </h2>
+          {u.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              style={{
+                color: VS_SALES.INK_700,
+                fontSize: '1rem',
+                lineHeight: 1.72,
+                maxWidth: 700,
+                margin: '0 auto 0.85rem',
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* PRICE CARD — white card with violet border, sun-accent stripe, green price. */
+function PriceCard({ content }: { content: VioletSunContent }) {
+  if (!content.priceCard) return null;
+  const p = content.priceCard;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: '#FFFFFF' }} id="purchase">
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div
+          style={{
+            background: '#FFFFFF',
+            border: `2px solid ${VS_SALES.VIO_200}`,
+            borderRadius: 28,
+            boxShadow: '0 32px 60px -30px rgba(74,47,184,.4)',
+            padding: '2rem 1.75rem',
+            position: 'relative',
+            overflow: 'hidden',
+            maxWidth: 500,
+            width: '100%',
+            margin: '0 auto',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: 6,
+              background: `linear-gradient(90deg, ${VS_SALES.VIO_500}, ${VS_SALES.SUN_500}, ${VS_SALES.VIO_500})`,
+            }}
+          />
+
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#DC2626',
+              color: '#FFFFFF',
+              padding: '.4rem .9rem',
+              borderRadius: 9999,
+              fontWeight: 700,
+              fontSize: '.72rem',
+              letterSpacing: '.14em',
+              textTransform: 'uppercase',
+              marginBottom: '0.85rem',
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {p.badge}
+          </div>
+
+          <h3
+            className="violet-sun-display"
+            style={{ fontWeight: 700, fontSize: '1.25rem', color: VS_SALES.INK_900, marginBottom: '0.55rem', lineHeight: 1.28 }}
+          >
+            {p.headline}
+          </h3>
+          <p
+            style={{
+              fontSize: '0.9rem',
+              color: VS_SALES.INK_600,
+              marginBottom: '0.6rem',
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {p.note}
+          </p>
+
+          <ul style={{ padding: 0, listStyle: 'none', margin: '1.1rem 0 1.4rem' }}>
+            {p.features.map((f, i) => (
+              <li
+                key={i}
+                style={{
+                  display: 'flex',
+                  gap: '0.65rem',
+                  alignItems: 'flex-start',
+                  padding: '0.4rem 0',
+                  fontSize: '0.95rem',
+                  color: VS_SALES.INK_700,
+                  lineHeight: 1.48,
+                  fontFamily: "'Inter', sans-serif",
+                }}
+              >
+                <VsCheckIcon />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div
+            style={{
+              background: VS_SALES.SUN_100,
+              border: `1px solid ${VS_SALES.SUN_300}`,
+              borderRadius: 14,
+              padding: '0.9rem 1.1rem',
+              marginBottom: '1.4rem',
+            }}
+          >
+            <p
+              style={{
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                color: VS_SALES.INK_900,
+                marginBottom: '0.55rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              <VsGiftIcon size={16} color={VS_SALES.INK_900} /> {p.giftsBoxTitle}
+            </p>
+            {p.giftItems.map((g, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  gap: '0.55rem',
+                  alignItems: 'flex-start',
+                  fontSize: '0.9rem',
+                  padding: '0.3rem 0',
+                  color: VS_SALES.INK_700,
+                  fontFamily: "'Inter', sans-serif",
+                }}
+              >
+                <VsCheckIcon />
+                <span>{g}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', borderTop: `1px solid ${VS_SALES.MIST_100}`, paddingTop: '1.4rem' }}>
+            <p
+              style={{
+                color: VS_SALES.VIO_700,
+                textDecoration: 'line-through',
+                fontWeight: 500,
+                fontSize: '0.95rem',
+                marginBottom: '0.3rem',
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+            </p>
+            <p
+              className="violet-sun-display"
+              style={{
+                fontSize: '2.8rem',
+                fontWeight: 800,
+                color: '#16A34A',
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+              }}
+            >
+              {p.currentPrice}
+            </p>
+            <p
+              style={{
+                fontSize: '0.88rem',
+                color: '#16A34A',
+                fontWeight: 600,
+                marginBottom: '1.1rem',
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              {p.savings}
+            </p>
+            <a
+              href="#purchase"
+              className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
+              style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
+            >
+              {p.ctaLabel} <VsArrowRight size={20} />
+            </a>
+            <p
+              style={{
+                marginTop: '0.85rem',
+                fontSize: '0.78rem',
+                color: VS_SALES.VIO_700,
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              {p.guarantee}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* SALES SPEAKERS — <details> cards with photo/initials avatar + bio toggle. */
+function SalesSpeakers({ content, speakers }: { content: VioletSunContent; speakers: Record<string, Speaker> }) {
+  if (!content.salesSpeakers) return null;
+  const s = content.salesSpeakers;
+  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  if (sortedSpeakers.length === 0) return null;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: '#FFFFFF' }}>
+      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+          <p
+            className="violet-sun-italic-serif"
+            style={{ color: VS_SALES.VIO_700, fontSize: '1.35rem', marginBottom: '0.35rem' }}
+          >
+            {s.eyebrow}
+          </p>
+          <h2
+            className="violet-sun-display"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+              color: VS_SALES.INK_900,
+              lineHeight: 1.14,
+            }}
+          >
+            {s.headline}
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: '1.1rem' }}>
+          {sortedSpeakers.map((spk, idx) => (
+            <details
+              key={spk.id}
+              style={{
+                background: '#FFFFFF',
+                border: `1px solid ${VS_SALES.MIST_100}`,
+                borderRadius: 18,
+                boxShadow: '0 8px 22px -12px rgba(74,47,184,.22)',
+                marginBottom: 0,
+                overflow: 'hidden',
+              }}
+            >
+              <summary
+                style={{
+                  cursor: 'pointer',
+                  listStyle: 'none',
+                  padding: '1.5rem 1.25rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  gap: '0.85rem',
+                }}
+              >
+                {spk.photoUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={spk.photoUrl}
+                    alt={displayName(spk)}
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `3px solid ${VS_SALES.VIO_200}`,
+                      boxShadow: `0 0 0 4px #FFFFFF, 0 8px 18px -6px rgba(74,47,184,.35)`,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      background: SPEAKER_GRADIENTS[idx % SPEAKER_GRADIENTS.length],
+                      border: `3px solid ${VS_SALES.VIO_200}`,
+                      display: 'grid',
+                      placeItems: 'center',
+                      color: SPEAKER_INITIAL_COLORS[idx % SPEAKER_INITIAL_COLORS.length],
+                      fontFamily: "'DM Serif Display', serif",
+                      fontSize: '1.9rem',
+                      fontStyle: 'italic',
+                    }}
+                  >
+                    {initialsFromSpeaker(spk)}
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <p
+                    className="violet-sun-display"
+                    style={{ fontWeight: 700, fontSize: '0.98rem', color: VS_SALES.INK_900, margin: 0 }}
+                  >
+                    {displayName(spk)}
+                  </p>
+                  <p style={{ fontSize: '0.78rem', color: VS_SALES.VIO_700, margin: 0, fontFamily: "'Inter', sans-serif" }}>
+                    {spk.title}
+                  </p>
+                  <p
+                    className="violet-sun-italic-serif"
+                    style={{ fontSize: '0.85rem', color: VS_SALES.INK_700, margin: 0 }}
+                  >
+                    {spk.masterclassTitle}
+                  </p>
+                </div>
+              </summary>
+              {spk.shortBio && (
+                <p
+                  style={{
+                    padding: '0 1.5rem 1.5rem',
+                    color: VS_SALES.INK_600,
+                    fontSize: '0.88rem',
+                    lineHeight: 1.65,
+                    margin: 0,
+                    textAlign: 'center',
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  {spk.shortBio}
+                </p>
+              )}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* COMPARISON TABLE — Free Pass vs VIP Pass with mist header row. */
+function ComparisonTable({ content }: { content: VioletSunContent }) {
+  if (!content.comparisonTable) return null;
+  const c = content.comparisonTable;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: VS_SALES.MIST_50 }}>
+      <div style={{ maxWidth: 820, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+          <p
+            className="violet-sun-italic-serif"
+            style={{ color: VS_SALES.VIO_700, fontSize: '1.35rem', marginBottom: '0.35rem' }}
+          >
+            {c.eyebrow}
+          </p>
+          <h2
+            className="violet-sun-display"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+              color: VS_SALES.INK_900,
+              lineHeight: 1.14,
+            }}
+          >
+            {c.headline}
+          </h2>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'separate',
+              borderSpacing: 0,
+              borderRadius: 20,
+              overflow: 'hidden',
+              border: `1px solid ${VS_SALES.MIST_100}`,
+              background: '#FFFFFF',
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  className="violet-sun-eyebrow"
+                  style={{
+                    background: VS_SALES.MIST_100,
+                    color: VS_SALES.VIO_700,
+                    padding: '1.1rem',
+                    textAlign: 'left',
+                  }}
+                >
+                  Feature
+                </th>
+                <th
+                  className="violet-sun-eyebrow"
+                  style={{
+                    background: VS_SALES.MIST_200,
+                    color: VS_SALES.VIO_700,
+                    padding: '1.1rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  Free Pass
+                </th>
+                <th
+                  className="violet-sun-eyebrow"
+                  style={{
+                    background: VS_SALES.MIST_200,
+                    color: VS_SALES.VIO_700,
+                    padding: '1.1rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  VIP Pass
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {c.rows.map((row, i) => (
+                <tr key={i}>
+                  <td
+                    style={{
+                      padding: '1rem',
+                      borderTop: `1px solid ${VS_SALES.MIST_100}`,
+                      fontWeight: 600,
+                      color: VS_SALES.INK_900,
+                      fontSize: '0.95rem',
+                      lineHeight: 1.4,
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                  >
+                    {row.label}
+                  </td>
+                  <td
+                    style={{
+                      padding: '1rem',
+                      borderTop: `1px solid ${VS_SALES.MIST_100}`,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {row.freePass ? (
+                      <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}>
+                        <VsCheckIcon />
+                      </span>
+                    ) : (
+                      <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}>
+                        <VsXIcon />
+                      </span>
+                    )}
+                  </td>
+                  <td
+                    style={{
+                      padding: '1rem',
+                      borderTop: `1px solid ${VS_SALES.MIST_100}`,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {row.vipPass ? (
+                      <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}>
+                        <VsCheckIcon />
+                      </span>
+                    ) : (
+                      <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}>
+                        <VsXIcon />
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* GUARANTEE — dashed sun-yellow shield card with heading + body. */
+function Guarantee({ content }: { content: VioletSunContent }) {
+  if (!content.guarantee) return null;
+  const g = content.guarantee;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: VS_SALES.MIST_50 }}>
+      <div style={{ maxWidth: 740, margin: '0 auto' }}>
+        <div
+          style={{
+            background: VS_SALES.SUN_100,
+            border: `2px dashed ${VS_SALES.SUN_500}`,
+            borderRadius: 22,
+            padding: '1.9rem',
+            display: 'flex',
+            gap: '1.35rem',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ fontSize: '3rem', flexShrink: 0 }}>🛡️</div>
+          <div>
+            <h3
+              className="violet-sun-display"
+              style={{ fontWeight: 700, fontSize: '1.15rem', color: VS_SALES.INK_900, marginBottom: '0.5rem' }}
+            >
+              {g.heading}
+            </h3>
+            <p
+              style={{
+                fontSize: '0.95rem',
+                color: VS_SALES.INK_700,
+                lineHeight: 1.65,
+                margin: 0,
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              {g.body}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* WHY SECTION — centered editorial body with italic-serif subhead. */
+function WhySection({ content }: { content: VioletSunContent }) {
+  if (!content.whySection) return null;
+  const w = content.whySection;
+  return (
+    <section style={{ padding: '4rem 1.25rem', background: '#FFFFFF' }}>
+      <div style={{ maxWidth: 740, margin: '0 auto', textAlign: 'center' }}>
+        <h2
+          className="violet-sun-display"
+          style={{
+            fontWeight: 700,
+            fontSize: 'clamp(1.85rem, 3.2vw, 2.6rem)',
+            color: VS_SALES.INK_900,
+            lineHeight: 1.14,
+            marginBottom: '0.6rem',
+          }}
+        >
+          {w.headline}
+        </h2>
+        <p
+          className="violet-sun-italic-serif"
+          style={{ fontSize: '1.4rem', color: VS_SALES.VIO_700, marginBottom: '1.75rem' }}
+        >
+          {w.subheadline}
+        </p>
+        {w.paragraphs.map((p, i) => (
+          <p
+            key={i}
+            style={{
+              color: VS_SALES.INK_700,
+              fontSize: '1rem',
+              lineHeight: 1.78,
+              marginBottom: '1rem',
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ============== ROOT COMPONENT ============== */
 export function VioletSun({ content, speakers, funnelId, enabledSections }: RootProps) {
   const enabled = new Set(enabledSections ?? violetSunDefaultEnabledSections);
@@ -1417,11 +2534,24 @@ export function VioletSun({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('shifts') && <Shifts content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
+
+        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('intro') && <Intro content={content} />}
+        {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
+        {enabled.has('free-gifts') && <FreeGifts content={content} />}
+        {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
+        {enabled.has('comparison-table') && <ComparisonTable content={content} />}
+        {enabled.has('guarantee') && <Guarantee content={content} />}
+        {enabled.has('why-section') && <WhySection content={content} />}
       </main>
 
       {enabled.has('footer') && <Footer content={content} />}
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      {enabled.has('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      )}
     </div>
   );
 }

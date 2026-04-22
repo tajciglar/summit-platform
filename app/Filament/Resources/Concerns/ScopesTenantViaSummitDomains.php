@@ -26,8 +26,8 @@ trait ScopesTenantViaSummitDomains
         }
 
         $query->whereHas(
-            'summit.domains',
-            fn (Builder $q) => $q->whereKey($tenant->getKey()),
+            'summit',
+            fn (Builder $q) => $q->where('domain_id', $tenant->getKey()),
         );
 
         if ($summitId = CurrentSummit::getId()) {

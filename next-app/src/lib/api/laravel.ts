@@ -10,6 +10,7 @@ export interface DraftPayload extends PublishedContent {
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;
+  wp_checkout_redirect_url: string | null;
 }
 
 export interface PublicPayload extends PublishedContent {
@@ -18,6 +19,7 @@ export interface PublicPayload extends PublishedContent {
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;
+  wp_checkout_redirect_url: string | null;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {

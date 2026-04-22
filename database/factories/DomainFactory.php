@@ -15,13 +15,13 @@ class DomainFactory extends Factory
 
     public function definition(): array
     {
-        $name = $this->faker->unique()->word();
+        $slug = Str::slug(fake()->unique()->domainWord()).'-'.fake()->unique()->numberBetween(1000, 9999);
 
         return [
-            'name' => $this->faker->company(),
-            'hostname' => "{$name}.example.com",
-            'slug' => Str::slug($name),
-            'brand_color' => $this->faker->hexColor(),
+            'name' => fake()->company(),
+            'hostname' => "{$slug}.test",
+            'slug' => $slug,
+            'brand_color' => fake()->hexColor(),
             'is_active' => true,
         ];
     }

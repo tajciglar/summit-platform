@@ -65,13 +65,9 @@ const manifestTemplates = templateKeys.map((key) => {
   //     `sectionSchemas` block (per-section editing isn't available yet).
   if (t.supportedSections) {
     const sectionSchemas: Record<string, unknown> = {};
-    let allInCatalog = true;
     for (const sectionKey of t.supportedSections) {
       const entry = catalog[sectionKey];
-      if (!entry) {
-        allInCatalog = false;
-        continue;
-      }
+      if (!entry) continue;
       sectionSchemas[sectionKey] = z.toJSONSchema(entry.schema);
     }
     base.supportedSections = [...t.supportedSections];
@@ -79,7 +75,10 @@ const manifestTemplates = templateKeys.map((key) => {
     base.defaultEnabledSections = t.defaultEnabledSections
       ? [...t.defaultEnabledSections]
       : [...t.supportedSections];
-    if (allInCatalog) {
+    if (t.defaultSalesSections) {
+      base.defaultSalesSections = [...t.defaultSalesSections];
+    }
+    if (t.catalogBacked) {
       base.sectionSchemas = sectionSchemas;
     }
   }
