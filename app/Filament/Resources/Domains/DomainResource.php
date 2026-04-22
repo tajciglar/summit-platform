@@ -11,7 +11,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -89,16 +88,6 @@ class DomainResource extends Resource
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('Summits hosted on this domain')
-                ->description('Many-to-many. A summit can live on multiple domains.')
-                ->components([
-                    Select::make('summits')
-                        ->relationship('summits', 'title')
-                        ->multiple()
-                        ->searchable()
-                        ->preload()
-                        ->hiddenLabel(),
-                ]),
         ]);
     }
 

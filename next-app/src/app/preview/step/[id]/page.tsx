@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import { notFound } from 'next/navigation';
 import { fetchStepPreview, speakersById } from '@/lib/api/laravel';
 import { getTemplate } from '@/templates/registry';
@@ -21,27 +22,20 @@ export default async function StepPreviewPage({
     );
   }
 
-  const parsed = template.schema.safeParse(preview.content);
-  if (!parsed.success) {
-    return (
-      <div style={{ padding: 40, fontFamily: 'sans-serif' }}>
-        <h1>Schema validation failed</h1>
-        <p>The step&apos;s page_content does not match the template&apos;s current schema.</p>
-        <pre style={{ background: '#f3f4f6', padding: 16, overflow: 'auto' }}>
-          {JSON.stringify(parsed.error.issues, null, 2)}
-        </pre>
-      </div>
-    );
-  }
-
-  const Component = template.Component;
+  // Skip strict schema parsing. Sales-page previews only carry sales-section
+  // content and would fail validation of the required optin sections; the
+  // renderer gates each section on `enabled_sections` so absent sections
+  // are simply skipped.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Component = template.Component as ComponentType<any>;
   return (
     <Component
-      content={parsed.data}
+      content={preview.content}
       speakers={speakersById(preview.speakers)}
       funnelId={preview.funnel_id ?? ''}
       enabledSections={preview.enabled_sections ?? undefined}
       palette={preview.palette}
+      wpCheckoutRedirectUrl={preview.wp_checkout_redirect_url}
     />
   );
 }

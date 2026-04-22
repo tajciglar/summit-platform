@@ -1285,6 +1285,1064 @@ function Footer({ content }: { content: LimeInkContent }) {
   );
 }
 
+/* =======================================================================
+ * ============           SALES-PAGE SECTIONS                 ============
+ * -----------------------------------------------------------------------
+ * All sales sections are optional in the schema; each component guards
+ * with `if (!content.xxx) return null;` so optin pages render cleanly.
+ * Visual language matches the lime-ink dev-console aesthetic: dark
+ * surfaces, mono-accented eyebrows, JetBrains Mono metadata, lime accent.
+ * ======================================================================= */
+
+const SALES_INK = {
+  INK900: '#0A0A0B',
+  INK800: '#18181B',
+  INK700: '#27272A',
+  INK600: '#3F3F46',
+  INK500: '#52525B',
+  INK400: '#71717A',
+  INK300: '#A1A1AA',
+  SURFACE: '#F4F4F5',
+  SURFACE_BORDER: '#E4E4E7',
+  LIME: '#C4F245',
+  LIME_SOFT: '#DCFF6B',
+  LIME_DARK: '#AEE02B',
+};
+
+const salesIconLabels: Record<string, string> = {
+  'infinity': 'Unlimited Access',
+  'clipboard': 'Action Blueprints',
+  'headphones': 'Audio Edition',
+  'captions': 'Subtitles',
+  'file-text': 'Transcripts',
+  'book': 'Workbook',
+};
+
+function SalesBonusIcon({ icon }: { icon: string }) {
+  const label = salesIconLabels[icon] ?? icon;
+  const color = SALES_INK.LIME;
+  if (icon === 'infinity') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      </svg>
+    );
+  }
+  if (icon === 'clipboard') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    );
+  }
+  if (icon === 'headphones') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
+    );
+  }
+  if (icon === 'captions') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
+      </svg>
+    );
+  }
+  if (icon === 'file-text') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    );
+  }
+  if (icon === 'book') {
+    return (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+function SalesCheckIcon({ color = SALES_INK.LIME }: { color?: string } = {}) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function SalesXIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function SalesArrowRight({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function SalesGiftIcon({ size = 18, color = SALES_INK.LIME }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
+/* SALES HERO — dark terminal-card with live badge, mono metadata, pulse CTA. */
+function SalesHero({ content }: { content: LimeInkContent }) {
+  if (!content.salesHero) return null;
+  const h = content.salesHero;
+  const topName = content.topBar.name;
+  return (
+    <section
+      className="relative text-white overflow-hidden py-20 md:py-28"
+      style={{ background: SALES_INK.INK900 }}
+    >
+      <div className="absolute inset-0 lime-ink-grid-bg"></div>
+      <div className="absolute inset-0 lime-ink-noise"></div>
+      <div className="relative max-w-5xl mx-auto px-6 text-center">
+        <span
+          className="lime-ink-mono inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
+          style={{
+            fontSize: '0.7rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: SALES_INK.INK900,
+            background: SALES_INK.LIME,
+            fontWeight: 700,
+          }}
+        >
+          <span
+            className="lime-ink-sales-live-dot"
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: SALES_INK.INK900,
+              display: 'inline-block',
+            }}
+          />
+          {h.badge}
+        </span>
+
+        <h1 className="font-black text-4xl md:text-6xl lg:text-7xl leading-[0.98] tracking-[-0.04em] mb-6">
+          {h.headline}
+        </h1>
+
+        <p
+          className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-12"
+          style={{ color: 'rgba(255,255,255,0.7)' }}
+        >
+          {h.subheadline}
+        </p>
+
+        <div
+          className="max-w-xl mx-auto mb-10 rounded-2xl overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${SALES_INK.INK800}, ${SALES_INK.INK700})`,
+            border: '1px solid rgba(196,242,69,0.25)',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.4)',
+          }}
+        >
+          <div
+            className="flex items-center gap-2 px-5 py-3 lime-ink-mono"
+            style={{
+              fontSize: '0.7rem',
+              color: SALES_INK.INK400,
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(0,0,0,0.25)',
+            }}
+          >
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: '#EF4444',
+              }}
+            />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: '#F5CB47',
+              }}
+            />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: SALES_INK.LIME,
+              }}
+            />
+            <span className="ml-3">{topName.toLowerCase().replace(/\s+/g, '-')}.pkg</span>
+          </div>
+          <div className="p-10 text-center">
+            <p
+              className="lime-ink-mono mb-3"
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.3em',
+                textTransform: 'uppercase',
+                color: SALES_INK.LIME_SOFT,
+              }}
+            >
+              FULL.ACCESS
+            </p>
+            <p
+              className="font-black leading-none tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(2rem,5vw,3.5rem)' }}
+            >
+              {h.productLabel}
+            </p>
+            <p
+              className="lime-ink-mono mt-3"
+              style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: SALES_INK.INK400,
+              }}
+            >
+              {topName}
+            </p>
+          </div>
+        </div>
+
+        <p
+          className="lime-ink-mono mb-5"
+          style={{ fontSize: '0.8rem', color: SALES_INK.INK400 }}
+        >
+          Total value:{' '}
+          <span style={{ color: SALES_INK.INK300, textDecoration: 'line-through' }}>
+            {h.totalValue}
+          </span>
+        </p>
+
+        <a
+          href="#purchase"
+          id="purchase"
+          className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-5 rounded-full text-lg"
+        >
+          {h.ctaLabel}
+          <SalesArrowRight size={20} />
+        </a>
+
+        <p
+          className="lime-ink-mono mt-6"
+          style={{ fontSize: '0.8rem', color: SALES_INK.LIME_SOFT }}
+        >
+          {h.ctaNote}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* INTRO — light surface, centered mono eyebrow + display headline + body. */
+function Intro({ content }: { content: LimeInkContent }) {
+  if (!content.intro) return null;
+  const i = content.intro;
+  return (
+    <section className="bg-white py-20 md:py-24 lime-ink-hairline-b">
+      <div className="max-w-3xl mx-auto px-6 text-center">
+        <p
+          className="lime-ink-mono mb-4"
+          style={{
+            fontSize: '0.7rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: SALES_INK.LIME_DARK,
+          }}
+        >
+          {i.eyebrow}
+        </p>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-8">
+          {i.headline}
+        </h2>
+        {i.paragraphs.map((p, idx) => (
+          <p
+            key={`intro-p-${idx}`}
+            className="text-lg leading-relaxed mb-5"
+            style={{ color: SALES_INK.INK500 }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* VIP BONUSES — dark card grid with lime icon tiles + mono value pills. */
+function VipBonuses({ content }: { content: LimeInkContent }) {
+  if (!content.vipBonuses) return null;
+  const v = content.vipBonuses;
+  return (
+    <section
+      className="py-20 md:py-28 lime-ink-hairline-b"
+      style={{ background: SALES_INK.SURFACE }}
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center gap-4 mb-4">
+          <span
+            className="lime-ink-mono text-xs"
+            style={{ color: SALES_INK.INK400 }}
+          >
+            {v.eyebrow}
+          </span>
+          <span
+            className="h-[1px] w-12"
+            style={{ background: SALES_INK.SURFACE_BORDER }}
+          ></span>
+        </div>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-14 max-w-3xl">
+          {v.headline}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {v.items.map((item, i) => (
+            <article
+              key={`vip-${i}`}
+              className="text-white rounded-2xl p-7 flex flex-col gap-4"
+              style={{
+                background: SALES_INK.INK900,
+                border: '1px solid rgba(196,242,69,0.18)',
+              }}
+            >
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: 'rgba(196,242,69,0.08)',
+                    border: '1px solid rgba(196,242,69,0.25)',
+                  }}
+                >
+                  <SalesBonusIcon icon={item.icon} />
+                </div>
+                <span
+                  className="lime-ink-mono px-2.5 py-1 rounded-full"
+                  style={{
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.1em',
+                    color: SALES_INK.INK900,
+                    background: SALES_INK.LIME,
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.valueLabel}
+                </span>
+              </div>
+              <div>
+                <p
+                  className="lime-ink-mono mb-2"
+                  style={{
+                    fontSize: '0.65rem',
+                    color: SALES_INK.INK400,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  MOD.{String(i + 1).padStart(2, '0')}
+                </p>
+                <h3 className="font-black text-xl mb-2 tracking-tight">
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                >
+                  {item.description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* FREE GIFTS — light grid, lime-accented bonus cards with gift metadata. */
+function FreeGifts({ content }: { content: LimeInkContent }) {
+  if (!content.freeGifts) return null;
+  const fg = content.freeGifts;
+  return (
+    <section className="bg-white py-20 md:py-28 lime-ink-hairline-b">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center gap-4 mb-4">
+          <span
+            className="lime-ink-mono text-xs"
+            style={{ color: SALES_INK.INK400 }}
+          >
+            {fg.eyebrow}
+          </span>
+          <span
+            className="h-[1px] w-12"
+            style={{ background: SALES_INK.SURFACE_BORDER }}
+          ></span>
+        </div>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-14 max-w-3xl">
+          {fg.headline}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {fg.items.map((gift, i) => (
+            <article
+              key={`gift-${i}`}
+              className="rounded-2xl p-7 flex flex-col gap-4"
+              style={{
+                background: SALES_INK.SURFACE,
+                border: `1px solid ${SALES_INK.SURFACE_BORDER}`,
+              }}
+            >
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: SALES_INK.INK900,
+                  }}
+                >
+                  <SalesGiftIcon size={26} color={SALES_INK.LIME} />
+                </div>
+                <span
+                  className="lime-ink-mono px-2.5 py-1 rounded-full"
+                  style={{
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.1em',
+                    color: SALES_INK.INK900,
+                    background: SALES_INK.LIME,
+                    fontWeight: 700,
+                  }}
+                >
+                  {gift.valueLabel}
+                </span>
+              </div>
+              <div>
+                <p
+                  className="lime-ink-mono mb-2"
+                  style={{
+                    fontSize: '0.65rem',
+                    color: SALES_INK.LIME_DARK,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                  }}
+                >
+                  GIFT.{String(gift.giftNumber).padStart(2, '0')}
+                </p>
+                <h3 className="font-black text-xl mb-2 tracking-tight">
+                  {gift.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: SALES_INK.INK500 }}
+                >
+                  {gift.description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p
+          className="lime-ink-mono text-center mt-10"
+          style={{ fontSize: '0.8rem', color: SALES_INK.INK400 }}
+        >
+          {fg.deliveryNote}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* UPGRADE SECTION — centered mono eyebrow + headline + paragraphs preamble
+ * (the adjacent PriceCard is its own section). */
+function UpgradeSection({ content }: { content: LimeInkContent }) {
+  if (!content.upgradeSection) return null;
+  const u = content.upgradeSection;
+  return (
+    <section
+      className="py-20 md:py-24 lime-ink-hairline-b"
+      style={{ background: SALES_INK.SURFACE }}
+    >
+      <div className="max-w-3xl mx-auto px-6 text-center">
+        <p
+          className="lime-ink-mono mb-4"
+          style={{
+            fontSize: '0.7rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: SALES_INK.LIME_DARK,
+          }}
+        >
+          {u.eyebrow}
+        </p>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-8">
+          {u.headline}
+        </h2>
+        {u.paragraphs.map((p, idx) => (
+          <p
+            key={`upgrade-p-${idx}`}
+            className="text-lg leading-relaxed mb-4"
+            style={{ color: SALES_INK.INK500 }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* PRICE CARD — dark terminal-style pricing panel with mono features,
+ * gift box, strikethrough value, large lime price, pulse CTA. */
+function PriceCard({ content }: { content: LimeInkContent }) {
+  if (!content.priceCard) return null;
+  const p = content.priceCard;
+  return (
+    <section
+      id="purchase"
+      className="py-20 md:py-28 lime-ink-hairline-b"
+      style={{ background: SALES_INK.INK900 }}
+    >
+      <div className="max-w-2xl mx-auto px-6">
+        <div
+          className="relative text-white rounded-2xl overflow-hidden"
+          style={{
+            background: `linear-gradient(180deg, ${SALES_INK.INK800}, ${SALES_INK.INK900})`,
+            border: '1px solid rgba(196,242,69,0.3)',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.4)',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: 4,
+              background: `linear-gradient(90deg, ${SALES_INK.LIME}, ${SALES_INK.LIME_SOFT}, ${SALES_INK.LIME})`,
+            }}
+          />
+
+          <div className="p-8 md:p-10">
+            <span
+              className="lime-ink-mono inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5"
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: SALES_INK.INK900,
+                background: SALES_INK.LIME,
+                fontWeight: 700,
+              }}
+            >
+              {p.badge}
+            </span>
+
+            <h3 className="font-black text-2xl md:text-3xl leading-tight tracking-[-0.02em] mb-2">
+              {p.headline}
+            </h3>
+            <p
+              className="lime-ink-mono mb-6"
+              style={{ fontSize: '0.8rem', color: SALES_INK.INK400 }}
+            >
+              {p.note}
+            </p>
+
+            <ul className="space-y-2.5 mb-6">
+              {p.features.map((f, i) => (
+                <li
+                  key={`pc-feat-${i}`}
+                  className="flex gap-3 items-start text-sm leading-relaxed"
+                  style={{ color: 'rgba(255,255,255,0.85)' }}
+                >
+                  <SalesCheckIcon color={SALES_INK.LIME} />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div
+              className="rounded-xl p-5 mb-6"
+              style={{
+                background: 'rgba(196,242,69,0.06)',
+                border: '1px solid rgba(196,242,69,0.18)',
+              }}
+            >
+              <p
+                className="lime-ink-mono flex items-center gap-2 mb-3"
+                style={{
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: SALES_INK.LIME_SOFT,
+                  fontWeight: 700,
+                }}
+              >
+                <SalesGiftIcon size={14} color={SALES_INK.LIME_SOFT} />
+                {p.giftsBoxTitle}
+              </p>
+              {p.giftItems.map((g, i) => (
+                <div
+                  key={`pc-gift-${i}`}
+                  className="flex gap-2.5 items-start text-sm py-1"
+                  style={{ color: 'rgba(255,255,255,0.75)' }}
+                >
+                  <SalesCheckIcon color={SALES_INK.LIME} />
+                  <span>{g}</span>
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="text-center pt-6"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              <p
+                className="lime-ink-mono mb-2"
+                style={{
+                  fontSize: '0.78rem',
+                  color: SALES_INK.INK400,
+                  textDecoration: 'line-through',
+                }}
+              >
+                Total value: {p.totalValue} · Regular: {p.regularPrice}
+              </p>
+              <p
+                className="font-black leading-none tracking-[-0.04em] mb-1"
+                style={{
+                  fontSize: 'clamp(3rem,8vw,4.5rem)',
+                  color: SALES_INK.LIME,
+                }}
+              >
+                {p.currentPrice}
+              </p>
+              <p
+                className="lime-ink-mono mb-6"
+                style={{
+                  fontSize: '0.78rem',
+                  color: SALES_INK.LIME_SOFT,
+                  fontWeight: 700,
+                }}
+              >
+                {p.savings}
+              </p>
+              <a
+                href="#purchase"
+                className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-4 rounded-full text-base"
+              >
+                {p.ctaLabel}
+                <SalesArrowRight size={18} />
+              </a>
+              <p
+                className="lime-ink-mono mt-4"
+                style={{ fontSize: '0.72rem', color: SALES_INK.INK400 }}
+              >
+                {p.guarantee}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* SALES SPEAKERS — dense grid of <details> cards with mono metadata. */
+function SalesSpeakers({ content, speakers }: Props) {
+  if (!content.salesSpeakers) return null;
+  const s = content.salesSpeakers;
+  const sortedSpeakers = Object.values(speakers).sort((a, b) => a.sortOrder - b.sortOrder);
+  if (sortedSpeakers.length === 0) return null;
+  return (
+    <section className="bg-white py-20 md:py-28 lime-ink-hairline-b">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center gap-4 mb-4">
+          <span
+            className="lime-ink-mono text-xs"
+            style={{ color: SALES_INK.INK400 }}
+          >
+            {s.eyebrow}
+          </span>
+          <span
+            className="h-[1px] w-12"
+            style={{ background: SALES_INK.SURFACE_BORDER }}
+          ></span>
+        </div>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-14 max-w-3xl">
+          {s.headline}
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {sortedSpeakers.map((spk, idx) => (
+            <details
+              key={spk.id}
+              className="lime-ink-sales-spk rounded-2xl overflow-hidden"
+              style={{
+                background: SALES_INK.SURFACE,
+                border: `1px solid ${SALES_INK.SURFACE_BORDER}`,
+              }}
+            >
+              <summary
+                style={{
+                  cursor: 'pointer',
+                  padding: '1.25rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  gap: '0.75rem',
+                }}
+              >
+                {spk.photoUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={spk.photoUrl}
+                    alt={`${spk.firstName} ${spk.lastName}`}
+                    style={{
+                      width: 72,
+                      height: 72,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `2px solid ${SALES_INK.LIME}`,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 72,
+                      height: 72,
+                      borderRadius: '50%',
+                      background:
+                        SPEAKER_GRADIENTS[idx % SPEAKER_GRADIENTS.length],
+                      border: `2px solid ${SALES_INK.LIME}`,
+                      display: 'grid',
+                      placeItems: 'center',
+                      color: SALES_INK.LIME,
+                      fontWeight: 900,
+                      fontSize: '1.3rem',
+                    }}
+                  >
+                    {initialsFromSpeaker(spk)}
+                  </div>
+                )}
+                <div>
+                  <p
+                    className="font-bold text-sm"
+                    style={{ color: SALES_INK.INK900 }}
+                  >
+                    {spk.firstName} {spk.lastName}
+                  </p>
+                  {spk.title ? (
+                    <p
+                      className="lime-ink-mono mt-1"
+                      style={{
+                        fontSize: '0.62rem',
+                        color: SALES_INK.INK400,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      {spk.title}
+                    </p>
+                  ) : null}
+                  {spk.masterclassTitle ? (
+                    <p
+                      className="text-xs mt-1.5"
+                      style={{ color: SALES_INK.INK500, fontStyle: 'italic' }}
+                    >
+                      {spk.masterclassTitle}
+                    </p>
+                  ) : null}
+                </div>
+              </summary>
+              {spk.shortBio ? (
+                <p
+                  style={{
+                    padding: '0 1.25rem 1.25rem',
+                    color: SALES_INK.INK500,
+                    fontSize: '0.82rem',
+                    lineHeight: 1.6,
+                    margin: 0,
+                  }}
+                >
+                  {spk.shortBio}
+                </p>
+              ) : null}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* COMPARISON TABLE — dark terminal table: Free Pass vs VIP Pass. */
+function ComparisonTable({ content }: { content: LimeInkContent }) {
+  if (!content.comparisonTable) return null;
+  const c = content.comparisonTable;
+  return (
+    <section
+      className="py-20 md:py-28 lime-ink-hairline-b"
+      style={{ background: SALES_INK.SURFACE }}
+    >
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="flex items-center gap-4 mb-4">
+          <span
+            className="lime-ink-mono text-xs"
+            style={{ color: SALES_INK.INK400 }}
+          >
+            {c.eyebrow}
+          </span>
+          <span
+            className="h-[1px] w-12"
+            style={{ background: SALES_INK.SURFACE_BORDER }}
+          ></span>
+        </div>
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-12">
+          {c.headline}
+        </h2>
+
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            background: SALES_INK.INK900,
+            border: '1px solid rgba(196,242,69,0.2)',
+          }}
+        >
+          <div
+            className="grid grid-cols-[1.5fr_1fr_1fr] text-white"
+            style={{
+              background: 'rgba(0,0,0,0.3)',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <div
+              className="lime-ink-mono px-5 py-4"
+              style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: SALES_INK.INK400,
+              }}
+            >
+              Feature
+            </div>
+            <div
+              className="lime-ink-mono px-5 py-4 text-center"
+              style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: SALES_INK.INK400,
+              }}
+            >
+              Free
+            </div>
+            <div
+              className="lime-ink-mono px-5 py-4 text-center"
+              style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: SALES_INK.LIME,
+                fontWeight: 700,
+              }}
+            >
+              VIP
+            </div>
+          </div>
+          {c.rows.map((row, i) => (
+            <div
+              key={`cmp-${i}`}
+              className="lime-ink-sales-cmp-row grid grid-cols-[1.5fr_1fr_1fr] text-white"
+              style={{
+                borderBottom:
+                  i === c.rows.length - 1
+                    ? 'none'
+                    : '1px solid rgba(255,255,255,0.06)',
+              }}
+            >
+              <div
+                className="px-5 py-4 text-sm leading-relaxed"
+                style={{ color: 'rgba(255,255,255,0.85)', fontWeight: 600 }}
+              >
+                {row.label}
+              </div>
+              <div className="px-5 py-4 flex items-center justify-center">
+                {row.freePass ? (
+                  <span
+                    className="inline-grid place-items-center w-8 h-8 rounded-full"
+                    style={{ background: 'rgba(196,242,69,0.12)' }}
+                  >
+                    <SalesCheckIcon color={SALES_INK.LIME} />
+                  </span>
+                ) : (
+                  <span
+                    className="inline-grid place-items-center w-8 h-8 rounded-full"
+                    style={{ background: 'rgba(239,68,68,0.12)' }}
+                  >
+                    <SalesXIcon />
+                  </span>
+                )}
+              </div>
+              <div className="px-5 py-4 flex items-center justify-center">
+                {row.vipPass ? (
+                  <span
+                    className="inline-grid place-items-center w-8 h-8 rounded-full"
+                    style={{ background: 'rgba(196,242,69,0.12)' }}
+                  >
+                    <SalesCheckIcon color={SALES_INK.LIME} />
+                  </span>
+                ) : (
+                  <span
+                    className="inline-grid place-items-center w-8 h-8 rounded-full"
+                    style={{ background: 'rgba(239,68,68,0.12)' }}
+                  >
+                    <SalesXIcon />
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* GUARANTEE — lime-dashed shield panel with mono eyebrow + body. */
+function Guarantee({ content }: { content: LimeInkContent }) {
+  if (!content.guarantee) return null;
+  const g = content.guarantee;
+  return (
+    <section className="bg-white py-20 md:py-24 lime-ink-hairline-b">
+      <div className="max-w-3xl mx-auto px-6">
+        <div
+          className="rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start gap-6"
+          style={{
+            background: SALES_INK.INK900,
+            border: `2px dashed ${SALES_INK.LIME}`,
+          }}
+        >
+          <div
+            className="flex items-center justify-center rounded-2xl shrink-0"
+            style={{
+              width: 72,
+              height: 72,
+              background: 'rgba(196,242,69,0.12)',
+              border: '1px solid rgba(196,242,69,0.35)',
+            }}
+          >
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={SALES_INK.LIME}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div>
+            <p
+              className="lime-ink-mono mb-2"
+              style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: SALES_INK.LIME,
+                fontWeight: 700,
+              }}
+            >
+              {g.days}-DAY.GUARANTEE
+            </p>
+            <h3
+              className="font-black text-xl md:text-2xl mb-3 tracking-tight"
+              style={{ color: '#FFFFFF' }}
+            >
+              {g.heading}
+            </h3>
+            <p
+              className="leading-relaxed"
+              style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem' }}
+            >
+              {g.body}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* WHY SECTION — centered mono subheadline + body paragraphs. */
+function WhySection({ content }: { content: LimeInkContent }) {
+  if (!content.whySection) return null;
+  const w = content.whySection;
+  return (
+    <section
+      className="py-20 md:py-24 lime-ink-hairline-b"
+      style={{ background: SALES_INK.SURFACE }}
+    >
+      <div className="max-w-3xl mx-auto px-6 text-center">
+        <h2 className="font-black text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] mb-4">
+          {w.headline}
+        </h2>
+        <p
+          className="lime-ink-mono mb-8"
+          style={{
+            fontSize: '0.8rem',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            color: SALES_INK.LIME_DARK,
+            fontWeight: 700,
+          }}
+        >
+          {w.subheadline}
+        </p>
+        {w.paragraphs.map((p, i) => (
+          <p
+            key={`why-p-${i}`}
+            className="text-lg leading-relaxed mb-5"
+            style={{ color: SALES_INK.INK500 }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ============== ROOT COMPONENT ============== */
 export function LimeInk({ content, speakers, funnelId, enabledSections }: RootProps) {
   const enabled = new Set(enabledSections ?? limeInkDefaultEnabledSections);
@@ -1312,11 +2370,24 @@ export function LimeInk({ content, speakers, funnelId, enabledSections }: RootPr
         {enabled.has('shifts') && <Shifts content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
+
+        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('intro') && <Intro content={content} />}
+        {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
+        {enabled.has('free-gifts') && <FreeGifts content={content} />}
+        {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
+        {enabled.has('comparison-table') && <ComparisonTable content={content} />}
+        {enabled.has('guarantee') && <Guarantee content={content} />}
+        {enabled.has('why-section') && <WhySection content={content} />}
       </main>
 
       {enabled.has('footer') && <Footer content={content} />}
 
-      <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      {enabled.has('hero') && content.hero && (
+        <OptinModal funnelId={funnelId} ctaLabel={content.hero.primaryCtaLabel} />
+      )}
     </div>
   );
 }

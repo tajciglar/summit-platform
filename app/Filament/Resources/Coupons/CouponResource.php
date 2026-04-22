@@ -86,10 +86,7 @@ class CouponResource extends Resource
                             modifyQueryUsing: function ($query) {
                                 $domain = Filament::getTenant();
                                 if ($domain) {
-                                    $query->whereHas(
-                                        'domains',
-                                        fn ($q) => $q->whereKey($domain->getKey()),
-                                    );
+                                    $query->where('domain_id', $domain->getKey());
                                 }
                             },
                         )

@@ -11,7 +11,7 @@ it('returns page_content for any step by id (including non-optin)', function () 
     $step = FunnelStep::factory()->for($funnel)->create([
         'step_type' => 'upsell',
         'page_content' => [
-            'template_key' => 'lavender-gold',
+            'template_key' => 'indigo-gold',
             'content' => ['hero' => ['title' => 'Upgrade to VIP']],
             'enabled_sections' => ['hero'],
             'palette' => ['primary' => '#000'],
@@ -21,7 +21,7 @@ it('returns page_content for any step by id (including non-optin)', function () 
     $response = $this->getJson("/api/funnel-steps/{$step->id}/preview-content");
 
     $response->assertOk();
-    $response->assertJsonPath('template_key', 'lavender-gold');
+    $response->assertJsonPath('template_key', 'indigo-gold');
     $response->assertJsonPath('content.hero.title', 'Upgrade to VIP');
     $response->assertJsonPath('enabled_sections.0', 'hero');
     $response->assertJsonPath('palette.primary', '#000');

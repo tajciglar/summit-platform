@@ -32,6 +32,7 @@ class AdhdParentingSummitSeeder extends Seeder
         $summit = Summit::updateOrCreate(
             ['slug' => 'adhd-parenting-summit'],
             [
+                'domain_id' => $domain->id,
                 'title' => 'ADHD Parenting Summit',
                 'topic' => 'ADHD parenting',
                 'description' => 'A 5-day virtual summit for parents navigating ADHD.',
@@ -46,8 +47,6 @@ class AdhdParentingSummitSeeder extends Seeder
                 'ends_at' => '2025-03-15 00:00:00',
             ]
         );
-
-        $summit->domains()->syncWithoutDetaching([$domain->id]);
 
         $admin = User::where('email', 'admin@example.test')->first();
         if ($admin) {
@@ -107,6 +106,8 @@ class AdhdParentingSummitSeeder extends Seeder
         );
 
         // --- Single funnel: optin + sales page ---
+        // template_key + section_config on the funnel are what the template
+        // family flow expects — one skin, distinct sections per step_type.
         $funnel = Funnel::updateOrCreate(
             ['summit_id' => $summit->id, 'slug' => 'aps-post'],
             [
@@ -114,6 +115,20 @@ class AdhdParentingSummitSeeder extends Seeder
                 'description' => 'Post-summit funnel: replay-access optin followed by VIP upgrade pitch.',
                 'target_phase' => 'post',
                 'is_active' => true,
+                'template_key' => 'indigo-gold',
+                'section_config' => [
+                    'optin' => [
+                        'top-bar', 'hero', 'press', 'trust-badges', 'stats', 'overview',
+                        'speakers', 'outcomes', 'free-gift', 'founders', 'testimonials',
+                        'bonuses', 'pull-quote', 'figures', 'shifts', 'closing-cta',
+                        'faq', 'footer', 'sticky-mobile-cta',
+                    ],
+                    'sales_page' => [
+                        'sales-hero', 'intro', 'vip-bonuses', 'free-gifts', 'upgrade-section',
+                        'price-card', 'sales-speakers', 'comparison-table', 'guarantee', 'why-section',
+                    ],
+                    'thank_you' => [],
+                ],
             ]
         );
 
@@ -374,13 +389,12 @@ class AdhdParentingSummitSeeder extends Seeder
     private function vipSalesPageContent(): array
     {
         return [
-            'template_key' => 'lavender-gold',
+            'template_key' => 'indigo-gold',
             'content' => [
                 'topBar' => [
                     'name' => 'ADHD Parenting Summit',
-                    'ctaLabel' => 'Upgrade Now',
                 ],
-                'hero' => [
+                'salesHero' => [
                     'badge' => 'Special One-Time Offer',
                     'headline' => 'You Can Keep The Invaluable Lessons From All 40+ Summit Experts FOREVER',
                     'subheadline' => 'Watch or re-watch at your own pace, listen on the go, or just read the summaries with your own VIP Pass.',
@@ -458,7 +472,7 @@ class AdhdParentingSummitSeeder extends Seeder
                     'ctaLabel' => 'Upgrade to VIP Now',
                     'guarantee' => '14-day money-back guarantee · Secure checkout',
                 ],
-                'speakersSection' => [
+                'salesSpeakers' => [
                     'eyebrow' => 'Learn From These',
                     'headline' => '40+ World-Leading Experts and Authorities',
                 ],
@@ -494,6 +508,8 @@ class AdhdParentingSummitSeeder extends Seeder
                 ],
                 'footer' => [
                     'brandName' => 'StrategicParenting ADHD',
+                    'tagline' => 'Parenting you can rely on',
+                    'brandInitial' => 'S',
                     'links' => [
                         ['label' => 'Privacy policy', 'href' => '/privacy'],
                         ['label' => 'Cookies', 'href' => '/cookies'],

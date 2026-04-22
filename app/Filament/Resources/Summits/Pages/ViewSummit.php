@@ -127,10 +127,9 @@ class ViewSummit extends ViewRecord
                                 ->placeholder('—'),
                         ]),
 
-                    TextEntry::make('domains.name')
+                    TextEntry::make('domain.name')
                         ->label('Published on')
                         ->badge()
-                        ->separator(', ')
                         ->color('primary')
                         ->placeholder('Not published to any domain'),
                 ]),

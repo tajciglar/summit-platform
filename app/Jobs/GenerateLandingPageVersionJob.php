@@ -81,6 +81,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
                 speakers: $speakers,
                 notes: $batch->notes,
                 styleReferenceUrl: $batch->style_reference_url,
+                stepType: $batch->funnelStep?->step_type,
             );
 
             $enabledSections = $this->resolveEnabledSections($registry, $batch);

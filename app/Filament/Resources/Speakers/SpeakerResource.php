@@ -64,10 +64,7 @@ class SpeakerResource extends Resource
                             modifyQueryUsing: function ($query) {
                                 $domain = Filament::getTenant();
                                 if ($domain) {
-                                    $query->whereHas(
-                                        'domains',
-                                        fn ($q) => $q->whereKey($domain->getKey()),
-                                    );
+                                    $query->where('domain_id', $domain->getKey());
                                 }
                             },
                         )
@@ -76,6 +73,19 @@ class SpeakerResource extends Resource
                         ->required()
                         ->searchable()
                         ->preload(),
+                    Select::make('day_number')
+                        ->label('Day')
+                        ->options([
+                            1 => 'Day 1',
+                            2 => 'Day 2',
+                            3 => 'Day 3',
+                            4 => 'Day 4',
+                            5 => 'Day 5',
+                            6 => 'Day 6',
+                            7 => 'Day 7',
+                        ])
+                        ->placeholder('Unassigned')
+                        ->helperText('Which day of the summit this speaker presents on.'),
                     TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
@@ -161,6 +171,13 @@ class SpeakerResource extends Resource
                     ->sortable()
                     ->weight('bold'),
                 TextColumn::make('summit.title')->label('Summit')->searchable()->toggleable(),
+                TextColumn::make('day_number')
+                    ->label('Day')
+                    ->formatStateUsing(fn (?int $state): string => $state === null ? '—' : "Day {$state}")
+                    ->badge()
+                    ->color('gray')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('masterclass_title')
                     ->label('Masterclass')
                     ->limit(40)

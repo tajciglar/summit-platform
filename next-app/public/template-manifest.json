@@ -2022,6 +2022,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -2065,7 +2474,17 @@
         "reasons-to-attend",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "masthead",
@@ -2084,6 +2503,16 @@
         "reasons-to-attend",
         "faq",
         "closing-cta",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section",
         "footer"
       ],
       "defaultEnabledSections": [
@@ -2097,6 +2526,18 @@
         "faq",
         "closing-cta",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionSchemas": {
         "masthead": {
@@ -2876,6 +3317,156 @@
             "tagline",
             "volume",
             "copyright"
+          ],
+          "additionalProperties": false
+        },
+        "price-card": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "badge": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1
+            },
+            "features": {
+              "minItems": 1,
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "giftsBoxTitle": {
+              "type": "string",
+              "minLength": 1
+            },
+            "giftItems": {
+              "minItems": 1,
+              "maxItems": 6,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "totalValue": {
+              "type": "string",
+              "minLength": 1
+            },
+            "regularPrice": {
+              "type": "string",
+              "minLength": 1
+            },
+            "currentPrice": {
+              "type": "string",
+              "minLength": 1
+            },
+            "savings": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "guarantee": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "badge",
+            "headline",
+            "note",
+            "features",
+            "giftsBoxTitle",
+            "giftItems",
+            "totalValue",
+            "regularPrice",
+            "currentPrice",
+            "savings",
+            "ctaLabel",
+            "guarantee"
+          ],
+          "additionalProperties": false
+        },
+        "comparison-table": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rows": {
+              "minItems": 1,
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "freePass": {
+                    "type": "boolean"
+                  },
+                  "vipPass": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "label",
+                  "freePass",
+                  "vipPass"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "eyebrow",
+            "headline",
+            "rows"
+          ],
+          "additionalProperties": false
+        },
+        "guarantee": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "heading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "heading",
+            "body",
+            "days"
           ],
           "additionalProperties": false
         }
@@ -3859,6 +4450,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -3901,7 +4901,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -3920,7 +4930,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -3940,6 +4960,18 @@
         "faq",
         "closing-cta",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -4802,6 +5834,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -4844,7 +6285,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -4863,7 +6314,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -4883,6 +6344,18 @@
         "faq",
         "closing-cta",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -5837,6 +7310,415 @@
               "signoff"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -5879,7 +7761,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -5898,7 +7790,17 @@
         "shifts",
         "faq",
         "closing-cta",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -5918,6 +7820,18 @@
         "faq",
         "closing-cta",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -6719,6 +8633,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -6764,7 +9087,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -6784,7 +9117,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -6805,6 +9148,18 @@
         "closing-cta",
         "faq",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -7614,6 +9969,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -7658,7 +10422,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -7678,7 +10452,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -7699,6 +10483,18 @@
         "closing-cta",
         "faq",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -8485,6 +11281,415 @@
               "copyright"
             ],
             "additionalProperties": false
+          },
+          "salesHero": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "productLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "subheadline",
+              "productLabel",
+              "totalValue",
+              "ctaLabel",
+              "ctaNote"
+            ],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "vipBonuses": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "infinity",
+                        "clipboard",
+                        "headphones",
+                        "captions",
+                        "file-text",
+                        "book"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "freeGifts": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "items": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "giftNumber": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueLabel": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "giftNumber",
+                    "title",
+                    "description",
+                    "valueLabel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deliveryNote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "items",
+              "deliveryNote"
+            ],
+            "additionalProperties": false
+          },
+          "upgradeSection": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          },
+          "priceCard": {
+            "type": "object",
+            "properties": {
+              "badge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "features": {
+                "minItems": 1,
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "giftsBoxTitle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "giftItems": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "totalValue": {
+                "type": "string",
+                "minLength": 1
+              },
+              "regularPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "currentPrice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "savings": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ctaLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guarantee": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "badge",
+              "headline",
+              "note",
+              "features",
+              "giftsBoxTitle",
+              "giftItems",
+              "totalValue",
+              "regularPrice",
+              "currentPrice",
+              "savings",
+              "ctaLabel",
+              "guarantee"
+            ],
+            "additionalProperties": false
+          },
+          "salesSpeakers": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline"
+            ],
+            "additionalProperties": false
+          },
+          "comparisonTable": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "type": "string",
+                "minLength": 1
+              },
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rows": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freePass": {
+                      "type": "boolean"
+                    },
+                    "vipPass": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "freePass",
+                    "vipPass"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "eyebrow",
+              "headline",
+              "rows"
+            ],
+            "additionalProperties": false
+          },
+          "guarantee": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "days"
+            ],
+            "additionalProperties": false
+          },
+          "whySection": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subheadline": {
+                "type": "string",
+                "minLength": 1
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "headline",
+              "subheadline",
+              "paragraphs"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -8530,7 +11735,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
@@ -8550,7 +11765,17 @@
         "shifts",
         "closing-cta",
         "faq",
-        "footer"
+        "footer",
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
@@ -8571,6 +11796,18 @@
         "closing-cta",
         "faq",
         "footer"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
+        "intro",
+        "vip-bonuses",
+        "free-gifts",
+        "upgrade-section",
+        "price-card",
+        "sales-speakers",
+        "comparison-table",
+        "guarantee",
+        "why-section"
       ]
     },
     {
@@ -9543,128 +12780,8 @@
               "copyright"
             ],
             "additionalProperties": false
-          }
-        },
-        "required": [
-          "summit",
-          "topBar",
-          "hero",
-          "press",
-          "trustBadges",
-          "stats",
-          "overview",
-          "speakersDay",
-          "outcomes",
-          "freeGift",
-          "bonuses",
-          "founders",
-          "testimonials",
-          "pullQuote",
-          "figures",
-          "shifts",
-          "closing",
-          "faqSection",
-          "faqs",
-          "mobileCta",
-          "footer"
-        ],
-        "additionalProperties": false
-      },
-      "supportedSections": [
-        "top-bar",
-        "hero",
-        "press",
-        "trust-badges",
-        "stats",
-        "overview",
-        "speakers",
-        "outcomes",
-        "free-gift",
-        "founders",
-        "testimonials",
-        "bonuses",
-        "pull-quote",
-        "figures",
-        "shifts",
-        "closing-cta",
-        "faq",
-        "footer",
-        "sticky-mobile-cta"
-      ],
-      "sectionOrder": [
-        "top-bar",
-        "hero",
-        "press",
-        "trust-badges",
-        "stats",
-        "overview",
-        "speakers",
-        "outcomes",
-        "free-gift",
-        "founders",
-        "testimonials",
-        "bonuses",
-        "pull-quote",
-        "figures",
-        "shifts",
-        "closing-cta",
-        "faq",
-        "footer",
-        "sticky-mobile-cta"
-      ],
-      "defaultEnabledSections": [
-        "top-bar",
-        "hero",
-        "press",
-        "trust-badges",
-        "stats",
-        "overview",
-        "speakers",
-        "outcomes",
-        "free-gift",
-        "founders",
-        "testimonials",
-        "bonuses",
-        "pull-quote",
-        "figures",
-        "shifts",
-        "closing-cta",
-        "faq",
-        "footer",
-        "sticky-mobile-cta"
-      ]
-    },
-    {
-      "key": "lavender-gold",
-      "label": "APS VIP Pass (Lavender / Gold)",
-      "thumbnail": "/template-thumbs/lavender-gold.jpg",
-      "tags": [
-        "serif",
-        "warm"
-      ],
-      "jsonSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "properties": {
-          "topBar": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "ctaLabel": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "required": [
-              "name",
-              "ctaLabel"
-            ],
-            "additionalProperties": false
           },
-          "hero": {
+          "salesHero": {
             "type": "object",
             "properties": {
               "badge": {
@@ -9958,7 +13075,7 @@
             ],
             "additionalProperties": false
           },
-          "speakersSection": {
+          "salesSpeakers": {
             "type": "object",
             "properties": {
               "eyebrow": {
@@ -10072,62 +13189,29 @@
               "paragraphs"
             ],
             "additionalProperties": false
-          },
-          "footer": {
-            "type": "object",
-            "properties": {
-              "brandName": {
-                "type": "string",
-                "minLength": 1
-              },
-              "links": {
-                "minItems": 1,
-                "maxItems": 6,
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "href": {
-                      "type": "string",
-                      "minLength": 1
-                    }
-                  },
-                  "required": [
-                    "label",
-                    "href"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "copyright": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "required": [
-              "brandName",
-              "links",
-              "copyright"
-            ],
-            "additionalProperties": false
           }
         },
         "required": [
+          "summit",
           "topBar",
           "hero",
-          "intro",
-          "vipBonuses",
-          "freeGifts",
-          "upgradeSection",
-          "priceCard",
-          "speakersSection",
-          "comparisonTable",
-          "guarantee",
-          "whySection",
+          "press",
+          "trustBadges",
+          "stats",
+          "overview",
+          "speakersDay",
+          "outcomes",
+          "freeGift",
+          "bonuses",
+          "founders",
+          "testimonials",
+          "pullQuote",
+          "figures",
+          "shifts",
+          "closing",
+          "faqSection",
+          "faqs",
+          "mobileCta",
           "footer"
         ],
         "additionalProperties": false
@@ -10135,44 +13219,97 @@
       "supportedSections": [
         "top-bar",
         "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta",
+        "sales-hero",
         "intro",
         "vip-bonuses",
         "free-gifts",
+        "upgrade-section",
         "price-card",
-        "speakers",
+        "sales-speakers",
         "comparison-table",
         "guarantee",
-        "why-section",
-        "footer",
-        "mobile-sticky-cta"
+        "why-section"
       ],
       "sectionOrder": [
         "top-bar",
         "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta",
+        "sales-hero",
         "intro",
         "vip-bonuses",
         "free-gifts",
+        "upgrade-section",
         "price-card",
-        "speakers",
+        "sales-speakers",
         "comparison-table",
         "guarantee",
-        "why-section",
-        "footer",
-        "mobile-sticky-cta"
+        "why-section"
       ],
       "defaultEnabledSections": [
         "top-bar",
         "hero",
+        "press",
+        "trust-badges",
+        "stats",
+        "overview",
+        "speakers",
+        "outcomes",
+        "free-gift",
+        "founders",
+        "testimonials",
+        "bonuses",
+        "pull-quote",
+        "figures",
+        "shifts",
+        "closing-cta",
+        "faq",
+        "footer",
+        "sticky-mobile-cta"
+      ],
+      "defaultSalesSections": [
+        "sales-hero",
         "intro",
         "vip-bonuses",
         "free-gifts",
+        "upgrade-section",
         "price-card",
-        "speakers",
+        "sales-speakers",
         "comparison-table",
         "guarantee",
-        "why-section",
-        "footer",
-        "mobile-sticky-cta"
+        "why-section"
       ]
     }
   ]

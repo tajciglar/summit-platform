@@ -49,6 +49,7 @@ class LandingPageDraftController extends Controller
             'palette' => $draft->palette,
             'speakers' => $speakers,
             'funnel_id' => $funnel?->id,
+            'wp_checkout_redirect_url' => $funnel?->wp_checkout_redirect_url,
             'status' => $draft->status?->value,
         ]);
     }

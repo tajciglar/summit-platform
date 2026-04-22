@@ -25,7 +25,18 @@ class PublicFunnelController extends Controller
             return response()->json(['error' => 'no published content'], 404);
         }
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id));
+        // Fall back to the funnel's per-step section_config when the step's
+        // page_content doesn't carry its own enabled_sections. This is what
+        // the template family flow ("one skin, different sections per step")
+        // relies on so sales_page renders the sales section mix.
+        if (! isset($content['enabled_sections']) && is_array($funnel->section_config ?? null)) {
+            $forStep = $funnel->section_config[$stepType] ?? null;
+            if (is_array($forStep) && $forStep !== []) {
+                $content['enabled_sections'] = array_values($forStep);
+            }
+        }
+
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $funnel->wp_checkout_redirect_url));
     }
 
     /**
@@ -43,14 +54,14 @@ class PublicFunnelController extends Controller
 
         $funnel = $step->funnel;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $funnel?->wp_checkout_redirect_url));
     }
 
     /**
      * @param  array<string, mixed>  $content
      * @return array<string, mixed>
      */
-    private function payload(array $content, ?string $summitId, ?string $funnelId): array
+    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $wpCheckoutRedirectUrl = null): array
     {
         $speakers = $summitId
             ? Speaker::where('summit_id', $summitId)->get()->map(fn ($s) => [
@@ -78,6 +89,7 @@ class PublicFunnelController extends Controller
             'palette' => $content['palette'] ?? null,
             'speakers' => $speakers,
             'funnel_id' => $funnelId,
+            'wp_checkout_redirect_url' => $wpCheckoutRedirectUrl,
         ];
     }
 }

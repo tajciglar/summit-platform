@@ -40,9 +40,7 @@ class CurrentSummit
         // If the summit no longer belongs to the active domain (user switched
         // tenant), drop the filter so they see all summits in the new domain.
         $domain = Filament::getTenant();
-        if ($domain instanceof Domain
-            && ! $summit->domains()->withoutGlobalScopes()->whereKey($domain->getKey())->exists()
-        ) {
+        if ($domain instanceof Domain && $summit->domain_id !== $domain->getKey()) {
             self::clear();
 
             return null;

@@ -92,6 +92,14 @@ class TemplateRegistry
         return $t['defaultEnabledSections'] ?? [];
     }
 
+    /** @return list<string> */
+    public function defaultSalesSections(string $key): array
+    {
+        $t = $this->get($key);
+
+        return $t['defaultSalesSections'] ?? [];
+    }
+
     /** @return array<string, array<string, mixed>> */
     public function sectionSchemas(string $key): array
     {

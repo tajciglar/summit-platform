@@ -7,6 +7,7 @@ use App\Models\Concerns\HasUuid;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -34,6 +35,7 @@ class Summit extends Model implements HasMedia, HasName
     }
 
     protected $fillable = [
+        'domain_id',
         'slug', 'title', 'description', 'topic', 'hero_image_url',
         'status', 'current_phase', 'timezone',
         'pre_summit_starts_at', 'late_pre_summit_starts_at',
@@ -62,9 +64,9 @@ class Summit extends Model implements HasMedia, HasName
         return $this->belongsToMany(User::class, 'summit_user')->withPivot('created_at');
     }
 
-    public function domains(): BelongsToMany
+    public function domain(): BelongsTo
     {
-        return $this->belongsToMany(Domain::class, 'domain_summit')->withPivot('created_at');
+        return $this->belongsTo(Domain::class);
     }
 
     public function pages(): HasMany

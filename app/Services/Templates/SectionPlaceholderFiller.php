@@ -25,15 +25,16 @@ class SectionPlaceholderFiller
     /**
      * @param  array<string, mixed>  $sectionSchema
      * @param  list<string>  $speakerIds  Real summit speaker UUIDs used to satisfy `format: uuid` requirements.
+     * @param  array<int, list<string>>  $speakersByDay  Speaker IDs grouped by day_number; used to expand multi-day speaker arrays.
      * @return array<string, mixed>
      */
-    public function fill(array $sectionSchema, array $speakerIds = []): array
+    public function fill(array $sectionSchema, array $speakerIds = [], array $speakersByDay = []): array
     {
         if (($sectionSchema['type'] ?? null) !== 'object') {
             return [];
         }
 
-        return $this->fillObject($sectionSchema, $speakerIds);
+        return $this->fillObject($sectionSchema, $speakerIds, $speakersByDay);
     }
 
     /**
@@ -43,9 +44,10 @@ class SectionPlaceholderFiller
      * @param  array<string, array<string, mixed>>  $sectionSchemas
      * @param  list<string>  $enabledSections
      * @param  list<string>  $speakerIds
+     * @param  array<int, list<string>>  $speakersByDay
      * @return array<string, array<string, mixed>>
      */
-    public function fillEnabled(array $sectionSchemas, array $enabledSections, array $speakerIds = []): array
+    public function fillEnabled(array $sectionSchemas, array $enabledSections, array $speakerIds = [], array $speakersByDay = []): array
     {
         $out = [];
         foreach ($enabledSections as $key) {
@@ -53,7 +55,7 @@ class SectionPlaceholderFiller
             if (! is_array($schema)) {
                 continue;
             }
-            $out[$key] = $this->fill($schema, $speakerIds);
+            $out[$key] = $this->fill($schema, $speakerIds, $speakersByDay);
         }
 
         return $out;
@@ -75,11 +77,37 @@ class SectionPlaceholderFiller
     }
 
     /**
+     * Speaker UUIDs grouped by day_number — used to expand multi-day speakers
+     * arrays (e.g. ochre-ink's `speakersByDay`). Speakers without a day_number
+     * are excluded; callers fall back to the flat `speakerIds` list when the
+     * returned map is empty.
+     *
+     * @return array<int, list<string>>
+     */
+    public static function speakersByDayFor(?string $summitId): array
+    {
+        if (! $summitId) {
+            return [];
+        }
+
+        return Speaker::query()
+            ->where('summit_id', $summitId)
+            ->whereNotNull('day_number')
+            ->orderBy('day_number')
+            ->orderBy('sort_order')
+            ->get(['id', 'day_number'])
+            ->groupBy('day_number')
+            ->map(fn ($speakers) => $speakers->pluck('id')->all())
+            ->all();
+    }
+
+    /**
      * @param  array<string, mixed>  $schema
      * @param  list<string>  $speakerIds
+     * @param  array<int, list<string>>  $speakersByDay
      * @return array<string, mixed>
      */
-    private function fillObject(array $schema, array $speakerIds): array
+    private function fillObject(array $schema, array $speakerIds, array $speakersByDay = []): array
     {
         /** @var list<string> $required */
         $required = $schema['required'] ?? [];
@@ -93,7 +121,7 @@ class SectionPlaceholderFiller
                 continue;
             }
 
-            $value = $this->placeholderFor((string) $name, $propSchema, $speakerIds);
+            $value = $this->placeholderFor((string) $name, $propSchema, $speakerIds, $speakersByDay);
             if ($value !== null) {
                 $out[$name] = $value;
             }
@@ -105,8 +133,9 @@ class SectionPlaceholderFiller
     /**
      * @param  array<string, mixed>  $schema
      * @param  list<string>  $speakerIds
+     * @param  array<int, list<string>>  $speakersByDay
      */
-    private function placeholderFor(string $name, array $schema, array $speakerIds): mixed
+    private function placeholderFor(string $name, array $schema, array $speakerIds, array $speakersByDay = []): mixed
     {
         $type = $schema['type'] ?? null;
 
@@ -118,8 +147,8 @@ class SectionPlaceholderFiller
             'string' => $this->placeholderString($name, $schema),
             'integer', 'number' => $this->placeholderNumber($schema),
             'boolean' => false,
-            'array' => $this->placeholderArray($name, $schema, $speakerIds),
-            'object' => $this->fillObject($schema, $speakerIds),
+            'array' => $this->placeholderArray($name, $schema, $speakerIds, $speakersByDay),
+            'object' => $this->fillObject($schema, $speakerIds, $speakersByDay),
             default => null,
         };
     }
@@ -170,9 +199,10 @@ class SectionPlaceholderFiller
     /**
      * @param  array<string, mixed>  $schema
      * @param  list<string>  $speakerIds
+     * @param  array<int, list<string>>  $speakersByDay
      * @return list<mixed>
      */
-    private function placeholderArray(string $name, array $schema, array $speakerIds): array
+    private function placeholderArray(string $name, array $schema, array $speakerIds, array $speakersByDay = []): array
     {
         $items = $schema['items'] ?? null;
         if (! is_array($items)) {
@@ -194,17 +224,57 @@ class SectionPlaceholderFiller
             return array_slice($speakerIds, 0, max(1, $count));
         }
 
+        // Multi-day speakers array (e.g. ochre-ink `speakersByDay`): items are
+        // objects with a uuid-array `speakerIds` and a `dayLabel` string.
+        // Expand one entry per assigned day rather than seeding a single stub.
+        if ($this->looksLikeDayGroupedSpeakers($items) && $speakersByDay !== []) {
+            $out = [];
+            foreach ($speakersByDay as $day => $ids) {
+                $entry = $this->fillObject($items, $speakerIds, $speakersByDay);
+                $entry['speakerIds'] = $ids;
+                $entry['dayLabel'] = "Day {$day}";
+                $out[] = $entry;
+            }
+
+            return $out;
+        }
+
         $out = [];
         for ($i = 0; $i < $minItems; $i++) {
             if (($items['type'] ?? null) === 'object') {
-                $out[] = $this->fillObject($items, $speakerIds);
+                $out[] = $this->fillObject($items, $speakerIds, $speakersByDay);
             } else {
-                $value = $this->placeholderFor($name.'Item', $items, $speakerIds);
+                $value = $this->placeholderFor($name.'Item', $items, $speakerIds, $speakersByDay);
                 $out[] = $value;
             }
         }
 
         return $out;
+    }
+
+    /**
+     * @param  array<string, mixed>  $items
+     */
+    private function looksLikeDayGroupedSpeakers(array $items): bool
+    {
+        if (($items['type'] ?? null) !== 'object') {
+            return false;
+        }
+
+        $props = $items['properties'] ?? [];
+        $speakerIdsProp = $props['speakerIds'] ?? null;
+        if (! is_array($speakerIdsProp) || ($speakerIdsProp['type'] ?? null) !== 'array') {
+            return false;
+        }
+
+        $itemsOfArray = $speakerIdsProp['items'] ?? [];
+        $isUuidArray = ($itemsOfArray['type'] ?? null) === 'string'
+            && ($itemsOfArray['format'] ?? null) === 'uuid';
+        if (! $isUuidArray) {
+            return false;
+        }
+
+        return isset($props['dayLabel']) || isset($props['dayDate']) || isset($props['dayNumber']);
     }
 
     private function humanize(string $name): string

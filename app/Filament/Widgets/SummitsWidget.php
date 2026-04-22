@@ -26,7 +26,7 @@ class SummitsWidget extends TableWidget
 
                 $domain = Filament::getTenant();
                 if ($domain instanceof Domain) {
-                    $query->whereHas('domains', fn (Builder $q) => $q->whereKey($domain->getKey()));
+                    $query->where('domain_id', $domain->getKey());
                 }
 
                 return $query->orderBy('title');

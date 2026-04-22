@@ -25,6 +25,7 @@ export default async function OptinPage({
       funnelId={funnel}
       enabledSections={published.enabled_sections ?? undefined}
       palette={published.palette}
+      wpCheckoutRedirectUrl={published.wp_checkout_redirect_url}
     />
   );
 }

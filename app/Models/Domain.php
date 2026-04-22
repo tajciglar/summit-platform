@@ -7,6 +7,7 @@ use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -43,11 +44,9 @@ class Domain extends Model implements HasMedia, HasName
         return $this->name ?: $this->hostname ?: 'Untitled domain';
     }
 
-    public function summits(): BelongsToMany
+    public function summits(): HasMany
     {
-        return $this->belongsToMany(Summit::class, 'domain_summit')
-            ->withPivot('created_at')
-            ->orderBy('title');
+        return $this->hasMany(Summit::class)->orderBy('title');
     }
 
     public function users(): BelongsToMany

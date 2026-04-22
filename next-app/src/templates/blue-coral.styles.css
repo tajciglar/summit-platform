@@ -206,11 +206,49 @@
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .blue-coral-body .blue-coral-marquee-set,
-  .blue-coral-body .blue-coral-pulse-coral {
+  .blue-coral-body .blue-coral-pulse-coral,
+  .blue-coral-body .blue-coral-sales-pulse {
     animation: none !important;
   }
   .blue-coral-body .blue-coral-marquee-set {
     transform: none !important;
   }
   .blue-coral-root { scroll-behavior: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * SALES SECTIONS — namespaced styles.
+ * Only used when sales-style sections (sales-hero, vip-bonuses,
+ * price-card, comparison-table, etc.) are enabled on a step.
+ * ───────────────────────────────────────────────────────────────── */
+@keyframes blue-coral-sales-pulse-cta {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+.blue-coral-body .blue-coral-sales-pulse {
+  animation: blue-coral-sales-pulse-cta 2.4s infinite;
+}
+
+/* Sales speaker details cards — "View More" / "View Less" toggle */
+.blue-coral-body details.blue-coral-sales-spk summary::-webkit-details-marker {
+  display: none;
+}
+.blue-coral-body details.blue-coral-sales-spk summary::after {
+  content: 'View More';
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1D4ED8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 0.5rem;
+  border-top: 1px solid #E0EBFA;
+  width: 100%;
+  justify-content: center;
+}
+.blue-coral-body details.blue-coral-sales-spk[open] summary::after {
+  content: 'View Less';
 }

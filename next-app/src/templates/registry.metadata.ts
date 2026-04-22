@@ -8,52 +8,54 @@ import { RustCreamSchema } from './rust-cream.schema';
 import { BlueCoralSchema } from './blue-coral.schema';
 import { GreenGoldSchema } from './green-gold.schema';
 import { IndigoGoldSchema } from './indigo-gold.schema';
-import { LavenderGoldSchema } from './lavender-gold.schema';
 import {
   opusV1SupportedSections,
   opusV1SectionOrder,
   opusV1DefaultEnabledSections,
+  opusV1DefaultSalesSections,
 } from './ochre-ink/sections';
 import {
   indigoGoldSupportedSections,
   indigoGoldSectionOrder,
   indigoGoldDefaultEnabledSections,
+  indigoGoldDefaultSalesSections,
 } from './indigo-gold.sections';
 import {
   limeInkSupportedSections,
   limeInkSectionOrder,
   limeInkDefaultEnabledSections,
+  limeInkDefaultSalesSections,
 } from './lime-ink.sections';
 import {
   creamSageSupportedSections,
   creamSageSectionOrder,
   creamSageDefaultEnabledSections,
+  creamSageDefaultSalesSections,
 } from './cream-sage.sections';
 import {
   violetSunSupportedSections,
   violetSunSectionOrder,
   violetSunDefaultEnabledSections,
+  violetSunDefaultSalesSections,
 } from './violet-sun.sections';
 import {
   rustCreamSupportedSections,
   rustCreamSectionOrder,
   rustCreamDefaultEnabledSections,
+  rustCreamDefaultSalesSections,
 } from './rust-cream.sections';
 import {
   blueCoralSupportedSections,
   blueCoralSectionOrder,
   blueCoralDefaultEnabledSections,
+  blueCoralDefaultSalesSections,
 } from './blue-coral.sections';
 import {
   greenGoldSupportedSections,
   greenGoldSectionOrder,
   greenGoldDefaultEnabledSections,
+  greenGoldDefaultSalesSections,
 } from './green-gold.sections';
-import {
-  lavenderGoldSupportedSections,
-  lavenderGoldSectionOrder,
-  lavenderGoldDefaultEnabledSections,
-} from './lavender-gold.sections';
 
 /**
  * Component-free metadata. Used by the manifest-export script so it can
@@ -69,6 +71,12 @@ export interface TemplateMetadata<TContent = unknown> {
   supportedSections?: readonly string[];
   sectionOrder?: readonly string[];
   defaultEnabledSections?: readonly string[];
+  /**
+   * Sections enabled by default on `sales_page` steps. Operators can override
+   * these from the Funnel form's "Sales page sections" checkbox list.
+   */
+  defaultSalesSections?: readonly string[];
+  catalogBacked?: boolean;
 }
 
 export const templateMetadata = {
@@ -81,6 +89,8 @@ export const templateMetadata = {
     supportedSections: opusV1SupportedSections,
     sectionOrder: opusV1SectionOrder,
     defaultEnabledSections: opusV1DefaultEnabledSections,
+    defaultSalesSections: opusV1DefaultSalesSections,
+    catalogBacked: true,
   },
   'lime-ink': {
     key: 'lime-ink',
@@ -91,6 +101,7 @@ export const templateMetadata = {
     supportedSections: limeInkSupportedSections,
     sectionOrder: limeInkSectionOrder,
     defaultEnabledSections: limeInkDefaultEnabledSections,
+    defaultSalesSections: limeInkDefaultSalesSections,
   },
   'cream-sage': {
     key: 'cream-sage',
@@ -101,6 +112,7 @@ export const templateMetadata = {
     supportedSections: creamSageSupportedSections,
     sectionOrder: creamSageSectionOrder,
     defaultEnabledSections: creamSageDefaultEnabledSections,
+    defaultSalesSections: creamSageDefaultSalesSections,
   },
   'violet-sun': {
     key: 'violet-sun',
@@ -111,6 +123,7 @@ export const templateMetadata = {
     supportedSections: violetSunSupportedSections,
     sectionOrder: violetSunSectionOrder,
     defaultEnabledSections: violetSunDefaultEnabledSections,
+    defaultSalesSections: violetSunDefaultSalesSections,
   },
   'rust-cream': {
     key: 'rust-cream',
@@ -121,6 +134,7 @@ export const templateMetadata = {
     supportedSections: rustCreamSupportedSections,
     sectionOrder: rustCreamSectionOrder,
     defaultEnabledSections: rustCreamDefaultEnabledSections,
+    defaultSalesSections: rustCreamDefaultSalesSections,
   },
   'blue-coral': {
     key: 'blue-coral',
@@ -131,6 +145,7 @@ export const templateMetadata = {
     supportedSections: blueCoralSupportedSections,
     sectionOrder: blueCoralSectionOrder,
     defaultEnabledSections: blueCoralDefaultEnabledSections,
+    defaultSalesSections: blueCoralDefaultSalesSections,
   },
   'green-gold': {
     key: 'green-gold',
@@ -141,6 +156,7 @@ export const templateMetadata = {
     supportedSections: greenGoldSupportedSections,
     sectionOrder: greenGoldSectionOrder,
     defaultEnabledSections: greenGoldDefaultEnabledSections,
+    defaultSalesSections: greenGoldDefaultSalesSections,
   },
   'indigo-gold': {
     key: 'indigo-gold',
@@ -151,16 +167,7 @@ export const templateMetadata = {
     supportedSections: indigoGoldSupportedSections,
     sectionOrder: indigoGoldSectionOrder,
     defaultEnabledSections: indigoGoldDefaultEnabledSections,
-  },
-  'lavender-gold': {
-    key: 'lavender-gold',
-    label: 'APS VIP Pass (Lavender / Gold)',
-    thumbnail: '/template-thumbs/lavender-gold.jpg',
-    schema: LavenderGoldSchema,
-    tags: ['serif', 'warm'] as const,
-    supportedSections: lavenderGoldSupportedSections,
-    sectionOrder: lavenderGoldSectionOrder,
-    defaultEnabledSections: lavenderGoldDefaultEnabledSections,
+    defaultSalesSections: indigoGoldDefaultSalesSections,
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, TemplateMetadata<any>>;

@@ -37,6 +37,7 @@ class Speaker extends Model implements HasMedia
         'sort_order',
         'is_featured',
         'free_access_window_hours',
+        'day_number',
     ];
 
     protected function casts(): array
@@ -48,6 +49,7 @@ class Speaker extends Model implements HasMedia
             'rating' => 'integer',
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
+            'day_number' => 'integer',
         ];
     }
 

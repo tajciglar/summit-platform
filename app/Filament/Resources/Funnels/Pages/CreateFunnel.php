@@ -58,6 +58,7 @@ class CreateFunnel extends CreateRecord
             ? ($registry->get($funnel->template_key)['jsonSchema'] ?? [])
             : [];
         $speakerIds = SectionPlaceholderFiller::speakerIdsFor($funnel->summit_id);
+        $speakersByDay = SectionPlaceholderFiller::speakersByDayFor($funnel->summit_id);
 
         foreach (self::AUTO_STEP_TYPES as $stepType => $defaults) {
             $sections = $sectionConfig[$stepType] ?? [];
@@ -68,8 +69,15 @@ class CreateFunnel extends CreateRecord
             $pageContent = null;
             if ($funnel->template_key) {
                 $enabled = array_values($sections);
-                $content = is_array($wholeSchema) && ($wholeSchema['type'] ?? null) === 'object'
-                    ? $filler->fill($wholeSchema, $speakerIds)
+                $stepSchema = $this->scopeSchemaForStepType(
+                    $wholeSchema,
+                    $stepType,
+                    $enabled,
+                    $registry,
+                    $funnel->template_key,
+                );
+                $content = is_array($stepSchema) && ($stepSchema['type'] ?? null) === 'object'
+                    ? $filler->fill($stepSchema, $speakerIds, $speakersByDay)
                     : [];
 
                 $pageContent = [
@@ -97,5 +105,55 @@ class CreateFunnel extends CreateRecord
                 ->success()
                 ->send();
         }
+    }
+
+    /**
+     * The whole-template jsonSchema's `required` list is the optin body. A
+     * sales_page step needs placeholder content for the sales sections
+     * (salesHero, priceCard, guarantee, ...) but skins routinely cross-
+     * reference optin data like `content.topBar.brandName`, so we keep the
+     * optin required list and APPEND the enabled sales camelCase keys. That
+     * way placeholder content covers every key any sales skin might read.
+     *
+     * @param  array<string, mixed>  $schema
+     * @param  list<string>  $enabledKebab
+     * @return array<string, mixed>
+     */
+    private function scopeSchemaForStepType(
+        array $schema,
+        string $stepType,
+        array $enabledKebab,
+        TemplateRegistry $registry,
+        string $templateKey,
+    ): array {
+        if ($stepType !== 'sales_page') {
+            return $schema;
+        }
+
+        $salesKebab = $registry->defaultSalesSections($templateKey);
+        if ($salesKebab === []) {
+            return $schema;
+        }
+
+        $enabledSales = array_values(array_intersect($enabledKebab, $salesKebab));
+        if ($enabledSales === []) {
+            return $schema;
+        }
+
+        $salesCamel = array_map(
+            static fn (string $key): string => lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key)))),
+            $enabledSales,
+        );
+        $properties = array_keys($schema['properties'] ?? []);
+        $salesRequired = array_values(array_intersect($properties, $salesCamel));
+
+        if ($salesRequired === []) {
+            return $schema;
+        }
+
+        $existing = is_array($schema['required'] ?? null) ? $schema['required'] : [];
+        $schema['required'] = array_values(array_unique([...$existing, ...$salesRequired]));
+
+        return $schema;
     }
 }

@@ -128,8 +128,8 @@ class FunnelStepBumpResource extends Resource
         }
 
         $query->whereHas(
-            'funnelStep.funnel.summit.domains',
-            fn ($q) => $q->whereKey($tenant->getKey()),
+            'funnelStep.funnel.summit',
+            fn ($q) => $q->where('domain_id', $tenant->getKey()),
         );
 
         if ($summitId = CurrentSummit::getId()) {
