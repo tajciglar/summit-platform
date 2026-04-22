@@ -45,6 +45,7 @@ class Summit extends Model implements HasName
         'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
         'audience',
         'summit_type',
+        'ac_optin_tag',
         'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
     ];
 
