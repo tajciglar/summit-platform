@@ -17,12 +17,15 @@ class Optin extends Model
         'contact_id', 'user_id', 'email', 'first_name', 'summit_id', 'funnel_id', 'funnel_step_id',
         'source_url', 'ip_address', 'user_agent',
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
-        'activecampaign_synced',
+        'ac_sync_status', 'ac_sync_error', 'ac_synced_at',
     ];
 
     protected function casts(): array
     {
-        return ['created_at' => 'datetime'];
+        return [
+            'created_at' => 'datetime',
+            'ac_synced_at' => 'datetime',
+        ];
     }
 
     public function funnel(): BelongsTo

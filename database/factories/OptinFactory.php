@@ -17,7 +17,7 @@ class OptinFactory extends Factory
         return [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
-            'activecampaign_synced' => false,
+            'ac_sync_status' => 'pending',
         ];
     }
 }
