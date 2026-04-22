@@ -118,6 +118,7 @@ class FunnelStepResource extends Resource
                         ->blocks(fn (?FunnelStep $record) => self::builderBlocks($record))
                         ->addActionLabel('Add block')
                         ->collapsible()
+                        ->blockNumbers(false)
                         ->visible(fn (Get $get): bool => is_array($get('page_content')) && count($get('page_content')) > 0),
                 ]),
         ]);

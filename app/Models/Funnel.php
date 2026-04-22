@@ -34,6 +34,25 @@ class Funnel extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::saving(function (Funnel $funnel): void {
+            if (! $funnel->is_active || ! $funnel->summit_id) {
+                return;
+            }
+
+            $query = static::query()
+                ->where('summit_id', $funnel->summit_id)
+                ->where('is_active', true);
+
+            if ($funnel->exists) {
+                $query->where('id', '!=', $funnel->id);
+            }
+
+            $query->update(['is_active' => false]);
+        });
+    }
+
     public function summit(): BelongsTo
     {
         return $this->belongsTo(Summit::class);

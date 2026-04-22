@@ -100,7 +100,10 @@ class FunnelResource extends Resource
                         ->maxLength(2048)
                         ->helperText('Interim checkout redirect to the legacy WP cart. Leave blank once native checkout is live.')
                         ->columnSpanFull(),
-                    Toggle::make('is_active')->default(true),
+                    Toggle::make('is_active')
+                        ->label('Live')
+                        ->helperText('Only one funnel per summit can be live. Marking this live will flip the current live funnel to draft.')
+                        ->default(false),
                 ]),
 
             Section::make('Design')

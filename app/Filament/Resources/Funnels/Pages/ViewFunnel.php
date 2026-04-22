@@ -139,6 +139,19 @@ class ViewFunnel extends EditRecord
                             Notification::make()->title('Skin saved')->success()->send();
                         })
                         ->columnSpan(6),
+
+                    TextInput::make('wp_checkout_redirect_url')
+                        ->label('WordPress checkout URL')
+                        ->url()
+                        ->maxLength(2048)
+                        ->placeholder('https://...')
+                        ->helperText('Sales-page CTAs redirect here. Leave blank once native checkout is live.')
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['wp_checkout_redirect_url' => $state]);
+                            Notification::make()->title('Checkout URL saved')->success()->send();
+                        })
+                        ->columnSpan(6),
                 ]),
 
             ViewEntry::make('steps_list')

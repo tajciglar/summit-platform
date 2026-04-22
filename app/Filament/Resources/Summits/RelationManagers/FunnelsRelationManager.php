@@ -6,14 +6,13 @@ use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -34,17 +33,23 @@ class FunnelsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->orderByDesc('is_active')->orderBy('name'))
+            ->defaultSort('created_at', 'desc')
+            ->groups([
+                Group::make('is_active')
+                    ->label('Status')
+                    ->getTitleFromRecordUsing(fn (Funnel $record): string => $record->is_active ? 'Live' : 'Draft')
+                    ->getKeyFromRecordUsing(fn (Funnel $record): string => $record->is_active ? '1_live' : '2_draft')
+                    ->orderQueryUsing(fn (Builder $query) => $query->orderByDesc('is_active')),
+            ])
+            ->defaultGroup('is_active')
             ->columns([
                 IconColumn::make('is_active')
-                    ->label('Live')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-bolt')
-                    ->falseIcon('heroicon-o-pause-circle')
-                    ->trueColor('success')
-                    ->falseColor('gray'),
+                    ->label('')
+                    ->icon(fn (Funnel $record): ?string => $record->is_active ? 'heroicon-s-bolt' : null)
+                    ->color('success'),
                 TextColumn::make('name')
                     ->searchable()
+                    ->sortable()
                     ->weight('bold'),
                 TextColumn::make('slug')
                     ->color('gray')
@@ -67,10 +72,9 @@ class FunnelsRelationManager extends RelationManager
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->date()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
-                TernaryFilter::make('is_active')->label('Live'),
                 SelectFilter::make('target_phase')->options([
                     'pre' => 'Pre-summit',
                     'late_pre' => 'Late pre-summit',
@@ -85,13 +89,29 @@ class FunnelsRelationManager extends RelationManager
                     ->url(fn (): string => FunnelResource::getUrl('create')),
             ])
             ->recordActions([
+                Action::make('makeLive')
+                    ->label('Make live')
+                    ->icon('heroicon-o-bolt')
+                    ->color('success')
+                    ->visible(fn (Funnel $record): bool => ! $record->is_active)
+                    ->requiresConfirmation()
+                    ->modalHeading('Make this funnel live?')
+                    ->modalDescription('Only one funnel can be live per summit. The currently live funnel will become a draft.')
+                    ->modalSubmitActionLabel('Yes, make live')
+                    ->action(fn (Funnel $record) => $record->update(['is_active' => true])),
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
-                DeleteAction::make()
+                Action::make('delete')
                     ->label('Delete')
-                    ->icon('heroicon-o-trash'),
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete funnel?')
+                    ->modalDescription('This will permanently remove the funnel and its steps. This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete')
+                    ->action(fn (Funnel $record) => $record->delete()),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

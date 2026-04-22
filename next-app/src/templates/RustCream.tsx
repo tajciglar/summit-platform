@@ -6,6 +6,7 @@ import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
 import type { RustCreamContent } from './rust-cream.schema';
 import { rustCreamDefaultEnabledSections } from './rust-cream.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -17,6 +18,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 /* Visual gradients for speaker avatars — deterministic, cycled by index.
@@ -1141,7 +1143,10 @@ const salesBtnCta: CSSProperties = {
 const salesBtnCtaLg: CSSProperties = { ...salesBtnCta, padding: '1.15rem 2.4rem', fontSize: '1.15rem' };
 
 /* SALES HERO — warm rust live badge, gradient product mockup, pulsing CTA. */
-function SalesHero({ content }: { content: RustCreamContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: RustCreamContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.name;
@@ -1178,7 +1183,7 @@ function SalesHero({ content }: { content: RustCreamContent }) {
         <p style={{ fontSize: '0.88rem', color: SALES_TOKENS.INK700, marginBottom: '0.5rem' }}>
           Total value: <span style={{ fontWeight: 700, color: SALES_TOKENS.RUST500, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href="#purchase" id="purchase" className="rust-cream-sales-pulse" style={salesBtnCtaLg}>
+        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="rust-cream-sales-pulse" style={salesBtnCtaLg}>
           {h.ctaLabel} <SalesArrowRight size={20} />
         </a>
         <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: SALES_TOKENS.RUST500 }}>
@@ -1295,7 +1300,10 @@ function UpgradeSection({ content }: { content: RustCreamContent }) {
 
 /* PRICE CARD — cream card with rust border, bullet features, gift box,
  * strikethrough value, large sage price, pulse CTA. */
-function PriceCard({ content }: { content: RustCreamContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: RustCreamContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1349,7 +1357,7 @@ function PriceCard({ content }: { content: RustCreamContent }) {
             </p>
             <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '2.6rem', fontWeight: 800, color: SALES_TOKENS.SAGE, letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p style={{ fontSize: '0.85rem', color: SALES_TOKENS.SAGE, fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
-            <a href="#purchase" style={salesBtnCtaLg}>
+            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={salesBtnCtaLg}>
               {p.ctaLabel} <SalesArrowRight size={20} />
             </a>
             <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: SALES_TOKENS.RUST500 }}>{p.guarantee}</p>
@@ -1484,7 +1492,7 @@ function WhySection({ content }: { content: RustCreamContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function RustCream({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function RustCream({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? rustCreamDefaultEnabledSections);
   return (
     <div className="rust-cream-root rust-cream-body antialiased">
@@ -1512,12 +1520,12 @@ export function RustCream({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('closing-cta') && <Closing content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
 
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

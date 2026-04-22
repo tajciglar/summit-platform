@@ -6,6 +6,7 @@ import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
 import type { GreenGoldContent } from './green-gold.schema';
 import { greenGoldDefaultEnabledSections } from './green-gold.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -17,6 +18,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 // Deterministic gradient + accent cycles, drawn from the green-gold HTML palette
@@ -1406,7 +1408,10 @@ const salesHeadline: CSSProperties = {
 
 /* SALES HERO — soft green gradient wash, red live badge, warm-gold product
  * mockup, pulsing gold CTA. */
-function SalesHero({ content }: { content: GreenGoldContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: GreenGoldContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.title;
@@ -1443,7 +1448,7 @@ function SalesHero({ content }: { content: GreenGoldContent }) {
         <p style={{ fontSize: '0.88rem', color: GG_SALES.INK700, marginBottom: '0.75rem' }}>
           Total value: <span style={{ fontWeight: 800, color: GG_SALES.GREEN700, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href="#purchase" id="purchase" className="green-gold-pulse-gold" style={salesBtnCtaLg}>
+        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="green-gold-pulse-gold" style={salesBtnCtaLg}>
           {h.ctaLabel} <SalesArrowRight size={20} />
         </a>
         <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: GG_SALES.GREEN700, fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
@@ -1563,7 +1568,10 @@ function UpgradeSection({ content }: { content: GreenGoldContent }) {
 /* PRICE CARD — white card with green border, top gradient bar, bullet
  * features, cream gift box, strikethrough value, large green price, gold
  * pulse CTA. Renders ONCE. */
-function PriceCard({ content }: { content: GreenGoldContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: GreenGoldContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1617,7 +1625,7 @@ function PriceCard({ content }: { content: GreenGoldContent }) {
             </p>
             <p className="green-gold-heading" style={{ fontSize: '2.75rem', fontWeight: 900, color: GG_SALES.GREEN600, letterSpacing: '-0.025em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p className="green-gold-heading" style={{ fontSize: '0.85rem', color: GG_SALES.GREEN700, fontWeight: 700, marginTop: '0.3rem', marginBottom: '1rem', letterSpacing: '.02em' }}>{p.savings}</p>
-            <a href="#purchase" className="green-gold-pulse-gold" style={salesBtnCtaLg}>
+            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} className="green-gold-pulse-gold" style={salesBtnCtaLg}>
               {p.ctaLabel} <SalesArrowRight size={20} />
             </a>
             <p style={{ marginTop: '0.85rem', fontSize: '0.78rem', color: GG_SALES.INK600 }}>{p.guarantee}</p>
@@ -1754,7 +1762,7 @@ function WhySection({ content }: { content: GreenGoldContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function GreenGold({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function GreenGold({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? greenGoldDefaultEnabledSections);
   return (
     <div className="green-gold-root green-gold-body antialiased">
@@ -1783,12 +1791,12 @@ export function GreenGold({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('faq') && <FAQ content={content} />}
 
         {/* Sales-page sections — optional, only rendered when enabled. */}
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

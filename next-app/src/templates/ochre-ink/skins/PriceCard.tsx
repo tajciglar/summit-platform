@@ -1,7 +1,10 @@
+import { resolveCheckoutHref } from '../../lib/checkout-href';
 import type { SectionContentMap } from '../bridge';
+import type { TemplateContext } from './shared';
 
 type Props = {
   content: NonNullable<SectionContentMap['price-card']>;
+  context?: TemplateContext;
 };
 
 function CheckMark() {
@@ -15,8 +18,10 @@ function CheckMark() {
   );
 }
 
-export function PriceCard({ content }: Props) {
+export function PriceCard({ content, context }: Props) {
   if (!content) return null;
+
+  const ctaHref = resolveCheckoutHref(context?.wpCheckoutRedirectUrl);
 
   return (
     <section id="purchase" className="bg-paper-50 py-20 md:py-28 border-b border-paper-300">
@@ -91,7 +96,7 @@ export function PriceCard({ content }: Props) {
               <p className="font-opus-serif italic text-ochre-700 text-lg mb-8">{content.savings}</p>
 
               <a
-                href="#purchase"
+                href={ctaHref}
                 className="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold text-base md:text-lg px-10 py-4 rounded-full transition"
               >
                 {content.ctaLabel}

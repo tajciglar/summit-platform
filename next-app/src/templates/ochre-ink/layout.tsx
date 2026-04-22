@@ -16,6 +16,7 @@ export type OchreInkLayoutProps = {
   speakers: Record<string, Speaker>;
   funnelId: string;
   palette?: Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 export function OchreInkLayout({
@@ -24,6 +25,7 @@ export function OchreInkLayout({
   speakers,
   funnelId,
   palette,
+  wpCheckoutRedirectUrl,
 }: OchreInkLayoutProps) {
   const enabled = enabledSections ?? opusV1DefaultEnabledSections;
   const sections = opusV1ContentToSections(content);
@@ -35,6 +37,7 @@ export function OchreInkLayout({
   const context: TemplateContext = {
     summitName: content.summit?.name ?? '',
     heroCtaLabel: content.hero?.ctaLabel ?? 'Get Started',
+    wpCheckoutRedirectUrl,
   };
 
   return (

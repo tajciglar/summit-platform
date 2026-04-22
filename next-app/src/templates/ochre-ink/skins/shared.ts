@@ -42,6 +42,7 @@ export const TESTIMONIAL_GRADIENTS = [
 export type TemplateContext = {
   summitName: string;
   heroCtaLabel: string;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 export function initialsFromSpeaker(s: Speaker): string {

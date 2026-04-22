@@ -1,3 +1,4 @@
+import { resolveCheckoutHref } from '../../lib/checkout-href';
 import type { SectionContentMap } from '../bridge';
 import type { TemplateContext } from './shared';
 
@@ -6,8 +7,10 @@ type Props = {
   context?: TemplateContext;
 };
 
-export function SalesHero({ content }: Props) {
+export function SalesHero({ content, context }: Props) {
   if (!content) return null;
+
+  const ctaHref = resolveCheckoutHref(context?.wpCheckoutRedirectUrl);
 
   return (
     <section className="bg-paper-100 pt-14 md:pt-20 pb-16 md:pb-24 border-b border-paper-300 ochre-ink-sales-hero">
@@ -55,7 +58,7 @@ export function SalesHero({ content }: Props) {
 
           <div>
             <a
-              href="#purchase"
+              href={ctaHref}
               className="inline-flex items-center gap-3 bg-ink-700 hover:bg-ink-900 text-paper-50 font-ui font-semibold text-base md:text-lg px-10 py-4 rounded-full transition"
             >
               {content.ctaLabel}

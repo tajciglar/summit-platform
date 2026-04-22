@@ -6,6 +6,7 @@ import { OptinModal } from '@/components/OptinModal';
 import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { CreamSageContent } from './cream-sage.schema';
 import { creamSageDefaultEnabledSections } from './cream-sage.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -17,6 +18,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 /* ============== PALETTE CONSTANTS ============== */
@@ -1494,7 +1496,10 @@ function CsSalesGiftIcon({ size = 20, color = CS_SALES.CLAY }: { size?: number; 
 }
 
 /* SALES HERO — cream letterpress "special edition" cover. */
-function SalesHero({ content }: { content: CreamSageContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: CreamSageContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const brand = content.topBar.brandName;
@@ -1635,7 +1640,7 @@ function SalesHero({ content }: { content: CreamSageContent }) {
         </p>
 
         <a
-          href="#purchase"
+          href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           id="purchase"
           className="cream-sage-btn-primary"
           style={{ fontSize: '1.15rem' }}
@@ -1925,7 +1930,10 @@ function UpgradeSection({ content }: { content: CreamSageContent }) {
 }
 
 /* PRICE CARD — cream soft-card with sage accents, rose spine, single render. */
-function PriceCard({ content }: { content: CreamSageContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: CreamSageContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -2078,7 +2086,7 @@ function PriceCard({ content }: { content: CreamSageContent }) {
               {p.savings}
             </p>
             <a
-              href="#purchase"
+              href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
               className="cream-sage-btn-primary"
               style={{ fontSize: '1.1rem' }}
             >
@@ -2510,7 +2518,7 @@ function WhySection({ content }: { content: CreamSageContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function CreamSage({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function CreamSage({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? creamSageDefaultEnabledSections);
   return (
     <div className="cream-sage-root cream-sage-body antialiased">
@@ -2537,12 +2545,12 @@ export function CreamSage({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
 
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

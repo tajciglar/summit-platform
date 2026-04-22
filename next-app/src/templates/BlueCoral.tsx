@@ -6,6 +6,7 @@ import './blue-coral.styles.css';
 import { OptinModal } from '@/components/OptinModal';
 import type { BlueCoralContent } from './blue-coral.schema';
 import { blueCoralDefaultEnabledSections } from './blue-coral.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -17,6 +18,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 /* -------------------------- VISUAL TOKENS -------------------------- */
@@ -1387,7 +1389,10 @@ const bcSalesBtnCtaLg: CSSProperties = { ...bcSalesBtnCta, padding: '1.15rem 2.4
 
 /* SALES HERO — friendly coral live badge, blue gradient product mockup,
  * pulsing coral CTA, soft sky bg. */
-function SalesHero({ content }: { content: BlueCoralContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: BlueCoralContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topTitle = content.topBar.title;
@@ -1424,7 +1429,7 @@ function SalesHero({ content }: { content: BlueCoralContent }) {
         <p style={{ fontSize: '0.9rem', color: BC_SALES.INK700, marginBottom: '0.6rem' }}>
           Total value: <span style={{ fontWeight: 700, color: BC_SALES.NAVY700, textDecoration: 'line-through' }}>{h.totalValue}</span>
         </p>
-        <a href="#purchase" id="purchase" className="blue-coral-sales-pulse" style={bcSalesBtnCtaLg}>
+        <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="blue-coral-sales-pulse" style={bcSalesBtnCtaLg}>
           {h.ctaLabel} <BcSalesArrowRight size={20} />
         </a>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: BC_SALES.NAVY700 }}>
@@ -1543,7 +1548,10 @@ function UpgradeSection({ content }: { content: BlueCoralContent }) {
 
 /* PRICE CARD — modern SaaS-style card, blue accent bar, coral savings
  * badge, big green current price, pulse coral CTA. */
-function PriceCard({ content }: { content: BlueCoralContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: BlueCoralContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1597,7 +1605,7 @@ function PriceCard({ content }: { content: BlueCoralContent }) {
             </p>
             <p className="blue-coral-heading" style={{ fontSize: '2.75rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
             <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
-            <a href="#purchase" style={bcSalesBtnCtaLg}>
+            <a href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={bcSalesBtnCtaLg}>
               {p.ctaLabel} <BcSalesArrowRight size={20} />
             </a>
             <p style={{ marginTop: '0.85rem', fontSize: '0.8rem', color: BC_SALES.NAVY700 }}>{p.guarantee}</p>
@@ -1736,7 +1744,7 @@ function WhySection({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function BlueCoral({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function BlueCoral({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? blueCoralDefaultEnabledSections);
   return (
     <div className="blue-coral-root blue-coral-body">
@@ -1764,12 +1772,12 @@ export function BlueCoral({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
         {enabled.has('faq') && <FAQ content={content} />}
 
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

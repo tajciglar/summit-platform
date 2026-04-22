@@ -5,6 +5,7 @@ import './violet-sun.styles.css';
 import { OptinModal } from '@/components/OptinModal';
 import type { VioletSunContent } from './violet-sun.schema';
 import { violetSunDefaultEnabledSections } from './violet-sun.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -16,6 +17,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 // Deterministic sparkline heights keyed by trend label.
@@ -1528,7 +1530,10 @@ function VsGiftIcon({ size = 20, color = VS_SALES.VIO_700 }: { size?: number; co
 }
 
 /* SALES HERO — violet-on-violet editorial hero with sun CTA + mist product card. */
-function SalesHero({ content }: { content: VioletSunContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: VioletSunContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.brandName;
@@ -1641,7 +1646,7 @@ function SalesHero({ content }: { content: VioletSunContent }) {
           </span>
         </p>
         <a
-          href="#purchase"
+          href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
           style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
         >
@@ -1966,7 +1971,10 @@ function UpgradeSection({ content }: { content: VioletSunContent }) {
 }
 
 /* PRICE CARD — white card with violet border, sun-accent stripe, green price. */
-function PriceCard({ content }: { content: VioletSunContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: VioletSunContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -2134,7 +2142,7 @@ function PriceCard({ content }: { content: VioletSunContent }) {
               {p.savings}
             </p>
             <a
-              href="#purchase"
+              href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
               className="violet-sun-btn-sun violet-sun-btn-sun-pulse"
               style={{ fontSize: '1.05rem', padding: '1.1rem 2.25rem' }}
             >
@@ -2508,7 +2516,7 @@ function WhySection({ content }: { content: VioletSunContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function VioletSun({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function VioletSun({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? violetSunDefaultEnabledSections);
   return (
     <div className="violet-sun-root violet-sun-body antialiased">
@@ -2535,12 +2543,12 @@ export function VioletSun({ content, speakers, funnelId, enabledSections }: Root
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
 
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

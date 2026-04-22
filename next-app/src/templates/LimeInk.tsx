@@ -6,6 +6,7 @@ import { OptinModal } from '@/components/OptinModal';
 import { EventStatusBadge } from '@/components/EventStatusBadge';
 import type { LimeInkContent } from './lime-ink.schema';
 import { limeInkDefaultEnabledSections } from './lime-ink.sections';
+import { resolveCheckoutHref } from './lib/checkout-href';
 import type { Speaker } from './types';
 
 type Props = {
@@ -17,6 +18,7 @@ type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 // Deterministic sparkline heights keyed by trend label. Keeps the AI-fillable
@@ -1413,7 +1415,10 @@ function SalesGiftIcon({ size = 18, color = SALES_INK.LIME }: { size?: number; c
 }
 
 /* SALES HERO — dark terminal-card with live badge, mono metadata, pulse CTA. */
-function SalesHero({ content }: { content: LimeInkContent }) {
+function SalesHero({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: LimeInkContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.name;
@@ -1546,7 +1551,7 @@ function SalesHero({ content }: { content: LimeInkContent }) {
         </p>
 
         <a
-          href="#purchase"
+          href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
           id="purchase"
           className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-5 rounded-full text-lg"
         >
@@ -1820,7 +1825,10 @@ function UpgradeSection({ content }: { content: LimeInkContent }) {
 
 /* PRICE CARD — dark terminal-style pricing panel with mono features,
  * gift box, strikethrough value, large lime price, pulse CTA. */
-function PriceCard({ content }: { content: LimeInkContent }) {
+function PriceCard({
+  content,
+  wpCheckoutRedirectUrl,
+}: { content: LimeInkContent; wpCheckoutRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1953,7 +1961,7 @@ function PriceCard({ content }: { content: LimeInkContent }) {
                 {p.savings}
               </p>
               <a
-                href="#purchase"
+                href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
                 className="lime-ink-cta-primary lime-ink-sales-pulse inline-flex items-center gap-3 font-bold px-10 py-4 rounded-full text-base"
               >
                 {p.ctaLabel}
@@ -2344,7 +2352,7 @@ function WhySection({ content }: { content: LimeInkContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function LimeInk({ content, speakers, funnelId, enabledSections }: RootProps) {
+export function LimeInk({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? limeInkDefaultEnabledSections);
   return (
     <div className="lime-ink-root lime-ink-body antialiased">
@@ -2371,12 +2379,12 @@ export function LimeInk({ content, speakers, funnelId, enabledSections }: RootPr
         {enabled.has('faq') && <FAQ content={content} />}
         {enabled.has('closing-cta') && <FinalCTA content={content} />}
 
-        {enabled.has('sales-hero') && <SalesHero content={content} />}
+        {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

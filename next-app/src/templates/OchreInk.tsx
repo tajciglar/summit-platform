@@ -10,6 +10,7 @@ type Props = {
   funnelId: string;
   enabledSections?: string[];
   palette?: Palette | null;
+  wpCheckoutRedirectUrl?: string | null;
 };
 
 export function OchreInk({
@@ -18,6 +19,7 @@ export function OchreInk({
   funnelId,
   enabledSections,
   palette,
+  wpCheckoutRedirectUrl,
 }: Props) {
   return (
     <OchreInkLayout
@@ -26,6 +28,7 @@ export function OchreInk({
       speakers={speakers}
       funnelId={funnelId}
       palette={palette}
+      wpCheckoutRedirectUrl={wpCheckoutRedirectUrl}
     />
   );
 }
