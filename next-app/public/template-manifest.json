@@ -12179,92 +12179,37 @@
             ],
             "additionalProperties": false
           },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "dayBadge": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headline": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
+          "speakersByDay": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dayLabel": {
                   "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "minLength": 1
+                },
+                "headline": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "speakerIds": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
                 }
               },
-              "sectionEyebrow": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "sectionHeadline": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "days": {
-                "anyOf": [
-                  {
-                    "maxItems": 7,
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "badge": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "title": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "speakerIds": {
-                          "minItems": 1,
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          }
-                        }
-                      },
-                      "required": [
-                        "badge",
-                        "title",
-                        "speakerIds"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              }
-            },
-            "required": [
-              "dayBadge",
-              "headline",
-              "speakerIds"
-            ],
-            "additionalProperties": false
+              "required": [
+                "dayLabel",
+                "headline",
+                "speakerIds"
+              ],
+              "additionalProperties": false
+            }
           },
           "outcomes": {
             "type": "object",
@@ -13199,7 +13144,7 @@
           "trustBadges",
           "stats",
           "overview",
-          "speakersDay",
+          "speakersByDay",
           "outcomes",
           "freeGift",
           "bonuses",

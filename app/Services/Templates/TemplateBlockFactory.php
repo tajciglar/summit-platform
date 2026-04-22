@@ -221,7 +221,7 @@ class TemplateBlockFactory
             'trustBadges', 'trust-badges' => 'heroicon-o-shield-check',
             'stats', 'figures', 'stats-hero', 'facts-stats' => 'heroicon-o-chart-bar',
             'overview', 'intro', 'summit', 'summit-overview' => 'heroicon-o-document-text',
-            'speakersDay', 'speakersSection', 'speakers-by-day' => 'heroicon-o-user-group',
+            'speakersDay', 'speakersByDay', 'speakersSection', 'speakers-by-day' => 'heroicon-o-user-group',
             'outcomes', 'valueProps', 'value-prop' => 'heroicon-o-sparkles',
             'freeGift', 'freeGifts', 'free-gift', 'supplement' => 'heroicon-o-gift',
             'bonuses', 'bonusStack', 'bonus-stack', 'vipBonuses' => 'heroicon-o-squares-plus',

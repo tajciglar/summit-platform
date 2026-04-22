@@ -81,27 +81,14 @@ export const IndigoGoldSchema = z.object({
     cardSubhead: z.string().min(1),             // "Watch live or catch the replays"
     imageUrl: z.string().url().nullish(),        // optional hero-right image
   }),
-  speakersDay: z.object({
-    dayBadge: z.string().min(1),                // "DAY 1"
+  // Multi-day speaker grid. One entry per summit day; SectionPlaceholderFiller
+  // expands the `speakers.day_number` assignments into one entry per day when
+  // the schema item has a `dayLabel` + uuid-array `speakerIds` shape.
+  speakersByDay: z.array(z.object({
+    dayLabel: z.string().min(1),                // "DAY 1"
     headline: z.string().min(1),                // "Understanding Your Child's Brain"
     speakerIds: z.array(z.string().uuid()).min(1),
-    // Optional outer heading shown above the day list ("Learn From These" / "40+ World-Leading Experts").
-    sectionEyebrow: z.string().nullish(),
-    sectionHeadline: z.string().nullish(),
-    // Optional per-day breakdown. If supplied with items, renders the full
-    // multi-day layout. An empty array or null/undefined falls back to the
-    // single-day grid driven by the top-level `speakerIds` list.
-    days: z
-      .array(
-        z.object({
-          badge: z.string().min(1),
-          title: z.string().min(1),
-          speakerIds: z.array(z.string().uuid()).min(1),
-        }),
-      )
-      .max(7)
-      .nullish(),
-  }),
+  })).min(1),
   outcomes: z.object({
     eyebrow: z.string().min(1),                 // "What You'll Walk Away With"
     headline: z.string().min(1),

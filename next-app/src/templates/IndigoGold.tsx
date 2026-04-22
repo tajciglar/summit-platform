@@ -475,25 +475,17 @@ function Overview({ content }: { content: IndigoGoldContent }) {
 }
 
 /* =======================================================================
- * SPEAKER GRID — 5-day layout when `days` is present, otherwise single grid
- * from legacy speakersDay.speakerIds. Each card is a vertical stack:
- * photo → name → credentials → quote → view-more toggle.
+ * SPEAKER GRID — one day block per speakersByDay entry. Each card is a
+ * vertical stack: photo → name → credentials → quote → view-more toggle.
  * ======================================================================= */
 function SpeakersGrid({ content, speakers }: Props) {
-  const section = content.speakersDay;
-  const sectionEyebrow = section.sectionEyebrow ?? 'Learn From These';
-  const sectionHeadline = section.sectionHeadline ?? '40+ World-Leading Experts and Authorities';
-
-  const days =
-    section.days && section.days.length > 0
-      ? section.days
-      : [{ badge: section.dayBadge, title: section.headline, speakerIds: section.speakerIds }];
+  const days = content.speakersByDay;
 
   return (
     <section className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
-        <p className="indigo-gold-eyebrow-head mb-2">{sectionEyebrow}</p>
-        <h2 className="indigo-gold-h2-head mb-12">{sectionHeadline}</h2>
+        <p className="indigo-gold-eyebrow-head mb-2">Learn From These</p>
+        <h2 className="indigo-gold-h2-head mb-12">40+ World-Leading Experts and Authorities</h2>
 
         {days.map((day, dayIdx) => {
           const daySpeakers = day.speakerIds
@@ -502,9 +494,9 @@ function SpeakersGrid({ content, speakers }: Props) {
           if (daySpeakers.length === 0) return null;
           return (
             <div key={`day-${dayIdx}`} className="mb-16">
-              <p className="indigo-gold-eyebrow-head mb-1">{day.badge}</p>
+              <p className="indigo-gold-eyebrow-head mb-1">{day.dayLabel}</p>
               <h3 className="text-xl md:text-2xl font-bold mb-8" style={{ color: INK.c900 }}>
-                {day.title}
+                {day.headline}
               </h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
                 {daySpeakers.map((s) => (

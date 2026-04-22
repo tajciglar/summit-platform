@@ -125,10 +125,12 @@ class GoldenTemplates
                 'cardHeadline' => '5 Days. 40+ Experts. On Demand.',
                 'cardSubhead' => 'Watch all replays at your own pace',
             ],
-            'speakersDay' => [
-                'dayBadge' => 'DAY 1',
-                'headline' => "Understanding Your Child's Brain",
-                'speakerIds' => $speakerIds,
+            'speakersByDay' => [
+                [
+                    'dayLabel' => 'DAY 1',
+                    'headline' => "Understanding Your Child's Brain",
+                    'speakerIds' => $speakerIds,
+                ],
             ],
             'outcomes' => [
                 'eyebrow' => "What You'll Walk Away With",
