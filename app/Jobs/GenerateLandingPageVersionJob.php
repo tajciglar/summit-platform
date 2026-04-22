@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Enums\LandingPageDraftStatus;
 use App\Models\LandingPageBatch;
 use App\Models\LandingPageDraft;
-use App\Models\Speaker;
 use App\Services\Templates\AudienceResolver;
 use App\Services\Templates\PublishDraftService;
 use App\Services\Templates\TemplateFiller;
@@ -68,11 +67,10 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         $start = microtime(true);
         try {
             $summit = $batch->summit;
-            $speakers = Speaker::query()
-                ->where('summit_id', $summit->id)
+            $speakers = $summit->speakers()
                 ->whereNotNull('goes_live_at')
                 ->orderBy('goes_live_at')
-                ->orderBy('sort_order')
+                ->orderByPivot('sort_order')
                 ->get();
 
             $result = $filler->fill(

@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\Speakers;
 
 use App\Filament\Forms\Components\MediaPickerInput;
-use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Speaker;
 use App\Models\Summit;
+use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -20,6 +20,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -29,12 +30,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class SpeakerResource extends Resource
 {
-    use ScopesTenantViaSummitDomains;
-
     protected static ?string $model = Speaker::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMicrophone;
@@ -228,4 +229,46 @@ class SpeakerResource extends Resource
             'edit' => Pages\EditSpeaker::route('/{record}/edit'),
         ];
     }
+
+    /**
+     * Tenant scoping for a many-to-many model. Speakers aren't owned by a
+     * summit anymore — they're attached via the `speaker_summit` pivot.
+     * Show any speaker that has at least one attachment to a summit under
+     * the current tenant (domain); if an admin has picked a specific
+     * summit, narrow to speakers attached to that summit.
+     */
+    public static function scopeEloquentQueryToTenant(Builder $query, ?Model $tenant): Builder
+    {
+        $tenant ??= Filament::getTenant();
+        if (! $tenant) {
+            return $query;
+        }
+
+        $query->whereHas(
+            'summits',
+            fn (Builder $q) => $q->where('summits.domain_id', $tenant->getKey()),
+        );
+
+        if ($summitId = CurrentSummit::getId()) {
+            $query->whereHas(
+                'summits',
+                fn (Builder $q) => $q->where('summits.id', $summitId),
+            );
+        }
+
+        return $query;
+    }
+
+    public static function getTenantOwnershipRelationshipName(): string
+    {
+        return 'summits';
+    }
+
+    /**
+     * Tenant is a Domain (not a Summit); creation scoping via the default
+     * Filament tenancy hooks would misfire. See
+     * ScopesTenantViaSummitDomains for the parallel reasoning used on
+     * summit-owned resources.
+     */
+    public static function observeTenancyModelCreation(Panel $panel): void {}
 }

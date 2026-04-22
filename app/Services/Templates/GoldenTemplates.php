@@ -2,7 +2,7 @@
 
 namespace App\Services\Templates;
 
-use App\Models\Speaker;
+use App\Models\Summit;
 
 /**
  * Canonical starter content for the two golden templates we ship:
@@ -58,10 +58,13 @@ class GoldenTemplates
             return [];
         }
 
-        return Speaker::query()
-            ->where('summit_id', $summitId)
-            ->orderBy('sort_order')
-            ->pluck('id')
+        $summit = Summit::query()->find($summitId);
+        if (! $summit) {
+            return [];
+        }
+
+        return $summit->speakers()
+            ->pluck('speakers.id')
             ->all();
     }
 

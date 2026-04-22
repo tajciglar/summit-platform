@@ -3,12 +3,9 @@
 namespace App\Actions;
 
 use App\Models\Funnel;
-use App\Models\FunnelStep;
-use App\Models\FunnelStepBump;
 use App\Models\Product;
 use App\Models\Speaker;
 use App\Models\Summit;
-use App\Models\SummitPage;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -57,11 +54,19 @@ class DuplicateSummit
 
     private function cloneSpeakers(Summit $src, Summit $dest): void
     {
+        // Speakers are now M2M via `speaker_summit`; pivot carries per-summit
+        // day_number + sort_order. We duplicate each speaker as an independent
+        // record (so destination summit edits don't mutate the source speaker)
+        // and attach to the destination with the source's pivot values.
         foreach ($src->speakers as $speaker) {
             $clone = $speaker->replicate(['created_at', 'updated_at']);
-            $clone->summit_id = $dest->id;
-            // Slugs are (summit_id, slug) unique, so reusing is fine — but if same summit gets cloned again we'd collide. Fresh dest = safe.
+            $clone->summit_id = $dest->id; // legacy NOT-NULL-less column; dropped in C4
             $clone->save();
+
+            $dest->speakers()->attach($clone->id, [
+                'day_number' => $speaker->pivot->day_number,
+                'sort_order' => $speaker->pivot->sort_order ?? 0,
+            ]);
         }
     }
 

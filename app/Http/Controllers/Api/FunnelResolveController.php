@@ -35,10 +35,11 @@ class FunnelResolveController extends Controller
             : null;
 
         $speakers = $summit->speakers->map(function ($s) use ($starts) {
-            // Prefer the operator-managed `day_number` column; fall back to
-            // the date-derived day (goes_live_at vs pre_summit_starts_at + 1)
-            // for legacy summits that haven't populated day_number yet.
-            $dayNumber = $s->day_number;
+            // Prefer the per-attachment pivot `day_number` (set per summit);
+            // fall back to the date-derived day (goes_live_at vs
+            // pre_summit_starts_at + 1) for legacy summits whose operators
+            // haven't populated day_number yet.
+            $dayNumber = $s->pivot->day_number ?? null;
             if ($dayNumber === null) {
                 $dayNumber = ($starts && $s->goes_live_at)
                     ? (int) ($starts->diffInDays(Carbon::parse($s->goes_live_at)->startOfDay()) + 1)
@@ -56,7 +57,7 @@ class FunnelResolveController extends Controller
                 'longBio' => $s->long_bio,
                 'dayNumber' => $dayNumber,
                 'masterclassTitle' => $s->masterclass_title,
-                'sortOrder' => $s->sort_order,
+                'sortOrder' => $s->pivot->sort_order ?? 0,
             ];
         })->values();
 

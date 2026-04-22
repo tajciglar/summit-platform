@@ -2,7 +2,7 @@
 
 namespace App\Services\Templates;
 
-use App\Models\Speaker;
+use App\Models\Summit;
 
 /**
  * Generates placeholder content for a section's JSON Schema so a just-created
@@ -68,19 +68,22 @@ class SectionPlaceholderFiller
             return [];
         }
 
-        return Speaker::query()
-            ->where('summit_id', $summitId)
-            ->orderBy('sort_order')
+        $summit = Summit::query()->find($summitId);
+        if (! $summit) {
+            return [];
+        }
+
+        return $summit->speakers()
             ->limit($limit)
-            ->pluck('id')
+            ->pluck('speakers.id')
             ->all();
     }
 
     /**
-     * Speaker UUIDs grouped by day_number — used to expand multi-day speakers
-     * arrays (e.g. ochre-ink's `speakersByDay`). Speakers without a day_number
-     * are excluded; callers fall back to the flat `speakerIds` list when the
-     * returned map is empty.
+     * Speaker UUIDs grouped by pivot `day_number` — used to expand multi-day
+     * speakers arrays (e.g. ochre-ink's `speakersByDay`). Speakers not yet
+     * slotted to a day on this summit are excluded; callers fall back to
+     * the flat `speakerIdsFor()` list when the returned map is empty.
      *
      * @return array<int, list<string>>
      */
@@ -90,13 +93,18 @@ class SectionPlaceholderFiller
             return [];
         }
 
-        return Speaker::query()
-            ->where('summit_id', $summitId)
-            ->whereNotNull('day_number')
-            ->orderBy('day_number')
-            ->orderBy('sort_order')
-            ->get(['id', 'day_number'])
-            ->groupBy('day_number')
+        $summit = Summit::query()->find($summitId);
+        if (! $summit) {
+            return [];
+        }
+
+        return $summit->speakers()
+            ->wherePivotNotNull('day_number')
+            ->reorder()
+            ->orderByPivot('day_number')
+            ->orderByPivot('sort_order')
+            ->get()
+            ->groupBy(fn ($s) => (int) $s->pivot->day_number)
             ->map(fn ($speakers) => $speakers->pluck('id')->all())
             ->all();
     }

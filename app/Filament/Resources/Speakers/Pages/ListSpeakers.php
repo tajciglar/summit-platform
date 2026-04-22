@@ -43,7 +43,10 @@ class ListSpeakers extends ListRecords
             $tabs[(string) $summitId] = Tab::make($summit->title)
                 ->icon('heroicon-o-calendar-days')
                 ->badge($summit->speakers_count ?: null)
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('summit_id', $summitId));
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas(
+                    'summits',
+                    fn (Builder $q) => $q->where('summits.id', $summitId),
+                ));
         }
 
         return $tabs;

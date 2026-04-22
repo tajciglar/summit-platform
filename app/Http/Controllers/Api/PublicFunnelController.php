@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Funnel;
 use App\Models\FunnelStep;
-use App\Models\Speaker;
+use App\Models\Summit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -68,8 +68,9 @@ class PublicFunnelController extends Controller
      */
     private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $wpCheckoutRedirectUrl = null): array
     {
-        $speakers = $summitId
-            ? Speaker::where('summit_id', $summitId)->get()->map(fn ($s) => [
+        $summit = $summitId ? Summit::query()->find($summitId) : null;
+        $speakers = $summit
+            ? $summit->speakers()->get()->map(fn ($s) => [
                 'id' => $s->id,
                 'firstName' => $s->first_name,
                 'lastName' => $s->last_name,
@@ -81,9 +82,9 @@ class PublicFunnelController extends Controller
                 'masterclassDescription' => $s->masterclass_description,
                 'rating' => $s->rating,
                 'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
-                'sortOrder' => $s->sort_order,
+                'sortOrder' => $s->pivot->sort_order ?? 0,
                 'isFeatured' => $s->is_featured,
-                'dayNumber' => $s->day_number,
+                'dayNumber' => $s->pivot->day_number,
             ])
             : collect();
 

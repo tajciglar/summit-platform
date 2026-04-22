@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\LandingPageDraft;
-use App\Models\Speaker;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
@@ -20,8 +19,7 @@ class LandingPageDraftController extends Controller
         $funnel = $batch?->funnel;
 
         $speakers = $summit
-            ? Speaker::where('summit_id', $summit->id)
-                ->orderBy('sort_order')
+            ? $summit->speakers()
                 ->get()
                 ->map(fn ($s) => [
                     'id' => $s->id,
@@ -35,9 +33,9 @@ class LandingPageDraftController extends Controller
                     'masterclassDescription' => $s->masterclass_description,
                     'rating' => $s->rating,
                     'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
-                    'sortOrder' => $s->sort_order,
+                    'sortOrder' => $s->pivot->sort_order ?? 0,
                     'isFeatured' => $s->is_featured,
-                    'dayNumber' => $s->day_number,
+                    'dayNumber' => $s->pivot->day_number,
                 ])
                 ->values()
             : collect();

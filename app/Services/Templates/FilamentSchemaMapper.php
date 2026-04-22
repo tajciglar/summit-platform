@@ -3,6 +3,7 @@
 namespace App\Services\Templates;
 
 use App\Models\Speaker;
+use App\Models\Summit;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -70,13 +71,15 @@ class FilamentSchemaMapper
 
         // Speaker UUID arrays become a multi-select populated from the summit's speakers.
         if ($this->isSpeakerIdArray($name, $schema) && $summitId !== null) {
-            $options = Speaker::query()
-                ->where('summit_id', $summitId)
-                ->get()
-                ->mapWithKeys(fn (Speaker $s) => [
-                    $s->id => trim("{$s->first_name} {$s->last_name}") !== '' ? "{$s->first_name} {$s->last_name}" : 'Unnamed',
-                ])
-                ->all();
+            $summit = Summit::query()->find($summitId);
+            $options = $summit
+                ? $summit->speakers()
+                    ->get()
+                    ->mapWithKeys(fn (Speaker $s) => [
+                        $s->id => trim("{$s->first_name} {$s->last_name}") !== '' ? "{$s->first_name} {$s->last_name}" : 'Unnamed',
+                    ])
+                    ->all()
+                : [];
 
             $select = Select::make($name)
                 ->label($label)
