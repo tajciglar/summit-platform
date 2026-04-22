@@ -31,8 +31,6 @@ return [
     'activecampaign' => [
         'url' => env('ACTIVE_CAMPAIGN_URL'),
         'key' => env('ACTIVE_CAMPAIGN_KEY'),
-        'optin_tag_id' => env('ACTIVE_CAMPAIGN_OPTIN_TAG_ID'),
-        'product_tag_id' => env('ACTIVE_CAMPAIGN_PRODUCT_TAG_ID'),
     ],
 
     'brevo' => [
