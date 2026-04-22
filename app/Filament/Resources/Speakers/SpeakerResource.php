@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Speakers;
 use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Speaker;
-use App\Support\CurrentSummit;
+use App\Models\Summit;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -15,6 +15,7 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -52,39 +53,50 @@ class SpeakerResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
+            Section::make('Summit attachments')
+                ->description('Which summits this speaker appears on, and which day of each summit they present. A speaker can be attached to multiple summits — the same video can be used in several events, scheduled on a different day per summit.')
+                ->components([
+                    Repeater::make('speakerSummits')
+                        ->relationship()
+                        ->label('')
+                        ->addActionLabel('Attach to another summit')
+                        ->minItems(1)
+                        ->columns(2)
+                        ->schema([
+                            Select::make('summit_id')
+                                ->label('Summit')
+                                ->options(function () {
+                                    $query = Summit::query()->orderBy('title');
+                                    $domain = Filament::getTenant();
+                                    if ($domain) {
+                                        $query->where('domain_id', $domain->getKey());
+                                    }
+
+                                    return $query->pluck('title', 'id')->all();
+                                })
+                                ->required()
+                                ->searchable()
+                                ->preload()
+                                ->distinct()
+                                ->validationMessages(['distinct' => 'This speaker is already attached to that summit.']),
+                            Select::make('day_number')
+                                ->label('Day')
+                                ->options([
+                                    1 => 'Day 1',
+                                    2 => 'Day 2',
+                                    3 => 'Day 3',
+                                    4 => 'Day 4',
+                                    5 => 'Day 5',
+                                    6 => 'Day 6',
+                                    7 => 'Day 7',
+                                ])
+                                ->placeholder('Unassigned')
+                                ->helperText('Which day of this summit the speaker presents.'),
+                        ]),
+                ]),
             Section::make('Identity')
                 ->columns(2)
                 ->components([
-                    Select::make('summit_id')
-                        ->label('Summit')
-                        ->relationship(
-                            'summit',
-                            'title',
-                            modifyQueryUsing: function ($query) {
-                                $domain = Filament::getTenant();
-                                if ($domain) {
-                                    $query->where('domain_id', $domain->getKey());
-                                }
-                            },
-                        )
-                        ->default(fn () => CurrentSummit::getId())
-                        ->hidden(fn (): bool => CurrentSummit::getId() !== null)
-                        ->required()
-                        ->searchable()
-                        ->preload(),
-                    Select::make('day_number')
-                        ->label('Day')
-                        ->options([
-                            1 => 'Day 1',
-                            2 => 'Day 2',
-                            3 => 'Day 3',
-                            4 => 'Day 4',
-                            5 => 'Day 5',
-                            6 => 'Day 6',
-                            7 => 'Day 7',
-                        ])
-                        ->placeholder('Unassigned')
-                        ->helperText('Which day of the summit this speaker presents on.'),
                     TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
@@ -108,7 +120,8 @@ class SpeakerResource extends Resource
                 ->columns(2)
                 ->components([
                     MediaPickerInput::make('photo_media_item_id')
-                        ->category('people')
+                        ->category('speakers')
+                        ->subCategory('headshot')
                         ->role('photo')
                         ->label('Speaker photo')
                         ->columnSpanFull(),

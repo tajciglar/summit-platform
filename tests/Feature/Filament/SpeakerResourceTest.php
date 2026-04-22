@@ -27,28 +27,32 @@ beforeEach(function () {
     $this->summitB = Summit::factory()->create(['title' => 'Summit B', 'domain_id' => $this->domain->id]);
 });
 
-it('persists day_number when creating a speaker', function () {
+it('persists day_number on the pivot when creating a speaker', function () {
     livewire(CreateSpeaker::class)
         ->fillForm([
-            'summit_id' => $this->summitA->id,
+            'speakerSummits' => [
+                ['summit_id' => $this->summitA->id, 'day_number' => 2],
+            ],
             'slug' => 'jane-doe',
             'first_name' => 'Jane',
             'last_name' => 'Doe',
-            'day_number' => 2,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $speaker = Speaker::firstWhere('slug', 'jane-doe');
+    $speaker = Speaker::with('summits')->firstWhere('slug', 'jane-doe');
     expect($speaker)->not->toBeNull();
-    expect($speaker->day_number)->toBe(2);
-    expect($speaker->summit_id)->toBe($this->summitA->id);
+    expect($speaker->summits)->toHaveCount(1);
+    expect($speaker->summits->first()->id)->toBe($this->summitA->id);
+    expect($speaker->summits->first()->pivot->day_number)->toBe(2);
 });
 
 it('allows a null day_number (unassigned)', function () {
     livewire(CreateSpeaker::class)
         ->fillForm([
-            'summit_id' => $this->summitA->id,
+            'speakerSummits' => [
+                ['summit_id' => $this->summitA->id, 'day_number' => null],
+            ],
             'slug' => 'no-day',
             'first_name' => 'Nada',
             'last_name' => 'Day',
@@ -56,7 +60,29 @@ it('allows a null day_number (unassigned)', function () {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    expect(Speaker::firstWhere('slug', 'no-day')->day_number)->toBeNull();
+    $speaker = Speaker::with('summits')->firstWhere('slug', 'no-day');
+    expect($speaker->summits->first()->pivot->day_number)->toBeNull();
+});
+
+it('attaches a speaker to multiple summits at create time', function () {
+    livewire(CreateSpeaker::class)
+        ->fillForm([
+            'speakerSummits' => [
+                ['summit_id' => $this->summitA->id, 'day_number' => 2],
+                ['summit_id' => $this->summitB->id, 'day_number' => 5],
+            ],
+            'slug' => 'multi-attach',
+            'first_name' => 'Multi',
+            'last_name' => 'Attach',
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $speaker = Speaker::with('summits')->firstWhere('slug', 'multi-attach');
+    expect($speaker->summits)->toHaveCount(2);
+    $byId = $speaker->summits->keyBy('id');
+    expect($byId[$this->summitA->id]->pivot->day_number)->toBe(2);
+    expect($byId[$this->summitB->id]->pivot->day_number)->toBe(5);
 });
 
 it('shows an All tab plus one tab per domain summit on the list page', function () {

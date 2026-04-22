@@ -70,7 +70,18 @@ class Speaker extends Model
     {
         return $this->belongsToMany(Summit::class, 'speaker_summit')
             ->withPivot('day_number', 'sort_order')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->using(SpeakerSummit::class);
+    }
+
+    /**
+     * Direct HasMany to the pivot rows — used by the Filament Speaker form's
+     * Repeater so each attachment's `day_number` is an editable per-row
+     * control. For read paths prefer `summits()` and `$speaker->pivot`.
+     */
+    public function speakerSummits(): HasMany
+    {
+        return $this->hasMany(SpeakerSummit::class);
     }
 
     public function videoViewSessions(): HasMany

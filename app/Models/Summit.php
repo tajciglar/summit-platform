@@ -89,6 +89,7 @@ class Summit extends Model implements HasName
         return $this->belongsToMany(Speaker::class, 'speaker_summit')
             ->withPivot('day_number', 'sort_order')
             ->withTimestamps()
+            ->using(SpeakerSummit::class)
             ->orderByPivot('sort_order');
     }
 
