@@ -175,6 +175,17 @@ class SummitResource extends Resource
                         ->columnSpanFull()
                         ->helperText('Which brand site hosts this summit. One summit belongs to exactly one domain.'),
                 ]),
+            Section::make('ActiveCampaign')
+                ->description('Tag applied to contacts who opt in via this summit\'s funnels.')
+                ->collapsed()
+                ->columnSpanFull()
+                ->components([
+                    TextInput::make('ac_optin_tag')
+                        ->label('Optin tag')
+                        ->placeholder('e.g. ATS1 APR26 SIGNUP')
+                        ->maxLength(255)
+                        ->helperText('Contacts will be tagged with this value in ActiveCampaign when they opt in. Leave blank to skip AC sync.'),
+                ]),
         ]);
     }
 
