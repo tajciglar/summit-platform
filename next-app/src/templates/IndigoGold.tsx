@@ -11,6 +11,7 @@ import { EventStatusBadge } from '@/components/EventStatusBadge';
 import { paletteStyle, type Palette } from '@/lib/palette';
 import type { IndigoGoldContent } from './indigo-gold.schema';
 import { resolveCheckoutHref } from './lib/checkout-href';
+import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 import { indigoGoldDefaultEnabledSections } from './indigo-gold.sections';
 
@@ -483,21 +484,6 @@ function Overview({ content }: { content: IndigoGoldContent }) {
  * appear without touching the funnel. If the summit has zero speakers,
  * we render a single placeholder block so preview layouts don't collapse.
  * ======================================================================= */
-function groupSpeakersByDay(speakers: Record<string, Speaker>): Array<{ dayNumber: number; speakers: Speaker[] }> {
-  const grouped = new Map<number, Speaker[]>();
-  for (const s of Object.values(speakers)) {
-    if (s.dayNumber === null) continue;
-    const bucket = grouped.get(s.dayNumber) ?? [];
-    bucket.push(s);
-    grouped.set(s.dayNumber, bucket);
-  }
-  return [...grouped.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([dayNumber, list]) => ({
-      dayNumber,
-      speakers: list.sort((a, b) => a.sortOrder - b.sortOrder),
-    }));
-}
 
 function SpeakersGrid({ speakers }: Props) {
   const dayBlocks = groupSpeakersByDay(speakers);
@@ -1078,6 +1064,7 @@ function Footer({ content }: { content: IndigoGoldContent }) {
  * MOBILE STICKY CTA
  * ======================================================================= */
 function StickyMobileCTA({ content }: { content: IndigoGoldContent }) {
+  if (!content.mobileCta) return null;
   return (
     <a href="#optin" className="indigo-gold-stick-mobile">
       <span className="indigo-gold-btn-cta" style={{ padding: '.7rem 1.25rem' }}>

@@ -64,15 +64,8 @@ export const VioletSunSchema = z.object({
       description: z.string().min(1),
     })).length(3),
   }),
-  speakersDay: z.object({
-    dayLabel: z.string().min(1),                 // "Day 01 · Opening Circle"
-    headlineLead: z.string().min(1),             // "Understanding your child's "
-    headlineAccent: z.string().min(1),           // italic-serif "brain"
-    headlineTrail: z.string().min(1),            // "."
-    countLabel: z.string().min(1),               // "8 of 40 speakers →"
-    speakerIds: z.array(z.string().uuid()).min(1),
-    ctaLabel: z.string().min(1),                 // "See all 40 speakers →"
-  }),
+  // Speakers section derived at render time from the summit's Speaker
+  // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "Six shifts by Day 5"
     headlineLead: z.string().min(1),             // "What the end of the week "

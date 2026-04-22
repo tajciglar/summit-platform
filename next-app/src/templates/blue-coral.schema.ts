@@ -57,11 +57,10 @@ export const BlueCoralSchema = z.object({
     illustrationCaption: z.string().min(1), // "5 Days. 40+ Experts. 100% Free."
     illustrationSubcaption: z.string().min(1), // "Watch live or catch the replays"
   }),
-  speakersDay: z.object({
-    dayLabel: z.string().min(1), // "DAY 1"
-    headline: z.string().min(1),
-    speakerIds: z.array(z.string().uuid()).min(1),
-  }),
+  // Speakers section derived at render time from the summit's Speaker
+  // table: one day block per distinct `speaker.day_number`. No per-speaker
+  // config in page_content — adding a speaker with a new day_number makes
+  // a new block appear automatically.
   outcomes: z.object({
     eyebrow: z.string().min(1),
     headline: z.string().min(1),

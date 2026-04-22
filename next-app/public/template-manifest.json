@@ -3796,44 +3796,6 @@
             ],
             "additionalProperties": false
           },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "sectionLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headline": {
-                "type": "string",
-                "minLength": 1
-              },
-              "countLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              },
-              "ctaLabel": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "required": [
-              "sectionLabel",
-              "headline",
-              "countLabel",
-              "speakerIds",
-              "ctaLabel"
-            ],
-            "additionalProperties": false
-          },
           "outcomes": {
             "type": "object",
             "properties": {
@@ -4868,7 +4830,6 @@
           "press",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",
@@ -5246,49 +5207,6 @@
               "bodyParagraphs",
               "ctaLabel",
               "imageCaption"
-            ],
-            "additionalProperties": false
-          },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "eyebrow": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineLead": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineAccent": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineTrail": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              },
-              "ctaLabel": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "required": [
-              "eyebrow",
-              "headlineLead",
-              "headlineAccent",
-              "headlineTrail",
-              "speakerIds",
-              "ctaLabel"
             ],
             "additionalProperties": false
           },
@@ -6252,7 +6170,6 @@
           "press",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",
@@ -6651,54 +6568,6 @@
               "ctaLabel",
               "cardEyebrow",
               "components"
-            ],
-            "additionalProperties": false
-          },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "dayLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineLead": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineAccent": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headlineTrail": {
-                "type": "string",
-                "minLength": 1
-              },
-              "countLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              },
-              "ctaLabel": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "required": [
-              "dayLabel",
-              "headlineLead",
-              "headlineAccent",
-              "headlineTrail",
-              "countLabel",
-              "speakerIds",
-              "ctaLabel"
             ],
             "additionalProperties": false
           },
@@ -7728,7 +7597,6 @@
           "press",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",
@@ -8100,34 +7968,6 @@
               "ctaLabel",
               "cardHeadline",
               "cardSubtext"
-            ],
-            "additionalProperties": false
-          },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "dayLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headline": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              }
-            },
-            "required": [
-              "dayLabel",
-              "headline",
-              "speakerIds"
             ],
             "additionalProperties": false
           },
@@ -9052,7 +8892,6 @@
           "trust",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",
@@ -9427,34 +9266,6 @@
               "ctaLabel",
               "illustrationCaption",
               "illustrationSubcaption"
-            ],
-            "additionalProperties": false
-          },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "dayLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headline": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              }
-            },
-            "required": [
-              "dayLabel",
-              "headline",
-              "speakerIds"
             ],
             "additionalProperties": false
           },
@@ -10388,7 +10199,6 @@
           "trustBadges",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",
@@ -10764,35 +10574,6 @@
               "ctaLabel",
               "cardDaysLabel",
               "cardSubLabel"
-            ],
-            "additionalProperties": false
-          },
-          "speakersDay": {
-            "type": "object",
-            "properties": {
-              "dayLabel": {
-                "type": "string",
-                "minLength": 1
-              },
-              "headline": {
-                "type": "string",
-                "minLength": 1
-              },
-              "speakerIds": {
-                "minItems": 1,
-                "maxItems": 12,
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                }
-              }
-            },
-            "required": [
-              "dayLabel",
-              "headline",
-              "speakerIds"
             ],
             "additionalProperties": false
           },
@@ -11700,7 +11481,6 @@
           "trust",
           "stats",
           "overview",
-          "speakersDay",
           "outcomes",
           "freeGift",
           "bonuses",

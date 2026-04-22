@@ -58,11 +58,8 @@ export const RustCreamSchema = z.object({
     cardHeadline: z.string().min(1),             // "5 Days. 40+ Experts. 100% Free."
     cardSubtext: z.string().min(1),              // "Watch live or catch the replays"
   }),
-  speakersDay: z.object({
-    dayLabel: z.string().min(1),                 // "DAY 1"
-    headline: z.string().min(1),                 // "Understanding Your Child's Brain"
-    speakerIds: z.array(z.string().uuid()).min(1),
-  }),
+  // Speakers section derived at render time from the summit's Speaker
+  // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "What You'll Walk Away With"
     headline: z.string().min(1),

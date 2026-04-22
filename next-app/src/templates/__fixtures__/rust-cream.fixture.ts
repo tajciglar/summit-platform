@@ -79,20 +79,6 @@ export const rustCreamFixture: RustCreamContent = {
     cardHeadline: '5 Days. 40+ Experts. 100% Free.',
     cardSubtext: 'Watch live or catch the replays',
   },
-  speakersDay: {
-    dayLabel: 'DAY 1',
-    headline: "Understanding Your Child's Brain",
-    speakerIds: [
-      '11111111-1111-4111-8111-111111111111',
-      '22222222-2222-4222-8222-222222222222',
-      '33333333-3333-4333-8333-333333333333',
-      '44444444-4444-4444-8444-444444444444',
-      '55555555-5555-4555-8555-555555555555',
-      '66666666-6666-4666-8666-666666666666',
-      '77777777-7777-4777-8777-777777777777',
-      '88888888-8888-4888-8888-888888888888',
-    ],
-  },
   outcomes: {
     eyebrow: "What You'll Walk Away With",
     headline: 'Six Transformations By The End Of Day 5',

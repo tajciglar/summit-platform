@@ -70,13 +70,8 @@ export const LimeInkSchema = z.object({
       description: z.string().min(1),
     })).length(3),
   }),
-  speakersDay: z.object({
-    sectionLabel: z.string().min(1),             // "04 → SPEAKERS · DAY 01"
-    headline: z.string().min(1),                 // "Understanding Your Child's Brain"
-    countLabel: z.string().min(1),               // "8 OF 40 →"
-    speakerIds: z.array(z.string().uuid()).min(1),
-    ctaLabel: z.string().min(1),                 // "See all 40 speakers — register free →"
-  }),
+  // Speakers section derived at render time from the summit's Speaker
+  // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     sectionLabel: z.string().min(1),             // "05 → OUTCOMES"
     headlineLead: z.string().min(1),             // "Six shifts by Day Five. "

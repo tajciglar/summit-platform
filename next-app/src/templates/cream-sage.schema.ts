@@ -61,14 +61,8 @@ export const CreamSageSchema = z.object({
     ctaLabel: z.string().min(1),                 // "Reserve your seat"
     imageCaption: z.string().min(1),             // "Live talks · a printed Collection · a quiet community"
   }),
-  speakersDay: z.object({
-    eyebrow: z.string().min(1),                  // "Day One · Opening Circle"
-    headlineLead: z.string().min(1),             // "Understanding "
-    headlineAccent: z.string().min(1),           // "your child's"
-    headlineTrail: z.string().min(1),            // " brain."
-    speakerIds: z.array(z.string().uuid()).min(1),
-    ctaLabel: z.string().min(1),                 // "See the full forty — register free →"
-  }),
+  // Speakers section derived at render time from the summit's Speaker
+  // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "Six Shifts by Day Five"
     headlineLead: z.string().min(1),             // "What the end of the week "
