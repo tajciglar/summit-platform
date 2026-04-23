@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Services\Templates\TemplateRegistry;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
@@ -32,5 +33,10 @@ class AppServiceProvider extends ServiceProvider
         // Dynamic Summit navigation items are registered in AdminPanelProvider
         // via ->bootUsing(), since that closure runs once per request after
         // tenant resolution and before the nav manager snapshots panel items.
+
+        // Raise Livewire's default upload cap (12 MB) to match PHP limits
+        // configured in composer dev (50 MB). Stock images can easily exceed
+        // the default and produce a bare 422 with no visible error for the user.
+        Config::set('livewire.temporary_file_upload.rules', ['required', 'file', 'max:51200']);
     }
 }
