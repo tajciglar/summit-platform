@@ -23,6 +23,18 @@
     $summitUrl = $summit
         ? \App\Filament\Resources\Summits\SummitResource::getUrl('view', ['record' => $summit->id])
         : null;
+
+    // Live URL — Drop `/optin` suffix from the default optin step so the
+    // admin button matches the public route (`/funnel-slug` not
+    // `/funnel-slug/optin`).
+    $hostname = optional($summit?->domain)->hostname;
+    $stepPath = ($record->step_type === 'optin' && $record->slug === 'optin')
+        ? ''
+        : '/'.$record->slug;
+    $liveUrl = $hostname
+        ? 'https://'.$hostname.'/'.$funnel->slug.$stepPath
+        : '/'.$funnel->slug.$stepPath;
+    $isLive = $record->is_published && (bool) $funnel->is_active && $hostname;
 @endphp
 
 <div
@@ -85,7 +97,18 @@
                                 <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd" />
                             </svg>
-                            Preview live
+                            Preview
+                        </a>
+                    @endif
+                    @if ($isLive)
+                        <a href="{{ $liveUrl }}" target="_blank" rel="noopener noreferrer"
+                           title="{{ $liveUrl }}"
+                           class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                                <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z" clip-rule="evenodd" />
+                            </svg>
+                            Open live
                         </a>
                     @endif
                     <x-filament::actions :actions="$this->getCachedHeaderActions()" />
@@ -105,20 +128,9 @@
 
             {{-- Content --}}
             <div class="flex-1 px-8 pt-6 pb-10">
-                {{-- Publish status pill with absolute live URL + open/copy --}}
-                @php
-                    // Drop the `/optin` suffix from the default optin step so
-                    // the URL reads `https://host/funnel-slug` rather than
-                    // `/funnel-slug/optin` — matches the public route.
-                    $stepPath = ($record->step_type === 'optin' && $record->slug === 'optin')
-                        ? ''
-                        : '/'.$record->slug;
-                    $hostname = optional($funnel->summit?->domain)->hostname;
-                    $liveUrl = $hostname
-                        ? 'https://'.$hostname.'/'.$funnel->slug.$stepPath
-                        : '/'.$funnel->slug.$stepPath;
-                    $isLive = $record->is_published && (bool) $funnel->is_active && $hostname;
-                @endphp
+                {{-- Publish status pill — $liveUrl / $isLive / $hostname / $stepPath
+                     are computed at the top @php block so the header's
+                     "Open live" button can share them. --}}
                 <div
                     x-data="{ copied: false }"
                     class="mb-5 flex flex-wrap items-center gap-3 rounded-lg bg-white px-4 py-3 text-sm shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-white/10"
