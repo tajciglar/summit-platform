@@ -90,7 +90,6 @@ class DemoSeeder extends Seeder
         Speaker::factory()->count(8)->create(['summit_id' => $summit->id]);
 
         $vipPass = Product::factory()->create([
-            'summit_id' => $summit->id,
             'slug' => 'vip-pass',
             'name' => 'VIP All-Access Pass',
             'category' => 'vip_pass',
@@ -101,9 +100,9 @@ class DemoSeeder extends Seeder
             'price_during_cents' => 19700,
             'price_post_summit_cents' => 24700,
         ]);
+        $vipPass->summits()->syncWithoutDetaching([$summit->id]);
 
         $recordings = Product::factory()->create([
-            'summit_id' => $summit->id,
             'slug' => 'session-recordings',
             'name' => 'Session Recordings',
             'category' => 'recording',
@@ -114,6 +113,7 @@ class DemoSeeder extends Seeder
             'price_during_cents' => 9700,
             'price_post_summit_cents' => 12700,
         ]);
+        $recordings->summits()->syncWithoutDetaching([$summit->id]);
 
         // Primary opt-in funnel: aps (ADHD Parenting Summit initials).
         $optinFunnel = Funnel::factory()->create([

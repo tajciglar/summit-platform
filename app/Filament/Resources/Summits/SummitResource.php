@@ -163,6 +163,8 @@ class SummitResource extends Resource
                         ->subCategory('hero')
                         ->role('hero')
                         ->label('Hero image')
+                        ->captionUsing(fn (Summit $record): string => $record->title.' — hero')
+                        ->altTextUsing(fn (Summit $record): string => $record->title.' hero image')
                         ->columnSpanFull(),
 
                     Select::make('domain_id')

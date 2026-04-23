@@ -82,14 +82,13 @@ class FunnelContentSeeder extends Seeder
 
         $admin = User::where('email', 'admin@example.test')->first();
         if ($admin) {
-            $admin->summits()->syncWithoutDetaching([$summit->id]);
             $admin->domains()->syncWithoutDetaching([$domain->id]);
         }
 
         $speakerIds = $this->ensureSpeakers($summit);
 
         $product = Product::updateOrCreate(
-            ['summit_id' => $summit->id, 'slug' => Str::slug($summit->title).'-vip-pass'],
+            ['slug' => Str::slug($summit->title).'-vip-pass'],
             [
                 'name' => 'VIP All-Access Pass',
                 'category' => 'vip_pass',
@@ -103,6 +102,7 @@ class FunnelContentSeeder extends Seeder
                 'compare_pre_summit_cents' => 29700,
             ]
         );
+        $product->summits()->syncWithoutDetaching([$summit->id]);
 
         Funnel::where('summit_id', $summit->id)->delete();
 

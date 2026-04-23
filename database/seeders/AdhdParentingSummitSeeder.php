@@ -91,7 +91,7 @@ class AdhdParentingSummitSeeder extends Seeder
         $speakerIds = $speakers->pluck('id')->toArray();
 
         $vipPass = Product::updateOrCreate(
-            ['summit_id' => $summit->id, 'slug' => 'vip-all-access-pass'],
+            ['slug' => 'vip-all-access-pass'],
             [
                 'name' => 'VIP All-Access Pass',
                 'category' => 'vip_pass',
@@ -104,6 +104,7 @@ class AdhdParentingSummitSeeder extends Seeder
                 'price_post_summit_cents' => 24700,
             ]
         );
+        $vipPass->summits()->syncWithoutDetaching([$summit->id]);
 
         // --- Single funnel: optin + sales page ---
         // template_key + section_config on the funnel are what the template

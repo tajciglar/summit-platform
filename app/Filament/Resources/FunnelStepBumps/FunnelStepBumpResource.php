@@ -74,7 +74,9 @@ class FunnelStepBumpResource extends Resource
                         ->category('product')
                         ->subCategory('bump')
                         ->role('image')
-                        ->label('Bump image'),
+                        ->label('Bump image')
+                        ->captionUsing(fn (FunnelStepBump $record): string => ($record->headline ?: 'Order bump').' — image')
+                        ->altTextUsing(fn (FunnelStepBump $record): string => (string) ($record->headline ?: 'Order bump image')),
                 ]),
 
             Section::make('Settings')

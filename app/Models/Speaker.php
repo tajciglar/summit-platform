@@ -71,11 +71,6 @@ class Speaker extends Model
         return $this->hasMany(SpeakerSummit::class);
     }
 
-    public function videoViewSessions(): HasMany
-    {
-        return $this->hasMany(VideoViewSession::class);
-    }
-
     public function fullName(): string
     {
         return trim("{$this->first_name} {$this->last_name}");

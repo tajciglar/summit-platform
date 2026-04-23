@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Models\Funnel;
-use App\Models\Product;
 use App\Models\Speaker;
 use App\Models\Summit;
 use Illuminate\Support\Facades\DB;
@@ -34,22 +33,12 @@ class DuplicateSummit
 
             $newSummit->save();
 
-            $this->clonePages($summit, $newSummit);
             $this->cloneSpeakers($summit, $newSummit);
             $productMap = $this->cloneProducts($summit, $newSummit);
             $this->cloneFunnels($summit, $newSummit, $productMap);
 
             return $newSummit;
         });
-    }
-
-    private function clonePages(Summit $src, Summit $dest): void
-    {
-        foreach ($src->pages as $page) {
-            $clone = $page->replicate(['created_at', 'updated_at']);
-            $clone->summit_id = $dest->id;
-            $clone->save();
-        }
     }
 
     private function cloneSpeakers(Summit $src, Summit $dest): void
@@ -71,33 +60,19 @@ class DuplicateSummit
     }
 
     /**
-     * @return array<string, string> map from old product id to new product id
+     * Products are global since the product_summit pivot was introduced. Duplicating
+     * a summit now just attaches the source summit's products to the new summit —
+     * no cloning, no slug collisions. Funnel steps keep pointing at the same products.
+     *
+     * @return array<string, string> identity map (retained for cloneFunnels's API)
      */
     private function cloneProducts(Summit $src, Summit $dest): array
     {
-        $map = [];
+        $productIds = $src->products()->pluck('products.id')->all();
 
-        // Clone non-combos first so combos can remap their bundled_product_ids afterward.
-        foreach ($src->products()->where('kind', '!=', 'combo')->get() as $product) {
-            $clone = $product->replicate(['created_at', 'updated_at', 'stripe_product_id', 'stripe_price_pre_id', 'stripe_price_late_id', 'stripe_price_during_id', 'stripe_price_post_id']);
-            $clone->summit_id = $dest->id;
-            $clone->save();
-            $map[$product->id] = $clone->id;
-        }
+        $dest->products()->syncWithoutDetaching($productIds);
 
-        foreach ($src->products()->where('kind', 'combo')->get() as $combo) {
-            $clone = $combo->replicate(['created_at', 'updated_at', 'stripe_product_id']);
-            $clone->summit_id = $dest->id;
-            $clone->bundled_product_ids = collect($combo->bundled_product_ids ?? [])
-                ->map(fn ($id) => $map[$id] ?? null)
-                ->filter()
-                ->values()
-                ->all();
-            $clone->save();
-            $map[$combo->id] = $clone->id;
-        }
-
-        return $map;
+        return array_combine($productIds, $productIds);
     }
 
     /**

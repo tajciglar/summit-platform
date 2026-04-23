@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Product;
-use App\Models\Summit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -19,7 +18,6 @@ class ProductFactory extends Factory
         $name = fake()->words(3, true).' Pass';
 
         return [
-            'summit_id' => Summit::factory(),
             'category' => 'vip_pass',
             'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(100, 999),
             'name' => $name,

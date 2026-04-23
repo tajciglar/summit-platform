@@ -6,7 +6,7 @@ use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
@@ -14,7 +14,6 @@ class Product extends Model
     use HasFactory, HasMediaAttachments, HasUuid;
 
     protected $fillable = [
-        'summit_id',
         'category',
         'kind',
         'slug',
@@ -126,9 +125,11 @@ class Product extends Model
         return $this->priceCentsForPhase($phase);
     }
 
-    public function summit(): BelongsTo
+    public function summits(): BelongsToMany
     {
-        return $this->belongsTo(Summit::class);
+        return $this->belongsToMany(Summit::class, 'product_summit')
+            ->withPivot(['sort_order', 'is_featured'])
+            ->withTimestamps();
     }
 
     public function funnelSteps(): HasMany
