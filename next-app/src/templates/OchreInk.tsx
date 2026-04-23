@@ -1,4 +1,4 @@
-import './ochre-ink.styles.css';
+import { Node } from "./shared/Node";import './ochre-ink.styles.css';
 import type { Speaker } from './types';
 import type { OchreInkContent } from './ochre-ink.schema';
 import type { Palette } from '@/lib/palette';
@@ -21,7 +21,7 @@ export function OchreInk({
   enabledSections,
   palette,
   wpCheckoutRedirectUrl,
-  wpThankyouRedirectUrl,
+  wpThankyouRedirectUrl
 }: Props) {
   return (
     <OchreInkLayout
@@ -31,7 +31,7 @@ export function OchreInk({
       funnelId={funnelId}
       palette={palette}
       wpCheckoutRedirectUrl={wpCheckoutRedirectUrl}
-      wpThankyouRedirectUrl={wpThankyouRedirectUrl}
-    />
-  );
+      wpThankyouRedirectUrl={wpThankyouRedirectUrl} />);
+
+
 }

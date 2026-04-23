@@ -1,4 +1,4 @@
-// Lavender / gold "trusted family" aesthetic — visually ported from
+import { Node } from "./shared/Node"; // Lavender / gold "trusted family" aesthetic — visually ported from
 // next-app/public/aps-parenting.html. Document chrome (html/head/body) is
 // owned by the Next.js page/layout that renders this template. The fonts
 // (Cormorant Garamond + Poppins) are loaded inside `indigo-gold.styles.css`
@@ -35,8 +35,8 @@ type MediaSidecar = {
  * the slots the skin actually renders.
  */
 type RenderContent = IndigoGoldContent & {
-  hero: IndigoGoldContent['hero'] & { backgroundImage?: MediaSidecar };
-  footer: IndigoGoldContent['footer'] & { logo?: MediaSidecar };
+  hero: IndigoGoldContent['hero'] & {backgroundImage?: MediaSidecar;};
+  footer: IndigoGoldContent['footer'] & {logo?: MediaSidecar;};
 };
 
 type Props = {
@@ -65,21 +65,21 @@ const LAV = {
   c400: '#A891D1',
   c500: '#8C72BF',
   c600: '#6E57A3',
-  c700: '#5A4589',
+  c700: '#5A4589'
 };
 
 const SUN = {
   c300: '#FFE066',
   c400: '#FFD93D',
   c500: '#FFCE29',
-  c600: '#E9B60C',
+  c600: '#E9B60C'
 };
 
 const INK = {
   c900: '#1B132C',
   c800: '#2A1F3F',
   c700: '#3C2E54',
-  c600: '#5A4989',
+  c600: '#5A4989'
 };
 
 /* Speaker photo fallback: deterministic pravatar avatars so the visual
@@ -90,7 +90,7 @@ const FALLBACK_AVATAR_SLOTS = [12, 5, 47, 68, 33, 59, 45, 16, 49, 20, 60, 23, 44
 function hashToIndex(id: string | number, modulo: number): number {
   const s = String(id);
   let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  for (let i = 0; i < s.length; i++) h = h * 31 + s.charCodeAt(i) >>> 0;
   return h % modulo;
 }
 
@@ -186,36 +186,36 @@ function IconSprite() {
           <path d="M6 12v5a6 6 0 0 0 12 0v-5" />
         </symbol>
       </defs>
-    </svg>
-  );
+    </svg>);
+
 }
 
 type IconId =
-  | 'arrow-right'
-  | 'arrow-up-right'
-  | 'star'
-  | 'gift'
-  | 'clock'
-  | 'users'
-  | 'trending'
-  | 'heart'
-  | 'brain'
-  | 'message'
-  | 'book'
-  | 'chevron-down'
-  | 'check'
-  | 'shield'
-  | 'lock'
-  | 'info'
-  | 'target'
-  | 'school';
+'arrow-right' |
+'arrow-up-right' |
+'star' |
+'gift' |
+'clock' |
+'users' |
+'trending' |
+'heart' |
+'brain' |
+'message' |
+'book' |
+'chevron-down' |
+'check' |
+'shield' |
+'lock' |
+'info' |
+'target' |
+'school';
 
-function Icon({ id, className, style }: { id: IconId; className?: string; style?: React.CSSProperties }) {
+function Icon({ id, className, style }: {id: IconId;className?: string;style?: React.CSSProperties;}) {
   return (
     <svg className={className} style={style} aria-hidden="true">
       <use href={`#ig-${id}`} />
-    </svg>
-  );
+    </svg>);
+
 }
 
 /* Map schema outcome icons → sprite symbols. */
@@ -225,13 +225,13 @@ const OUTCOME_ICON: Record<string, IconId> = {
   clock: 'clock',
   heart: 'heart',
   school: 'school',
-  users: 'users',
+  users: 'users'
 };
 const TRUST_ICON: Record<string, IconId> = {
   shield: 'shield',
   lock: 'lock',
   info: 'info',
-  star: 'star',
+  star: 'star'
 };
 
 /* =======================================================================
@@ -243,12 +243,12 @@ function TopBar({ content }: Props) {
       className="w-full text-center text-white text-xs md:text-sm font-semibold py-2.5"
       style={{
         background: `linear-gradient(90deg,${LAV.c700},${LAV.c600},${LAV.c700})`,
-        letterSpacing: '0.18em',
-      }}
-    >
-      {content.topBar.name}
-    </div>
-  );
+        letterSpacing: '0.18em'
+      }}>
+      
+      <Node id="topBar.name" role="body">{content.topBar.name}</Node>
+    </div>);
+
 }
 
 /* =======================================================================
@@ -276,22 +276,22 @@ function Hero({ content, speakers }: Props) {
   const photoSlots = Array.from({ length: 6 }, (_, i) => ({
     s: collage[i],
     url: resolvePhoto(i, collage[i]),
-    alt: collage[i] ? displayName(collage[i]) : '',
+    alt: collage[i] ? displayName(collage[i]) : ''
   }));
 
   return (
     <section className="indigo-gold-hero-bg relative">
-      {bg?.url ? (
-        <img
-          src={bg.url}
-          alt={bg.alt ?? ''}
-          width={bg.width ?? undefined}
-          height={bg.height ?? undefined}
-          className="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none"
-          loading="eager"
-          data-testid="indigo-gold-hero-background"
-        />
-      ) : null}
+      {bg?.url ?
+      <img
+        src={bg.url}
+        alt={bg.alt ?? ''}
+        width={bg.width ?? undefined}
+        height={bg.height ?? undefined}
+        className="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none"
+        loading="eager"
+        data-testid="indigo-gold-hero-background" /> :
+
+      null}
       <div className="max-w-7xl mx-auto px-5 md:px-8 pt-10 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-10 md:gap-14 items-center relative">
         <div>
           <div className="mb-6">
@@ -300,69 +300,69 @@ function Hero({ content, speakers }: Props) {
               dateLabel={h.dateRangeLabel ?? h.eventStatusLabel ?? ''}
               liveLabel={h.liveLabel ?? undefined}
               endedLabel={h.endedLabel ?? h.eventStatusLabel ?? undefined}
-              style={{ '--esb-primary': LAV.c700, '--esb-fg': '#ffffff' } as CSSProperties}
-            />
+              style={{ '--esb-primary': LAV.c700, '--esb-fg': '#ffffff' } as CSSProperties} />
+            
           </div>
 
 
           <p className="font-bold text-2xl md:text-3xl mb-3 leading-tight" style={{ color: INK.c900 }}>
-            {h.eyebrow}
+            <Node id="hero.eyebrow" role="label">{h.eyebrow}</Node>
           </p>
           <h1
             className="indigo-gold-display font-bold mb-6"
             style={{
               color: INK.c900,
               fontSize: 'clamp(2.2rem, 4.5vw, 4rem)',
-              lineHeight: 1.02,
-            }}
-          >
-            {h.headline}
-            {h.headlineItalicTail ? (
-              <>
+              lineHeight: 1.02
+            }}>
+            
+            <Node id="hero.headline" role="heading">{h.headline}</Node>
+            {h.headlineItalicTail ?
+            <>
                 {' '}
-                <span className="italic">{h.headlineItalicTail}</span>
-              </>
-            ) : null}
+                <span className="italic"><Node id="hero.headlineItalicTail" role="heading">{h.headlineItalicTail}</Node></span>
+              </> :
+            null}
           </h1>
           <p className="text-base md:text-lg mb-8 max-w-xl" style={{ color: INK.c800 }}>
-            <strong>{h.subheadlineLead}</strong>
-            {h.subheadlineTrail}
+            <strong><Node id="hero.subheadlineLead" role="heading">{h.subheadlineLead}</Node></strong>
+            <Node id="hero.subheadlineTrail" role="heading">{h.subheadlineTrail}</Node>
           </p>
 
           <a href="#optin" className="indigo-gold-btn-cta indigo-gold-btn-pulse">
-            {h.ctaLabel}
+            <Node id="hero.ctaLabel" role="button">{h.ctaLabel}</Node>
             <span className="indigo-gold-btn-arrow">
               <Icon id="arrow-right" className="w-3.5 h-3.5" />
             </span>
           </a>
-          {h.ctaNote ? (
-            <p className="mt-3 text-sm" style={{ color: LAV.c700 }}>
-              {h.ctaNote}
-            </p>
-          ) : null}
+          {h.ctaNote ?
+          <p className="mt-3 text-sm" style={{ color: LAV.c700 }}>
+              <Node id="hero.ctaNote" role="body">{h.ctaNote}</Node>
+            </p> :
+          null}
 
           <div className="mt-6 flex items-center gap-3">
             <div className="flex" style={{ color: SUN.c500 }}>
-              {[0, 1, 2, 3, 4].map((i) => (
-                <Icon key={`hstar-${i}`} id="star" className="w-5 h-5" />
-              ))}
+              {[0, 1, 2, 3, 4].map((i) =>
+              <Icon key={`hstar-${i}`} id="star" className="w-5 h-5" />
+              )}
             </div>
             <p className="text-sm" style={{ color: INK.c800 }}>
-              {h.ratingLead}
-              <strong>{h.ratingCount}</strong>
-              {h.ratingTrail}
+              <Node id="hero.ratingLead" role="body">{h.ratingLead}</Node>
+              <strong><Node id="hero.ratingCount" role="body">{h.ratingCount}</Node></strong>
+              <Node id="hero.ratingTrail" role="body">{h.ratingTrail}</Node>
             </p>
           </div>
 
           <p className="mt-5">
             <span
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm"
-              style={{ background: 'rgba(255,255,255,0.85)', color: LAV.c700 }}
-            >
+              style={{ background: 'rgba(255,255,255,0.85)', color: LAV.c700 }}>
+              
               <Icon id="gift" className="w-4 h-4" />
-              {h.giftNoteLead}
-              <strong style={{ color: LAV.c700 }}>{h.giftNoteAccent}</strong>
-              {h.giftNoteTrail}
+              <Node id="hero.giftNoteLead" role="body">{h.giftNoteLead}</Node>
+              <strong style={{ color: LAV.c700 }}><Node id="hero.giftNoteAccent" role="body">{h.giftNoteAccent}</Node></strong>
+              <Node id="hero.giftNoteTrail" role="body">{h.giftNoteTrail}</Node>
             </span>
           </p>
         </div>
@@ -382,28 +382,28 @@ function Hero({ content, speakers }: Props) {
           </div>
           <div
             className="absolute -bottom-4 right-4 bg-white rounded-full shadow-lg px-4 py-2 text-xs font-semibold flex items-center gap-2"
-            style={{ color: INK.c800 }}
-          >
+            style={{ color: INK.c800 }}>
+            
             <span className="flex" style={{ color: SUN.c500 }}>
-              {[0, 1, 2, 3, 4].map((i) => (
-                <Icon key={`hrat-${i}`} id="star" className="w-3.5 h-3.5" />
-              ))}
+              {[0, 1, 2, 3, 4].map((i) =>
+              <Icon key={`hrat-${i}`} id="star" className="w-3.5 h-3.5" />
+              )}
             </span>
-            {h.ratingCount} parents
+            <Node id="hero.ratingCount" role="body">{h.ratingCount}</Node> parents
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
-function PhotoCircle({ url, alt }: { url: string; alt: string }) {
+function PhotoCircle({ url, alt }: {url: string;alt: string;}) {
   return (
     <div className="w-full aspect-square rounded-full overflow-hidden shadow-lg">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={url} alt={alt} className="w-full h-full object-cover" loading="lazy" />
-    </div>
-  );
+    </div>);
+
 }
 
 /* =======================================================================
@@ -411,7 +411,7 @@ function PhotoCircle({ url, alt }: { url: string; alt: string }) {
  * (text is rendered as brand-style wordmarks since we don't have logo URLs
  * bundled with every summit).
  * ======================================================================= */
-function Press({ content }: { content: IndigoGoldContent }) {
+function Press({ content }: {content: IndigoGoldContent;}) {
   const outlets = content.press.outlets;
   // Duplicate twice for seamless loop
   const full = [...outlets, ...outlets];
@@ -422,65 +422,65 @@ function Press({ content }: { content: IndigoGoldContent }) {
       </p>
       <div className="indigo-gold-marquee-wrap">
         <div className="indigo-gold-marquee-track">
-          {full.map((name, idx) => (
-            <span className="indigo-gold-logo-wordmark" key={`logo-${idx}`}>
+          {full.map((name, idx) =>
+          <span className="indigo-gold-logo-wordmark" key={`logo-${idx}`}>
               {name}
             </span>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * STAT PILLS — 3 gradient pills, white text, rounded-2xl
  * ======================================================================= */
-function StatPills({ content }: { content: IndigoGoldContent }) {
+function StatPills({ content }: {content: IndigoGoldContent;}) {
   const icons: IconId[] = ['clock', 'trending', 'users'];
   const items = content.stats.items;
   return (
     <section className="py-10 bg-white">
       <div className="max-w-5xl mx-auto px-5 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        {items.map((item, idx) => (
-          <div
-            key={`stat-${idx}`}
-            className="flex items-center justify-center gap-3 rounded-2xl px-5 py-4 text-white shadow-lg"
-            style={{
-              background: `linear-gradient(135deg,${LAV.c700},${LAV.c500})`,
-              boxShadow: '0 10px 24px -10px rgba(140,114,191,0.45)',
-            }}
-          >
+        {items.map((item, idx) =>
+        <div
+          key={`stat-${idx}`}
+          className="flex items-center justify-center gap-3 rounded-2xl px-5 py-4 text-white shadow-lg"
+          style={{
+            background: `linear-gradient(135deg,${LAV.c700},${LAV.c500})`,
+            boxShadow: '0 10px 24px -10px rgba(140,114,191,0.45)'
+          }}>
+          
             <span
-              className="w-10 h-10 rounded-full grid place-items-center"
-              style={{ background: 'rgba(255,255,255,0.15)' }}
-            >
+            className="w-10 h-10 rounded-full grid place-items-center"
+            style={{ background: 'rgba(255,255,255,0.15)' }}>
+            
               <Icon id={icons[idx] ?? 'clock'} className="w-5 h-5" />
             </span>
             <div>
               <p
-                className="text-[0.65rem] uppercase"
-                style={{ letterSpacing: '0.2em', opacity: 0.8 }}
-              >
+              className="text-[0.65rem] uppercase"
+              style={{ letterSpacing: '0.2em', opacity: 0.8 }}>
+              
                 {item.label}
               </p>
               <p className="font-bold text-lg leading-tight">{item.value}</p>
             </div>
           </div>
-        ))}
+        )}
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * OVERVIEW — two-column "What Is This?" with image
  * ======================================================================= */
-function Overview({ content }: { content: IndigoGoldContent }) {
+function Overview({ content }: {content: IndigoGoldContent;}) {
   const o = content.overview;
   const image =
-    o.imageUrl ??
-    'https://images.unsplash.com/photo-1591343395082-e120087004b4?w=700&auto=format&fit=crop&q=60';
+  o.imageUrl ??
+  'https://images.unsplash.com/photo-1591343395082-e120087004b4?w=700&auto=format&fit=crop&q=60';
 
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
@@ -490,19 +490,19 @@ function Overview({ content }: { content: IndigoGoldContent }) {
           src={image}
           alt=""
           className="rounded-2xl shadow-xl w-full max-w-md mx-auto"
-          loading="lazy"
-        />
+          loading="lazy" />
+        
         <div>
-          <p className="indigo-gold-eyebrow-head mb-2">{o.eyebrow}</p>
-          <h2 className="indigo-gold-h2-head mb-5">{o.headline}</h2>
+          <p className="indigo-gold-eyebrow-head mb-2"><Node id="overview.eyebrow" role="label">{o.eyebrow}</Node></p>
+          <h2 className="indigo-gold-h2-head mb-5"><Node id="overview.headline" role="heading">{o.headline}</Node></h2>
           <div className="space-y-4 leading-relaxed" style={{ color: INK.c800 }}>
-            {o.bodyParagraphs.map((para, idx) => (
-              <p key={`ovp-${idx}`}>{para}</p>
-            ))}
+            {o.bodyParagraphs.map((para, idx) =>
+            <p key={`ovp-${idx}`}>{para}</p>
+            )}
           </div>
           <div className="mt-6">
             <a href="#optin" className="indigo-gold-btn-cta">
-              {o.ctaLabel}
+              <Node id="overview.ctaLabel" role="button">{o.ctaLabel}</Node>
               <span className="indigo-gold-btn-arrow">
                 <Icon id="arrow-right" className="w-3.5 h-3.5" />
               </span>
@@ -510,8 +510,8 @@ function Overview({ content }: { content: IndigoGoldContent }) {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
@@ -532,42 +532,42 @@ function SpeakersGrid({ speakers }: Props) {
         <p className="indigo-gold-eyebrow-head mb-2">Learn From These</p>
         <h2 className="indigo-gold-h2-head mb-12">40+ World-Leading Experts and Authorities</h2>
 
-        {showPlaceholder ? (
-          <PlaceholderDayBlock dayNumber={1} count={6} />
-        ) : (
-          dayBlocks.map(({ dayNumber, speakers: daySpeakers }) => (
-            <div key={`day-${dayNumber}`} className="mb-16">
+        {showPlaceholder ?
+        <PlaceholderDayBlock dayNumber={1} count={6} /> :
+
+        dayBlocks.map(({ dayNumber, speakers: daySpeakers }) =>
+        <div key={`day-${dayNumber}`} className="mb-16">
               <p className="indigo-gold-eyebrow-head mb-1">DAY {dayNumber}</p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
-                {daySpeakers.map((s) => (
-                  <SpeakerCard key={s.id} speaker={s} />
-                ))}
+                {daySpeakers.map((s) =>
+            <SpeakerCard key={s.id} speaker={s} />
+            )}
               </div>
             </div>
-          ))
-        )}
+        )
+        }
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
-function PlaceholderDayBlock({ dayNumber, count }: { dayNumber: number; count: number }) {
+function PlaceholderDayBlock({ dayNumber, count }: {dayNumber: number;count: number;}) {
   return (
     <div className="mb-16">
       <p className="indigo-gold-eyebrow-head mb-1">DAY {dayNumber}</p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
-        {Array.from({ length: count }).map((_, idx) => (
-          <div
-            key={`placeholder-${idx}`}
-            className="indigo-gold-spk"
-            style={{ opacity: 0.45 }}
-            aria-hidden="true"
-          >
+        {Array.from({ length: count }).map((_, idx) =>
+        <div
+          key={`placeholder-${idx}`}
+          className="indigo-gold-spk"
+          style={{ opacity: 0.45 }}
+          aria-hidden="true">
+          
             <div className="flex gap-4 items-start p-4">
               <div
-                className="indigo-gold-spk-ava"
-                style={{ background: '#E5E7EB', flexShrink: 0 }}
-              />
+              className="indigo-gold-spk-ava"
+              style={{ background: '#E5E7EB', flexShrink: 0 }} />
+            
               <div className="flex-1 space-y-2">
                 <div className="h-4 rounded" style={{ background: '#E5E7EB', width: '70%' }} />
                 <div className="h-3 rounded" style={{ background: '#F3F4F6', width: '50%' }} />
@@ -575,16 +575,16 @@ function PlaceholderDayBlock({ dayNumber, count }: { dayNumber: number; count: n
               </div>
             </div>
           </div>
-        ))}
+        )}
       </div>
       <p className="mt-6 text-sm" style={{ color: INK.c700 }}>
         Speakers coming soon — assign them a day in the admin to see them here.
       </p>
-    </div>
-  );
+    </div>);
+
 }
 
-function SpeakerCard({ speaker }: { speaker: Speaker }) {
+function SpeakerCard({ speaker }: {speaker: Speaker;}) {
   const quote = speaker.masterclassTitle;
   const credentials = speaker.title;
   const longBio = speaker.longBio ?? speaker.shortBio ?? '';
@@ -598,41 +598,41 @@ function SpeakerCard({ speaker }: { speaker: Speaker }) {
           <p className="font-bold" style={{ color: INK.c900 }}>
             {displayName(speaker)}
           </p>
-          {credentials ? (
-            <p className="text-xs mt-1" style={{ color: INK.c700 }}>
+          {credentials ?
+          <p className="text-xs mt-1" style={{ color: INK.c700 }}>
               {credentials}
-            </p>
-          ) : null}
-          {quote ? (
-            <p className="text-sm italic mt-2" style={{ color: LAV.c700 }}>
+            </p> :
+          null}
+          {quote ?
+          <p className="text-sm italic mt-2" style={{ color: LAV.c700 }}>
               &ldquo;{quote}&rdquo;
-            </p>
-          ) : null}
+            </p> :
+          null}
         </div>
       </summary>
       {longBio ? <div className="indigo-gold-spk-body">{longBio}</div> : null}
-    </details>
-  );
+    </details>);
+
 }
 
 /* =======================================================================
  * OUTCOMES — white pills with icons ("You'll Discover How To…" row)
  * ======================================================================= */
-function Outcomes({ content }: { content: IndigoGoldContent }) {
+function Outcomes({ content }: {content: IndigoGoldContent;}) {
   const o = content.outcomes;
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
       <div className="max-w-6xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <p className="indigo-gold-eyebrow-head mb-2">{o.eyebrow}</p>
-          <h2 className="indigo-gold-h2-head mb-8">{o.headline}</h2>
+          <p className="indigo-gold-eyebrow-head mb-2"><Node id="outcomes.eyebrow" role="label">{o.eyebrow}</Node></p>
+          <h2 className="indigo-gold-h2-head mb-8"><Node id="outcomes.headline" role="heading">{o.headline}</Node></h2>
           <ul className="space-y-4">
-            {o.items.map((item, idx) => (
-              <li key={`out-${idx}`} className="flex gap-4 items-start">
+            {o.items.map((item, idx) =>
+            <li key={`out-${idx}`} className="flex gap-4 items-start">
                 <span
-                  className="w-11 h-11 rounded-full grid place-items-center flex-shrink-0 shadow"
-                  style={{ background: '#fff', color: LAV.c700 }}
-                >
+                className="w-11 h-11 rounded-full grid place-items-center flex-shrink-0 shadow"
+                style={{ background: '#fff', color: LAV.c700 }}>
+                
                   <Icon id={OUTCOME_ICON[item.icon] ?? 'heart'} className="w-5 h-5" />
                 </span>
                 <p>
@@ -643,7 +643,7 @@ function Outcomes({ content }: { content: IndigoGoldContent }) {
                   </span>
                 </p>
               </li>
-            ))}
+            )}
           </ul>
           <a href="#optin" className="indigo-gold-btn-cta mt-6">
             Get Instant Access
@@ -657,11 +657,11 @@ function Outcomes({ content }: { content: IndigoGoldContent }) {
           src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=700&auto=format&fit=crop&q=60"
           alt=""
           className="rounded-2xl shadow-xl w-full max-w-md mx-auto"
-          loading="lazy"
-        />
+          loading="lazy" />
+        
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
@@ -669,10 +669,10 @@ function Outcomes({ content }: { content: IndigoGoldContent }) {
  * ======================================================================= */
 function FreeGift({ content, speakers }: Props) {
   const g = content.freeGift;
-  const heroCollage = content.hero.collageSpeakerIds
-    .map((id) => speakers[id])
-    .filter((s): s is Speaker => Boolean(s))
-    .slice(0, 3);
+  const heroCollage = content.hero.collageSpeakerIds.
+  map((id) => speakers[id]).
+  filter((s): s is Speaker => Boolean(s)).
+  slice(0, 3);
 
   return (
     <section className="py-16 bg-white">
@@ -680,83 +680,83 @@ function FreeGift({ content, speakers }: Props) {
         <div className="relative">
           <div
             className="rounded-2xl overflow-hidden shadow-2xl aspect-video grid place-items-center text-white relative"
-            style={{ background: INK.c900 }}
-          >
+            style={{ background: INK.c900 }}>
+            
             <div className="absolute inset-x-0 top-4 flex justify-center gap-2">
               <span className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.3)' }} />
               <span className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.3)' }} />
               <span className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.3)' }} />
             </div>
             <div className="flex gap-3 px-6">
-              {(heroCollage.length > 0 ? heroCollage : [undefined, undefined, undefined]).map((s, idx) => (
-                <div
-                  key={`gift-mini-${idx}`}
-                  className="w-20 h-24 rounded-lg bg-cover bg-center"
-                  style={{
-                    background: s
-                      ? `#C5B5E4 url(${speakerPhoto(s, 200)}) center/cover`
-                      : `linear-gradient(135deg,${LAV.c400},${LAV.c600})`,
-                  }}
-                />
-              ))}
+              {(heroCollage.length > 0 ? heroCollage : [undefined, undefined, undefined]).map((s, idx) =>
+              <div
+                key={`gift-mini-${idx}`}
+                className="w-20 h-24 rounded-lg bg-cover bg-center"
+                style={{
+                  background: s ?
+                  `#C5B5E4 url(${speakerPhoto(s, 200)}) center/cover` :
+                  `linear-gradient(135deg,${LAV.c400},${LAV.c600})`
+                }} />
+
+              )}
             </div>
             <div className="absolute bottom-5 left-5 right-5 text-center">
               <p className="text-[0.6rem]" style={{ letterSpacing: '0.4em', opacity: 0.7 }}>
-                {g.badgeLabel}
+                <Node id="freeGift.badgeLabel" role="label">{g.badgeLabel}</Node>
               </p>
-              <p className="indigo-gold-display text-2xl italic">{g.cardTitle}</p>
+              <p className="indigo-gold-display text-2xl italic"><Node id="freeGift.cardTitle" role="body">{g.cardTitle}</Node></p>
             </div>
           </div>
         </div>
         <div>
-          <p className="indigo-gold-eyebrow-head mb-2">{g.eyebrow}</p>
-          <h2 className="indigo-gold-h2-head mb-5">{g.headline}</h2>
+          <p className="indigo-gold-eyebrow-head mb-2"><Node id="freeGift.eyebrow" role="label">{g.eyebrow}</Node></p>
+          <h2 className="indigo-gold-h2-head mb-5"><Node id="freeGift.headline" role="heading">{g.headline}</Node></h2>
           <p className="font-semibold mb-4" style={{ color: INK.c800 }}>
-            {g.body}
+            <Node id="freeGift.body" role="body">{g.body}</Node>
           </p>
           <ul className="space-y-3 list-disc pl-5 mb-6" style={{ color: INK.c800 }}>
-            {g.bullets.map((bullet, idx) => (
-              <li key={`gift-b-${idx}`}>{bullet}</li>
-            ))}
+            {g.bullets.map((bullet, idx) =>
+            <li key={`gift-b-${idx}`}>{bullet}</li>
+            )}
           </ul>
           <a href="#optin" className="indigo-gold-btn-cta">
-            {g.ctaLabel}
+            <Node id="freeGift.ctaLabel" role="button">{g.ctaLabel}</Node>
             <span className="indigo-gold-btn-arrow">
               <Icon id="arrow-right" className="w-3.5 h-3.5" />
             </span>
           </a>
           <p className="text-sm mt-3" style={{ color: LAV.c700 }}>
-            {g.cardNote}
+            <Node id="freeGift.cardNote" role="body">{g.cardNote}</Node>
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * HOSTS / FOUNDERS — "We're Changing The Way" centered white panel
  * ======================================================================= */
-function Founders({ content }: { content: IndigoGoldContent }) {
+function Founders({ content }: {content: IndigoGoldContent;}) {
   const f = content.founders;
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
       <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
         <p className="indigo-gold-eyebrow-head mb-2">From the</p>
-        <h2 className="indigo-gold-h2-head mb-12">{f.headline}</h2>
+        <h2 className="indigo-gold-h2-head mb-12"><Node id="founders.headline" role="heading">{f.headline}</Node></h2>
 
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-3xl mx-auto text-left">
           <div className="flex justify-center gap-8 mb-8 flex-wrap">
-            {f.items.map((founder, idx) => (
-              <div key={`fndr-${idx}`} className="text-center">
+            {f.items.map((founder, idx) =>
+            <div key={`fndr-${idx}`} className="text-center">
                 <div
-                  className="w-24 h-24 rounded-full mx-auto flex items-center justify-center indigo-gold-display font-bold text-2xl"
-                  style={{
-                    background: `linear-gradient(135deg,${LAV.c400},${LAV.c600})`,
-                    color: '#fff',
-                    border: `4px solid ${LAV.c300}`,
-                  }}
-                >
+                className="w-24 h-24 rounded-full mx-auto flex items-center justify-center indigo-gold-display font-bold text-2xl"
+                style={{
+                  background: `linear-gradient(135deg,${LAV.c400},${LAV.c600})`,
+                  color: '#fff',
+                  border: `4px solid ${LAV.c300}`
+                }}>
+                
                   {founder.initials}
                 </div>
                 <p className="font-bold mt-3" style={{ color: INK.c900 }}>
@@ -766,14 +766,14 @@ function Founders({ content }: { content: IndigoGoldContent }) {
                   {founder.role}
                 </p>
               </div>
-            ))}
+            )}
           </div>
           <div className="space-y-4 leading-relaxed" style={{ color: INK.c800 }}>
-            {f.items.map((founder, idx) => (
-              <p key={`fndrq-${idx}`}>
+            {f.items.map((founder, idx) =>
+            <p key={`fndrq-${idx}`}>
                 <strong>{founder.name}:</strong> &ldquo;{founder.quote}&rdquo;
               </p>
-            ))}
+            )}
           </div>
           <div className="text-center mt-6">
             <a href="#optin" className="indigo-gold-btn-cta">
@@ -785,34 +785,34 @@ function Founders({ content }: { content: IndigoGoldContent }) {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * TESTIMONIALS — quote cards with quotation marks
  * ======================================================================= */
-function Testimonials({ content }: { content: IndigoGoldContent }) {
+function Testimonials({ content }: {content: IndigoGoldContent;}) {
   const t = content.testimonials;
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <div className="text-center mb-10">
-          <p className="indigo-gold-eyebrow-head mb-2">{t.eyebrow}</p>
-          <h2 className="indigo-gold-h2-head">{t.headline}</h2>
+          <p className="indigo-gold-eyebrow-head mb-2"><Node id="testimonials.eyebrow" role="label">{t.eyebrow}</Node></p>
+          <h2 className="indigo-gold-h2-head"><Node id="testimonials.headline" role="heading">{t.headline}</Node></h2>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {t.items.map((item, idx) => (
-            <div key={`testi-${idx}`} className="indigo-gold-testi">
+          {t.items.map((item, idx) =>
+          <div key={`testi-${idx}`} className="indigo-gold-testi">
               <span className="indigo-gold-testi-qmark indigo-gold-testi-qmark-l">&ldquo;</span>
               <span className="indigo-gold-testi-qmark indigo-gold-testi-qmark-r">&rdquo;</span>
               <div
-                className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center indigo-gold-display font-bold"
-                style={{
-                  background: `linear-gradient(135deg,${LAV.c400},${LAV.c600})`,
-                  color: '#fff',
-                }}
-              >
+              className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center indigo-gold-display font-bold"
+              style={{
+                background: `linear-gradient(135deg,${LAV.c400},${LAV.c600})`,
+                color: '#fff'
+              }}>
+              
                 {item.initials}
               </div>
               <p className="text-sm leading-relaxed" style={{ color: INK.c800 }}>
@@ -822,35 +822,35 @@ function Testimonials({ content }: { content: IndigoGoldContent }) {
                 — {item.name}, {item.location}
               </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * BONUSES — soft lavender cards with checklist and value pricing
  * ======================================================================= */
-function Bonuses({ content }: { content: IndigoGoldContent }) {
+function Bonuses({ content }: {content: IndigoGoldContent;}) {
   const b = content.bonuses;
   return (
     <section className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
-        <p className="indigo-gold-eyebrow-head mb-2">{b.eyebrow}</p>
-        <h2 className="indigo-gold-h2-head mb-12">{b.headline}</h2>
+        <p className="indigo-gold-eyebrow-head mb-2"><Node id="bonuses.eyebrow" role="label">{b.eyebrow}</Node></p>
+        <h2 className="indigo-gold-h2-head mb-12"><Node id="bonuses.headline" role="heading">{b.headline}</Node></h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-          {b.items.map((bonus, idx) => (
-            <article
-              key={`bonus-${idx}`}
-              className="rounded-2xl p-6 flex flex-col gap-3"
-              style={{ background: LAV.c50, border: `1px solid ${LAV.c200}` }}
-            >
+          {b.items.map((bonus, idx) =>
+          <article
+            key={`bonus-${idx}`}
+            className="rounded-2xl p-6 flex flex-col gap-3"
+            style={{ background: LAV.c50, border: `1px solid ${LAV.c200}` }}>
+            
               <span
-                className="self-start text-xs font-bold rounded-full px-3 py-1"
-                style={{ background: '#fff', color: LAV.c700, border: `1px solid ${LAV.c200}` }}
-              >
+              className="self-start text-xs font-bold rounded-full px-3 py-1"
+              style={{ background: '#fff', color: LAV.c700, border: `1px solid ${LAV.c200}` }}>
+              
                 {bonus.valueLabel}
               </span>
               <h3 className="font-bold text-lg" style={{ color: INK.c900 }}>
@@ -860,37 +860,37 @@ function Bonuses({ content }: { content: IndigoGoldContent }) {
                 {bonus.description}
               </p>
               <ul className="space-y-2 text-sm" style={{ color: INK.c800 }}>
-                {bonus.bullets.map((bullet, bIdx) => (
-                  <li key={`bonus-${idx}-b-${bIdx}`} className="flex items-start gap-2">
+                {bonus.bullets.map((bullet, bIdx) =>
+              <li key={`bonus-${idx}-b-${bIdx}`} className="flex items-start gap-2">
                     <span
-                      className="w-5 h-5 rounded-full grid place-items-center flex-shrink-0 mt-0.5"
-                      style={{ background: '#DCFCE7', color: '#16A34A' }}
-                    >
+                  className="w-5 h-5 rounded-full grid place-items-center flex-shrink-0 mt-0.5"
+                  style={{ background: '#DCFCE7', color: '#16A34A' }}>
+                  
                       <Icon id="check" className="w-3 h-3" />
                     </span>
                     <span>{bullet}</span>
                   </li>
-                ))}
+              )}
               </ul>
             </article>
-          ))}
+          )}
         </div>
 
         <a href="#optin" className="indigo-gold-btn-cta mt-12">
-          {b.ctaLabel}
+          <Node id="bonuses.ctaLabel" role="button">{b.ctaLabel}</Node>
           <span className="indigo-gold-btn-arrow">
             <Icon id="arrow-right" className="w-3.5 h-3.5" />
           </span>
         </a>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * PULL QUOTE
  * ======================================================================= */
-function PullQuote({ content }: { content: IndigoGoldContent }) {
+function PullQuote({ content }: {content: IndigoGoldContent;}) {
   const pq = content.pullQuote;
   return (
     <section className="py-14 md:py-20" style={{ background: INK.c900 }}>
@@ -900,35 +900,35 @@ function PullQuote({ content }: { content: IndigoGoldContent }) {
           fill="currentColor"
           viewBox="0 0 24 24"
           style={{ color: LAV.c300, opacity: 0.6 }}
-          aria-hidden="true"
-        >
+          aria-hidden="true">
+          
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11H10v10H0z" />
         </svg>
         <p className="indigo-gold-display font-bold text-2xl md:text-3xl text-white leading-relaxed italic">
-          &ldquo;{pq.quote}&rdquo;
+          &ldquo;<Node id="pullQuote.quote" role="quote">{pq.quote}</Node>&rdquo;
         </p>
         <p className="font-medium text-sm mt-4" style={{ color: LAV.c300 }}>
-          {pq.attribution}
+          <Node id="pullQuote.attribution" role="body">{pq.attribution}</Node>
         </p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * FIGURES — "Why This Matters" soft-card grid with icons
  * ======================================================================= */
-function Figures({ content }: { content: IndigoGoldContent }) {
+function Figures({ content }: {content: IndigoGoldContent;}) {
   const f = content.figures;
   const icons: IconId[] = ['brain', 'users', 'heart', 'message', 'book', 'target'];
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
       <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
-        <p className="indigo-gold-eyebrow-head mb-2">{f.eyebrow}</p>
-        <h2 className="indigo-gold-h2-head mb-10">{f.headline}</h2>
+        <p className="indigo-gold-eyebrow-head mb-2"><Node id="figures.eyebrow" role="label">{f.eyebrow}</Node></p>
+        <h2 className="indigo-gold-h2-head mb-10"><Node id="figures.headline" role="heading">{f.headline}</Node></h2>
         <div className="grid md:grid-cols-2 gap-4 text-left">
-          {f.items.map((item, idx) => (
-            <div key={`fig-${idx}`} className="indigo-gold-factcard">
+          {f.items.map((item, idx) =>
+          <div key={`fig-${idx}`} className="indigo-gold-factcard">
               <div className="indigo-gold-factcard-ico">
                 <Icon id={icons[idx % icons.length]} className="w-5 h-5" />
               </div>
@@ -941,40 +941,40 @@ function Figures({ content }: { content: IndigoGoldContent }) {
                 </p>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * SHIFTS — "5 Reasons you can't miss this Summit" style panel
  * ======================================================================= */
-function Shifts({ content }: { content: IndigoGoldContent }) {
+function Shifts({ content }: {content: IndigoGoldContent;}) {
   const s = content.shifts;
   return (
     <section className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-5 md:px-8 text-center">
-        <p className="indigo-gold-eyebrow-head mb-2">{s.eyebrow}</p>
-        <h2 className="indigo-gold-h2-head mb-10">{s.headline}</h2>
+        <p className="indigo-gold-eyebrow-head mb-2"><Node id="shifts.eyebrow" role="label">{s.eyebrow}</Node></p>
+        <h2 className="indigo-gold-h2-head mb-10"><Node id="shifts.headline" role="heading">{s.headline}</Node></h2>
         <div
           className="rounded-2xl p-8 md:p-10 text-left space-y-5 shadow"
-          style={{ background: LAV.c50 }}
-        >
-          {s.items.map((item, idx) => (
-            <p key={`shift-${idx}`} className="flex gap-3">
+          style={{ background: LAV.c50 }}>
+          
+          {s.items.map((item, idx) =>
+          <p key={`shift-${idx}`} className="flex gap-3">
               <span
-                className="w-8 h-8 rounded-full grid place-items-center flex-shrink-0"
-                style={{ background: '#DCFCE7', color: '#16A34A' }}
-              >
+              className="w-8 h-8 rounded-full grid place-items-center flex-shrink-0"
+              style={{ background: '#DCFCE7', color: '#16A34A' }}>
+              
                 <Icon id="arrow-up-right" className="w-4 h-4" />
               </span>
               <span style={{ color: INK.c800 }}>
                 <strong style={{ color: INK.c900 }}>{item.title}.</strong> {item.description}
               </span>
             </p>
-          ))}
+          )}
         </div>
         <a href="#optin" className="indigo-gold-btn-cta mt-8">
           Get Instant Access
@@ -983,59 +983,59 @@ function Shifts({ content }: { content: IndigoGoldContent }) {
           </span>
         </a>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * CLOSING CTA — lavender gradient block with chips + final CTA
  * ======================================================================= */
-function ClosingCTA({ content }: { content: IndigoGoldContent }) {
+function ClosingCTA({ content }: {content: IndigoGoldContent;}) {
   const c = content.closing;
   return (
     <section className="py-16 bg-white">
       <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
         <p className="indigo-gold-eyebrow-head mb-2">Whatever Your Situation, We Believe Every Child Is Capable Of More</p>
-        <h2 className="indigo-gold-h2-head mb-8">{c.headline}</h2>
+        <h2 className="indigo-gold-h2-head mb-8"><Node id="closing.headline" role="heading">{c.headline}</Node></h2>
         <div className="flex flex-wrap justify-center gap-3 mb-8">
-          {c.chips.map((chip, idx) => (
-            <span key={`chip-${idx}`} className="indigo-gold-plus-pill">
+          {c.chips.map((chip, idx) =>
+          <span key={`chip-${idx}`} className="indigo-gold-plus-pill">
               <span className="indigo-gold-plus-pill-plus">+</span>
               {chip}
             </span>
-          ))}
+          )}
         </div>
         <a href="#optin" className="indigo-gold-btn-cta">
-          {c.ctaLabel}
+          <Node id="closing.ctaLabel" role="button">{c.ctaLabel}</Node>
           <span className="indigo-gold-btn-arrow">
             <Icon id="arrow-right" className="w-3.5 h-3.5" />
           </span>
         </a>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * FAQ — accordion with lavender border & chevron
  * ======================================================================= */
-function FAQ({ content }: { content: IndigoGoldContent }) {
+function FAQ({ content }: {content: IndigoGoldContent;}) {
   return (
     <section className="py-16" style={{ background: '#F4EFFA' }}>
       <div className="max-w-3xl mx-auto px-5 md:px-8">
         <div className="text-center mb-10">
-          <p className="indigo-gold-eyebrow-head mb-2">{content.faqSection.eyebrow}</p>
-          <h2 className="indigo-gold-h2-head">{content.faqSection.headline}</h2>
+          <p className="indigo-gold-eyebrow-head mb-2"><Node id="faqSection.eyebrow" role="label">{content.faqSection.eyebrow}</Node></p>
+          <h2 className="indigo-gold-h2-head"><Node id="faqSection.headline" role="heading">{content.faqSection.headline}</Node></h2>
         </div>
-        {content.faqs.map((faq, idx) => (
-          <details className="indigo-gold-qa" key={`faq-${idx}`}>
+        {content.faqs.map((faq, idx) =>
+        <details className="indigo-gold-qa" key={`faq-${idx}`}>
             <summary>
               <span>{faq.question}</span>
               <Icon id="chevron-down" className="w-5 h-5" style={{ color: LAV.c700 }} />
             </summary>
             <div className="indigo-gold-qa-body">{faq.answer}</div>
           </details>
-        ))}
+        )}
         <div className="text-center mt-8">
           <a href="#optin" className="indigo-gold-btn-cta">
             Get Instant Access
@@ -1045,84 +1045,84 @@ function FAQ({ content }: { content: IndigoGoldContent }) {
           </a>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * TRUST BADGES — thin row above stat pills
  * ======================================================================= */
-function TrustBadges({ content }: { content: IndigoGoldContent }) {
+function TrustBadges({ content }: {content: IndigoGoldContent;}) {
   return (
     <section className="bg-white py-5" style={{ borderBottom: `1px solid ${LAV.c100}` }}>
       <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm" style={{ color: INK.c700 }}>
-        {content.trustBadges.items.map((item, idx) => (
-          <span key={`trust-${idx}`} className="flex items-center gap-2">
+        {content.trustBadges.items.map((item, idx) =>
+        <span key={`trust-${idx}`} className="flex items-center gap-2">
             <Icon
-              id={TRUST_ICON[item.icon] ?? 'shield'}
-              className="w-4 h-4"
-              style={{ color: item.icon === 'star' ? SUN.c500 : LAV.c700 }}
-            />
+            id={TRUST_ICON[item.icon] ?? 'shield'}
+            className="w-4 h-4"
+            style={{ color: item.icon === 'star' ? SUN.c500 : LAV.c700 }} />
+          
             {item.label}
           </span>
-        ))}
+        )}
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
  * FOOTER — lavender 50 bg, serif-italic brand wordmark, small nav
  * ======================================================================= */
-function Footer({ content }: { content: RenderContent }) {
+function Footer({ content }: {content: RenderContent;}) {
   const f = content.footer;
   const logo = f.logo;
   return (
     <footer className="py-10" style={{ background: LAV.c50, borderTop: `1px solid ${LAV.c200}` }}>
       <div className="max-w-4xl mx-auto px-5 md:px-8 text-center">
-        {logo?.url ? (
-          <img
-            src={logo.url}
-            alt={logo.alt ?? f.brandName}
-            width={logo.width ?? undefined}
-            height={logo.height ?? undefined}
-            className="mx-auto mb-4 h-10 w-auto"
-            data-testid="indigo-gold-footer-logo"
-          />
-        ) : null}
+        {logo?.url ?
+        <img
+          src={logo.url}
+          alt={logo.alt ?? f.brandName}
+          width={logo.width ?? undefined}
+          height={logo.height ?? undefined}
+          className="mx-auto mb-4 h-10 w-auto"
+          data-testid="indigo-gold-footer-logo" /> :
+
+        null}
         <p className="indigo-gold-display italic text-xl mb-4" style={{ color: LAV.c700 }}>
-          {f.brandName}
+          <Node id="footer.brandName" role="body">{f.brandName}</Node>
         </p>
         <nav className="text-sm flex flex-wrap justify-center gap-6" style={{ color: INK.c700 }}>
-          {f.links.map((link, idx) => (
-            <a key={`foot-${idx}`} href={link.href} className="hover:underline">
+          {f.links.map((link, idx) =>
+          <a key={`foot-${idx}`} href={link.href} className="hover:underline">
               {link.label}
             </a>
-          ))}
+          )}
         </nav>
         <p className="text-xs mt-3" style={{ color: INK.c700 }}>
-          {f.copyright}
+          <Node id="footer.copyright" role="body">{f.copyright}</Node>
         </p>
       </div>
-    </footer>
-  );
+    </footer>);
+
 }
 
 /* =======================================================================
  * MOBILE STICKY CTA
  * ======================================================================= */
-function StickyMobileCTA({ content }: { content: IndigoGoldContent }) {
+function StickyMobileCTA({ content }: {content: IndigoGoldContent;}) {
   if (!content.mobileCta) return null;
   return (
     <a href="#optin" className="indigo-gold-stick-mobile">
       <span className="indigo-gold-btn-cta" style={{ padding: '.7rem 1.25rem' }}>
-        {content.mobileCta.ctaLabel}
+        <Node id="mobileCta.ctaLabel" role="button">{content.mobileCta.ctaLabel}</Node>
         <span className="indigo-gold-btn-arrow">
           <Icon id="arrow-right" className="w-3.5 h-3.5" />
         </span>
       </span>
-    </a>
-  );
+    </a>);
+
 }
 
 /* =======================================================================
@@ -1146,7 +1146,7 @@ const LAV_SALES = {
   SUN300: '#FFE066',
   INK900: '#1B132C',
   INK800: '#2A1F3F',
-  INK700: '#3C2E54',
+  INK700: '#3C2E54'
 };
 
 const salesIconLabels: Record<string, string> = {
@@ -1155,42 +1155,42 @@ const salesIconLabels: Record<string, string> = {
   'headphones': 'Audio Edition',
   'captions': 'Subtitles',
   'file-text': 'Transcripts',
-  'book': 'Workbook',
+  'book': 'Workbook'
 };
 
-function SalesBonusIcon({ icon }: { icon: string }) {
+function SalesBonusIcon({ icon }: {icon: string;}) {
   const label = salesIconLabels[icon] ?? icon;
   const color = LAV_SALES.LAV700;
   if (icon === 'infinity') {
     return (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
         <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
-      </svg>
-    );
+      </svg>);
+
   }
   if (icon === 'clipboard') {
     return (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
         <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
         <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-      </svg>
-    );
+      </svg>);
+
   }
   if (icon === 'headphones') {
     return (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
         <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-      </svg>
-    );
+      </svg>);
+
   }
   if (icon === 'captions') {
     return (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
         <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
         <path d="M7 15h4" /><path d="M15 15h2" /><path d="M7 11h2" /><path d="M13 11h4" />
-      </svg>
-    );
+      </svg>);
+
   }
   if (icon === 'file-text') {
     return (
@@ -1200,16 +1200,16 @@ function SalesBonusIcon({ icon }: { icon: string }) {
         <line x1="16" y1="13" x2="8" y2="13" />
         <line x1="16" y1="17" x2="8" y2="17" />
         <polyline points="10 9 9 9 8 9" />
-      </svg>
-    );
+      </svg>);
+
   }
   if (icon === 'book') {
     return (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={label}>
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-      </svg>
-    );
+      </svg>);
+
   }
   return null;
 }
@@ -1218,8 +1218,8 @@ function SalesCheckIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }}>
       <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
+    </svg>);
+
 }
 
 function SalesXIcon() {
@@ -1227,20 +1227,20 @@ function SalesXIcon() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
+    </svg>);
+
 }
 
-function SalesArrowRight({ size = 16 }: { size?: number }) {
+function SalesArrowRight({ size = 16 }: {size?: number;}) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
-    </svg>
-  );
+    </svg>);
+
 }
 
-function SalesGiftIcon({ size = 20, color = '#8a6b00' }: { size?: number; color?: string }) {
+function SalesGiftIcon({ size = 20, color = '#8a6b00' }: {size?: number;color?: string;}) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 12 20 22 4 22 4 12" />
@@ -1248,8 +1248,8 @@ function SalesGiftIcon({ size = 20, color = '#8a6b00' }: { size?: number; color?
       <line x1="12" y1="22" x2="12" y2="7" />
       <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
       <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-    </svg>
-  );
+    </svg>);
+
 }
 
 /* Sales CTA button (yellow pill) — same visual as LavenderGold.btnCta. */
@@ -1268,7 +1268,7 @@ const salesBtnCta: CSSProperties = {
   textTransform: 'uppercase',
   textDecoration: 'none',
   border: 'none',
-  cursor: 'pointer',
+  cursor: 'pointer'
 };
 
 const salesBtnCtaLg: CSSProperties = { ...salesBtnCta, padding: '1.15rem 2.4rem', fontSize: '1.15rem' };
@@ -1276,8 +1276,8 @@ const salesBtnCtaLg: CSSProperties = { ...salesBtnCta, padding: '1.15rem 2.4rem'
 /* SALES HERO — red live badge, gradient product mockup, pulsing gold CTA. */
 function SalesHero({
   content,
-  wpCheckoutRedirectUrl,
-}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpCheckoutRedirectUrl
+}: {content: IndigoGoldContent;wpCheckoutRedirectUrl?: string | null;}) {
   if (!content.salesHero) return null;
   const h = content.salesHero;
   const topName = content.topBar.name;
@@ -1286,19 +1286,19 @@ function SalesHero({
       <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.18em', color: '#fff', background: '#dc2626', borderRadius: 9999, padding: '0.5rem 1rem', marginBottom: '1.5rem', textTransform: 'uppercase', boxShadow: '0 4px 14px rgba(220,38,38,.3)' }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
-          {h.badge}
+          <Node id="salesHero.badge" role="label">{h.badge}</Node>
         </span>
 
         <h1 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', lineHeight: 1.2, letterSpacing: '-0.01em', color: LAV_SALES.INK900, marginBottom: '1rem' }}>
           {h.headline.split('40+').map((part, i, arr) =>
-            i < arr.length - 1
-              ? <span key={i}>{part}<span style={{ background: LAV_SALES.SUN300, padding: '0 0.3rem', borderRadius: 6 }}>40+</span></span>
-              : <span key={i}>{part}</span>
+          i < arr.length - 1 ?
+          <span key={i}>{part}<span style={{ background: LAV_SALES.SUN300, padding: '0 0.3rem', borderRadius: 6 }}>40+</span></span> :
+          <span key={i}>{part}</span>
           )}
         </h1>
 
         <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: 'clamp(1.1rem,2vw,1.4rem)', color: LAV_SALES.LAV700, maxWidth: 680, margin: '0 auto 2rem' }}>
-          {h.subheadline}
+          <Node id="salesHero.subheadline" role="heading">{h.subheadline}</Node>
         </p>
 
         {/* Product mockup */}
@@ -1306,56 +1306,56 @@ function SalesHero({
           <div style={{ position: 'absolute', inset: 0, opacity: 0.3, background: `radial-gradient(circle at 20% 50%,${LAV_SALES.LAV300},transparent 50%),radial-gradient(circle at 80% 50%,${LAV_SALES.SUN300},transparent 40%)` }} />
           <div style={{ position: 'relative', textAlign: 'center', color: '#fff', padding: '1.5rem' }}>
             <p style={{ fontSize: '0.6rem', letterSpacing: '0.4em', textTransform: 'uppercase', opacity: 0.7, marginBottom: '0.5rem' }}>Full Access</p>
-            <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: 'clamp(2rem,5vw,4rem)', fontStyle: 'italic', margin: 0 }}>{h.productLabel}</p>
+            <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: 'clamp(2rem,5vw,4rem)', fontStyle: 'italic', margin: 0 }}><Node id="salesHero.productLabel" role="body">{h.productLabel}</Node></p>
             <p style={{ fontSize: '0.7rem', opacity: 0.8, marginTop: '0.5rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{topName}</p>
           </div>
         </div>
 
         <p style={{ fontSize: '0.88rem', color: LAV_SALES.INK700, marginBottom: '0.5rem' }}>
-          Total value: <span style={{ fontWeight: 700, color: LAV_SALES.LAV700, textDecoration: 'line-through' }}>{h.totalValue}</span>
+          Total value: <span style={{ fontWeight: 700, color: LAV_SALES.LAV700, textDecoration: 'line-through' }}><Node id="salesHero.totalValue" role="body">{h.totalValue}</Node></span>
         </p>
         <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} id="purchase" className="indigo-gold-sales-pulse" style={salesBtnCtaLg}>
-          {h.ctaLabel} <SalesArrowRight size={20} />
+          <Node id="salesHero.ctaLabel" role="button">{h.ctaLabel}</Node> <SalesArrowRight size={20} />
         </TrackedCheckoutLink>
         <p style={{ marginTop: '1rem', fontSize: '0.88rem', color: LAV_SALES.LAV700 }}>
-          <strong>{h.ctaNote}</strong>
+          <strong><Node id="salesHero.ctaNote" role="body">{h.ctaNote}</Node></strong>
         </p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* INTRO — centered serif eyebrow + body paragraphs. */
-function Intro({ content }: { content: IndigoGoldContent }) {
+function Intro({ content }: {content: IndigoGoldContent;}) {
   if (!content.intro) return null;
   const i = content.intro;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
       <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.5rem' }}>{i.eyebrow}</p>
-        <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '1.5rem' }}>{i.headline}</h2>
-        {i.paragraphs.map((p, idx) => (
-          <p key={idx} style={{ color: LAV_SALES.INK800, fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '1rem' }}>{p}</p>
-        ))}
+        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.5rem' }}><Node id="intro.eyebrow" role="label">{i.eyebrow}</Node></p>
+        <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '1.5rem' }}><Node id="intro.headline" role="heading">{i.headline}</Node></h2>
+        {i.paragraphs.map((p, idx) =>
+        <p key={idx} style={{ color: LAV_SALES.INK800, fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '1rem' }}>{p}</p>
+        )}
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* VIP BONUSES — lavender card grid with icon tiles. */
-function VipBonuses({ content }: { content: IndigoGoldContent }) {
+function VipBonuses({ content }: {content: IndigoGoldContent;}) {
   if (!content.vipBonuses) return null;
   const v = content.vipBonuses;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: LAV_SALES.LAV50 }}>
       <div style={{ maxWidth: 1152, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{v.eyebrow}</p>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}>{v.headline}</h2>
+          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}><Node id="vipBonuses.eyebrow" role="label">{v.eyebrow}</Node></p>
+          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}><Node id="vipBonuses.headline" role="heading">{v.headline}</Node></h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.25rem' }}>
-          {v.items.map((item, i) => (
-            <div key={i} style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 20, boxShadow: '0 10px 24px -14px rgba(90,69,137,.3)', overflow: 'hidden', position: 'relative' }}>
+          {v.items.map((item, i) =>
+          <div key={i} style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 20, boxShadow: '0 10px 24px -14px rgba(90,69,137,.3)', overflow: 'hidden', position: 'relative' }}>
               <div style={{ background: `linear-gradient(135deg,${LAV_SALES.LAV50},${LAV_SALES.LAV200})`, aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: LAV_SALES.LAV700, fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '1.2rem', textAlign: 'center', padding: '1.25rem', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
                   <SalesBonusIcon icon={item.icon} />
@@ -1368,27 +1368,27 @@ function VipBonuses({ content }: { content: IndigoGoldContent }) {
                 <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${LAV_SALES.LAV300}`, color: LAV_SALES.LAV700, fontWeight: 700, fontSize: '.7rem', letterSpacing: '.1em', padding: '.3rem .7rem', borderRadius: 9999 }}>{item.valueLabel}</span>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* FREE GIFTS — yellow/gold card grid with gift icon tiles. */
-function FreeGifts({ content }: { content: IndigoGoldContent }) {
+function FreeGifts({ content }: {content: IndigoGoldContent;}) {
   if (!content.freeGifts) return null;
   const fg = content.freeGifts;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
       <div style={{ maxWidth: 1152, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{fg.eyebrow}</p>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}>{fg.headline}</h2>
+          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}><Node id="freeGifts.eyebrow" role="label">{fg.eyebrow}</Node></p>
+          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}><Node id="freeGifts.headline" role="heading">{fg.headline}</Node></h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: '1.25rem' }}>
-          {fg.items.map((gift, i) => (
-            <div key={i} style={{ background: '#FFF8E6', border: '1px solid #F0E1A8', borderRadius: 20, boxShadow: '0 10px 24px -14px rgba(233,182,12,.3)', overflow: 'hidden' }}>
+          {fg.items.map((gift, i) =>
+          <div key={i} style={{ background: '#FFF8E6', border: '1px solid #F0E1A8', borderRadius: 20, boxShadow: '0 10px 24px -14px rgba(233,182,12,.3)', overflow: 'hidden' }}>
               <div style={{ background: 'linear-gradient(135deg,#FFF6D6,#FFE07A)', aspectRatio: '16/10', display: 'grid', placeItems: 'center', color: '#8a6b00', fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '1.2rem', textAlign: 'center', padding: '1.25rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
                   <SalesGiftIcon size={40} color="#8a6b00" />
@@ -1402,32 +1402,32 @@ function FreeGifts({ content }: { content: IndigoGoldContent }) {
                 <span style={{ display: 'inline-block', background: '#fff', border: '1px solid #F0DD8A', color: '#8a6b00', fontWeight: 700, fontSize: '.7rem', letterSpacing: '.1em', padding: '.3rem .7rem', borderRadius: 9999 }}>{gift.valueLabel}</span>
               </div>
             </div>
-          ))}
+          )}
         </div>
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.88rem', color: LAV_SALES.INK700 }}>{fg.deliveryNote}</p>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.88rem', color: LAV_SALES.INK700 }}><Node id="freeGifts.deliveryNote" role="body">{fg.deliveryNote}</Node></p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* UPGRADE SECTION — centered eyebrow/headline + paragraphs preamble
  * (without the adjacent price card — PriceCard is now its own section). */
-function UpgradeSection({ content }: { content: IndigoGoldContent }) {
+function UpgradeSection({ content }: {content: IndigoGoldContent;}) {
   if (!content.upgradeSection) return null;
   const u = content.upgradeSection;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: LAV_SALES.LAV50 }}>
       <div style={{ maxWidth: 1152, margin: '0 auto' }}>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{u.eyebrow}</p>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '1.5rem' }}>{u.headline}</h2>
-          {u.paragraphs.map((p, i) => (
-            <p key={i} style={{ color: LAV_SALES.INK800, fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: 680, margin: '0 auto 0.75rem' }}>{p}</p>
-          ))}
+          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}><Node id="upgradeSection.eyebrow" role="label">{u.eyebrow}</Node></p>
+          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '1.5rem' }}><Node id="upgradeSection.headline" role="heading">{u.headline}</Node></h2>
+          {u.paragraphs.map((p, i) =>
+          <p key={i} style={{ color: LAV_SALES.INK800, fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: 680, margin: '0 auto 0.75rem' }}>{p}</p>
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* PRICE CARD — white card with lavender border, bullet features, gift box,
@@ -1435,8 +1435,8 @@ function UpgradeSection({ content }: { content: IndigoGoldContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-  wpThankyouRedirectUrl,
-}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl
+}: {content: IndigoGoldContent;wpCheckoutRedirectUrl?: string | null;wpThankyouRedirectUrl?: string | null;}) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1452,67 +1452,67 @@ function PriceCard({
           overflow: 'hidden',
           maxWidth: 480,
           width: '100%',
-          margin: '0 auto',
+          margin: '0 auto'
         }}>
           <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 6, background: `linear-gradient(90deg,${LAV_SALES.LAV500},${LAV_SALES.LAV300},${LAV_SALES.LAV500})` }} />
 
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#dc2626', color: '#fff', padding: '.35rem .85rem', borderRadius: 9999, fontWeight: 700, fontSize: '.72rem', letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-            {p.badge}
+            <Node id="priceCard.badge" role="label">{p.badge}</Node>
           </div>
 
-          <h3 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '1.2rem', color: LAV_SALES.INK900, marginBottom: '0.5rem', lineHeight: 1.3 }}>{p.headline}</h3>
-          <p style={{ fontSize: '0.88rem', color: LAV_SALES.INK700, marginBottom: '0.5rem' }}>{p.note}</p>
+          <h3 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '1.2rem', color: LAV_SALES.INK900, marginBottom: '0.5rem', lineHeight: 1.3 }}><Node id="priceCard.headline" role="heading">{p.headline}</Node></h3>
+          <p style={{ fontSize: '0.88rem', color: LAV_SALES.INK700, marginBottom: '0.5rem' }}><Node id="priceCard.note" role="body">{p.note}</Node></p>
 
           <ul style={{ padding: 0, listStyle: 'none', margin: '1rem 0 1.25rem' }}>
-            {p.features.map((f, i) => (
-              <li key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start', padding: '0.35rem 0', fontSize: '0.95rem', color: LAV_SALES.INK800, lineHeight: 1.45 }}>
+            {p.features.map((f, i) =>
+            <li key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start', padding: '0.35rem 0', fontSize: '0.95rem', color: LAV_SALES.INK800, lineHeight: 1.45 }}>
                 <SalesCheckIcon />
                 <span>{f}</span>
               </li>
-            ))}
+            )}
           </ul>
 
           <div style={{ background: '#FFF8E6', border: '1px solid #F0E1A8', borderRadius: 12, padding: '0.85rem 1rem', marginBottom: '1.25rem' }}>
             <p style={{ fontWeight: 700, fontSize: '0.85rem', color: LAV_SALES.INK700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <SalesGiftIcon size={16} /> {p.giftsBoxTitle}
+              <SalesGiftIcon size={16} /> <Node id="priceCard.giftsBoxTitle" role="body">{p.giftsBoxTitle}</Node>
             </p>
-            {p.giftItems.map((g, i) => (
-              <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', fontSize: '0.9rem', padding: '0.3rem 0', color: LAV_SALES.INK700 }}>
+            {p.giftItems.map((g, i) =>
+            <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', fontSize: '0.9rem', padding: '0.3rem 0', color: LAV_SALES.INK700 }}>
                 <SalesCheckIcon />
                 <span>{g}</span>
               </div>
-            ))}
+            )}
           </div>
 
           <div style={{ textAlign: 'center', borderTop: `1px solid ${LAV_SALES.LAV100}`, paddingTop: '1.25rem' }}>
             <p style={{ color: LAV_SALES.LAV700, textDecoration: 'line-through', fontWeight: 500, fontSize: '0.95rem', marginBottom: '0.25rem' }}>
-              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+              Total value: <Node id="priceCard.totalValue" role="body">{p.totalValue}</Node> — Regular price: <Node id="priceCard.regularPrice" role="body">{p.regularPrice}</Node>
             </p>
-            <p style={{ fontSize: '2.6rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.currentPrice}</p>
-            <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}>{p.savings}</p>
+            <p style={{ fontSize: '2.6rem', fontWeight: 800, color: '#16A34A', letterSpacing: '-0.02em', lineHeight: 1 }}><Node id="priceCard.currentPrice" role="body">{p.currentPrice}</Node></p>
+            <p style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600, marginBottom: '1rem' }}><Node id="priceCard.savings" role="body">{p.savings}</Node></p>
             <TrackedCheckoutLink href={resolveCheckoutHref(wpCheckoutRedirectUrl)} style={salesBtnCtaLg}>
-              {p.ctaLabel} <SalesArrowRight size={20} />
+              <Node id="priceCard.ctaLabel" role="button">{p.ctaLabel}</Node> <SalesArrowRight size={20} />
             </TrackedCheckoutLink>
-            <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: LAV_SALES.LAV700 }}>{p.guarantee}</p>
-            {wpThankyouRedirectUrl && (
-              <p style={{ marginTop: '1.25rem' }}>
+            <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: LAV_SALES.LAV700 }}><Node id="priceCard.guarantee" role="body">{p.guarantee}</Node></p>
+            {wpThankyouRedirectUrl &&
+            <p style={{ marginTop: '1.25rem' }}>
                 <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
                   No thanks. Complete my free registration
                 </a>
               </p>
-            )}
+            }
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* SALES SPEAKERS — grouped by day. Uses the same day-derivation logic as
  * the optin SpeakersGrid: distinct `speaker.dayNumber` values become day
  * sub-blocks under the section's operator-editable eyebrow/headline. New
  * day_number on a speaker = new sub-block, no funnel edit. */
-function SalesSpeakers({ content, speakers }: { content: IndigoGoldContent; speakers: Record<string, Speaker> }) {
+function SalesSpeakers({ content, speakers }: {content: IndigoGoldContent;speakers: Record<string, Speaker>;}) {
   if (!content.salesSpeakers) return null;
   const s = content.salesSpeakers;
   const dayBlocks = groupSpeakersByDay(speakers);
@@ -1521,54 +1521,54 @@ function SalesSpeakers({ content, speakers }: { content: IndigoGoldContent; spea
     <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
       <div style={{ maxWidth: 1152, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{s.eyebrow}</p>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}>{s.headline}</h2>
+          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}><Node id="salesSpeakers.eyebrow" role="label">{s.eyebrow}</Node></p>
+          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}><Node id="salesSpeakers.headline" role="heading">{s.headline}</Node></h2>
         </div>
-        {dayBlocks.map(({ dayNumber, speakers: daySpeakers }) => (
-          <div key={`sales-day-${dayNumber}`} style={{ marginBottom: '2.5rem' }}>
+        {dayBlocks.map(({ dayNumber, speakers: daySpeakers }) =>
+        <div key={`sales-day-${dayNumber}`} style={{ marginBottom: '2.5rem' }}>
             <p style={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '.15em', textTransform: 'uppercase', color: LAV_SALES.LAV700, marginBottom: '1rem' }}>
               DAY {dayNumber}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
-              {daySpeakers.map((spk) => (
-                <details key={spk.id} className="indigo-gold-sales-spk" style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 16, boxShadow: '0 6px 18px -10px rgba(90,69,137,.25)', marginBottom: 0, overflow: 'hidden' }}>
+              {daySpeakers.map((spk) =>
+            <details key={spk.id} className="indigo-gold-sales-spk" style={{ background: '#fff', border: `1px solid ${LAV_SALES.LAV200}`, borderRadius: 16, boxShadow: '0 6px 18px -10px rgba(90,69,137,.25)', marginBottom: 0, overflow: 'hidden' }}>
                   <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '1.5rem 1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
-                    {spk.photoUrl
-                      ? /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${LAV_SALES.LAV300}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(90,69,137,.35)` }} />
-                      : <div style={{ width: 84, height: 84, borderRadius: '50%', background: `linear-gradient(135deg,${LAV_SALES.LAV200},${LAV_SALES.LAV400})`, border: `3px solid ${LAV_SALES.LAV300}`, display: 'grid', placeItems: 'center', color: LAV_SALES.LAV700, fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '1.8rem', fontStyle: 'italic' }}>
+                    {spk.photoUrl ?
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={spk.photoUrl} alt={`${spk.firstName} ${spk.lastName}`} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${LAV_SALES.LAV300}`, boxShadow: `0 0 0 4px #fff, 0 6px 14px -4px rgba(90,69,137,.35)` }} /> :
+                <div style={{ width: 84, height: 84, borderRadius: '50%', background: `linear-gradient(135deg,${LAV_SALES.LAV200},${LAV_SALES.LAV400})`, border: `3px solid ${LAV_SALES.LAV300}`, display: 'grid', placeItems: 'center', color: LAV_SALES.LAV700, fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '1.8rem', fontStyle: 'italic' }}>
                           {spk.firstName[0]}{spk.lastName[0]}
                         </div>
-                    }
+                }
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                       <p style={{ fontWeight: 700, fontSize: '0.95rem', color: LAV_SALES.INK900, margin: 0 }}>{spk.firstName} {spk.lastName}</p>
                       <p style={{ fontSize: '0.78rem', color: LAV_SALES.LAV700, margin: 0 }}>{spk.title}</p>
                       <p style={{ fontSize: '0.78rem', color: LAV_SALES.INK700, margin: 0, fontStyle: 'italic' }}>{spk.masterclassTitle}</p>
                     </div>
                   </summary>
-                  {spk.shortBio && (
-                    <p style={{ padding: '0 1.5rem 1.5rem', color: LAV_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
-                  )}
+                  {spk.shortBio &&
+              <p style={{ padding: '0 1.5rem 1.5rem', color: LAV_SALES.INK700, fontSize: '0.88rem', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>{spk.shortBio}</p>
+              }
                 </details>
-              ))}
+            )}
             </div>
           </div>
-        ))}
+        )}
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* COMPARISON TABLE — Free Pass vs VIP Pass side-by-side. */
-function ComparisonTable({ content }: { content: IndigoGoldContent }) {
+function ComparisonTable({ content }: {content: IndigoGoldContent;}) {
   if (!content.comparisonTable) return null;
   const c = content.comparisonTable;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: LAV_SALES.LAV50 }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}>{c.eyebrow}</p>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}>{c.headline}</h2>
+          <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', color: LAV_SALES.INK700, fontWeight: 500, fontSize: '1.35rem', marginBottom: '0.25rem' }}><Node id="comparisonTable.eyebrow" role="label">{c.eyebrow}</Node></p>
+          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15 }}><Node id="comparisonTable.headline" role="heading">{c.headline}</Node></h2>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${LAV_SALES.LAV200}`, background: '#fff' }}>
@@ -1580,33 +1580,33 @@ function ComparisonTable({ content }: { content: IndigoGoldContent }) {
               </tr>
             </thead>
             <tbody>
-              {c.rows.map((row, i) => (
-                <tr key={i}>
+              {c.rows.map((row, i) =>
+              <tr key={i}>
                   <td style={{ padding: '1rem', borderTop: `1px solid ${LAV_SALES.LAV100}`, fontWeight: 600, color: LAV_SALES.INK900, fontSize: '0.95rem', lineHeight: 1.4 }}>{row.label}</td>
                   <td style={{ padding: '1rem', borderTop: `1px solid ${LAV_SALES.LAV100}`, textAlign: 'center' }}>
-                    {row.freePass
-                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><SalesCheckIcon /></span>
-                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
-                    }
+                    {row.freePass ?
+                  <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><SalesCheckIcon /></span> :
+                  <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
+                  }
                   </td>
                   <td style={{ padding: '1rem', borderTop: `1px solid ${LAV_SALES.LAV100}`, textAlign: 'center' }}>
-                    {row.vipPass
-                      ? <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><SalesCheckIcon /></span>
-                      : <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
-                    }
+                    {row.vipPass ?
+                  <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#DCFCE7', color: '#16A34A' }}><SalesCheckIcon /></span> :
+                  <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, borderRadius: '50%', background: '#FEE2E2', color: '#DC2626' }}><SalesXIcon /></span>
+                  }
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* GUARANTEE — dashed-yellow shield card with heading + body. */
-function Guarantee({ content }: { content: IndigoGoldContent }) {
+function Guarantee({ content }: {content: IndigoGoldContent;}) {
   if (!content.guarantee) return null;
   const g = content.guarantee;
   return (
@@ -1615,30 +1615,30 @@ function Guarantee({ content }: { content: IndigoGoldContent }) {
         <div style={{ background: '#FFF8E6', border: '2px dashed #F0DD8A', borderRadius: 20, padding: '1.75rem', display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
           <div style={{ fontSize: '3rem', flexShrink: 0 }}>🛡️</div>
           <div>
-            <h3 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '1.1rem', color: LAV_SALES.INK900, marginBottom: '0.5rem' }}>{g.heading}</h3>
-            <p style={{ fontSize: '0.95rem', color: LAV_SALES.INK700, lineHeight: 1.65, margin: 0 }}>{g.body}</p>
+            <h3 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: '1.1rem', color: LAV_SALES.INK900, marginBottom: '0.5rem' }}><Node id="guarantee.heading" role="heading">{g.heading}</Node></h3>
+            <p style={{ fontSize: '0.95rem', color: LAV_SALES.INK700, lineHeight: 1.65, margin: 0 }}><Node id="guarantee.body" role="body">{g.body}</Node></p>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* WHY SECTION — centered serif-subtitled body text. */
-function WhySection({ content }: { content: IndigoGoldContent }) {
+function WhySection({ content }: {content: IndigoGoldContent;}) {
   if (!content.whySection) return null;
   const w = content.whySection;
   return (
     <section style={{ padding: '3.5rem 1.25rem', background: '#fff' }}>
       <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '0.5rem' }}>{w.headline}</h2>
-        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '1.35rem', color: LAV_SALES.LAV700, marginBottom: '1.5rem' }}>{w.subheadline}</p>
-        {w.paragraphs.map((p, i) => (
-          <p key={i} style={{ color: LAV_SALES.INK800, fontSize: '1rem', lineHeight: 1.75, marginBottom: '1rem' }}>{p}</p>
-        ))}
+        <h2 style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: LAV_SALES.INK900, lineHeight: 1.15, marginBottom: '0.5rem' }}><Node id="whySection.headline" role="heading">{w.headline}</Node></h2>
+        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '1.35rem', color: LAV_SALES.LAV700, marginBottom: '1.5rem' }}><Node id="whySection.subheadline" role="heading">{w.subheadline}</Node></p>
+        {w.paragraphs.map((p, i) =>
+        <p key={i} style={{ color: LAV_SALES.INK800, fontSize: '1rem', lineHeight: 1.75, marginBottom: '1rem' }}>{p}</p>
+        )}
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 /* =======================================================================
@@ -1651,7 +1651,7 @@ export function IndigoGold({
   enabledSections,
   palette,
   wpCheckoutRedirectUrl,
-  wpThankyouRedirectUrl,
+  wpThankyouRedirectUrl
 }: RootProps) {
   const enabled = new Set(enabledSections ?? indigoGoldDefaultEnabledSections);
   return (
@@ -1696,9 +1696,9 @@ export function IndigoGold({
       {enabled.has('footer') && <Footer content={content} />}
       {enabled.has('sticky-mobile-cta') && <StickyMobileCTA content={content} />}
 
-      {enabled.has('hero') && content.hero && (
-        <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
-      )}
-    </div>
-  );
+      {enabled.has('hero') && content.hero &&
+      <OptinModal funnelId={funnelId} ctaLabel={content.hero.ctaLabel} />
+      }
+    </div>);
+
 }
