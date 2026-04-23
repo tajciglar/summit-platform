@@ -16,8 +16,31 @@ import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 import { indigoGoldDefaultEnabledSections } from './indigo-gold.sections';
 
+/**
+ * Resolved media sidecar attached by the Laravel API next to every
+ * `*MediaId` / `*ImageId` field in the content tree. Present only when the
+ * operator has selected an image; absent otherwise.
+ */
+type MediaSidecar = {
+  id: string;
+  url: string | null;
+  alt: string | null;
+  width: number | null;
+  height: number | null;
+};
+
+/**
+ * Render-time content type: the Zod-inferred type plus the media sidecars
+ * that the API injects post-parse. Keep narrow — only declare sidecars for
+ * the slots the skin actually renders.
+ */
+type RenderContent = IndigoGoldContent & {
+  hero: IndigoGoldContent['hero'] & { backgroundImage?: MediaSidecar };
+  footer: IndigoGoldContent['footer'] & { logo?: MediaSidecar };
+};
+
 type Props = {
-  content: IndigoGoldContent;
+  content: RenderContent;
   speakers: Record<string, Speaker>;
 };
 
@@ -26,6 +49,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 /* =======================================================================
@@ -233,6 +257,7 @@ function TopBar({ content }: Props) {
  * ======================================================================= */
 function Hero({ content, speakers }: Props) {
   const h = content.hero;
+  const bg = h.backgroundImage;
   const collage = h.collageSpeakerIds.map((id) => speakers[id]).filter((s): s is Speaker => Boolean(s));
 
   // Overrides: if content supplied explicit photo URLs they win, else we
@@ -255,8 +280,19 @@ function Hero({ content, speakers }: Props) {
   }));
 
   return (
-    <section className="indigo-gold-hero-bg">
-      <div className="max-w-7xl mx-auto px-5 md:px-8 pt-10 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+    <section className="indigo-gold-hero-bg relative">
+      {bg?.url ? (
+        <img
+          src={bg.url}
+          alt={bg.alt ?? ''}
+          width={bg.width ?? undefined}
+          height={bg.height ?? undefined}
+          className="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none"
+          loading="eager"
+          data-testid="indigo-gold-hero-background"
+        />
+      ) : null}
+      <div className="max-w-7xl mx-auto px-5 md:px-8 pt-10 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-10 md:gap-14 items-center relative">
         <div>
           <div className="mb-6">
             <EventStatusBadge
@@ -1038,11 +1074,22 @@ function TrustBadges({ content }: { content: IndigoGoldContent }) {
 /* =======================================================================
  * FOOTER — lavender 50 bg, serif-italic brand wordmark, small nav
  * ======================================================================= */
-function Footer({ content }: { content: IndigoGoldContent }) {
+function Footer({ content }: { content: RenderContent }) {
   const f = content.footer;
+  const logo = f.logo;
   return (
     <footer className="py-10" style={{ background: LAV.c50, borderTop: `1px solid ${LAV.c200}` }}>
       <div className="max-w-4xl mx-auto px-5 md:px-8 text-center">
+        {logo?.url ? (
+          <img
+            src={logo.url}
+            alt={logo.alt ?? f.brandName}
+            width={logo.width ?? undefined}
+            height={logo.height ?? undefined}
+            className="mx-auto mb-4 h-10 w-auto"
+            data-testid="indigo-gold-footer-logo"
+          />
+        ) : null}
         <p className="indigo-gold-display italic text-xl mb-4" style={{ color: LAV.c700 }}>
           {f.brandName}
         </p>
@@ -1388,7 +1435,8 @@ function UpgradeSection({ content }: { content: IndigoGoldContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: IndigoGoldContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1446,6 +1494,13 @@ function PriceCard({
               {p.ctaLabel} <SalesArrowRight size={20} />
             </TrackedCheckoutLink>
             <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: LAV_SALES.LAV700 }}>{p.guarantee}</p>
+            {wpThankyouRedirectUrl && (
+              <p style={{ marginTop: '1.25rem' }}>
+                <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                  No thanks. Complete my free registration
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1596,6 +1651,7 @@ export function IndigoGold({
   enabledSections,
   palette,
   wpCheckoutRedirectUrl,
+  wpThankyouRedirectUrl,
 }: RootProps) {
   const enabled = new Set(enabledSections ?? indigoGoldDefaultEnabledSections);
   return (
@@ -1630,7 +1686,7 @@ export function IndigoGold({
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

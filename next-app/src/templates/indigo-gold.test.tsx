@@ -80,3 +80,58 @@ describe('IndigoGold enabled_sections', () => {
     expect(html).not.toContain('--primary:');
   });
 });
+
+describe('IndigoGold image slots', () => {
+  it('renders hero <img> when hero.backgroundImage sidecar is present', () => {
+    const html = render({
+      content: {
+        ...indigoGoldFixture,
+        hero: {
+          ...indigoGoldFixture.hero,
+          backgroundImage: {
+            id: '550e8400-e29b-41d4-a716-446655440000',
+            url: 'https://cdn.example.test/hero-bg.jpg',
+            alt: 'Backdrop',
+            width: 1920,
+            height: 1080,
+          },
+        },
+      } as React.ComponentProps<typeof IndigoGold>['content'],
+      speakers: {},
+      funnelId: 'funnel-1',
+    });
+    expect(html).toContain('data-testid="indigo-gold-hero-background"');
+    expect(html).toContain('src="https://cdn.example.test/hero-bg.jpg"');
+  });
+
+  it('omits hero <img> when sidecar is absent', () => {
+    const html = render({
+      content: indigoGoldFixture,
+      speakers: {},
+      funnelId: 'funnel-1',
+    });
+    expect(html).not.toContain('data-testid="indigo-gold-hero-background"');
+  });
+
+  it('renders footer logo <img> when sidecar present', () => {
+    const html = render({
+      content: {
+        ...indigoGoldFixture,
+        footer: {
+          ...indigoGoldFixture.footer,
+          logo: {
+            id: '550e8400-e29b-41d4-a716-446655440001',
+            url: 'https://cdn.example.test/logo.svg',
+            alt: 'Brand',
+            width: 120,
+            height: 40,
+          },
+        },
+      } as React.ComponentProps<typeof IndigoGold>['content'],
+      speakers: {},
+      funnelId: 'funnel-1',
+    });
+    expect(html).toContain('data-testid="indigo-gold-footer-logo"');
+    expect(html).toContain('src="https://cdn.example.test/logo.svg"');
+  });
+});
