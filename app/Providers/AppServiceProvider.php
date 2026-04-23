@@ -44,7 +44,10 @@ class AppServiceProvider extends ServiceProvider
         // Trusting X-Forwarded-Proto in bootstrap/app.php handles most URL
         // generation, but Livewire's signed upload URL is built before middleware
         // runs in some paths — forcing the scheme here is the reliable fix.
-        if (env('APP_FORCE_HTTPS', false)) {
+        //
+        // NOTE: env() returns null once `config:cache` has run, so we pivot on
+        // APP_ENV (which IS baked into the cache as config('app.env')).
+        if (app()->environment('production')) {
             URL::forceScheme('https');
         }
     }
