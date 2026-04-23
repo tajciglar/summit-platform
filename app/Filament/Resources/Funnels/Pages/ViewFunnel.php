@@ -9,14 +9,17 @@ use App\Models\Funnel;
 use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 
@@ -80,23 +83,32 @@ class ViewFunnel extends EditRecord
                         ->size('lg')
                         ->weight(FontWeight::Bold)
                         ->columnSpan(6),
-                    TextEntry::make('is_active')
-                        ->label('Status')
-                        ->badge()
-                        ->formatStateUsing(fn (bool $state) => $state ? 'Live' : 'Paused')
-                        ->color(fn (bool $state) => $state ? 'success' : 'gray')
-                        ->icon(fn (bool $state) => $state ? 'heroicon-m-bolt' : 'heroicon-m-pause-circle')
+                    Toggle::make('is_active')
+                        ->label('Live')
+                        ->inline(false)
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['is_active' => (bool) $state]);
+                            Notification::make()
+                                ->title($state ? 'Funnel set live' : 'Funnel paused')
+                                ->success()
+                                ->send();
+                        })
                         ->columnSpan(2),
-                    TextEntry::make('target_phase')
+                    Select::make('target_phase')
                         ->label('Phase')
-                        ->badge()
-                        ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : 'all phases')
-                        ->color(fn (?string $state): string => match ($state) {
-                            'during' => 'success',
-                            'late_pre' => 'warning',
-                            'pre' => 'info',
-                            'post' => 'gray',
-                            default => 'primary',
+                        ->options([
+                            'pre' => 'Pre-summit',
+                            'late_pre' => 'Late pre-summit',
+                            'during' => 'During summit',
+                            'post' => 'Post-summit',
+                        ])
+                        ->placeholder('All phases')
+                        ->native(false)
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['target_phase' => $state]);
+                            Notification::make()->title('Phase saved')->success()->send();
                         })
                         ->columnSpan(2),
                     TextEntry::make('summit.title')
@@ -152,12 +164,127 @@ class ViewFunnel extends EditRecord
                             Notification::make()->title('Checkout URL saved')->success()->send();
                         })
                         ->columnSpan(6),
+
+                    TextInput::make('wp_thankyou_redirect_url')
+                        ->label('WordPress thank-you page URL')
+                        ->url()
+                        ->maxLength(2048)
+                        ->placeholder('https://...')
+                        ->helperText('"No thanks" link on sales page redirects here. Leave blank to hide the link.')
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $record->update(['wp_thankyou_redirect_url' => $state]);
+                            Notification::make()->title('Thank-you URL saved')->success()->send();
+                        })
+                        ->columnSpan(6),
+                ]),
+
+            Section::make('Section layout')
+                ->description('Pick which sections render per step type. Saves on change.')
+                ->collapsible()
+                ->collapsed()
+                ->visible(fn (Funnel $record): bool => self::skinSupportsSections($record->template_key))
+                ->columnSpanFull()
+                ->schema([
+                    CheckboxList::make('section_config.optin')
+                        ->label('Optin sections')
+                        ->options(fn (Get $get) => self::optinSectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $config = $record->section_config ?? [];
+                            $config['optin'] = array_values((array) $state);
+                            $record->update(['section_config' => $config]);
+                            Notification::make()->title('Optin sections saved')->success()->send();
+                        }),
+
+                    CheckboxList::make('section_config.sales_page')
+                        ->label('Sales page sections')
+                        ->options(fn (Get $get) => self::salesSectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $config = $record->section_config ?? [];
+                            $config['sales_page'] = array_values((array) $state);
+                            $record->update(['section_config' => $config]);
+                            Notification::make()->title('Sales sections saved')->success()->send();
+                        }),
+
+                    CheckboxList::make('section_config.thank_you')
+                        ->label('Thank-you sections')
+                        ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
+                        ->columns(2)
+                        ->bulkToggleable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Funnel $record): void {
+                            $config = $record->section_config ?? [];
+                            $config['thank_you'] = array_values((array) $state);
+                            $record->update(['section_config' => $config]);
+                            Notification::make()->title('Thank-you sections saved')->success()->send();
+                        }),
                 ]),
 
             ViewEntry::make('steps_list')
                 ->columnSpanFull()
                 ->view('filament.funnels.steps-list'),
         ]);
+    }
+
+    private static function skinSupportsSections(?string $templateKey): bool
+    {
+        if (! $templateKey) {
+            return false;
+        }
+        $registry = app(TemplateRegistry::class);
+
+        return $registry->exists($templateKey) && $registry->supportsSections($templateKey);
+    }
+
+    /** @return array<string, string> */
+    private static function sectionOptionsFor(?string $templateKey): array
+    {
+        if (! self::skinSupportsSections($templateKey)) {
+            return [];
+        }
+        $registry = app(TemplateRegistry::class);
+
+        return collect($registry->supportedSections($templateKey))
+            ->mapWithKeys(fn (string $key) => [$key => ucwords(str_replace(['-', '_'], ' ', $key))])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function optinSectionOptionsFor(?string $templateKey): array
+    {
+        if (! self::skinSupportsSections($templateKey)) {
+            return [];
+        }
+        $registry = app(TemplateRegistry::class);
+        $sales = array_flip($registry->defaultSalesSections($templateKey));
+
+        return collect($registry->supportedSections($templateKey))
+            ->reject(fn (string $key) => isset($sales[$key]))
+            ->mapWithKeys(fn (string $key) => [$key => ucwords(str_replace(['-', '_'], ' ', $key))])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    private static function salesSectionOptionsFor(?string $templateKey): array
+    {
+        if (! self::skinSupportsSections($templateKey)) {
+            return [];
+        }
+        $registry = app(TemplateRegistry::class);
+        $sales = $registry->defaultSalesSections($templateKey);
+        if ($sales === []) {
+            return self::sectionOptionsFor($templateKey);
+        }
+
+        return collect($sales)
+            ->mapWithKeys(fn (string $key) => [$key => ucwords(str_replace(['-', '_'], ' ', $key))])
+            ->all();
     }
 
     /** @return array<string, string> */

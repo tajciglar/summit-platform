@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources\Affiliates;
 
-use App\Filament\Resources\Affiliates\Pages;
 use App\Models\Affiliate;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -71,12 +69,20 @@ class AffiliateResource extends Resource
                 ->columns(3)
                 ->components([
                     TextInput::make('commission_rate')
+                        ->label('Commission rate')
                         ->numeric()
-                        ->step('0.0001')
+                        ->suffix('%')
+                        ->step('0.1')
                         ->minValue(0)
-                        ->maxValue(1)
-                        ->default(0.3)
-                        ->helperText('Decimal: 0.3 = 30%.'),
+                        ->maxValue(100)
+                        ->default(30)
+                        ->required()
+                        ->formatStateUsing(fn (?float $state): ?string => $state !== null
+                            ? rtrim(rtrim(number_format($state * 100, 2, '.', ''), '0'), '.')
+                            : null)
+                        ->dehydrateStateUsing(fn ($state): ?float => ($state === null || $state === '')
+                            ? null
+                            : round(((float) $state) / 100, 4)),
                     TextInput::make('payment_email')->email()->maxLength(255)
                         ->helperText('PayPal/bank email for payouts.'),
                     Toggle::make('is_active')->default(true),
@@ -113,7 +119,6 @@ class AffiliateResource extends Resource
                 TernaryFilter::make('is_active'),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -130,7 +135,6 @@ class AffiliateResource extends Resource
         return [
             'index' => Pages\ListAffiliates::route('/'),
             'create' => Pages\CreateAffiliate::route('/create'),
-            'view' => Pages\ViewAffiliate::route('/{record}'),
             'edit' => Pages\EditAffiliate::route('/{record}/edit'),
         ];
     }

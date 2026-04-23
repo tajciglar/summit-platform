@@ -11,7 +11,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
@@ -23,6 +22,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -54,112 +55,157 @@ class SpeakerResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Summit attachments')
-                ->description('Which summits this speaker appears on, and which day of each summit they present. A speaker can be attached to multiple summits — the same video can be used in several events, scheduled on a different day per summit.')
-                ->components([
-                    Repeater::make('speakerSummits')
-                        ->relationship()
-                        ->label('')
-                        ->addActionLabel('Attach to another summit')
-                        ->minItems(1)
-                        ->columns(2)
+            Tabs::make('Speaker')
+                ->columnSpanFull()
+                ->persistTabInQueryString()
+                ->tabs([
+                    Tab::make('Identity')
+                        ->icon(Heroicon::OutlinedUser)
                         ->schema([
-                            Select::make('summit_id')
-                                ->label('Summit')
-                                ->options(function () {
-                                    $query = Summit::query()->orderBy('title');
-                                    $domain = Filament::getTenant();
-                                    if ($domain) {
-                                        $query->where('domain_id', $domain->getKey());
-                                    }
-
-                                    return $query->pluck('title', 'id')->all();
-                                })
-                                ->required()
-                                ->searchable()
-                                ->preload()
-                                ->distinct()
-                                ->validationMessages(['distinct' => 'This speaker is already attached to that summit.']),
-                            Select::make('day_number')
-                                ->label('Day')
-                                ->options([
-                                    1 => 'Day 1',
-                                    2 => 'Day 2',
-                                    3 => 'Day 3',
-                                    4 => 'Day 4',
-                                    5 => 'Day 5',
-                                    6 => 'Day 6',
-                                    7 => 'Day 7',
-                                ])
-                                ->placeholder('Unassigned')
-                                ->helperText('Which day of this summit the speaker presents.'),
+                            Section::make()
+                                ->columns(2)
+                                ->components([
+                                    TextInput::make('first_name')->required()->maxLength(255)
+                                        ->live(onBlur: true)
+                                        ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get): void {
+                                            if ($operation === 'create' && ! $get('slug')) {
+                                                $set('slug', Str::slug((string) $state.'-'.(string) $get('last_name')));
+                                            }
+                                        }),
+                                    TextInput::make('last_name')->required()->maxLength(255),
+                                    TextInput::make('slug')
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->helperText('URL slug within this summit.'),
+                                    TextInput::make('email')->email()->maxLength(255),
+                                    TextInput::make('title')
+                                        ->label('Professional title')
+                                        ->maxLength(500)
+                                        ->helperText('e.g. CEO of Company X')
+                                        ->columnSpanFull(),
+                                ]),
                         ]),
-                ]),
-            Section::make('Identity')
-                ->columns(2)
-                ->components([
-                    TextInput::make('slug')
-                        ->required()
-                        ->maxLength(255)
-                        ->helperText('URL slug within this summit.'),
-                    TextInput::make('first_name')->required()->maxLength(255)
-                        ->live(onBlur: true)
-                        ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get): void {
-                            if ($operation === 'create' && ! $get('slug')) {
-                                $set('slug', Str::slug((string) $state.'-'.(string) $get('last_name')));
-                            }
-                        }),
-                    TextInput::make('last_name')->required()->maxLength(255),
-                    TextInput::make('email')->email()->maxLength(255),
-                    TextInput::make('title')
-                        ->label('Professional title')
-                        ->maxLength(500)
-                        ->helperText('e.g. CEO of Company X'),
-                ]),
 
-            Section::make('Media & bio')
-                ->columns(2)
-                ->components([
-                    MediaPickerInput::make('photo_media_item_id')
-                        ->category('speakers')
-                        ->subCategory('headshot')
-                        ->role('photo')
-                        ->label('Speaker photo')
-                        ->columnSpanFull(),
-                    TextInput::make('website_url')->url()->maxLength(1000)->columnSpanFull(),
-                    Textarea::make('short_bio')->rows(3)->columnSpanFull(),
-                    Textarea::make('long_bio')->rows(6)->columnSpanFull(),
-                    KeyValue::make('social_links')
-                        ->keyLabel('Platform')
-                        ->valueLabel('URL')
-                        ->columnSpanFull()
-                        ->helperText('e.g. twitter, linkedin, instagram'),
-                ]),
+                    Tab::make('Bio & media')
+                        ->icon(Heroicon::OutlinedPhoto)
+                        ->schema([
+                            Section::make()
+                                ->columns(2)
+                                ->components([
+                                    MediaPickerInput::make('photo_media_item_id')
+                                        ->category('speakers')
+                                        ->subCategory('headshot')
+                                        ->role('photo')
+                                        ->label('Speaker photo')
+                                        ->captionUsing(fn (Speaker $record): string => trim("{$record->first_name} {$record->last_name}"))
+                                        ->altTextUsing(fn (Speaker $record): string => trim("{$record->first_name} {$record->last_name}").' — speaker photo')
+                                        ->columnSpanFull(),
+                                    TextInput::make('website_url')->url()->maxLength(1000)->columnSpanFull(),
+                                    Textarea::make('short_bio')->rows(3)->columnSpanFull(),
+                                    Textarea::make('long_bio')->rows(6)->columnSpanFull(),
+                                    KeyValue::make('social_links')
+                                        ->keyLabel('Platform')
+                                        ->valueLabel('URL')
+                                        ->columnSpanFull()
+                                        ->helperText('e.g. twitter, linkedin, instagram'),
+                                ]),
+                        ]),
 
-            Section::make('Masterclass')
-                ->columns(2)
-                ->components([
-                    TextInput::make('masterclass_title')->maxLength(500)->columnSpanFull(),
-                    Textarea::make('masterclass_description')->rows(3)->columnSpanFull(),
-                    TextInput::make('free_video_url')->url()->maxLength(1000),
-                    TextInput::make('vip_video_url')->url()->maxLength(1000),
-                    DateTimePicker::make('goes_live_at')
-                        ->seconds(false)
-                        ->helperText('When the video becomes available.'),
-                    TextInput::make('free_access_window_hours')
-                        ->numeric()->default(24)->minValue(1)->maxValue(168)
-                        ->helperText('Free viewing window after a user clicks play.'),
-                ]),
+                    Tab::make('Masterclass')
+                        ->icon(Heroicon::OutlinedPlayCircle)
+                        ->schema([
+                            Section::make()
+                                ->columns(2)
+                                ->components([
+                                    TextInput::make('masterclass_title')->maxLength(500)->columnSpanFull(),
+                                    Textarea::make('masterclass_description')->rows(3)->columnSpanFull(),
+                                    TextInput::make('free_video_url')->url()->maxLength(1000),
+                                    TextInput::make('vip_video_url')->url()->maxLength(1000),
+                                    DateTimePicker::make('goes_live_at')
+                                        ->seconds(false)
+                                        ->helperText('When the video becomes available.'),
+                                    TextInput::make('free_access_window_hours')
+                                        ->numeric()->default(24)->minValue(1)->maxValue(168)
+                                        ->helperText('Free viewing window after a user clicks play.'),
+                                ]),
+                        ]),
 
-            Section::make('Display')
-                ->columns(3)
-                ->components([
-                    TextInput::make('sort_order')->numeric()->default(0),
-                    Select::make('rating')
-                        ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])
-                        ->placeholder('Unrated')
-                        ->helperText('Internal quality rating.'),
-                    Toggle::make('is_featured'),
+                    Tab::make('Summits')
+                        ->icon(Heroicon::OutlinedCalendarDays)
+                        ->badge(fn (?Speaker $record): ?int => $record?->summits()->count() ?: null)
+                        ->schema([
+                            Section::make()
+                                ->description('Which summits this speaker appears on, and which day of each summit they present. The same video can be used in multiple events, scheduled on a different day per summit.')
+                                ->components([
+                                    Repeater::make('speakerSummits')
+                                        ->relationship()
+                                        ->label('')
+                                        ->addActionLabel('Attach to another summit')
+                                        ->minItems(1)
+                                        ->columns(2)
+                                        ->itemLabel(function (array $state): ?string {
+                                            $summitId = $state['summit_id'] ?? null;
+                                            if (! $summitId) {
+                                                return null;
+                                            }
+                                            $title = Summit::query()->whereKey($summitId)->value('title');
+                                            $day = $state['day_number'] ?? null;
+
+                                            return $title
+                                                ? ($day ? "{$title} — Day {$day}" : $title)
+                                                : null;
+                                        })
+                                        ->collapsible()
+                                        ->schema([
+                                            Select::make('summit_id')
+                                                ->label('Summit')
+                                                ->options(function () {
+                                                    $query = Summit::query()->orderBy('title');
+                                                    $domain = Filament::getTenant();
+                                                    if ($domain) {
+                                                        $query->where('domain_id', $domain->getKey());
+                                                    }
+
+                                                    return $query->pluck('title', 'id')->all();
+                                                })
+                                                ->required()
+                                                ->searchable()
+                                                ->preload()
+                                                ->distinct()
+                                                ->live()
+                                                ->validationMessages(['distinct' => 'This speaker is already attached to that summit.']),
+                                            Select::make('day_number')
+                                                ->label('Day')
+                                                ->options([
+                                                    1 => 'Day 1',
+                                                    2 => 'Day 2',
+                                                    3 => 'Day 3',
+                                                    4 => 'Day 4',
+                                                    5 => 'Day 5',
+                                                    6 => 'Day 6',
+                                                    7 => 'Day 7',
+                                                ])
+                                                ->placeholder('Unassigned')
+                                                ->live()
+                                                ->helperText('Which day of this summit the speaker presents.'),
+                                        ]),
+                                ]),
+                        ]),
+
+                    Tab::make('Display')
+                        ->icon(Heroicon::OutlinedStar)
+                        ->schema([
+                            Section::make()
+                                ->columns(3)
+                                ->components([
+                                    TextInput::make('sort_order')->numeric()->default(0),
+                                    Select::make('rating')
+                                        ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])
+                                        ->placeholder('Unrated')
+                                        ->helperText('Internal quality rating.'),
+                                    Toggle::make('is_featured'),
+                                ]),
+                        ]),
                 ]),
         ]);
     }
@@ -210,7 +256,6 @@ class SpeakerResource extends Resource
                 TernaryFilter::make('is_featured'),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -228,7 +273,6 @@ class SpeakerResource extends Resource
         return [
             'index' => Pages\ListSpeakers::route('/'),
             'create' => Pages\CreateSpeaker::route('/create'),
-            'view' => Pages\ViewSpeaker::route('/{record}'),
             'edit' => Pages\EditSpeaker::route('/{record}/edit'),
         ];
     }
@@ -242,16 +286,6 @@ class SpeakerResource extends Resource
      */
     public static function scopeEloquentQueryToTenant(Builder $query, ?Model $tenant): Builder
     {
-        $tenant ??= Filament::getTenant();
-        if (! $tenant) {
-            return $query;
-        }
-
-        $query->whereHas(
-            'summits',
-            fn (Builder $q) => $q->where('summits.domain_id', $tenant->getKey()),
-        );
-
         if ($summitId = CurrentSummit::getId()) {
             $query->whereHas(
                 'summits',

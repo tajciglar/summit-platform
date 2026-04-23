@@ -80,9 +80,15 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Sales')
                     ->icon('heroicon-o-banknotes')
                     ->collapsible(false),
+                NavigationGroup::make('CRM')
+                    ->icon('heroicon-o-user-group')
+                    ->collapsible(false),
                 NavigationGroup::make('Analytics')
                     ->icon('heroicon-o-chart-bar-square')
                     ->collapsible(false),
+                NavigationGroup::make('Admin')
+                    ->icon('heroicon-o-shield-check')
+                    ->collapsed(),
                 NavigationGroup::make('Settings')
                     ->icon('heroicon-o-cog-6-tooth')
                     ->collapsed(),

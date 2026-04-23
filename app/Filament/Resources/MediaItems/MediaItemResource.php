@@ -68,7 +68,8 @@ class MediaItemResource extends Resource
             TextInput::make('alt_text')->maxLength(500),
             FileUpload::make('file_upload')
                 ->label('File')
-                ->disk(config('media-library.disk_name'))
+                ->disk('local')
+                ->directory('media-uploads')
                 ->image()
                 ->acceptedFileTypes([
                     'image/jpeg', 'image/png', 'image/webp', 'image/avif',
@@ -89,9 +90,10 @@ class MediaItemResource extends Resource
                 TextColumn::make('category')->badge()->sortable(),
                 TextColumn::make('sub_category')->toggleable(),
                 TextColumn::make('caption')->searchable(),
-                TextColumn::make('usage_count')
+                TextColumn::make('attachments_count')
+                    ->counts('attachments')
                     ->label('Used in')
-                    ->state(fn (MediaItem $r) => $r->attachments()->count().' places'),
+                    ->formatStateUsing(fn (int $state): string => $state.' places'),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([

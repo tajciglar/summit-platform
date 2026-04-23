@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources\Users;
 
-use App\Filament\Resources\Users\Pages;
 use App\Models\User;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -29,7 +27,7 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
+    protected static string|\UnitEnum|null $navigationGroup = 'Admin';
 
     protected static ?int $navigationSort = 10;
 
@@ -66,13 +64,13 @@ class UserResource extends Resource
                 ]),
 
             Section::make('Password')
-                ->visible(fn (string $operation): bool => $operation === 'create')
                 ->components([
                     TextInput::make('password')
                         ->password()
                         ->revealable()
                         ->required(fn (string $operation): bool => $operation === 'create')
                         ->dehydrated(fn ($state): bool => filled($state))
+                        ->helperText(fn (string $operation): ?string => $operation === 'edit' ? 'Leave blank to keep current password' : null)
                         ->minLength(8),
                 ]),
 
@@ -118,7 +116,6 @@ class UserResource extends Resource
                 TernaryFilter::make('is_active'),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -135,7 +132,6 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }

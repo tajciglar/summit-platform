@@ -6,7 +6,9 @@ use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
@@ -38,7 +40,7 @@ class FunnelsRelationManager extends RelationManager
                 Group::make('is_active')
                     ->label('Status')
                     ->getTitleFromRecordUsing(fn (Funnel $record): string => $record->is_active ? 'Live' : 'Draft')
-                    ->getKeyFromRecordUsing(fn (Funnel $record): string => $record->is_active ? '1_live' : '2_draft')
+                    ->getKeyFromRecordUsing(fn (Funnel $record): string => $record->is_active ? '1' : '0')
                     ->orderQueryUsing(fn (Builder $query) => $query->orderByDesc('is_active')),
             ])
             ->defaultGroup('is_active')
@@ -99,19 +101,11 @@ class FunnelsRelationManager extends RelationManager
                     ->modalDescription('Only one funnel can be live per summit. The currently live funnel will become a draft.')
                     ->modalSubmitActionLabel('Yes, make live')
                     ->action(fn (Funnel $record) => $record->update(['is_active' => true])),
-                Action::make('view')
-                    ->label('View')
-                    ->icon('heroicon-o-eye')
+                ViewAction::make()
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
-                Action::make('delete')
-                    ->label('Delete')
-                    ->icon('heroicon-o-trash')
-                    ->color('danger')
-                    ->requiresConfirmation()
+                DeleteAction::make()
                     ->modalHeading('Delete funnel?')
-                    ->modalDescription('This will permanently remove the funnel and its steps. This cannot be undone.')
-                    ->modalSubmitActionLabel('Yes, delete')
-                    ->action(fn (Funnel $record) => $record->delete()),
+                    ->modalDescription('This will permanently remove the funnel and its steps. This cannot be undone.'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

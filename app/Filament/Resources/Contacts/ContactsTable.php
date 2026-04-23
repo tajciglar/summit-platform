@@ -26,9 +26,9 @@ class ContactsTable
                 TextColumn::make('ac_contact_id')
                     ->label('AC ID')
                     ->placeholder('—'),
-                TextColumn::make('optins_failed_count')
+                TextColumn::make('failed_optins_count')
+                    ->counts(['optins as failed_optins_count' => fn (Builder $q) => $q->where('ac_sync_status', 'failed')])
                     ->label('Failed syncs')
-                    ->state(fn ($record) => $record->optins()->where('ac_sync_status', 'failed')->count())
                     ->badge()
                     ->color(fn (int $state): string => $state > 0 ? 'danger' : 'gray')
                     ->placeholder('0'),
