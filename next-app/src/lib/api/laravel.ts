@@ -23,6 +23,7 @@ export interface DraftPayload extends PublishedContent {
   audience: string | null;
   palette: Palette | null;
   tokens?: DesignTokens | null;
+  sections?: Record<string, DesignTokens> | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
 }
@@ -36,6 +37,7 @@ export interface PublicPayload extends PublishedContent {
   audience: string | null;
   palette: Palette | null;
   tokens?: DesignTokens | null;
+  sections?: Record<string, DesignTokens> | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
 }

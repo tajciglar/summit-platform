@@ -20,13 +20,41 @@ export type DesignTokens = {
 };
 
 /**
- * Shape of the whole `page_overrides` JSON. Wrapped under a `tokens` key so
- * we can add unrelated overrides (e.g. `sections`, `elements`) later without
- * breaking consumers.
+ * Shape of the whole `page_overrides` JSON. Wrapped under `tokens` for global
+ * defaults + `sections` for per-block overrides.
  */
 export type PageOverrides = {
   tokens?: DesignTokens;
+  sections?: Record<string, DesignTokens>;
 };
+
+/**
+ * Produce a style object for an individual section (Hero, Press, Stats, …)
+ * that applies section-scoped CSS custom properties. CSS inheritance means
+ * only descendants of this section pick up the overrides.
+ *
+ * Prefix is the template-specific CSS-var prefix (`cs` for cream-sage, `ig`
+ * for indigo-gold, etc.). When a template is refactored to vars it passes
+ * its prefix here.
+ */
+export function sectionStyle(
+  tokens: DesignTokens | undefined | null,
+  prefix: string,
+): import('react').CSSProperties | undefined {
+  if (!tokens) return undefined;
+  const s: Record<string, string> = {};
+  const p = tokens.palette;
+  if (p?.primary) {
+    s[`--${prefix}-primary`] = p.primary;
+    s[`--${prefix}-primary-hover`] = p.primary;
+  }
+  if (p?.accent) s[`--${prefix}-accent`] = p.accent;
+  if (p?.ink) s[`--${prefix}-ink`] = p.ink;
+  if (p?.paper) s[`--${prefix}-paper`] = p.paper;
+  if (tokens.headingFont) s['--heading-font'] = `'${tokens.headingFont}', serif`;
+  if (tokens.bodyFont) s['--body-font'] = `'${tokens.bodyFont}', system-ui, sans-serif`;
+  return Object.keys(s).length ? (s as import('react').CSSProperties) : undefined;
+}
 
 const FONT_FALLBACKS = ', system-ui, -apple-system, Segoe UI, sans-serif';
 

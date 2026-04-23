@@ -11,7 +11,12 @@ import { resolveCheckoutHref } from './lib/checkout-href';
 import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import { Node } from './shared/Node';
+import { sectionStyle } from './shared/design-tokens';
+import type { DesignTokens } from './shared/design-tokens';
 import type { Speaker } from './types';
+
+/** CreamSage's CSS-var prefix. Kept colocated so sectionWrap stays terse. */
+const sectionStyleFor = (t?: DesignTokens) => sectionStyle(t, 'cs');
 
 type Props = {
   content: CreamSageContent;
@@ -24,6 +29,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
   tokens?: import('./shared/design-tokens').DesignTokens;
+  sections?: Record<string, import('./shared/design-tokens').DesignTokens>;
   wpCheckoutRedirectUrl?: string | null;
   wpThankyouRedirectUrl?: string | null;
 };
@@ -141,7 +147,7 @@ function Hero({ content, speakers }: Props) {
   return (
     <section
       className="relative overflow-hidden pt-14 md:pt-20 pb-20 md:pb-28"
-      style={{ background: '#FAF7F2' }}
+      style={{ background: 'var(--cs-paper, #FAF7F2)' }}
     >
       <div
         className="cream-sage-blob cream-sage-blob-rose"
@@ -289,7 +295,7 @@ function Hero({ content, speakers }: Props) {
 function Press({ content }: { content: CreamSageContent }) {
   const items = [...content.press.outlets, ...content.press.outlets];
   return (
-    <section className="py-10" style={{ background: '#FAF7F2' }}>
+    <section className="py-10" style={{ background: 'var(--cs-paper, #FAF7F2)' }}>
       <div className="max-w-7xl mx-auto px-6">
         <p
           className="cream-sage-eyebrow text-center mb-6"
@@ -399,7 +405,7 @@ function Overview({ content }: { content: CreamSageContent }) {
     <section
       id="what-is-this"
       className="py-20 md:py-28 relative overflow-hidden"
-      style={{ background: '#F4EDE2' }}
+      style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}
     >
       <div
         className="cream-sage-blob cream-sage-blob-rose"
@@ -527,7 +533,7 @@ function SpeakersDay({ speakers }: Props) {
   return (
     <section
       className="py-20 md:py-28 relative overflow-hidden"
-      style={{ background: '#FAF7F2' }}
+      style={{ background: 'var(--cs-paper, #FAF7F2)' }}
     >
       <div className="relative max-w-6xl mx-auto px-6 text-center">
         <span className="cream-sage-eyebrow mb-3 inline-block" style={{ color: '#A85430' }}>
@@ -619,7 +625,7 @@ function Outcomes({ content }: { content: CreamSageContent }) {
   const ICON_BACKGROUNDS = ['#E9EEEA', 'rgba(232,185,160,0.35)'];
   const ICON_COLORS = ['#4A6B5D', '#A85430'];
   return (
-    <section className="py-20 md:py-28" style={{ background: '#F4EDE2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span
@@ -681,7 +687,7 @@ function FreeGift({ content }: { content: CreamSageContent }) {
   return (
     <section
       className="relative py-20 md:py-28 overflow-hidden"
-      style={{ background: '#FAF7F2' }}
+      style={{ background: 'var(--cs-paper, #FAF7F2)' }}
     >
       <div
         className="cream-sage-blob cream-sage-blob-sage"
@@ -820,7 +826,7 @@ function FreeGift({ content }: { content: CreamSageContent }) {
 function Bonuses({ content }: { content: CreamSageContent }) {
   const b = content.bonuses;
   return (
-    <section className="py-20 md:py-28" style={{ background: '#F4EDE2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span
@@ -895,7 +901,7 @@ function Bonuses({ content }: { content: CreamSageContent }) {
 function Founders({ content }: { content: CreamSageContent }) {
   const f = content.founders;
   return (
-    <section className="py-20 md:py-28" style={{ background: '#FAF7F2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper, #FAF7F2)' }}>
       <div className="max-w-5xl mx-auto px-6">
         <h2
           className="font-black text-4xl md:text-5xl text-center mb-14 leading-tight"
@@ -953,7 +959,7 @@ function Founders({ content }: { content: CreamSageContent }) {
 function Testimonials({ content }: { content: CreamSageContent }) {
   const t = content.testimonials;
   return (
-    <section className="py-20 md:py-28" style={{ background: '#F4EDE2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span
@@ -1080,7 +1086,7 @@ function PullQuote({ content }: { content: CreamSageContent }) {
 function Figures({ content }: { content: CreamSageContent }) {
   const f = content.figures;
   return (
-    <section className="py-20 md:py-28" style={{ background: '#FAF7F2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper, #FAF7F2)' }}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span
@@ -1126,7 +1132,7 @@ function Figures({ content }: { content: CreamSageContent }) {
 function Shifts({ content }: { content: CreamSageContent }) {
   const s = content.shifts;
   return (
-    <section className="py-20 md:py-28" style={{ background: '#F4EDE2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}>
       <div className="max-w-3xl mx-auto px-6">
         <span
           className="cream-sage-eyebrow mb-3 inline-block"
@@ -1180,7 +1186,7 @@ function Shifts({ content }: { content: CreamSageContent }) {
 /* ============== FAQ ============== */
 function FAQ({ content }: { content: CreamSageContent }) {
   return (
-    <section className="py-20 md:py-28" style={{ background: '#FAF7F2' }}>
+    <section className="py-20 md:py-28" style={{ background: 'var(--cs-paper, #FAF7F2)' }}>
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
           <span
@@ -1281,7 +1287,7 @@ function FinalCTA({ content }: { content: CreamSageContent }) {
           href="#optin"
           className="inline-flex items-center gap-3 font-bold text-xl px-12 py-5 shadow-2xl"
           style={{
-            background: '#FAF7F2',
+            background: 'var(--cs-paper, #FAF7F2)',
             color: '#A85430',
             borderRadius: 999,
             transition: 'background 0.2s ease',
@@ -1310,7 +1316,7 @@ function FinalCTA({ content }: { content: CreamSageContent }) {
 function Footer({ content }: { content: CreamSageContent }) {
   const f = content.footer;
   return (
-    <footer className="py-14 relative overflow-hidden" style={{ background: '#F4EDE2' }}>
+    <footer className="py-14 relative overflow-hidden" style={{ background: 'var(--cs-paper-alt, #F4EDE2)' }}>
       <svg
         className="cream-sage-wave-top absolute top-0 left-0 right-0"
         viewBox="0 0 1200 40"
@@ -2565,8 +2571,26 @@ function WhySection({ content }: { content: CreamSageContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function CreamSage({ content, speakers, funnelId, enabledSections, tokens, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
+export function CreamSage({ content, speakers, funnelId, enabledSections, tokens, sections, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? creamSageDefaultEnabledSections);
+
+  // Per-section wrapper that scopes CSS custom properties to the section's
+  // subtree. CSS inheritance means only that section and its children pick up
+  // the overrides — leaving the rest of the page on the global tokens.
+  // Rendered as a block-level div so layout matches the previous un-wrapped
+  // rendering (sections were already block-level).
+  const sectionWrap = (key: string, node: import('react').ReactElement) => {
+    const style = sectionStyleFor(sections?.[key]);
+    // Always render the wrapper so tests + future inspect-tooling can find
+    // `[data-cs-section="…"]` on an un-overridden section too. Style only
+    // attaches when there's an actual override, so baseline rendering stays
+    // byte-for-byte identical aside from the wrapping div.
+    return (
+      <div data-cs-section={key} style={style}>
+        {node}
+      </div>
+    );
+  };
 
   // Translate DesignTokens → inline CSS custom properties on the root. The
   // stylesheet already uses var(--cs-primary) etc. with template defaults,
@@ -2591,24 +2615,24 @@ export function CreamSage({ content, speakers, funnelId, enabledSections, tokens
         Skip to content
       </a>
 
-      {enabled.has('top-bar') && <TopBar content={content} />}
+      {enabled.has('top-bar') && sectionWrap('topBar', <TopBar content={content} />)}
 
       <main id="main">
-        {enabled.has('hero') && <Hero content={content} speakers={speakers} />}
-        {enabled.has('press') && <Press content={content} />}
-        {enabled.has('stats') && <Stats content={content} />}
-        {enabled.has('overview') && <Overview content={content} />}
+        {enabled.has('hero') && sectionWrap('hero', <Hero content={content} speakers={speakers} />)}
+        {enabled.has('press') && sectionWrap('press', <Press content={content} />)}
+        {enabled.has('stats') && sectionWrap('stats', <Stats content={content} />)}
+        {enabled.has('overview') && sectionWrap('overview', <Overview content={content} />)}
         {enabled.has('speakers') && <SpeakersDay content={content} speakers={speakers} />}
-        {enabled.has('outcomes') && <Outcomes content={content} />}
-        {enabled.has('free-gift') && <FreeGift content={content} />}
-        {enabled.has('bonuses') && <Bonuses content={content} />}
-        {enabled.has('founders') && <Founders content={content} />}
-        {enabled.has('testimonials') && <Testimonials content={content} />}
-        {enabled.has('pull-quote') && <PullQuote content={content} />}
-        {enabled.has('figures') && <Figures content={content} />}
-        {enabled.has('shifts') && <Shifts content={content} />}
-        {enabled.has('faq') && <FAQ content={content} />}
-        {enabled.has('closing-cta') && <FinalCTA content={content} />}
+        {enabled.has('outcomes') && sectionWrap('outcomes', <Outcomes content={content} />)}
+        {enabled.has('free-gift') && sectionWrap('freeGift', <FreeGift content={content} />)}
+        {enabled.has('bonuses') && sectionWrap('bonuses', <Bonuses content={content} />)}
+        {enabled.has('founders') && sectionWrap('founders', <Founders content={content} />)}
+        {enabled.has('testimonials') && sectionWrap('testimonials', <Testimonials content={content} />)}
+        {enabled.has('pull-quote') && sectionWrap('pullQuote', <PullQuote content={content} />)}
+        {enabled.has('figures') && sectionWrap('figures', <Figures content={content} />)}
+        {enabled.has('shifts') && sectionWrap('shifts', <Shifts content={content} />)}
+        {enabled.has('faq') && sectionWrap('faqSection', <FAQ content={content} />)}
+        {enabled.has('closing-cta') && sectionWrap('closing', <FinalCTA content={content} />)}
 
         {enabled.has('sales-hero') && <SalesHero content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
         {enabled.has('intro') && <Intro content={content} />}

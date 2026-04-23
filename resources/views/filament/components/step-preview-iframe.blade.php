@@ -26,6 +26,7 @@
                             content: result.content,
                             enabled_sections: result.enabled_sections ?? null,
                             tokens: result.tokens ?? null,
+                            sections: result.sections ?? null,
                         }, '*');
                     }
                 }, 600);

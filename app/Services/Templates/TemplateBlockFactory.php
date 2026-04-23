@@ -4,7 +4,10 @@ namespace App\Services\Templates;
 
 use App\Models\FunnelStep;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Fieldset;
 
 /**
  * Bridges Filament Builder ↔ page_content map.
@@ -185,10 +188,52 @@ class TemplateBlockFactory
             $blocks[] = Block::make($name)
                 ->label($this->humanize($name))
                 ->icon($this->iconFor($name))
-                ->schema($this->fieldsForSection($propSchema, $summitId));
+                ->schema(array_merge(
+                    $this->fieldsForSection($propSchema, $summitId),
+                    [$this->sectionDesignFieldset()],
+                ));
         }
 
         return $blocks;
+    }
+
+    /**
+     * Per-section design-token overrides. Rendered as a collapsed fieldset at
+     * the bottom of every block's form. Values write to `data.__design.*`;
+     * EditFunnelStep moves them to `page_overrides.sections[type]` on save and
+     * injects them back on fill, keeping block `data` pure content (so Zod
+     * validation on the Next side is unchanged).
+     */
+    private function sectionDesignFieldset(): Fieldset
+    {
+        $fonts = [
+            'Fraunces' => 'Fraunces',
+            'Cormorant Garamond' => 'Cormorant Garamond',
+            'Playfair Display' => 'Playfair Display',
+            'Inter' => 'Inter',
+            'DM Sans' => 'DM Sans',
+            'Poppins' => 'Poppins',
+            'Nunito' => 'Nunito',
+        ];
+
+        return Fieldset::make('Design (this section)')
+            ->columns(6)
+            ->schema([
+                ColorPicker::make('__design.palette.primary')
+                    ->label('Primary')->hex()->live(debounce: 500)->columnSpan(1),
+                ColorPicker::make('__design.palette.accent')
+                    ->label('Accent')->hex()->live(debounce: 500)->columnSpan(1),
+                ColorPicker::make('__design.palette.ink')
+                    ->label('Text')->hex()->live(debounce: 500)->columnSpan(1),
+                ColorPicker::make('__design.palette.paper')
+                    ->label('Background')->hex()->live(debounce: 500)->columnSpan(1),
+                Select::make('__design.headingFont')
+                    ->label('Heading font')->options($fonts)->native(false)->live()
+                    ->placeholder('— inherit —')->columnSpan(1),
+                Select::make('__design.bodyFont')
+                    ->label('Body font')->options($fonts)->native(false)->live()
+                    ->placeholder('— inherit —')->columnSpan(1),
+            ]);
     }
 
     /**

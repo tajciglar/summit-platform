@@ -70,6 +70,12 @@ export interface TemplateDefinition<TContent = unknown> {
      */
     tokens?: import('./shared/design-tokens').DesignTokens;
     /**
+     * Optional per-section design-token overrides, keyed by section key
+     * (`hero`, `press`, …). Sections that consume this apply CSS vars at
+     * their own root so only that section is restyled.
+     */
+    sections?: Record<string, import('./shared/design-tokens').DesignTokens>;
+    /**
      * Per-funnel WordPress cart URL used as the interim checkout handoff for
      * sales/upsell steps. When null, templates should fall back to the
      * in-progress native Stripe checkout (TBD).

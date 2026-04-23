@@ -17,6 +17,7 @@ interface LivePreviewShellProps {
   enabledSections?: string[];
   palette?: Palette | null;
   initialTokens?: DesignTokens | null;
+  initialSections?: Record<string, DesignTokens> | null;
   wpCheckoutRedirectUrl?: string | null;
   wpThankyouRedirectUrl?: string | null;
 }
@@ -44,12 +45,14 @@ export default function LivePreviewShell({
   enabledSections,
   palette,
   initialTokens,
+  initialSections,
   wpCheckoutRedirectUrl,
   wpThankyouRedirectUrl,
 }: LivePreviewShellProps) {
   const [content, setContent] = useState(initialContent);
   const [liveEnabledSections, setLiveEnabledSections] = useState(enabledSections);
   const [tokens, setTokens] = useState<DesignTokens | null | undefined>(initialTokens);
+  const [sections, setSections] = useState<Record<string, DesignTokens> | null | undefined>(initialSections);
   const search = useSearchParams();
   const inlineEdit = search?.get('inline') === '1';
 
@@ -59,6 +62,7 @@ export default function LivePreviewShell({
       if (event.data.content) setContent(event.data.content);
       if (event.data.enabled_sections) setLiveEnabledSections(event.data.enabled_sections);
       if ('tokens' in event.data) setTokens(event.data.tokens ?? null);
+      if ('sections' in event.data) setSections(event.data.sections ?? null);
     }
 
     window.addEventListener('message', handleMessage);
@@ -157,6 +161,7 @@ export default function LivePreviewShell({
       enabledSections={liveEnabledSections}
       palette={palette}
       tokens={tokens ?? undefined}
+      sections={sections ?? undefined}
       wpCheckoutRedirectUrl={wpCheckoutRedirectUrl}
       wpThankyouRedirectUrl={wpThankyouRedirectUrl}
     />

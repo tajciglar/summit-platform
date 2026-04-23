@@ -31,6 +31,7 @@ export default async function StepPreviewPage({
       enabledSections={preview.enabled_sections ?? undefined}
       palette={preview.palette}
       initialTokens={preview.tokens ?? null}
+      initialSections={preview.sections ?? null}
       wpCheckoutRedirectUrl={preview.wp_checkout_redirect_url}
       wpThankyouRedirectUrl={preview.wp_thankyou_redirect_url}
     />

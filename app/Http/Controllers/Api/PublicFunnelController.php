@@ -88,6 +88,7 @@ class PublicFunnelController extends Controller
             : [];
 
         $tokens = is_array($pageOverrides['tokens'] ?? null) ? $pageOverrides['tokens'] : null;
+        $sections = is_array($pageOverrides['sections'] ?? null) ? $pageOverrides['sections'] : null;
 
         return [
             'template_key' => $content['template_key'],
@@ -96,6 +97,7 @@ class PublicFunnelController extends Controller
             'audience' => $content['audience'] ?? null,
             'palette' => $content['palette'] ?? null,
             'tokens' => $tokens,
+            'sections' => $sections,
             'speakers' => $speakers,
             'funnel_id' => $funnelId,
             'funnel_step_id' => $funnelStepId,

@@ -86,6 +86,40 @@ test.describe('design tokens round-trip (CreamSage)', () => {
       .toBe('rgb(255, 0, 170)');
   });
 
+  test('per-section override isolates to that section', async ({ page }) => {
+    await page.goto(`/preview/step/${creamSageId}?inline=1`);
+    const root = page.locator('.cream-sage-root').first();
+    await expect(root).toBeVisible({ timeout: 15_000 });
+
+    // Sanity: both hero CTA and topBar CTA start on the template default.
+    const heroCta = page.locator('[data-cs-section="hero"] .cream-sage-btn-primary').first();
+    const topBarCta = page.locator('[data-cs-section="topBar"] .cream-sage-btn-primary').first();
+
+    // First trigger to ensure listener attaches.
+    await expect
+      .poll(() => root.evaluate((el) => getComputedStyle(el).getPropertyValue('--cs-primary').trim()), { timeout: 5_000 })
+      .toBe('#c4663d');
+
+    // Per-section override: recolor only the hero.
+    await page.evaluate(() => {
+      window.postMessage(
+        {
+          type: 'step-preview-update',
+          sections: { hero: { palette: { primary: '#22ee55' } } },
+        },
+        '*',
+      );
+    });
+
+    await expect
+      .poll(() => heroCta.evaluate((el) => getComputedStyle(el as HTMLElement).backgroundColor), { timeout: 4_000 })
+      .toBe('rgb(34, 238, 85)');
+
+    // TopBar CTA should remain on the unchanged template primary.
+    const topBarBg = await topBarCta.evaluate((el) => getComputedStyle(el as HTMLElement).backgroundColor);
+    expect(topBarBg).toBe('rgb(196, 102, 61)');
+  });
+
   test('inline-edit message posts back with new text', async ({ page }) => {
     await page.goto(`/preview/step/${creamSageId}?inline=1`);
     const editable = page.locator('[data-edit-path="hero.headlineLead"]').first();
