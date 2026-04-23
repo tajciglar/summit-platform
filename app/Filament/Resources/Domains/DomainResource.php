@@ -4,15 +4,18 @@ namespace App\Filament\Resources\Domains;
 
 use App\Filament\Forms\Components\MediaPickerInput;
 use App\Models\Domain;
+use App\Models\User;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -83,6 +86,8 @@ class DomainResource extends Resource
                         ->subCategory('logo')
                         ->role('logo')
                         ->label('Logo')
+                        ->captionUsing(fn (Domain $record): string => $record->name.' — logo')
+                        ->altTextUsing(fn (Domain $record): string => $record->name.' logo')
                         ->columnSpanFull(),
                 ]),
 
@@ -111,7 +116,35 @@ class DomainResource extends Resource
                 TernaryFilter::make('is_active'),
             ])
             ->recordActions([
-                ViewAction::make(),
+                // One-click grant: attach the currently logged-in user to this
+                // Domain's domain_user pivot so the tenant dropdown starts
+                // showing it. Hidden when the user is already attached. Fixes
+                // the "I created a domain via SQL but can't switch to it" trap
+                // until we finish the CreateDomain-page auto-attach rollout.
+                Action::make('joinDomain')
+                    ->label('Join')
+                    ->icon('heroicon-m-user-plus')
+                    ->color('info')
+                    ->visible(function (Domain $record): bool {
+                        $user = Filament::auth()->user();
+                        if (! $user instanceof User) {
+                            return false;
+                        }
+
+                        return ! $record->users()->whereKey($user->id)->exists();
+                    })
+                    ->action(function (Domain $record): void {
+                        $user = Filament::auth()->user();
+                        if (! $user instanceof User) {
+                            return;
+                        }
+                        $record->users()->syncWithoutDetaching([$user->id => ['created_at' => now()]]);
+                        Notification::make()
+                            ->title('Joined '.$record->name)
+                            ->body('This domain will now show up in your tenant switcher.')
+                            ->success()
+                            ->send();
+                    }),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -128,7 +161,6 @@ class DomainResource extends Resource
         return [
             'index' => Pages\ListDomains::route('/'),
             'create' => Pages\CreateDomain::route('/create'),
-            'view' => Pages\ViewDomain::route('/{record}'),
             'edit' => Pages\EditDomain::route('/{record}/edit'),
         ];
     }
