@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>08 · Dark Premium</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Geist', system-ui, sans-serif; background: #111114; color: #E5E5E2; min-height: 100dvh; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .em { color: #10B981; }
+  .card { border: 1px solid rgba(229,229,226,0.08); background: #15151A; }
+  .btn { transition: all 220ms cubic-bezier(0.16,1,0.3,1); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  @keyframes pulse-em { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 50% { opacity: 0.85; box-shadow: 0 0 0 4px rgba(16,185,129,0); } }
+  .live-dot { animation: pulse-em 2.4s infinite; }
+</style></head>
+<body>
+  <header class="max-w-[1400px] mx-auto px-6 py-5 flex items-center justify-between border-b border-white/5">
+    <div class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#10B981] live-dot"></div><span class="tracking-tight">awakened</span></div>
+    <nav class="hidden md:flex gap-7 text-sm text-[#E5E5E2]/60"><a>Speakers</a><a>Schedule</a><a>FAQ</a></nav>
+    <button class="btn bg-[#10B981] text-[#0F1413] px-5 py-2 rounded-full text-sm font-medium tracking-tight">Reserve</button>
+  </header>
+
+  <section class="max-w-[1400px] mx-auto px-6 pt-20 md:pt-32 pb-20 grid md:grid-cols-[1.5fr_1fr] gap-14 items-end">
+    <div>
+      <p class="mono text-[11px] tracking-[0.22em] uppercase em mb-6">Spring 2026 / 04.18 — 04.24</p>
+      <h1 class="text-[52px] md:text-[88px] tracking-tighter leading-[0.94] font-medium text-white">
+        Honest mornings.<br/>Twenty-four <span class="em">practitioners.</span><br/>One quiet week.
+      </h1>
+      <p class="mt-8 text-[#E5E5E2]/60 leading-relaxed max-w-[55ch] text-[17px]">
+        Live conversations with somatic therapists, breathwork teachers, and herbalists. No replays — show up, take notes, integrate.
+      </p>
+      <div class="mt-10 flex items-center gap-5">
+        <button class="btn bg-[#10B981] text-[#0F1413] px-7 py-3.5 rounded-full text-sm font-medium tracking-tight">Reserve free seat</button>
+        <span class="mono text-[11px] uppercase tracking-widest text-[#E5E5E2]/40">847 seats left</span>
+      </div>
+    </div>
+    <div class="card rounded-2xl divide-y divide-white/5">
+      <div class="p-5 flex items-center justify-between"><div><div class="text-sm">Today · Maren Solberg</div><div class="text-xs text-[#E5E5E2]/50 mt-0.5">Polyvagal mapping</div></div><div class="flex items-center gap-2 mono text-[10px] em uppercase tracking-widest"><div class="w-1.5 h-1.5 rounded-full bg-[#10B981] live-dot"></div>live in 1h</div></div>
+      <div class="p-5 flex items-center justify-between"><div><div class="text-sm text-[#E5E5E2]/85">Day 02 · Yusuf Adeyemi</div><div class="text-xs text-[#E5E5E2]/50 mt-0.5">Breath geometry</div></div><span class="mono text-[11px] text-[#E5E5E2]/50">04.19</span></div>
+      <div class="p-5 flex items-center justify-between"><div><div class="text-sm text-[#E5E5E2]/85">Day 03 · Nadia Castellanos</div><div class="text-xs text-[#E5E5E2]/50 mt-0.5">Plant medicine</div></div><span class="mono text-[11px] text-[#E5E5E2]/50">04.20</span></div>
+      <div class="p-5 flex items-center justify-between"><div><div class="text-sm text-[#E5E5E2]/85">Day 04 · Kirin Whittaker</div><div class="text-xs text-[#E5E5E2]/50 mt-0.5">Somatic experiencing</div></div><span class="mono text-[11px] text-[#E5E5E2]/50">04.21</span></div>
+      <div class="p-5 flex items-center justify-between"><div><div class="text-sm text-[#E5E5E2]/85">Day 05 · Tova Lindqvist</div><div class="text-xs text-[#E5E5E2]/50 mt-0.5">Restorative yoga</div></div><span class="mono text-[11px] text-[#E5E5E2]/50">04.22</span></div>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 pb-12">
+    <div class="grid md:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden">
+      <div class="bg-[#111114] p-7"><div class="mono text-3xl tracking-tight">24</div><div class="text-xs text-[#E5E5E2]/50 mt-2 uppercase tracking-widest">healers</div></div>
+      <div class="bg-[#111114] p-7"><div class="mono text-3xl tracking-tight">07</div><div class="text-xs text-[#E5E5E2]/50 mt-2 uppercase tracking-widest">mornings</div></div>
+      <div class="bg-[#111114] p-7"><div class="mono text-3xl tracking-tight em">$0</div><div class="text-xs text-[#E5E5E2]/50 mt-2 uppercase tracking-widest">to attend</div></div>
+      <div class="bg-[#111114] p-7"><div class="mono text-3xl tracking-tight">12.4k</div><div class="text-xs text-[#E5E5E2]/50 mt-2 uppercase tracking-widest">last edition</div></div>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 pb-28">
+    <div class="flex items-baseline justify-between border-t border-white/5 pt-8 mb-10">
+      <h2 class="text-2xl tracking-tight">Featured speakers</h2>
+      <span class="mono text-[11px] text-[#E5E5E2]/50">06 / 24</span>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden">
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#10B981,#0F4F3A);"></div><h3 class="text-base tracking-tight">Maren Solberg</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Polyvagal therapist · Oslo</p></article>
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#0F766E,#115E59);"></div><h3 class="text-base tracking-tight">Yusuf Adeyemi</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Breathwork · Lagos</p></article>
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#34D399,#065F46);"></div><h3 class="text-base tracking-tight">Nadia Castellanos</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Herbalist · CDMX</p></article>
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#10B981,#022C22);"></div><h3 class="text-base tracking-tight">Kirin Whittaker</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Somatic exp. · Bristol</p></article>
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#6EE7B7,#0F766E);"></div><h3 class="text-base tracking-tight">Tova Lindqvist</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Yoga therapy · Stockholm</p></article>
+      <article class="bg-[#15151A] p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#10B981,#1F2937);"></div><h3 class="text-base tracking-tight">Eshe Macharia</h3><p class="text-xs text-[#E5E5E2]/50 mt-1">Trauma coach · Nairobi</p></article>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/5"><div class="max-w-[1400px] mx-auto px-6 py-8 flex justify-between text-xs text-[#E5E5E2]/50"><span class="mono">awakened · spring 2026</span><div class="flex gap-5"><a>Privacy</a><a>Terms</a><a>Contact</a></div></div></footer>
+</body></html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>03 · Brutalist Ochre</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Archivo', system-ui, sans-serif; background: #F4EFE6; color: #1A1A1A; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  .border-ink { border-color: #1A1A1A; }
+  .btn { transition: transform 150ms, box-shadow 150ms; box-shadow: 4px 4px 0 #1A1A1A; }
+  .btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #1A1A1A; }
+  .btn:active { transform: translate(2px,2px); box-shadow: 0 0 0 #1A1A1A; }
+  .grid-bg { background-image: linear-gradient(rgba(26,26,26,0.07) 1px, transparent 1px), linear-gradient(90deg,rgba(26,26,26,0.07) 1px, transparent 1px); background-size: 40px 40px; }
+</style></head>
+<body class="min-h-[100dvh] grid-bg">
+  <header class="border-b-2 border-ink">
+    <div class="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="mono text-sm font-bold">[ AWAKENED // 24 ]</div>
+      <nav class="hidden md:flex gap-8 mono text-xs uppercase"><a>spk</a><a>cal</a><a>faq</a></nav>
+      <button class="btn bg-[#B8862A] text-[#1A1A1A] px-5 py-2 mono text-xs uppercase font-bold border-2 border-ink">reserve_seat</button>
+    </div>
+  </header>
+
+  <section class="max-w-[1400px] mx-auto px-6 pt-12 pb-20 grid md:grid-cols-12 gap-6 items-start">
+    <div class="md:col-span-8">
+      <div class="mono text-xs uppercase tracking-widest text-[#B8862A] mb-6">/ filed_under: somatic + nervous_system / spring 2026</div>
+      <h1 class="text-[56px] md:text-[120px] leading-[0.9] tracking-[-0.04em] font-black uppercase">
+        Slow<br/>practice.<br/><span class="text-[#B8862A]">Loud<br/>silence.</span>
+      </h1>
+    </div>
+    <aside class="md:col-span-4 md:mt-32 border-2 border-ink bg-white p-6">
+      <div class="mono text-[10px] uppercase tracking-widest text-[#5C5648] mb-4">// stats.json</div>
+      <dl class="space-y-3 mono text-sm">
+        <div class="flex justify-between border-b border-dashed border-ink/30 pb-2"><dt>healers</dt><dd class="font-bold">24</dd></div>
+        <div class="flex justify-between border-b border-dashed border-ink/30 pb-2"><dt>days</dt><dd class="font-bold">07</dd></div>
+        <div class="flex justify-between border-b border-dashed border-ink/30 pb-2"><dt>start</dt><dd class="font-bold">04.18.26</dd></div>
+        <div class="flex justify-between border-b border-dashed border-ink/30 pb-2"><dt>cost</dt><dd class="font-bold">$0.00</dd></div>
+        <div class="flex justify-between"><dt>seats_left</dt><dd class="font-bold text-[#B8862A]">847</dd></div>
+      </dl>
+      <button class="btn bg-[#1A1A1A] text-[#F4EFE6] w-full mt-6 py-3 mono text-xs uppercase font-bold border-2 border-ink">→ claim_free_seat</button>
+    </aside>
+  </section>
+
+  <section class="border-y-2 border-ink bg-[#1A1A1A] text-[#F4EFE6]">
+    <div class="max-w-[1400px] mx-auto px-6 py-16">
+      <div class="flex items-baseline justify-between mb-10 border-b border-[#F4EFE6]/20 pb-4">
+        <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight">// the_voices</h2>
+        <span class="mono text-xs">[06 / 24]</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-[#F4EFE6]/15">
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">001</div><div class="mt-3 text-xl font-bold tracking-tight">Maren Solberg</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">polyvagal // oslo</div></div>
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">002</div><div class="mt-3 text-xl font-bold tracking-tight">Yusuf Adeyemi</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">breathwork // lagos</div></div>
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">003</div><div class="mt-3 text-xl font-bold tracking-tight">Nadia Castellanos</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">herbalist // cdmx</div></div>
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">004</div><div class="mt-3 text-xl font-bold tracking-tight">Kirin Whittaker</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">somatic_exp // bristol</div></div>
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">005</div><div class="mt-3 text-xl font-bold tracking-tight">Tova Lindqvist</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">yoga_therapy // stockholm</div></div>
+        <div class="p-7"><div class="mono text-[10px] text-[#B8862A]">006</div><div class="mt-3 text-xl font-bold tracking-tight">Eshe Macharia</div><div class="mono text-xs text-[#F4EFE6]/60 mt-1">trauma_coach // nairobi</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="max-w-[1400px] mx-auto px-6 py-8 mono text-xs uppercase flex justify-between"><span>// awakened.summit / spring.2026</span><div class="flex gap-6"><a>privacy</a><a>terms</a><a>contact</a></div></footer>
+</body></html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>09 · Asymmetric Magazine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Geist', system-ui, sans-serif; background: #F7F3EB; color: #1B2151; min-height: 100dvh; overflow-x: hidden; }
+  .serif { font-family: 'DM Serif Display', serif; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .ind { color: #1B2151; }
+  .accent { color: #B8492C; }
+  .balance { text-wrap: balance; }
+  .btn { transition: all 220ms cubic-bezier(0.16,1,0.3,1); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+</style></head>
+<body>
+  <header class="max-w-[1500px] mx-auto px-6 py-6 flex items-center justify-between">
+    <span class="serif italic text-2xl">Awakened.</span>
+    <nav class="hidden md:flex gap-7 text-sm text-[#1B2151]/65"><a>Speakers</a><a>Schedule</a><a>About</a></nav>
+    <button class="btn ind text-[#F7F3EB] bg-[#1B2151] px-5 py-2.5 rounded-full text-sm tracking-tight">Reserve</button>
+  </header>
+
+  <section class="max-w-[1500px] mx-auto px-6 pt-8 pb-20 grid grid-cols-12 gap-x-6 gap-y-8">
+    <p class="mono text-xs uppercase tracking-[0.22em] accent col-span-12">No. 14 · Spring · April 18 — 24, 2026</p>
+    <h1 class="serif col-span-12 md:col-span-10 md:col-start-1 text-[64px] md:text-[140px] leading-[0.9] tracking-tight balance">
+      A quiet <em class="accent italic">field</em> of practitioners.
+    </h1>
+    <div class="col-span-12 md:col-span-5 md:col-start-3 mt-2">
+      <p class="text-[#3D4467] text-[17px] leading-relaxed">
+        Twenty-four therapists, herbalists, and breathwork teachers. Seven mornings of conversation that don't try to sell you wellness — they try to give you back the day.
+      </p>
+      <div class="mt-8 flex items-center gap-5">
+        <button class="btn bg-[#1B2151] text-[#F7F3EB] px-7 py-4 rounded-full tracking-tight">Reserve free seat</button>
+        <a class="text-sm accent underline underline-offset-4">read field notes</a>
+      </div>
+    </div>
+    <aside class="col-span-12 md:col-span-3 md:col-start-9 md:mt-20 border-l-2 border-[#1B2151]/20 pl-5 self-end">
+      <div class="serif text-3xl tracking-tight">"</div>
+      <p class="text-sm text-[#3D4467] leading-relaxed italic">Quiet, undidactic, and rare. The kind of summit I usually wish existed.</p>
+      <p class="mono text-[10px] uppercase tracking-widest text-[#1B2151]/50 mt-3">— Tova Lindqvist · '25 attendee</p>
+    </aside>
+  </section>
+
+  <section class="max-w-[1500px] mx-auto px-6 pb-20">
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-12 md:col-span-8 aspect-[16/9] rounded-3xl overflow-hidden" style="background:
+        radial-gradient(circle at 30% 30%, #C7A98E, #1B2151 90%);"></div>
+      <div class="col-span-12 md:col-span-4 grid grid-rows-2 gap-6">
+        <div class="rounded-3xl bg-white p-7 flex flex-col justify-between"><div class="serif text-6xl tracking-tight ind">24</div><div class="text-xs uppercase tracking-widest text-[#3D4467] mt-3">healers across 7 mornings</div></div>
+        <div class="rounded-3xl p-7 flex flex-col justify-between text-[#F7F3EB]" style="background: #1B2151;"><div class="serif text-6xl tracking-tight" style="color: #B8492C;">$0</div><div class="text-xs uppercase tracking-widest opacity-70 mt-3">to attend live</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-[1500px] mx-auto px-6 pb-28">
+    <div class="flex items-baseline justify-between mb-12 border-t border-[#1B2151]/15 pt-6">
+      <h2 class="serif italic text-3xl">Some voices.</h2>
+      <span class="mono text-xs text-[#3D4467]">06 / 24</span>
+    </div>
+    <div class="grid grid-cols-12 gap-x-6 gap-y-16">
+      <article class="col-span-12 md:col-span-4"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#C7A98E,#5C4838);"></div><h3 class="serif text-2xl tracking-tight">Maren Solberg</h3><p class="text-sm text-[#3D4467] mt-1">Polyvagal therapist · Oslo</p></article>
+      <article class="col-span-12 md:col-span-3 md:col-start-6 md:mt-12"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#7E9DC4,#1B2151);"></div><h3 class="serif text-xl tracking-tight">Yusuf Adeyemi</h3><p class="text-sm text-[#3D4467] mt-1">Breathwork · Lagos</p></article>
+      <article class="col-span-12 md:col-span-3 md:col-start-10"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#E8B287,#B8492C);"></div><h3 class="serif text-xl tracking-tight">Nadia Castellanos</h3><p class="text-sm text-[#3D4467] mt-1">Herbalist · CDMX</p></article>
+      <article class="col-span-12 md:col-span-3 md:col-start-2 md:mt-8"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#A8B5D0,#1B2151);"></div><h3 class="serif text-xl tracking-tight">Kirin Whittaker</h3><p class="text-sm text-[#3D4467] mt-1">Somatic experiencing · Bristol</p></article>
+      <article class="col-span-12 md:col-span-4 md:col-start-6"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#C7A98E,#1B2151);"></div><h3 class="serif text-2xl tracking-tight">Tova Lindqvist</h3><p class="text-sm text-[#3D4467] mt-1">Yoga therapy · Stockholm</p></article>
+      <article class="col-span-12 md:col-span-3 md:col-start-10 md:mt-8"><div class="aspect-[3/4] rounded-2xl mb-4" style="background: linear-gradient(160deg,#D9A085,#7C2818);"></div><h3 class="serif text-xl tracking-tight">Eshe Macharia</h3><p class="text-sm text-[#3D4467] mt-1">Trauma coach · Nairobi</p></article>
+    </div>
+  </section>
+
+  <footer class="border-t border-[#1B2151]/15"><div class="max-w-[1500px] mx-auto px-6 py-8 flex justify-between text-xs text-[#1B2151]/60"><span class="serif italic text-base">Awakened · Spring 2026</span><div class="flex gap-5"><a>Privacy</a><a>Terms</a><a>Contact</a></div></div></footer>
+</body></html>

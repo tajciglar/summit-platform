@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>02 · Bento Blue</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Geist', system-ui, sans-serif; background: #f9fafb; color: #0F172A; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .bento { box-shadow: 0 20px 40px -15px rgba(37,99,235,0.07); border: 1px solid rgba(226,232,240,0.7); }
+  .btn { transition: all 250ms cubic-bezier(0.16,1,0.3,1); }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(37,99,235,0.35); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+  .dot { animation: pulse-dot 2.4s infinite ease-in-out; }
+  @keyframes float-x { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-50%); } }
+  .marquee { animation: float-x 28s linear infinite; }
+</style></head>
+<body class="min-h-[100dvh]">
+  <header class="max-w-[1400px] mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-[#2563EB] dot"></div><span class="font-medium tracking-tight">awakened</span></div>
+    <nav class="hidden md:flex gap-7 text-sm text-slate-600"><a>Speakers</a><a>Schedule</a><a>FAQ</a></nav>
+    <button class="btn bg-[#0F172A] text-white px-4 py-2 rounded-full text-sm tracking-tight">Reserve · free</button>
+  </header>
+
+  <section class="max-w-[1400px] mx-auto px-6 pt-12 pb-12 grid lg:grid-cols-[1.4fr_1fr] gap-6 items-start">
+    <div class="bento bg-white rounded-[2rem] p-10 md:p-14">
+      <div class="mono text-[11px] tracking-widest uppercase text-[#2563EB] mb-6">Spring · April 18 — 24, 2026</div>
+      <h1 class="text-[44px] md:text-[68px] tracking-tighter leading-[0.96] font-medium text-slate-900">
+        Seven mornings of evidence-based<br/><span class="text-[#2563EB]">nervous-system care.</span>
+      </h1>
+      <p class="mt-7 text-slate-600 leading-relaxed max-w-[58ch] text-[17px]">
+        Twenty-four practitioners, one hour at a time. No replays — show up, take notes, integrate.
+      </p>
+      <div class="mt-10 flex items-center gap-4">
+        <button class="btn bg-[#2563EB] text-white px-7 py-3.5 rounded-full tracking-tight">Reserve free seat</button>
+        <span class="mono text-xs text-slate-500">+847 reserved this week</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-6">
+      <div class="bento bg-white rounded-[2rem] p-7 col-span-2">
+        <div class="mono text-[10px] uppercase tracking-widest text-slate-500">Live status</div>
+        <div class="mt-3 flex items-center gap-3">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#10B981] dot"></div>
+          <span class="text-sm">Today · Maren Solberg, polyvagal therapy at <span class="mono">09:00 GMT</span></span>
+        </div>
+        <div class="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden"><div class="h-full w-[34%] bg-[#2563EB] rounded-full"></div></div>
+        <div class="mono text-[10px] text-slate-500 mt-2">day 2 / 7</div>
+      </div>
+      <div class="bento bg-[#0F172A] text-white rounded-[2rem] p-7">
+        <div class="mono text-3xl">24</div><div class="text-xs text-slate-300 mt-1">healers</div>
+      </div>
+      <div class="bento bg-white rounded-[2rem] p-7">
+        <div class="mono text-3xl text-[#F87171]">$0</div><div class="text-xs text-slate-500 mt-1">to attend</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 pb-12">
+    <div class="bento bg-white rounded-[2rem] overflow-hidden">
+      <div class="px-7 pt-6 pb-3 flex items-baseline justify-between border-b border-slate-100">
+        <div><div class="mono text-[10px] uppercase tracking-widest text-slate-500">Featured speakers</div><div class="text-lg tracking-tight mt-0.5">Six of twenty-four</div></div>
+        <a class="mono text-xs text-[#2563EB]">view all →</a>
+      </div>
+      <div class="overflow-hidden border-b border-slate-100 py-2">
+        <div class="marquee whitespace-nowrap mono text-[11px] uppercase tracking-widest text-slate-400 inline-flex gap-10 pl-6">
+          <span>Maren Solberg · Oslo</span><span>Yusuf Adeyemi · Lagos</span><span>Nadia Castellanos · CDMX</span><span>Kirin Whittaker · Bristol</span><span>Tova Lindqvist · Stockholm</span><span>Eshe Macharia · Nairobi</span>
+          <span>Maren Solberg · Oslo</span><span>Yusuf Adeyemi · Lagos</span><span>Nadia Castellanos · CDMX</span><span>Kirin Whittaker · Bristol</span><span>Tova Lindqvist · Stockholm</span><span>Eshe Macharia · Nairobi</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 divide-x divide-y md:divide-y-0 divide-slate-100">
+        <div class="p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#2563EB,#1B3A5C);"></div><div class="text-base tracking-tight font-medium">Maren Solberg</div><div class="text-xs text-slate-500 mt-0.5">Polyvagal therapist</div></div>
+        <div class="p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#F87171,#DC2626);"></div><div class="text-base tracking-tight font-medium">Yusuf Adeyemi</div><div class="text-xs text-slate-500 mt-0.5">Breathwork facilitator</div></div>
+        <div class="p-7"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#60A5FA,#2563EB);"></div><div class="text-base tracking-tight font-medium">Nadia Castellanos</div><div class="text-xs text-slate-500 mt-0.5">Herbalist</div></div>
+        <div class="p-7 border-t md:border-t border-slate-100"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#1D4ED8,#0F172A);"></div><div class="text-base tracking-tight font-medium">Kirin Whittaker</div><div class="text-xs text-slate-500 mt-0.5">Somatic experiencing</div></div>
+        <div class="p-7 border-t border-slate-100"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#F87171,#FCA5A5);"></div><div class="text-base tracking-tight font-medium">Tova Lindqvist</div><div class="text-xs text-slate-500 mt-0.5">Yoga therapist</div></div>
+        <div class="p-7 border-t border-slate-100"><div class="w-12 h-12 rounded-full mb-4" style="background: linear-gradient(135deg,#0F766E,#115E59);"></div><div class="text-base tracking-tight font-medium">Eshe Macharia</div><div class="text-xs text-slate-500 mt-0.5">Trauma-informed coach</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="max-w-[1400px] mx-auto px-6 py-10 flex justify-between text-xs text-slate-500 mono">
+    <span>awakened · spring 2026</span><div class="flex gap-5"><a>Privacy</a><a>Terms</a><a>Contact</a></div>
+  </footer>
+</body></html>

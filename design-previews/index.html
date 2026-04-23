@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Design Previews · Summit Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Geist', system-ui, sans-serif; background: #f7f7f5; color: #18181b; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .card { transition: transform 200ms cubic-bezier(0.16,1,0.3,1), box-shadow 200ms; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08); }
+  .pill { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px solid currentColor; opacity: 0.7; }
+</style>
+</head>
+<body class="min-h-[100dvh]">
+  <header class="max-w-[1500px] mx-auto px-6 py-14 md:py-20 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
+    <div>
+      <p class="mono text-xs uppercase tracking-[0.18em] text-zinc-500 mb-4">Design Previews · 2026-04-23</p>
+      <h1 class="text-4xl md:text-6xl tracking-tighter leading-[0.95] font-medium">
+        18 design directions, three profiles each.
+      </h1>
+    </div>
+    <div class="text-zinc-600 leading-relaxed max-w-[55ch] text-base md:text-[17px] space-y-3">
+      <p>Each design ships in three configurations:</p>
+      <ul class="space-y-1.5 mono text-[13px]">
+        <li><span class="pill">baseline</span> · 8 / 6 / 4 — original direction proof</li>
+        <li><span class="pill" style="color:#1F8F4D;">landing</span> · 5 / 4 / 3 — airy, single CTA, conversion-focused</li>
+        <li><span class="pill" style="color:#B8492C;">sales</span> · 4 / 3 / 6 — denser, multi-section, offer-led</li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="max-w-[1500px] mx-auto px-6 pb-32">
+    <section class="mb-20">
+      <div class="flex items-baseline justify-between border-b border-zinc-200 pb-3 mb-8">
+        <h2 class="text-xl tracking-tight font-medium">New directions</h2>
+        <span class="mono text-xs text-zinc-500">10 designs · 30 pages</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5" id="new-grid"></div>
+    </section>
+
+    <section>
+      <div class="flex items-baseline justify-between border-b border-zinc-200 pb-3 mb-8">
+        <h2 class="text-xl tracking-tight font-medium">Redesigned existing templates</h2>
+        <span class="mono text-xs text-zinc-500">8 designs · 24 pages</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="redesign-grid"></div>
+    </section>
+  </main>
+
+  <footer class="max-w-[1500px] mx-auto px-6 py-12 border-t border-zinc-200 text-zinc-500 mono text-xs flex justify-between">
+    <span>summit-platform · design-previews · 54 files</span>
+    <span>open any · cmd-click for new tab</span>
+  </footer>
+
+<script>
+const newDirections = [
+  ['new-01-editorial-cream', 'Editorial Cream', 'linear-gradient(135deg,#FAF7F0 50%,#6B7E5C 50%)'],
+  ['new-02-bento-blue', 'Bento Blue', 'linear-gradient(135deg,#f9fafb 0%,#e6eefb 60%,#2563EB 100%)'],
+  ['new-03-brutalist-ochre', 'Brutalist Ochre', '#F4EFE6'],
+  ['new-04-glass-indigo', 'Glass Indigo', 'radial-gradient(circle at 30% 30%,#2D3970,#0F1535 80%)'],
+  ['new-05-split-green', 'Split Green', 'linear-gradient(90deg,#0F3D2E 50%,#D4A24A 50%)'],
+  ['new-06-marquee-lime', 'Kinetic Lime', '#0a0a0a'],
+  ['new-07-pastel-rust', 'Pastel Rust', 'linear-gradient(135deg,#FBF7F2,#E8C4B0)'],
+  ['new-08-dark-premium', 'Dark Premium', '#111114'],
+  ['new-09-asymmetric-mix', 'Asymmetric Magazine', '#F7F3EB'],
+  ['new-10-cockpit-mono', 'Cockpit Mono', '#F4EFE6'],
+];
+const redesigns = [
+  ['redesign-blue-coral', 'BlueCoral', 'linear-gradient(135deg,#2563EB,#F87171)'],
+  ['redesign-cream-sage', 'CreamSage', 'linear-gradient(135deg,#FAF7F0,#6B7E5C)'],
+  ['redesign-green-gold', 'GreenGold', 'linear-gradient(135deg,#0F3D2E,#D4A24A)'],
+  ['redesign-indigo-gold', 'IndigoGold', 'linear-gradient(135deg,#1F2A6B,#C9A961)'],
+  ['redesign-lime-ink', 'LimeInk', 'linear-gradient(135deg,#0a0a0a,#B8E040)'],
+  ['redesign-ochre-ink', 'OchreInk', 'linear-gradient(135deg,#F4EFE6,#1A1A1A)'],
+  ['redesign-rust-cream', 'RustCream', 'linear-gradient(135deg,#FBF7F2,#B8492C)'],
+  ['redesign-violet-sun', 'VioletSun', 'linear-gradient(135deg,#3D2E5E,#E8B547)'],
+];
+
+function buildCard(item) {
+  const [key, label, bg] = item;
+  const article = document.createElement('article');
+  article.className = 'card bg-white border border-zinc-200/70 rounded-2xl overflow-hidden';
+
+  const thumb = document.createElement('div');
+  thumb.className = 'aspect-[16/10]';
+  thumb.style.background = bg;
+  article.appendChild(thumb);
+
+  const body = document.createElement('div');
+  body.className = 'p-5';
+
+  const keyEl = document.createElement('div');
+  keyEl.className = 'mono text-[10px] text-zinc-500 mb-1';
+  keyEl.textContent = key;
+  body.appendChild(keyEl);
+
+  const labelEl = document.createElement('div');
+  labelEl.className = 'text-base tracking-tight mb-4';
+  labelEl.textContent = label;
+  body.appendChild(labelEl);
+
+  const links = document.createElement('div');
+  links.className = 'grid grid-cols-3 gap-1.5 text-[11px] mono';
+  const variants = [
+    { suffix: '', text: 'baseline', cls: 'bg-zinc-100 hover:bg-zinc-200', title: '8/6/4 baseline' },
+    { suffix: '-landing', text: 'landing', cls: 'bg-emerald-50 text-emerald-900 hover:bg-emerald-100', title: '5/4/3 landing' },
+    { suffix: '-sales', text: 'sales', cls: 'bg-orange-50 text-orange-900 hover:bg-orange-100', title: '4/3/6 sales' },
+  ];
+  for (const v of variants) {
+    const a = document.createElement('a');
+    a.href = key + v.suffix + '.html';
+    a.className = 'text-center py-1.5 rounded-md transition ' + v.cls;
+    a.title = v.title;
+    a.textContent = v.text;
+    links.appendChild(a);
+  }
+  body.appendChild(links);
+  article.appendChild(body);
+  return article;
+}
+
+const newGrid = document.getElementById('new-grid');
+for (const item of newDirections) newGrid.appendChild(buildCard(item));
+const redesignGrid = document.getElementById('redesign-grid');
+for (const item of redesigns) redesignGrid.appendChild(buildCard(item));
+</script>
+</body>
+</html>

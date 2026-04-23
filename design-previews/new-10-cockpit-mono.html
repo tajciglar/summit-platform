@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>10 · Cockpit Mono</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'JetBrains Mono', monospace; background: #F4EFE6; color: #1A1A1A; min-height: 100dvh; font-variant-numeric: tabular-nums; }
+  .sans { font-family: 'Geist', sans-serif; }
+  .ochre { color: #B8862A; }
+  .ink { color: #1A1A1A; }
+  .btn { transition: background 200ms, transform 150ms; }
+  .btn:hover { background: #1A1A1A; color: #F4EFE6; }
+  .btn:active { transform: scale(0.98); }
+</style></head>
+<body>
+  <header class="border-b border-ink">
+    <div class="max-w-[1400px] mx-auto px-6 py-3 flex items-center justify-between text-[11px] uppercase tracking-widest">
+      <div class="flex gap-6"><span class="font-bold">[awakened/24]</span><span class="text-ink/50">// spring.2026</span><span class="text-ink/50">// 04.18 — 04.24</span></div>
+      <div class="flex gap-6 text-ink/60"><span>seats:847</span><span>healers:24</span><span>days:07</span><button class="btn px-3 py-1 border border-ink ochre font-bold">→ reserve</button></div>
+    </div>
+  </header>
+
+  <section class="max-w-[1400px] mx-auto px-6 py-12 grid md:grid-cols-12 gap-8 border-b border-ink">
+    <div class="md:col-span-7">
+      <div class="text-[10px] uppercase tracking-widest text-ink/50 mb-4">/ summit_log / day_count = 7</div>
+      <h1 class="sans text-5xl md:text-7xl tracking-tight leading-[0.95] font-medium">
+        Twenty-four practitioners.<br/>One quiet week.<br/><span class="ochre">No replays.</span>
+      </h1>
+      <p class="text-sm leading-relaxed text-ink/70 max-w-[60ch] mt-8 sans">
+        A live nervous-system summit for people who don't want a funnel. Show up, take notes, integrate. Then it's done.
+      </p>
+      <div class="mt-8 flex items-center gap-4">
+        <button class="btn bg-ink text-[#F4EFE6] px-6 py-3 text-xs uppercase tracking-widest font-bold border border-ink">[ reserve_free_seat ]</button>
+        <span class="text-[10px] uppercase tracking-widest text-ink/50">+847 reserved · last 7d</span>
+      </div>
+    </div>
+    <aside class="md:col-span-5 border-l border-ink pl-6">
+      <div class="text-[10px] uppercase tracking-widest text-ink/50 mb-3">// session_grid</div>
+      <table class="w-full text-[11px]">
+        <tbody class="divide-y divide-ink/15">
+          <tr><td class="py-2 font-bold">001</td><td class="text-ink/80">04.18 09:00</td><td class="ochre">M.Solberg</td><td class="text-right text-ink/55">polyvagal</td></tr>
+          <tr><td class="py-2 font-bold">002</td><td class="text-ink/80">04.18 11:30</td><td class="ochre">Y.Adeyemi</td><td class="text-right text-ink/55">breathwork</td></tr>
+          <tr><td class="py-2 font-bold">003</td><td class="text-ink/80">04.19 09:00</td><td class="ochre">N.Castellanos</td><td class="text-right text-ink/55">herbalism</td></tr>
+          <tr><td class="py-2 font-bold">004</td><td class="text-ink/80">04.19 11:30</td><td class="ochre">K.Whittaker</td><td class="text-right text-ink/55">somatic_exp</td></tr>
+          <tr><td class="py-2 font-bold">005</td><td class="text-ink/80">04.20 09:00</td><td class="ochre">T.Lindqvist</td><td class="text-right text-ink/55">yoga_therapy</td></tr>
+          <tr><td class="py-2 font-bold">006</td><td class="text-ink/80">04.20 11:30</td><td class="ochre">E.Macharia</td><td class="text-right text-ink/55">trauma_coach</td></tr>
+        </tbody>
+      </table>
+    </aside>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 py-12 border-b border-ink">
+    <div class="text-[10px] uppercase tracking-widest text-ink/50 mb-6">// metrics</div>
+    <div class="grid grid-cols-2 md:grid-cols-6 divide-x divide-ink/15">
+      <div class="px-4 first:pl-0"><div class="sans text-4xl font-medium">24</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">healers</div></div>
+      <div class="px-4"><div class="sans text-4xl font-medium">07</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">mornings</div></div>
+      <div class="px-4"><div class="sans text-4xl font-medium ochre">$0</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">cost</div></div>
+      <div class="px-4"><div class="sans text-4xl font-medium">12.4k</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">last_attended</div></div>
+      <div class="px-4"><div class="sans text-4xl font-medium">847</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">seats_left</div></div>
+      <div class="px-4"><div class="sans text-4xl font-medium">98.7%</div><div class="text-[10px] uppercase tracking-widest text-ink/55 mt-1">return_rate</div></div>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 py-12">
+    <div class="flex items-baseline justify-between border-b border-ink pb-3 mb-8">
+      <h2 class="sans text-2xl tracking-tight font-medium">// the_voices</h2>
+      <span class="text-[10px] uppercase tracking-widest text-ink/55">06 / 24</span>
+    </div>
+    <div class="divide-y divide-ink/15">
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">001</div><div class="col-span-3 sans text-base">Maren Solberg</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">polyvagal therapist</div><div class="col-span-3 text-[11px] text-ink/55">Oslo, Norway</div><div class="col-span-2 text-right text-[11px] ochre">04.18 · 09:00</div></div>
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">002</div><div class="col-span-3 sans text-base">Yusuf Adeyemi</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">breathwork facilitator</div><div class="col-span-3 text-[11px] text-ink/55">Lagos, Nigeria</div><div class="col-span-2 text-right text-[11px] ochre">04.18 · 11:30</div></div>
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">003</div><div class="col-span-3 sans text-base">Nadia Castellanos</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">herbalist</div><div class="col-span-3 text-[11px] text-ink/55">Mexico City, MX</div><div class="col-span-2 text-right text-[11px] ochre">04.19 · 09:00</div></div>
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">004</div><div class="col-span-3 sans text-base">Kirin Whittaker</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">somatic experiencing</div><div class="col-span-3 text-[11px] text-ink/55">Bristol, UK</div><div class="col-span-2 text-right text-[11px] ochre">04.19 · 11:30</div></div>
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">005</div><div class="col-span-3 sans text-base">Tova Lindqvist</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">yoga therapist</div><div class="col-span-3 text-[11px] text-ink/55">Stockholm, SE</div><div class="col-span-2 text-right text-[11px] ochre">04.20 · 09:00</div></div>
+      <div class="grid grid-cols-12 gap-4 py-5 items-baseline"><div class="col-span-1 text-[10px] ochre font-bold">006</div><div class="col-span-3 sans text-base">Eshe Macharia</div><div class="col-span-3 text-[11px] text-ink/65 uppercase tracking-widest">trauma-informed coach</div><div class="col-span-3 text-[11px] text-ink/55">Nairobi, KE</div><div class="col-span-2 text-right text-[11px] ochre">04.20 · 11:30</div></div>
+    </div>
+  </section>
+
+  <footer class="border-t border-ink"><div class="max-w-[1400px] mx-auto px-6 py-4 flex justify-between text-[10px] uppercase tracking-widest text-ink/55"><span>// awakened.summit / spring.2026</span><div class="flex gap-6"><a>privacy</a><a>terms</a><a>contact</a></div></div></footer>
+</body></html>

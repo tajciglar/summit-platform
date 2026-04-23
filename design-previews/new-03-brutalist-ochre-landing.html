@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Brutalist Ochre · LANDING (5/4/3)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #F4EFE6; --ink: #1A1A1A; --muted: #5C5648; --primary: #1A1A1A; --accent: #B8862A; --line: rgba(26,26,26,0.18); }
+  body { font-family: 'Archivo', system-ui, sans-serif; background: var(--bg); color: var(--ink); min-height: 100dvh; }
+  .mono { font-family: 'Geist Mono','JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
+  .balance { text-wrap: balance; }
+  .card { background: white; border: 1px solid var(--line); border-radius: 0; box-shadow: 4px 4px 0 #1A1A1A; }
+  .btn { transition: all 220ms cubic-bezier(0.16,1,0.3,1); cursor: pointer; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 4px 4px 0 #1A1A1A; }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  h1,h2{font-weight:800;letter-spacing:-0.03em} .card{border-width:2px!important;border-color:#1A1A1A!important;box-shadow:4px 4px 0 #1A1A1A!important}
+</style></head>
+<body>
+  <!-- BANNER -->
+  <div class="bg-amber-50/60 border-b border-amber-200/80 text-amber-900 text-xs px-6 py-2 mono text-center">Brutalist Ochre · LANDING profile (5 / 4 / 3) · v2 — avatars, a11y, progressive disclosure</div>
+
+  <!-- HEADER -->
+  <header class="max-w-[1400px] mx-auto px-6 py-5 flex items-center justify-between" role="banner">
+    <a href="#" class="font-medium tracking-tight" aria-label="[ AWAKENED // 24 ] — home">[ AWAKENED // 24 ]</a>
+    <nav class="hidden md:flex gap-7 text-sm" style="color: var(--muted);" aria-label="Primary"><a href="#speakers">Speakers</a><a href="#schedule">Schedule</a><a href="#about">About</a><a href="#faq">FAQ</a></nav>
+    <a href="#reserve" class="btn px-5 py-2.5 rounded-full text-sm font-medium tracking-tight" style="background: var(--primary); color: var(--bg);" aria-label="Reserve a free seat">Reserve free seat</a>
+  </header>
+
+  <main id="main">
+
+  <!-- HERO -->
+  <section class="max-w-[1400px] mx-auto px-6 pt-16 md:pt-28 pb-20 md:pb-32 grid md:grid-cols-[1.5fr_1fr] gap-12 items-end" aria-labelledby="hero-h">
+    <div>
+      <p class="mono text-[11px] uppercase tracking-[0.22em] mb-7" style="color: var(--accent);">Spring 2026 · April 18 — 24 · Free + Live</p>
+      <h1 id="hero-h" class="text-[44px] md:text-[80px] tracking-tighter leading-[0.95] font-medium balance">
+        Seven mornings of <span style="color: var(--accent);">honest</span><br/>nervous-system care.
+      </h1>
+      <p class="mt-9 text-[18px] leading-relaxed max-w-[55ch]" style="color: var(--muted);">
+        Twenty-four practitioners, one hour at a time. Live, unrecorded, and unhurried — the conversation you've been wishing summits actually were.
+      </p>
+      <div class="mt-12 flex flex-col sm:flex-row sm:items-center gap-5">
+        <a href="#reserve" class="btn px-8 py-4 rounded-full font-medium tracking-tight text-base inline-block" style="background: var(--primary); color: var(--bg);" aria-label="Reserve your free seat">Reserve your free seat →</a>
+        <span class="mono text-xs" style="color: var(--muted);">847 seats remaining · no payment required</span>
+      </div>
+    </div>
+    <aside class="card p-7" aria-labelledby="flow-h">
+      <h2 id="flow-h" class="mono text-[10px] uppercase tracking-widest mb-4" style="color: var(--muted);">This week's flow</h2>
+      <ul class="divide-y" style="border-color: var(--line);">
+        <li class="py-3 flex justify-between items-baseline" style="border-color: var(--line);"><span class="text-sm">Mon · Maren Solberg</span><span class="mono text-[11px]" style="color: var(--accent);">04.18</span></li>
+        <li class="py-3 flex justify-between items-baseline" style="border-color: var(--line);"><span class="text-sm" style="color: var(--muted);">Tue · Yusuf Adeyemi</span><span class="mono text-[11px]" style="color: var(--muted);">04.19</span></li>
+        <li class="py-3 flex justify-between items-baseline" style="border-color: var(--line);"><span class="text-sm" style="color: var(--muted);">Wed · Nadia Castellanos</span><span class="mono text-[11px]" style="color: var(--muted);">04.20</span></li>
+        <li class="py-3 flex justify-between items-baseline" style="border-color: var(--line);"><span class="text-sm" style="color: var(--muted);">Thu · Kirin Whittaker</span><span class="mono text-[11px]" style="color: var(--muted);">04.21</span></li>
+        <li class="pt-3 flex justify-between items-baseline"><span class="text-sm" style="color: var(--muted);">Sun · Closing circle</span><span class="mono text-[11px]" style="color: var(--muted);">04.24</span></li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- STATS -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-28" aria-label="Summit at a glance">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="card p-7"><div class="mono text-4xl tracking-tight">24</div><div class="text-xs uppercase tracking-widest mt-3" style="color: var(--muted);">healers</div></div>
+      <div class="card p-7"><div class="mono text-4xl tracking-tight">07</div><div class="text-xs uppercase tracking-widest mt-3" style="color: var(--muted);">mornings</div></div>
+      <div class="card p-7" style="background: var(--accent); border-color: transparent;"><div class="mono text-4xl tracking-tight" style="color: var(--bg);">$0</div><div class="text-xs uppercase tracking-widest mt-3" style="color: var(--bg); opacity: 0.85;">to attend</div></div>
+      <div class="card p-7" style="background: var(--ink); border-color: transparent;"><div class="mono text-4xl tracking-tight" style="color: var(--bg);">12.4k</div><div class="text-xs uppercase tracking-widest mt-3" style="color: var(--bg); opacity: 0.7;">last edition</div></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="max-w-[1400px] mx-auto px-6 pb-28 grid md:grid-cols-[1fr_1.6fr] gap-14 items-start" aria-labelledby="about-h">
+    <div>
+      <p class="mono text-[11px] uppercase tracking-[0.22em] mb-3" style="color: var(--accent);">About</p>
+      <h2 id="about-h" class="text-3xl md:text-5xl tracking-tight leading-[1.05]">A small, slow gathering — by design.</h2>
+    </div>
+    <div class="space-y-5 text-[18px] leading-relaxed" style="color: var(--muted);">
+      <p>We started Awakened in 2022 because every wellness summit we'd been to felt like a funnel with a healing veneer — twenty back-to-back sales pitches in a Zoom skin.</p>
+      <p>This is the opposite. Twenty-four practitioners, one hour at a time, live and unrecorded. You show up, take notes, and integrate before the next conversation begins. That's the whole product.</p>
+      <p>If you've ever wished a summit didn't try to sell you something every fourteen minutes — this is for you.</p>
+    </div>
+  </section>
+
+  <!-- FEATURED SPEAKERS -->
+  <section id="speakers" class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="speakers-h">
+    <div class="border-t pt-7 mb-12 flex items-baseline justify-between" style="border-color: var(--line);">
+      <h2 id="speakers-h" class="text-3xl tracking-tight">A few of the voices</h2>
+      <span class="mono text-xs" style="color: var(--muted);">06 / 24 · view all →</span>
+    </div>
+    <p class="text-xs mb-6 mono" style="color: var(--muted); opacity: 0.7;">Photos are placeholders for layout preview — replace with real headshots before launch.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-14">
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center"><img src="https://picsum.photos/seed/maren-solberg-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Maren Solberg</h3><p class="text-sm mt-1" style="color: var(--muted);">Polyvagal therapist · Oslo</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Mon 04.18 · 09:00 GMT</p></div></article>
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center md:translate-y-8"><img src="https://picsum.photos/seed/yusuf-adeyemi-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Yusuf Adeyemi</h3><p class="text-sm mt-1" style="color: var(--muted);">Breathwork facilitator · Lagos</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Tue 04.19 · 11:30 GMT</p></div></article>
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center"><img src="https://picsum.photos/seed/nadia-castellanos-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Nadia Castellanos</h3><p class="text-sm mt-1" style="color: var(--muted);">Herbalist · Mexico City</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Wed 04.20 · 09:00 GMT</p></div></article>
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center md:translate-y-8"><img src="https://picsum.photos/seed/kirin-whittaker-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Kirin Whittaker</h3><p class="text-sm mt-1" style="color: var(--muted);">Somatic experiencing · Bristol</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Thu 04.21 · 11:30 GMT</p></div></article>
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center"><img src="https://picsum.photos/seed/tova-lindqvist-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Tova Lindqvist</h3><p class="text-sm mt-1" style="color: var(--muted);">Yoga therapist · Stockholm</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Fri 04.22 · 09:00 GMT</p></div></article>
+      <article class="grid grid-cols-[120px_1fr] gap-6 items-center md:translate-y-8"><img src="https://picsum.photos/seed/eshe-macharia-spk/240/240" alt="" loading="lazy" class="w-[120px] aspect-square rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/><div><h3 class="text-2xl tracking-tight">Eshe Macharia</h3><p class="text-sm mt-1" style="color: var(--muted);">Trauma-informed coach · Nairobi</p><p class="mono text-[11px] mt-3 uppercase tracking-widest" style="color: var(--accent);">Sat 04.23 · 11:30 GMT</p></div></article>
+    </div>
+  </section>
+
+  <!-- OUTCOMES -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="outcomes-h">
+    <div class="border-t pt-7 mb-12 flex items-baseline justify-between" style="border-color: var(--line);">
+      <h2 id="outcomes-h" class="text-3xl tracking-tight">What you'll leave with</h2>
+      <span class="mono text-xs" style="color: var(--muted);">06 outcomes</span>
+    </div>
+    <div class="grid md:grid-cols-2 gap-x-14 gap-y-8">
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">A daily nervous-system protocol you can run in 8 minutes</h3><p class="text-sm mt-1.5" style="color: var(--muted);">From Maren Solberg's polyvagal session.</p></div></div>
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">A breath sequence that resets morning anxiety</h3><p class="text-sm mt-1.5" style="color: var(--muted);">From Yusuf Adeyemi, breathwork facilitator.</p></div></div>
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">Three plants near you that calm gut inflammation</h3><p class="text-sm mt-1.5" style="color: var(--muted);">Nadia Castellanos walks through identification and prep.</p></div></div>
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">A way to title your trauma without re-living it</h3><p class="text-sm mt-1.5" style="color: var(--muted);">Kirin Whittaker on titration and pendulation.</p></div></div>
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">Restorative shapes for the half-hour after work</h3><p class="text-sm mt-1.5" style="color: var(--muted);">Tova Lindqvist's evening yoga sequence.</p></div></div>
+      <div class="grid grid-cols-[24px_1fr] gap-4 items-start"><div class="w-2 h-2 rounded-full mt-2.5" style="background: var(--accent);"></div><div><h3 class="text-base">Vocabulary for talking to your nervous system</h3><p class="text-sm mt-1.5" style="color: var(--muted);">Eshe Macharia on naming sensation without performing.</p></div></div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE — progressive disclosure -->
+  <section id="schedule" class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="schedule-h">
+    <div class="border-t pt-7 mb-12 flex items-baseline justify-between" style="border-color: var(--line);">
+      <h2 id="schedule-h" class="text-3xl tracking-tight">Full schedule · seven mornings</h2>
+      <span class="mono text-xs" style="color: var(--muted);">all times in GMT</span>
+    </div>
+    <div class="grid md:grid-cols-[140px_1fr] gap-y-7 md:gap-x-12">
+      <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Mon · 04.18</div><div class="text-xs mt-1" style="color: var(--muted);">Day 01 · ground</div></div>
+      <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Maren Solberg · polyvagal mapping</div><div class="text-xs mt-1" style="color: var(--muted);">Where the vagus nerve actually lives.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Yusuf Adeyemi · breath geometry</div><div class="text-xs mt-1" style="color: var(--muted);">A 4-7-8 sequence for morning anxiety.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+
+      <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Tue · 04.19</div><div class="text-xs mt-1" style="color: var(--muted);">Day 02 · ingest</div></div>
+      <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Nadia Castellanos · plant medicine</div><div class="text-xs mt-1" style="color: var(--muted);">Three nearby plants for gut + nervous system.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Kirin Whittaker · somatic experiencing</div><div class="text-xs mt-1" style="color: var(--muted);">Titration, pendulation, the felt sense.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+
+      <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Wed · 04.20</div><div class="text-xs mt-1" style="color: var(--muted);">Day 03 · soften</div></div>
+      <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Tova Lindqvist · restorative yoga</div><div class="text-xs mt-1" style="color: var(--muted);">Five shapes for the 30 min after work.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Eshe Macharia · trauma-informed practice</div><div class="text-xs mt-1" style="color: var(--muted);">Naming sensation without re-performing it.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+    </div>
+
+    <details class="mt-7 group">
+      <summary class="cursor-pointer mono text-xs uppercase tracking-widest list-none flex items-center gap-2 py-3 border-y" style="border-color: var(--line); color: var(--accent);">
+        <span class="group-open:rotate-90 inline-block transition" style="color: var(--accent);">▸</span>
+        <span>Show days 4 — 7</span>
+      </summary>
+      <div class="grid md:grid-cols-[140px_1fr] gap-y-7 md:gap-x-12 pt-7">
+        <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Thu · 04.21</div><div class="text-xs mt-1" style="color: var(--muted);">Day 04 · listen</div></div>
+        <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Kira Petrov · interoception</div><div class="text-xs mt-1" style="color: var(--muted);">Hearing the body before it shouts.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Sasha Bouchard · craniosacral basics</div><div class="text-xs mt-1" style="color: var(--muted);">Self-touch for the back of the skull.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+        <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Fri · 04.22</div><div class="text-xs mt-1" style="color: var(--muted);">Day 05 · move</div></div>
+        <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Imani Olusegun · ecstatic dance</div><div class="text-xs mt-1" style="color: var(--muted);">A 20-min moving meditation.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Renée Kalcheva · vocal release</div><div class="text-xs mt-1" style="color: var(--muted);">Sound as somatic discharge.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+        <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Sat · 04.23</div><div class="text-xs mt-1" style="color: var(--muted);">Day 06 · rest</div></div>
+        <div class="card p-6 divide-y" style="border-color: var(--line);"><div class="pb-3 flex justify-between items-baseline" style="border-color: var(--line);"><div><div class="text-base">Hiro Tachibana · yoga nidra</div><div class="text-xs mt-1" style="color: var(--muted);">A 45-min non-sleep deep rest practice.</div></div><span class="mono text-xs" style="color: var(--muted);">09:00</span></div><div class="pt-3 flex justify-between items-baseline"><div><div class="text-base">Aleksandra Mikulić · sleep architecture</div><div class="text-xs mt-1" style="color: var(--muted);">Why your wind-down matters more than your wake-up.</div></div><span class="mono text-xs" style="color: var(--muted);">11:30</span></div></div>
+        <div><div class="mono text-xs uppercase tracking-widest" style="color: var(--accent);">Sun · 04.24</div><div class="text-xs mt-1" style="color: var(--muted);">Day 07 · close</div></div>
+        <div class="card p-6"><div class="flex justify-between items-baseline"><div><div class="text-base">Closing circle · all 24 + Hanna Lindqvist</div><div class="text-xs mt-1" style="color: var(--muted);">A live integration call.</div></div><span class="mono text-xs" style="color: var(--muted);">11:00</span></div></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- TESTIMONIALS (no press marquee — distilled per critique) -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="testimonials-h">
+    <div class="border-t pt-7 mb-12 flex items-baseline justify-between" style="border-color: var(--line);">
+      <h2 id="testimonials-h" class="text-3xl tracking-tight">From past attendees</h2>
+      <span class="mono text-xs" style="color: var(--muted);">three of 12,400</span>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <article class="card p-8"><p class="text-[18px] leading-relaxed">"Quiet, undidactic, and rare. The kind of summit I usually wish for and almost never find."</p><div class="mt-7 flex items-center gap-3"><img src="https://picsum.photos/seed/sloane-vargas-t/96/96" alt="" loading="lazy" class="w-10 h-10 rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85);"/><div><div class="text-sm">Sloane Vargas</div><div class="text-[11px]" style="color: var(--muted);">Somatic coach · Edition 13</div></div></div></article>
+      <article class="card p-8"><p class="text-[18px] leading-relaxed">"I came expecting a Zoom funnel. I left with three protocols I still use eight months later."</p><div class="mt-7 flex items-center gap-3"><img src="https://picsum.photos/seed/tomas-beaumont-t/96/96" alt="" loading="lazy" class="w-10 h-10 rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85);"/><div><div class="text-sm">Tomás Beaumont</div><div class="text-[11px]" style="color: var(--muted);">GP, London · Edition 12</div></div></div></article>
+      <article class="card p-8"><p class="text-[18px] leading-relaxed">"The only summit where I've taken zero screenshots and still remembered everything I needed."</p><div class="mt-7 flex items-center gap-3"><img src="https://picsum.photos/seed/aurelie-renaud-t/96/96" alt="" loading="lazy" class="w-10 h-10 rounded-full object-cover" style="filter: grayscale(0.35) saturate(0.85);"/><div><div class="text-sm">Aurélie Renaud</div><div class="text-[11px]" style="color: var(--muted);">OT · Lyon · Edition 11</div></div></div></article>
+    </div>
+  </section>
+
+  <!-- HOST -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="host-h">
+    <div class="border-t pt-7 mb-12" style="border-color: var(--line);">
+      <p class="mono text-[11px] uppercase tracking-[0.22em]" style="color: var(--accent);">Convened by</p>
+    </div>
+    <div class="grid md:grid-cols-[280px_1fr] gap-12 items-center">
+      <img src="https://picsum.photos/seed/hanna-lindqvist-host/560/560" alt="" loading="lazy" class="aspect-square rounded-[2rem] w-full object-cover" style="filter: grayscale(0.35) saturate(0.85) contrast(1.05);"/>
+      <div>
+        <h2 id="host-h" class="text-3xl md:text-5xl tracking-tight">Hanna Lindqvist</h2>
+        <p class="text-sm mt-2" style="color: var(--muted);">Psychotherapist · Stockholm · Convener of Awakened</p>
+        <p class="mt-7 text-[18px] leading-relaxed max-w-[60ch]" style="color: var(--muted);">
+          I've spent fifteen years trying to make therapy more horizontal — less expert-on-couch, more peer-on-floor. Awakened is what happens when you take that idea and aim it at twenty-four people who already do this work better than I do. I host. They teach. You listen.
+        </p>
+        <p class="mt-5 text-sm" style="color: var(--muted);">Practice at <span style="color: var(--ink);">lindqvist-therapy.se</span> · Substack: <span style="color: var(--ink);">unrushed.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-[1400px] mx-auto px-6 pb-28" aria-labelledby="faq-h">
+    <div class="border-t pt-7 mb-12 flex items-baseline justify-between" style="border-color: var(--line);">
+      <h2 id="faq-h" class="text-3xl tracking-tight">Common questions</h2>
+      <span class="mono text-xs" style="color: var(--muted);">FAQ</span>
+    </div>
+    <div class="grid md:grid-cols-[1fr_1.6fr] gap-14">
+      <div class="space-y-7">
+        <div><h3 class="text-base">Will sessions be recorded?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">No — live only. The intimacy of an unrecorded room is what makes practitioners share things they wouldn't otherwise.</p></div>
+        <div><h3 class="text-base">Is there a paid track or VIP tier?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">No upsells, no premium pass. Donations open after the closing call if you want to keep us going.</p></div>
+        <div><h3 class="text-base">How long is each session?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">Fifty minutes of conversation, twenty minutes of live Q&amp;A.</p></div>
+      </div>
+      <div class="space-y-7">
+        <div><h3 class="text-base">Where does it run?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">Zoom — link arrives in your inbox the morning of, with a one-tap calendar add.</p></div>
+        <div><h3 class="text-base">Do I have to attend every session?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">No. Most people show up to four or five. Reserve and pick what calls.</p></div>
+        <div><h3 class="text-base">Will you sell my email?</h3><p class="text-sm mt-2 leading-relaxed" style="color: var(--muted);">No — three emails total, then never again unless you ask.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="reserve" class="max-w-[1400px] mx-auto px-6 pb-32">
+    <div class="rounded-[2rem] p-12 md:p-20 grid md:grid-cols-[1.5fr_1fr] gap-10 items-end" style="background: var(--ink); color: var(--bg);">
+      <div>
+        <p class="mono text-[11px] uppercase tracking-[0.22em] mb-6" style="color: var(--accent);">Spring 2026 · April 18 — 24</p>
+        <h2 class="text-3xl md:text-5xl tracking-tight leading-[1.05]">Seven mornings. Twenty-four practitioners. No replays.</h2>
+      </div>
+      <div class="flex flex-col items-start md:items-end gap-4">
+        <a href="#reserve" class="btn px-9 py-4 rounded-full font-medium tracking-tight text-base inline-block" style="background: var(--accent); color: var(--ink);" aria-label="Reserve your free seat">Reserve your free seat →</a>
+        <span class="mono text-xs opacity-70">847 seats remaining</span>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t" style="border-color: var(--line);" role="contentinfo">
+    <div class="max-w-[1400px] mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs mono" style="color: var(--muted);">
+      <span>[ AWAKENED // 24 ] · spring 2026 · landing page</span>
+      <div class="flex gap-6"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a><a href="#">Press</a></div>
+    </div>
+  </footer>
+
+</body></html>

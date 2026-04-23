@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>06 · Marquee Lime</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Geist', system-ui, sans-serif; background: #0a0a0a; color: #E8E5DC; min-height: 100dvh; overflow-x: hidden; }
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: -0.02em; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .lime { color: #B8E040; }
+  .bg-lime { background: #B8E040; }
+  @keyframes scroll-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee { animation: scroll-l 26s linear infinite; }
+  .marquee-slow { animation: scroll-l 60s linear infinite; }
+  .btn { transition: all 220ms cubic-bezier(0.16,1,0.3,1); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(1px) scale(0.98); }
+  .grain { position: fixed; inset: 0; pointer-events: none; opacity: 0.05; z-index: 50;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+</style></head>
+<body>
+  <div class="grain"></div>
+  <header class="px-6 py-5 flex items-center justify-between max-w-[1400px] mx-auto">
+    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-lime"></div><span class="mono text-xs uppercase tracking-widest">awakened.</span></div>
+    <nav class="hidden md:flex gap-7 mono text-xs uppercase text-[#E8E5DC]/60"><a>spk</a><a>cal</a><a>faq</a></nav>
+    <button class="btn bg-lime text-[#0a0a0a] px-5 py-2.5 mono text-xs uppercase font-medium tracking-wider rounded-none">reserve_seat</button>
+  </header>
+
+  <section class="overflow-hidden border-y border-[#E8E5DC]/15 py-3">
+    <div class="marquee whitespace-nowrap inline-flex gap-12 mono text-xs uppercase tracking-widest text-[#E8E5DC]/50 pl-6">
+      <span>spring · 2026</span><span class="lime">●</span><span>04.18 — 04.24</span><span class="lime">●</span><span>24 healers</span><span class="lime">●</span><span>seven mornings</span><span class="lime">●</span><span>$0 to attend</span><span class="lime">●</span>
+      <span>spring · 2026</span><span class="lime">●</span><span>04.18 — 04.24</span><span class="lime">●</span><span>24 healers</span><span class="lime">●</span><span>seven mornings</span><span class="lime">●</span><span>$0 to attend</span><span class="lime">●</span>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 pt-16 md:pt-24 pb-24">
+    <div class="grid md:grid-cols-[1.7fr_1fr] gap-10 items-end">
+      <h1 class="display text-[80px] md:text-[180px] leading-[0.82]">
+        Slow.<br/>Honest.<br/><span class="lime">Awake.</span>
+      </h1>
+      <div class="md:pb-6">
+        <p class="text-base md:text-lg text-[#E8E5DC]/75 leading-relaxed max-w-[40ch]">
+          Twenty-four practitioners. Seven mornings. One conversation that doesn't try to sell you anything but the next one.
+        </p>
+        <div class="mt-8 flex items-center gap-4">
+          <button class="btn bg-lime text-[#0a0a0a] px-7 py-4 mono text-xs uppercase font-medium tracking-wider">→ free seat</button>
+          <span class="mono text-[10px] uppercase tracking-widest text-[#E8E5DC]/40">847 left</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="overflow-hidden py-2">
+    <div class="marquee-slow whitespace-nowrap inline-flex gap-16 display text-[120px] md:text-[200px] leading-none text-[#E8E5DC]/8 pl-6 select-none">
+      <span>SOMATIC · BREATH · NERVOUS-SYSTEM · POLYVAGAL · HERBAL · TRAUMA-INFORMED ·</span>
+      <span>SOMATIC · BREATH · NERVOUS-SYSTEM · POLYVAGAL · HERBAL · TRAUMA-INFORMED ·</span>
+    </div>
+  </section>
+
+  <section class="max-w-[1400px] mx-auto px-6 py-24">
+    <div class="flex items-baseline justify-between mb-10 border-b border-[#E8E5DC]/15 pb-4">
+      <h2 class="display text-4xl md:text-6xl">// the_voices</h2>
+      <span class="mono text-xs text-[#E8E5DC]/50">06 / 24</span>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 divide-x divide-y md:divide-y-0 divide-[#E8E5DC]/10">
+      <div class="p-6"><div class="mono text-[10px] lime">001 · 04.18</div><h3 class="display text-3xl mt-2">Maren Solberg</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">polyvagal · oslo</p></div>
+      <div class="p-6"><div class="mono text-[10px] lime">002 · 04.19</div><h3 class="display text-3xl mt-2">Yusuf Adeyemi</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">breathwork · lagos</p></div>
+      <div class="p-6"><div class="mono text-[10px] lime">003 · 04.20</div><h3 class="display text-3xl mt-2">Nadia Castellanos</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">herbalist · cdmx</p></div>
+      <div class="p-6 border-t border-[#E8E5DC]/10"><div class="mono text-[10px] lime">004 · 04.21</div><h3 class="display text-3xl mt-2">Kirin Whittaker</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">somatic_exp · bristol</p></div>
+      <div class="p-6 border-t border-[#E8E5DC]/10"><div class="mono text-[10px] lime">005 · 04.22</div><h3 class="display text-3xl mt-2">Tova Lindqvist</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">yoga_therapy · stockholm</p></div>
+      <div class="p-6 border-t border-[#E8E5DC]/10"><div class="mono text-[10px] lime">006 · 04.23</div><h3 class="display text-3xl mt-2">Eshe Macharia</h3><p class="mono text-[11px] text-[#E8E5DC]/55 mt-2 uppercase tracking-widest">trauma_coach · nairobi</p></div>
+    </div>
+  </section>
+
+  <footer class="border-t border-[#E8E5DC]/10"><div class="max-w-[1400px] mx-auto px-6 py-6 flex justify-between mono text-[10px] uppercase tracking-widest text-[#E8E5DC]/50"><span>awakened // spring.2026</span><div class="flex gap-6"><a>privacy</a><a>terms</a><a>contact</a></div></div></footer>
+</body></html>
