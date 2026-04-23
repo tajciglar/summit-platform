@@ -1,5 +1,6 @@
 import type { PublishedContent, Speaker } from '@/templates/types';
 import type { Palette } from '../palette';
+import type { DesignTokens } from '@/templates/shared/design-tokens';
 
 const BASE = process.env.LARAVEL_API_URL ?? 'http://localhost:8000';
 const INTERNAL_TOKEN = process.env.INTERNAL_API_TOKEN ?? '';
@@ -21,6 +22,7 @@ export interface DraftPayload extends PublishedContent {
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;
+  tokens?: DesignTokens | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
 }
@@ -33,6 +35,7 @@ export interface PublicPayload extends PublishedContent {
   enabled_sections: string[] | null;
   audience: string | null;
   palette: Palette | null;
+  tokens?: DesignTokens | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
 }

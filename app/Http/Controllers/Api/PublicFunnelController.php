@@ -43,7 +43,7 @@ class PublicFunnelController extends Controller
         $wpUrl = $isSales ? $funnel->wp_checkout_redirect_url : null;
         $wpThankyouUrl = $isSales ? $funnel->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl, $wpThankyouUrl));
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl, $wpThankyouUrl, is_array($step?->page_overrides ?? null) ? $step->page_overrides : null));
     }
 
     /**
@@ -72,19 +72,22 @@ class PublicFunnelController extends Controller
         $wpUrl = $isSales ? $funnel?->wp_checkout_redirect_url : null;
         $wpThankyouUrl = $isSales ? $funnel?->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl, $wpThankyouUrl));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl, $wpThankyouUrl, is_array($step->page_overrides) ? $step->page_overrides : null));
     }
 
     /**
      * @param  array<string, mixed>  $content
+     * @param  array<string, mixed>|null  $pageOverrides
      * @return array<string, mixed>
      */
-    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null): array
+    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null, ?array $pageOverrides = null): array
     {
         $summit = $summitId ? Summit::query()->find($summitId) : null;
         $speakers = $summit
             ? SpeakerResource::collection($summit->speakers()->get())->toArray(request())
             : [];
+
+        $tokens = is_array($pageOverrides['tokens'] ?? null) ? $pageOverrides['tokens'] : null;
 
         return [
             'template_key' => $content['template_key'],
@@ -92,6 +95,7 @@ class PublicFunnelController extends Controller
             'enabled_sections' => $content['enabled_sections'] ?? null,
             'audience' => $content['audience'] ?? null,
             'palette' => $content['palette'] ?? null,
+            'tokens' => $tokens,
             'speakers' => $speakers,
             'funnel_id' => $funnelId,
             'funnel_step_id' => $funnelStepId,

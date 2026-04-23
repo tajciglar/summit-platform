@@ -44,3 +44,6 @@ next-env.d.ts
 
 # build artifacts
 dist/
+tests/e2e/fixtures/steps.json
+test-results/
+playwright-report/

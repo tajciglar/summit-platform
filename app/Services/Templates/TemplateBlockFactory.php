@@ -142,7 +142,11 @@ class TemplateBlockFactory
     private function unwrapValueFromBlock(mixed $data): mixed
     {
         if (is_array($data) && array_keys($data) === ['value']) {
-            return $data['value'];
+            return $this->unwrapValueFromBlock($data['value']);
+        }
+
+        if (is_array($data)) {
+            return array_map(fn ($v) => $this->unwrapValueFromBlock($v), $data);
         }
 
         return $data;

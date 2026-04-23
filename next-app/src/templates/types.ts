@@ -64,11 +64,18 @@ export interface TemplateDefinition<TContent = unknown> {
     enabledSections?: string[];
     palette?: Palette | null;
     /**
+     * Optional per-step design-token overrides (Phase 1 visual editor). Only
+     * templates that opt-in (currently: cream-sage) consume this; others accept
+     * the prop and ignore it.
+     */
+    tokens?: import('./shared/design-tokens').DesignTokens;
+    /**
      * Per-funnel WordPress cart URL used as the interim checkout handoff for
      * sales/upsell steps. When null, templates should fall back to the
      * in-progress native Stripe checkout (TBD).
      */
     wpCheckoutRedirectUrl?: string | null;
+    wpThankyouRedirectUrl?: string | null;
   }>;
   /** descriptive tags for filtering */
   tags: readonly TemplateTag[];

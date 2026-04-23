@@ -18,6 +18,7 @@ class FunnelStep extends Model
         'slug',
         'name',
         'page_content',
+        'page_overrides',
         'sort_order',
         'product_id',
         'is_published',
@@ -27,6 +28,7 @@ class FunnelStep extends Model
     {
         return [
             'page_content' => 'array',
+            'page_overrides' => 'array',
             'is_published' => 'boolean',
             'sort_order' => 'integer',
         ];

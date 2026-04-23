@@ -1,6 +1,7 @@
 // Document chrome (html/head/body) is owned by the Next.js page/layout that
 // renders this template. Fonts (Fraunces / DM Sans / Nunito) must be loaded
 // by the page — see Task 19/20 (preview/public routes) for wiring.
+import './cream-sage.styles.css';
 import type { CSSProperties } from 'react';
 import { OptinModal } from '@/components/OptinModal';
 import { EventStatusBadge } from '@/components/EventStatusBadge';
@@ -9,6 +10,7 @@ import { creamSageDefaultEnabledSections } from './cream-sage.sections';
 import { resolveCheckoutHref } from './lib/checkout-href';
 import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
+import { Node } from './shared/Node';
 import type { Speaker } from './types';
 
 type Props = {
@@ -16,11 +18,14 @@ type Props = {
   speakers: Record<string, Speaker>;
 };
 
+
 type RootProps = Props & {
   funnelId: string;
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
+  tokens?: import('./shared/design-tokens').DesignTokens;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 /* ============== PALETTE CONSTANTS ============== */
@@ -103,7 +108,7 @@ function TopBar({ content }: { content: CreamSageContent }) {
             className="font-bold text-xl tracking-tight"
             style={{ fontFamily: "'Fraunces', serif", color: '#2F4A40' }}
           >
-            {t.brandName}
+            <Node id="topBar.brandName">{t.brandName}</Node>
           </span>
         </div>
         <div className="flex items-center gap-5">
@@ -111,14 +116,14 @@ function TopBar({ content }: { content: CreamSageContent }) {
             className="hidden md:inline text-base font-semibold"
             style={{ color: '#2F4A40' }}
           >
-            {t.dateRangeLabel}
+            <Node id="topBar.dateRangeLabel">{t.dateRangeLabel}</Node>
           </span>
           <a
             href="#optin"
             className="cream-sage-btn-primary"
             style={{ fontSize: '1rem', padding: '0.75rem 1.5rem' }}
           >
-            {t.ctaLabel}
+            <Node id="topBar.ctaLabel">{t.ctaLabel}</Node>
           </a>
         </div>
       </div>
@@ -148,7 +153,7 @@ function Hero({ content, speakers }: Props) {
       />
 
       <div className="relative max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-12 gap-12 items-center">
+        <div className="grid md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-6">
             <div className="inline-flex items-center gap-3 mb-7">
               <span
@@ -159,7 +164,7 @@ function Hero({ content, speakers }: Props) {
                   borderRadius: 999,
                 }}
               >
-                {h.badgeLabel}
+                <Node id="hero.badgeLabel">{h.badgeLabel}</Node>
               </span>
               <EventStatusBadge
                 status={h.eventStatus}
@@ -173,25 +178,25 @@ function Hero({ content, speakers }: Props) {
               className="font-black text-5xl md:text-6xl lg:text-7xl leading-[1.02] mb-8"
               style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
             >
-              {h.headlineLead}
+              <Node id="hero.headlineLead">{h.headlineLead}</Node>
               <span style={{ fontStyle: 'italic', color: '#A85430' }}>
-                {h.headlineAccent}
+                <Node id="hero.headlineAccent">{h.headlineAccent}</Node>
               </span>
-              {h.headlineTrail}
+              <Node id="hero.headlineTrail">{h.headlineTrail}</Node>
             </h1>
             <p
               className="text-xl md:text-2xl leading-[1.55] mb-10 max-w-xl"
               style={{ color: '#3A3221' }}
             >
-              {h.subheadline}
+              <Node id="hero.subheadline">{h.subheadline}</Node>
             </p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
               <a href="#optin" className="cream-sage-btn-primary" style={{ fontSize: '1.125rem' }}>
-                {h.primaryCtaLabel}
+                <Node id="hero.primaryCtaLabel">{h.primaryCtaLabel}</Node>
                 <span aria-hidden="true">→</span>
               </a>
               <a href="#what-is-this" className="cream-sage-btn-ghost">
-                {h.secondaryCtaLabel}
+                <Node id="hero.secondaryCtaLabel">{h.secondaryCtaLabel}</Node>
               </a>
             </div>
 
@@ -220,12 +225,14 @@ function Hero({ content, speakers }: Props) {
                   className="font-bold tracking-widest mb-0.5 text-lg"
                   style={{ color: '#A85430' }}
                 >
-                  {h.ratingLabel}
+                  <Node id="hero.ratingLabel">{h.ratingLabel}</Node>
                 </p>
                 <p className="text-base md:text-lg" style={{ color: '#3A3221' }}>
-                  {h.readerLeadIn}{' '}
-                  <span style={{ color: '#2F4A40', fontWeight: 700 }}>{h.readerCount}</span>{' '}
-                  {h.readerCountSuffix}
+                  <Node id="hero.readerLeadIn">{h.readerLeadIn}</Node>{' '}
+                  <span style={{ color: '#2F4A40', fontWeight: 700 }}>
+                    <Node id="hero.readerCount">{h.readerCount}</Node>
+                  </span>{' '}
+                  <Node id="hero.readerCountSuffix">{h.readerCountSuffix}</Node>
                 </p>
               </div>
             </div>
@@ -288,15 +295,22 @@ function Press({ content }: { content: CreamSageContent }) {
           className="cream-sage-eyebrow text-center mb-6"
           style={{ color: '#3D5A4E' }}
         >
-          {content.press.eyebrow}
+          <Node id="press.eyebrow">{content.press.eyebrow}</Node>
         </p>
         <div className="cream-sage-marquee-wrap">
           <div className="cream-sage-marquee-track">
-            {items.map((name, idx) => (
-              <span className="cream-sage-marquee-item" key={`press-${idx}`}>
-                {name}
-              </span>
-            ))}
+            {items.map((name, idx) => {
+              const origIdx = idx % content.press.outlets.length;
+              return (
+                <span className="cream-sage-marquee-item" key={`press-${idx}`}>
+                  {idx < content.press.outlets.length ? (
+                    <Node id={`press.outlets.${origIdx}`}>{name}</Node>
+                  ) : (
+                    name
+                  )}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -325,7 +339,7 @@ function Stats({ content }: { content: CreamSageContent }) {
           className="cream-sage-eyebrow text-center mb-14 mt-8"
           style={{ color: '#E8B9A0' }}
         >
-          {content.stats.eyebrow}
+          <Node id="stats.eyebrow">{content.stats.eyebrow}</Node>
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
           {content.stats.items.map((item, idx) => {
@@ -340,13 +354,13 @@ function Stats({ content }: { content: CreamSageContent }) {
                   className="font-black text-8xl md:text-9xl leading-none mb-4"
                   style={{ fontFamily: "'Fraunces', serif", color: valueColor }}
                 >
-                  {item.value}
+                  <Node id={`stats.items.${idx}.value`}>{item.value}</Node>
                   {item.suffix ? (
                     <span
                       className="text-6xl align-top"
                       style={{ color: isMiddle ? '#FAF7F2' : '#FAF7F2' }}
                     >
-                      {item.suffix}
+                      <Node id={`stats.items.${idx}.suffix`}>{item.suffix}</Node>
                     </span>
                   ) : null}
                 </p>
@@ -357,7 +371,7 @@ function Stats({ content }: { content: CreamSageContent }) {
                     color: '#FAF7F2',
                   }}
                 >
-                  {item.label}
+                  <Node id={`stats.items.${idx}.label`}>{item.label}</Node>
                 </p>
               </div>
             );
@@ -397,17 +411,17 @@ function Overview({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-4 inline-block"
             style={{ color: '#A85430' }}
           >
-            {o.eyebrow}
+            <Node id="overview.eyebrow">{o.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight mb-8"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {o.headlineLead}
+            <Node id="overview.headlineLead">{o.headlineLead}</Node>
             <span className="cream-sage-hand-under" style={{ color: '#4A6B5D' }}>
-              {o.headlineAccent}
+              <Node id="overview.headlineAccent">{o.headlineAccent}</Node>
             </span>
-            {o.headlineTrail}
+            <Node id="overview.headlineTrail">{o.headlineTrail}</Node>
           </h2>
           {o.bodyParagraphs.map((para, idx) => (
             <p
@@ -417,11 +431,11 @@ function Overview({ content }: { content: CreamSageContent }) {
               }`}
               style={{ color: '#3A3221' }}
             >
-              {para}
+              <Node id={`overview.bodyParagraphs.${idx}`}>{para}</Node>
             </p>
           ))}
           <a href="#optin" className="cream-sage-btn-primary">
-            {o.ctaLabel}
+            <Node id="overview.ctaLabel">{o.ctaLabel}</Node>
             <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -496,7 +510,7 @@ function Overview({ content }: { content: CreamSageContent }) {
                 color: '#3D5A4E',
               }}
             >
-              {o.imageCaption}
+              <Node id="overview.imageCaption">{o.imageCaption}</Node>
             </p>
           </div>
         </div>
@@ -612,17 +626,19 @@ function Outcomes({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {o.eyebrow}
+            <Node id="outcomes.eyebrow">{o.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {o.headlineLead}
+            <Node id="outcomes.headlineLead">{o.headlineLead}</Node>
             <span style={{ fontStyle: 'italic', color: '#4A6B5D' }}>
-              {o.headlineAccent}
+              <Node id="outcomes.headlineAccent">{o.headlineAccent}</Node>
             </span>
-            {o.headlineTrail ?? ''}
+            {o.headlineTrail ? (
+              <Node id="outcomes.headlineTrail">{o.headlineTrail}</Node>
+            ) : ''}
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
@@ -646,10 +662,10 @@ function Outcomes({ content }: { content: CreamSageContent }) {
                 className="font-bold text-2xl mb-3"
                 style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
               >
-                {item.title}
+                <Node id={`outcomes.items.${idx}.title`}>{item.title}</Node>
               </h3>
               <p className="text-lg leading-relaxed" style={{ color: '#3A3221' }}>
-                {item.description}
+                <Node id={`outcomes.items.${idx}.description`}>{item.description}</Node>
               </p>
             </article>
           ))}
@@ -703,7 +719,7 @@ function FreeGift({ content }: { content: CreamSageContent }) {
                     className="cream-sage-eyebrow mb-3"
                     style={{ color: '#4A6B5D' }}
                   >
-                    {g.cardEyebrow}
+                    <Node id="freeGift.cardEyebrow">{g.cardEyebrow}</Node>
                   </p>
                   <div
                     className="w-10 mb-5"
@@ -713,7 +729,7 @@ function FreeGift({ content }: { content: CreamSageContent }) {
                     className="font-black text-2xl leading-tight"
                     style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
                   >
-                    {g.cardTitle}
+                    <Node id="freeGift.cardTitle">{g.cardTitle}</Node>
                   </h3>
                 </div>
                 <div>
@@ -725,10 +741,10 @@ function FreeGift({ content }: { content: CreamSageContent }) {
                       color: '#8A7E6C',
                     }}
                   >
-                    {g.cardEnclosure}
+                    <Node id="freeGift.cardEnclosure">{g.cardEnclosure}</Node>
                   </p>
                   <p className="cream-sage-eyebrow mt-2" style={{ color: '#8A7E6C' }}>
-                    {g.cardVolume}
+                    <Node id="freeGift.cardVolume">{g.cardVolume}</Node>
                   </p>
                 </div>
               </div>
@@ -743,7 +759,7 @@ function FreeGift({ content }: { content: CreamSageContent }) {
                 transform: 'rotate(6deg)',
               }}
             >
-              {g.cardBadge}
+              <Node id="freeGift.cardBadge">{g.cardBadge}</Node>
             </div>
           </div>
         </div>
@@ -753,21 +769,23 @@ function FreeGift({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {g.eyebrow}
+            <Node id="freeGift.eyebrow">{g.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight mb-6"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {g.headlineLead}
-            <span className="cream-sage-hand-under">{g.headlineAccent}</span>
-            {g.headlineTrail}
+            <Node id="freeGift.headlineLead">{g.headlineLead}</Node>
+            <span className="cream-sage-hand-under">
+              <Node id="freeGift.headlineAccent">{g.headlineAccent}</Node>
+            </span>
+            <Node id="freeGift.headlineTrail">{g.headlineTrail}</Node>
           </h2>
           <p
             className="text-xl md:text-2xl leading-relaxed mb-8"
             style={{ color: '#3A3221' }}
           >
-            {g.body}
+            <Node id="freeGift.body">{g.body}</Node>
           </p>
           <ul className="space-y-4 mb-10">
             {g.bullets.map((bullet, idx) => (
@@ -782,12 +800,14 @@ function FreeGift({ content }: { content: CreamSageContent }) {
                 >
                   <span style={{ color: '#3D5A4E', fontWeight: 700 }}>✓</span>
                 </span>
-                <span>{bullet}</span>
+                <span>
+                  <Node id={`freeGift.bullets.${idx}`}>{bullet}</Node>
+                </span>
               </li>
             ))}
           </ul>
           <a href="#optin" className="cream-sage-btn-primary">
-            {g.ctaLabel}
+            <Node id="freeGift.ctaLabel">{g.ctaLabel}</Node>
             <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -807,15 +827,17 @@ function Bonuses({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {b.eyebrow}
+            <Node id="bonuses.eyebrow">{b.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight mb-4"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {b.headlineLead}
-            <span className="cream-sage-hand-under">{b.headlineAccent}</span>
-            {b.headlineTrail}
+            <Node id="bonuses.headlineLead">{b.headlineLead}</Node>
+            <span className="cream-sage-hand-under">
+              <Node id="bonuses.headlineAccent">{b.headlineAccent}</Node>
+            </span>
+            <Node id="bonuses.headlineTrail">{b.headlineTrail}</Node>
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
@@ -830,19 +852,19 @@ function Bonuses({ content }: { content: CreamSageContent }) {
                   borderRadius: 999,
                 }}
               >
-                {bonus.valueLabel}
+                <Node id={`bonuses.items.${idx}.valueLabel`}>{bonus.valueLabel}</Node>
               </span>
               <h3
                 className="font-bold text-2xl mb-3 leading-tight"
                 style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
               >
-                {bonus.title}
+                <Node id={`bonuses.items.${idx}.title`}>{bonus.title}</Node>
               </h3>
               <p
                 className="text-lg mb-5 leading-relaxed"
                 style={{ color: '#3A3221' }}
               >
-                {bonus.description}
+                <Node id={`bonuses.items.${idx}.description`}>{bonus.description}</Node>
               </p>
               <ul className="space-y-2 text-base" style={{ color: '#3A3221' }}>
                 {bonus.bullets.map((bullet, bIdx) => (
@@ -851,7 +873,7 @@ function Bonuses({ content }: { content: CreamSageContent }) {
                     className="flex gap-2"
                   >
                     <span style={{ color: '#3D5A4E', fontWeight: 700 }}>✓</span>
-                    {bullet}
+                    <Node id={`bonuses.items.${idx}.bullets.${bIdx}`}>{bullet}</Node>
                   </li>
                 ))}
               </ul>
@@ -860,7 +882,7 @@ function Bonuses({ content }: { content: CreamSageContent }) {
         </div>
         <div className="text-center mt-12">
           <a href="#optin" className="cream-sage-btn-primary">
-            {b.ctaLabel}
+            <Node id="bonuses.ctaLabel">{b.ctaLabel}</Node>
             <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -879,7 +901,7 @@ function Founders({ content }: { content: CreamSageContent }) {
           className="font-black text-4xl md:text-5xl text-center mb-14 leading-tight"
           style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
         >
-          {f.headline}
+          <Node id="founders.headline">{f.headline}</Node>
         </h2>
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           {f.items.map((founder, idx) => (
@@ -895,19 +917,19 @@ function Founders({ content }: { content: CreamSageContent }) {
                   fontFamily: "'Fraunces', serif",
                 }}
               >
-                {founder.initials}
+                <Node id={`founders.items.${idx}.initials`}>{founder.initials}</Node>
               </div>
               <h3
                 className="font-bold text-2xl"
                 style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
               >
-                {founder.name}
+                <Node id={`founders.items.${idx}.name`}>{founder.name}</Node>
               </h3>
               <p
                 className="text-base mb-5 font-semibold"
                 style={{ color: '#3D5A4E' }}
               >
-                {founder.role}
+                <Node id={`founders.items.${idx}.role`}>{founder.role}</Node>
               </p>
               <blockquote
                 className="cream-sage-dropcap text-xl md:text-2xl leading-relaxed"
@@ -917,7 +939,7 @@ function Founders({ content }: { content: CreamSageContent }) {
                   color: '#3A3221',
                 }}
               >
-                {founder.quote}
+                <Node id={`founders.items.${idx}.quote`}>{founder.quote}</Node>
               </blockquote>
             </div>
           ))}
@@ -938,15 +960,15 @@ function Testimonials({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {t.eyebrow}
+            <Node id="testimonials.eyebrow">{t.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {t.headlineLead}
+            <Node id="testimonials.headlineLead">{t.headlineLead}</Node>
             <span style={{ fontStyle: 'italic', color: '#4A6B5D' }}>
-              {t.headlineAccent}
+              <Node id="testimonials.headlineAccent">{t.headlineAccent}</Node>
             </span>
           </h2>
         </div>
@@ -967,7 +989,7 @@ function Testimonials({ content }: { content: CreamSageContent }) {
                   color: '#2A2419',
                 }}
               >
-                &ldquo;{item.quote}&rdquo;
+                &ldquo;<Node id={`testimonials.items.${idx}.quote`}>{item.quote}</Node>&rdquo;
               </p>
               <div
                 className="flex items-center gap-3 pt-5"
@@ -982,17 +1004,17 @@ function Testimonials({ content }: { content: CreamSageContent }) {
                     fontFamily: "'Nunito', 'DM Sans', sans-serif",
                   }}
                 >
-                  {item.initials}
+                  <Node id={`testimonials.items.${idx}.initials`}>{item.initials}</Node>
                 </div>
                 <div>
                   <p
                     className="font-bold text-lg"
                     style={{ fontFamily: "'Fraunces', serif", color: '#2F4A40' }}
                   >
-                    {item.name}
+                    <Node id={`testimonials.items.${idx}.name`}>{item.name}</Node>
                   </p>
                   <p className="text-base" style={{ color: '#6B5E4C' }}>
-                    {item.location}
+                    <Node id={`testimonials.items.${idx}.location`}>{item.location}</Node>
                   </p>
                 </div>
               </div>
@@ -1038,7 +1060,7 @@ function PullQuote({ content }: { content: CreamSageContent }) {
             fontStyle: 'italic',
           }}
         >
-          {pq.quote}
+          <Node id="pullQuote.quote">{pq.quote}</Node>
         </p>
         <p
           className="font-bold text-base md:text-lg tracking-wide"
@@ -1047,7 +1069,7 @@ function PullQuote({ content }: { content: CreamSageContent }) {
             color: '#E8B9A0',
           }}
         >
-          {pq.attribution}
+          <Node id="pullQuote.attribution">{pq.attribution}</Node>
         </p>
       </div>
     </section>
@@ -1065,13 +1087,13 @@ function Figures({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {f.eyebrow}
+            <Node id="figures.eyebrow">{f.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {f.headline}
+            <Node id="figures.headline">{f.headline}</Node>
           </h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
@@ -1084,13 +1106,13 @@ function Figures({ content }: { content: CreamSageContent }) {
                   color: FIGURE_COLORS[idx % FIGURE_COLORS.length],
                 }}
               >
-                {item.value}
+                <Node id={`figures.items.${idx}.value`}>{item.value}</Node>
               </p>
               <p
                 className="text-base leading-relaxed font-medium"
                 style={{ color: '#3A3221' }}
               >
-                {item.description}
+                <Node id={`figures.items.${idx}.description`}>{item.description}</Node>
               </p>
             </div>
           ))}
@@ -1110,17 +1132,19 @@ function Shifts({ content }: { content: CreamSageContent }) {
           className="cream-sage-eyebrow mb-3 inline-block"
           style={{ color: '#A85430' }}
         >
-          {s.eyebrow}
+          <Node id="shifts.eyebrow">{s.eyebrow}</Node>
         </span>
         <h2
           className="font-black text-4xl md:text-5xl leading-tight mb-14"
           style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
         >
-          {s.headlineLead}
+          <Node id="shifts.headlineLead">{s.headlineLead}</Node>
           <span style={{ fontStyle: 'italic', color: '#4A6B5D' }}>
-            {s.headlineAccent}
+            <Node id="shifts.headlineAccent">{s.headlineAccent}</Node>
           </span>
-          {s.headlineTrail ?? ''}
+          {s.headlineTrail ? (
+            <Node id="shifts.headlineTrail">{s.headlineTrail}</Node>
+          ) : ''}
         </h2>
         <div className="space-y-8">
           {s.items.map((item, idx) => (
@@ -1139,10 +1163,10 @@ function Shifts({ content }: { content: CreamSageContent }) {
                   className="font-bold text-2xl mb-3"
                   style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
                 >
-                  {item.title}
+                  <Node id={`shifts.items.${idx}.title`}>{item.title}</Node>
                 </h3>
                 <p className="text-lg leading-relaxed" style={{ color: '#3A3221' }}>
-                  {item.description}
+                  <Node id={`shifts.items.${idx}.description`}>{item.description}</Node>
                 </p>
               </div>
             </article>
@@ -1163,27 +1187,27 @@ function FAQ({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: '#A85430' }}
           >
-            {content.faqSection.eyebrow}
+            <Node id="faqSection.eyebrow">{content.faqSection.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: '#2A2419' }}
           >
-            {content.faqSection.headline}
+            <Node id="faqSection.headline">{content.faqSection.headline}</Node>
           </h2>
         </div>
         <div>
           {content.faqs.map((faq, idx) => (
             <details key={`faq-${idx}`}>
               <summary>
-                {faq.question}
+                <Node id={`faqs.${idx}.question`}>{faq.question}</Node>
                 <span className="cream-sage-pm-icon">+</span>
               </summary>
               <p
                 className="px-7 pb-7 text-lg leading-relaxed"
                 style={{ color: '#3A3221' }}
               >
-                {faq.answer}
+                <Node id={`faqs.${idx}.answer`}>{faq.answer}</Node>
               </p>
             </details>
           ))}
@@ -1234,22 +1258,24 @@ function FinalCTA({ content }: { content: CreamSageContent }) {
               color: '#FAF7F2',
             }}
           >
-            {c.badgeLabel}
+            <Node id="closing.badgeLabel">{c.badgeLabel}</Node>
           </span>
         </div>
         <h2
           className="font-black text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-8 tracking-tight"
           style={{ fontFamily: "'Fraunces', serif", color: '#FAF7F2' }}
         >
-          {c.headlineLead}
-          <span style={{ fontStyle: 'italic' }}>{c.headlineAccent}</span>
-          {c.headlineTrail}
+          <Node id="closing.headlineLead">{c.headlineLead}</Node>
+          <span style={{ fontStyle: 'italic' }}>
+            <Node id="closing.headlineAccent">{c.headlineAccent}</Node>
+          </span>
+          <Node id="closing.headlineTrail">{c.headlineTrail}</Node>
         </h2>
         <p
           className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium"
           style={{ color: '#FAF7F2' }}
         >
-          {c.subheadline}
+          <Node id="closing.subheadline">{c.subheadline}</Node>
         </p>
         <a
           href="#optin"
@@ -1261,7 +1287,7 @@ function FinalCTA({ content }: { content: CreamSageContent }) {
             transition: 'background 0.2s ease',
           }}
         >
-          {c.ctaLabel}
+          <Node id="closing.ctaLabel">{c.ctaLabel}</Node>
           <span aria-hidden="true">→</span>
         </a>
         {c.fineprint ? (
@@ -1272,7 +1298,7 @@ function FinalCTA({ content }: { content: CreamSageContent }) {
               color: '#FAF7F2',
             }}
           >
-            {c.fineprint}
+            <Node id="closing.fineprint">{c.fineprint}</Node>
           </p>
         ) : null}
       </div>
@@ -1310,7 +1336,7 @@ function Footer({ content }: { content: CreamSageContent }) {
                 className="font-bold text-2xl"
                 style={{ fontFamily: "'Fraunces', serif", color: '#2F4A40' }}
               >
-                {f.brandName}
+                <Node id="footer.brandName">{f.brandName}</Node>
               </p>
               <p
                 className="text-base md:text-lg"
@@ -1320,7 +1346,7 @@ function Footer({ content }: { content: CreamSageContent }) {
                   color: '#3A3221',
                 }}
               >
-                {f.tagline}
+                <Node id="footer.tagline">{f.tagline}</Node>
               </p>
             </div>
           </div>
@@ -1334,7 +1360,7 @@ function Footer({ content }: { content: CreamSageContent }) {
                 href={link.href}
                 className="hover:underline"
               >
-                {link.label}
+                <Node id={`footer.links.${idx}.label`}>{link.label}</Node>
               </a>
             ))}
           </div>
@@ -1343,7 +1369,7 @@ function Footer({ content }: { content: CreamSageContent }) {
           className="text-base mt-6 text-center md:text-left"
           style={{ color: '#3A3221' }}
         >
-          {f.copyright}
+          <Node id="footer.copyright">{f.copyright}</Node>
         </p>
       </div>
     </footer>
@@ -1552,14 +1578,14 @@ function SalesHero({
               display: 'inline-block',
             }}
           />
-          {h.badge}
+          <Node id="salesHero.badge">{h.badge}</Node>
         </span>
 
         <h1
           className="font-black text-4xl md:text-5xl lg:text-6xl leading-[1.08] mb-6"
           style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
         >
-          {h.headline}
+          <Node id="salesHero.headline">{h.headline}</Node>
         </h1>
 
         <p
@@ -1571,7 +1597,7 @@ function SalesHero({
             lineHeight: 1.55,
           }}
         >
-          {h.subheadline}
+          <Node id="salesHero.subheadline">{h.subheadline}</Node>
         </p>
 
         {/* Letterpress "book cover" mockup */}
@@ -1622,7 +1648,7 @@ function SalesHero({
                 margin: 0,
               }}
             >
-              {h.productLabel}
+              <Node id="salesHero.productLabel">{h.productLabel}</Node>
             </p>
             <p
               className="mt-4"
@@ -1648,7 +1674,7 @@ function SalesHero({
               textDecoration: 'line-through',
             }}
           >
-            {h.totalValue}
+            <Node id="salesHero.totalValue">{h.totalValue}</Node>
           </span>
         </p>
 
@@ -1658,7 +1684,7 @@ function SalesHero({
           className="cream-sage-btn-primary"
           style={{ fontSize: '1.15rem' }}
         >
-          {h.ctaLabel}
+          <Node id="salesHero.ctaLabel">{h.ctaLabel}</Node>
           <span aria-hidden="true">→</span>
         </TrackedCheckoutLink>
 
@@ -1670,7 +1696,7 @@ function SalesHero({
             color: CS_SALES.SAGE_DEEP,
           }}
         >
-          <strong>{h.ctaNote}</strong>
+          <strong><Node id="salesHero.ctaNote">{h.ctaNote}</Node></strong>
         </p>
       </div>
     </section>
@@ -1688,13 +1714,13 @@ function Intro({ content }: { content: CreamSageContent }) {
           className="cream-sage-eyebrow mb-3 inline-block"
           style={{ color: CS_SALES.CLAY }}
         >
-          {i.eyebrow}
+          <Node id="intro.eyebrow">{i.eyebrow}</Node>
         </span>
         <h2
           className="font-black text-4xl md:text-5xl leading-tight mb-8"
           style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
         >
-          {i.headline}
+          <Node id="intro.headline">{i.headline}</Node>
         </h2>
         {i.paragraphs.map((p, idx) => (
           <p
@@ -1702,7 +1728,7 @@ function Intro({ content }: { content: CreamSageContent }) {
             className={`text-xl md:text-2xl leading-[1.7] mb-6 ${idx === 0 ? 'cream-sage-dropcap' : ''}`}
             style={{ color: CS_SALES.INK_SOFT }}
           >
-            {p}
+            <Node id={`intro.paragraphs.${idx}`}>{p}</Node>
           </p>
         ))}
       </div>
@@ -1722,13 +1748,13 @@ function VipBonuses({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: CS_SALES.CLAY }}
           >
-            {v.eyebrow}
+            <Node id="vipBonuses.eyebrow">{v.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
           >
-            {v.headline}
+            <Node id="vipBonuses.headline">{v.headline}</Node>
           </h2>
         </div>
         <div
@@ -1764,13 +1790,13 @@ function VipBonuses({ content }: { content: CreamSageContent }) {
                   className="font-bold text-xl mb-2"
                   style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
                 >
-                  {item.title}
+                  <Node id={`vipBonuses.items.${idx}.title`}>{item.title}</Node>
                 </h3>
                 <p
                   className="text-base mb-4 leading-relaxed"
                   style={{ color: CS_SALES.INK_SOFT }}
                 >
-                  {item.description}
+                  <Node id={`vipBonuses.items.${idx}.description`}>{item.description}</Node>
                 </p>
                 <span
                   className="inline-block"
@@ -1787,7 +1813,7 @@ function VipBonuses({ content }: { content: CreamSageContent }) {
                     borderRadius: 999,
                   }}
                 >
-                  {item.valueLabel}
+                  <Node id={`vipBonuses.items.${idx}.valueLabel`}>{item.valueLabel}</Node>
                 </span>
               </div>
             </article>
@@ -1810,13 +1836,13 @@ function FreeGifts({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: CS_SALES.CLAY }}
           >
-            {fg.eyebrow}
+            <Node id="freeGifts.eyebrow">{fg.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
           >
-            {fg.headline}
+            <Node id="freeGifts.headline">{fg.headline}</Node>
           </h2>
         </div>
         <div
@@ -1865,13 +1891,13 @@ function FreeGifts({ content }: { content: CreamSageContent }) {
                   className="font-bold text-xl mb-2"
                   style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
                 >
-                  {gift.title}
+                  <Node id={`freeGifts.items.${idx}.title`}>{gift.title}</Node>
                 </h3>
                 <p
                   className="text-base mb-4 leading-relaxed"
                   style={{ color: CS_SALES.INK_SOFT }}
                 >
-                  {gift.description}
+                  <Node id={`freeGifts.items.${idx}.description`}>{gift.description}</Node>
                 </p>
                 <span
                   className="inline-block"
@@ -1888,7 +1914,7 @@ function FreeGifts({ content }: { content: CreamSageContent }) {
                     borderRadius: 999,
                   }}
                 >
-                  {gift.valueLabel}
+                  <Node id={`freeGifts.items.${idx}.valueLabel`}>{gift.valueLabel}</Node>
                 </span>
               </div>
             </article>
@@ -1902,7 +1928,7 @@ function FreeGifts({ content }: { content: CreamSageContent }) {
             color: CS_SALES.SAGE_DEEP,
           }}
         >
-          {fg.deliveryNote}
+          <Node id="freeGifts.deliveryNote">{fg.deliveryNote}</Node>
         </p>
       </div>
     </section>
@@ -1920,13 +1946,13 @@ function UpgradeSection({ content }: { content: CreamSageContent }) {
           className="cream-sage-eyebrow mb-3 inline-block"
           style={{ color: CS_SALES.CLAY }}
         >
-          {u.eyebrow}
+          <Node id="upgradeSection.eyebrow">{u.eyebrow}</Node>
         </span>
         <h2
           className="font-black text-4xl md:text-5xl leading-tight mb-8"
           style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
         >
-          {u.headline}
+          <Node id="upgradeSection.headline">{u.headline}</Node>
         </h2>
         {u.paragraphs.map((p, idx) => (
           <p
@@ -1934,7 +1960,7 @@ function UpgradeSection({ content }: { content: CreamSageContent }) {
             className="text-xl leading-[1.7] mb-5"
             style={{ color: CS_SALES.INK_SOFT }}
           >
-            {p}
+            <Node id={`upgradeSection.paragraphs.${idx}`}>{p}</Node>
           </p>
         ))}
       </div>
@@ -1946,7 +1972,8 @@ function UpgradeSection({ content }: { content: CreamSageContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: CreamSageContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: CreamSageContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1993,14 +2020,14 @@ function PriceCard({
               textTransform: 'uppercase',
             }}
           >
-            {p.badge}
+            <Node id="priceCard.badge">{p.badge}</Node>
           </div>
 
           <h3
             className="font-bold text-2xl mb-2 leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
           >
-            {p.headline}
+            <Node id="priceCard.headline">{p.headline}</Node>
           </h3>
           <p
             className="text-base mb-4"
@@ -2010,7 +2037,7 @@ function PriceCard({
               color: CS_SALES.INK_MUTED,
             }}
           >
-            {p.note}
+            <Node id="priceCard.note">{p.note}</Node>
           </p>
 
           <ul
@@ -2024,7 +2051,7 @@ function PriceCard({
                 style={{ color: CS_SALES.INK_SOFT, lineHeight: 1.5 }}
               >
                 <CsSalesCheckIcon />
-                <span>{f}</span>
+                <span><Node id={`priceCard.features.${i}`}>{f}</Node></span>
               </li>
             ))}
           </ul>
@@ -2049,7 +2076,7 @@ function PriceCard({
                 color: CS_SALES.SAGE_DEEP,
               }}
             >
-              <CsSalesGiftIcon size={16} color={CS_SALES.SAGE_DEEP} /> {p.giftsBoxTitle}
+              <CsSalesGiftIcon size={16} color={CS_SALES.SAGE_DEEP} /> <Node id="priceCard.giftsBoxTitle">{p.giftsBoxTitle}</Node>
             </p>
             {p.giftItems.map((g, i) => (
               <div
@@ -2058,7 +2085,7 @@ function PriceCard({
                 style={{ color: CS_SALES.INK_SOFT }}
               >
                 <CsSalesCheckIcon />
-                <span>{g}</span>
+                <span><Node id={`priceCard.giftItems.${i}`}>{g}</Node></span>
               </div>
             ))}
           </div>
@@ -2074,7 +2101,7 @@ function PriceCard({
                 textDecoration: 'line-through',
               }}
             >
-              Total value: {p.totalValue} — Regular price: {p.regularPrice}
+              Total value: <Node id="priceCard.totalValue">{p.totalValue}</Node> — Regular price: <Node id="priceCard.regularPrice">{p.regularPrice}</Node>
             </p>
             <p
               className="font-black leading-none mb-1"
@@ -2085,7 +2112,7 @@ function PriceCard({
                 letterSpacing: '-0.02em',
               }}
             >
-              {p.currentPrice}
+              <Node id="priceCard.currentPrice">{p.currentPrice}</Node>
             </p>
             <p
               className="font-semibold text-sm mb-5"
@@ -2096,14 +2123,14 @@ function PriceCard({
                 textTransform: 'uppercase',
               }}
             >
-              {p.savings}
+              <Node id="priceCard.savings">{p.savings}</Node>
             </p>
             <TrackedCheckoutLink
               href={resolveCheckoutHref(wpCheckoutRedirectUrl)}
               className="cream-sage-btn-primary"
               style={{ fontSize: '1.1rem' }}
             >
-              {p.ctaLabel}
+              <Node id="priceCard.ctaLabel">{p.ctaLabel}</Node>
               <span aria-hidden="true">→</span>
             </TrackedCheckoutLink>
             <p
@@ -2114,8 +2141,15 @@ function PriceCard({
                 color: CS_SALES.INK_MUTED,
               }}
             >
-              {p.guarantee}
+              <Node id="priceCard.guarantee">{p.guarantee}</Node>
             </p>
+            {wpThankyouRedirectUrl && (
+              <p style={{ marginTop: '1.25rem' }}>
+                <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                  No thanks. Complete my free registration
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -2143,13 +2177,13 @@ function SalesSpeakers({
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: CS_SALES.CLAY }}
           >
-            {s.eyebrow}
+            <Node id="salesSpeakers.eyebrow">{s.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
           >
-            {s.headline}
+            <Node id="salesSpeakers.headline">{s.headline}</Node>
           </h2>
         </div>
         <div
@@ -2263,13 +2297,13 @@ function ComparisonTable({ content }: { content: CreamSageContent }) {
             className="cream-sage-eyebrow mb-3 inline-block"
             style={{ color: CS_SALES.CLAY }}
           >
-            {c.eyebrow}
+            <Node id="comparisonTable.eyebrow">{c.eyebrow}</Node>
           </span>
           <h2
             className="font-black text-4xl md:text-5xl leading-tight"
             style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
           >
-            {c.headline}
+            <Node id="comparisonTable.headline">{c.headline}</Node>
           </h2>
         </div>
         <div style={{ overflowX: 'auto' }}>
@@ -2344,7 +2378,7 @@ function ComparisonTable({ content }: { content: CreamSageContent }) {
                       lineHeight: 1.4,
                     }}
                   >
-                    {row.label}
+                    <Node id={`comparisonTable.rows.${i}.label`}>{row.label}</Node>
                   </td>
                   <td
                     style={{
@@ -2477,13 +2511,13 @@ function Guarantee({ content }: { content: CreamSageContent }) {
               className="font-bold text-2xl mb-2 leading-tight"
               style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
             >
-              {g.heading}
+              <Node id="guarantee.heading">{g.heading}</Node>
             </h3>
             <p
               className="text-base leading-relaxed"
               style={{ color: CS_SALES.INK_SOFT, margin: 0 }}
             >
-              {g.body}
+              <Node id="guarantee.body">{g.body}</Node>
             </p>
           </div>
         </div>
@@ -2503,7 +2537,7 @@ function WhySection({ content }: { content: CreamSageContent }) {
           className="font-black text-4xl md:text-5xl leading-tight mb-4"
           style={{ fontFamily: "'Fraunces', serif", color: CS_SALES.INK }}
         >
-          {w.headline}
+          <Node id="whySection.headline">{w.headline}</Node>
         </h2>
         <p
           className="text-xl md:text-2xl mb-8 max-w-xl mx-auto"
@@ -2514,7 +2548,7 @@ function WhySection({ content }: { content: CreamSageContent }) {
             lineHeight: 1.5,
           }}
         >
-          {w.subheadline}
+          <Node id="whySection.subheadline">{w.subheadline}</Node>
         </p>
         {w.paragraphs.map((p, idx) => (
           <p
@@ -2522,7 +2556,7 @@ function WhySection({ content }: { content: CreamSageContent }) {
             className="text-lg md:text-xl leading-[1.7] mb-5"
             style={{ color: CS_SALES.INK_SOFT }}
           >
-            {p}
+            <Node id={`whySection.paragraphs.${idx}`}>{p}</Node>
           </p>
         ))}
       </div>
@@ -2531,10 +2565,28 @@ function WhySection({ content }: { content: CreamSageContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function CreamSage({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
+export function CreamSage({ content, speakers, funnelId, enabledSections, tokens, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? creamSageDefaultEnabledSections);
+
+  // Translate DesignTokens → inline CSS custom properties on the root. The
+  // stylesheet already uses var(--cs-primary) etc. with template defaults,
+  // so this only writes vars the operator has actually overridden.
+  const rootStyle: import('react').CSSProperties | undefined = (() => {
+    if (!tokens) return undefined;
+    const s: Record<string, string> = {};
+    const p = tokens.palette;
+    if (p?.primary) s['--cs-primary'] = p.primary;
+    if (p?.primary) s['--cs-primary-hover'] = p.primary;
+    if (p?.accent) s['--cs-accent'] = p.accent;
+    if (p?.ink) s['--cs-ink'] = p.ink;
+    if (p?.paper) s['--cs-paper'] = p.paper;
+    if (tokens.headingFont) s['--heading-font'] = `'${tokens.headingFont}', serif`;
+    if (tokens.bodyFont) s['--body-font'] = `'${tokens.bodyFont}', system-ui, sans-serif`;
+    return Object.keys(s).length ? (s as import('react').CSSProperties) : undefined;
+  })();
+
   return (
-    <div className="cream-sage-root cream-sage-body antialiased">
+    <div className="cream-sage-root cream-sage-body antialiased" style={rootStyle}>
       <a href="#main" className="cream-sage-skip-nav">
         Skip to content
       </a>
@@ -2563,7 +2615,7 @@ export function CreamSage({ content, speakers, funnelId, enabledSections, wpChec
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

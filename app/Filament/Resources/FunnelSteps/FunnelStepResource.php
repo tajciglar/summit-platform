@@ -15,6 +15,7 @@ use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -49,8 +50,71 @@ class FunnelStepResource extends Resource
     {
         return $schema->columns(1)->components([
             self::metaSection(),
+            self::designSection(),
             self::pageContentRow(),
         ]);
+    }
+
+    /**
+     * Phase 1 visual-editor "Brand" panel — a compact collapsible section
+     * exposing the design-token override knobs (colors + fonts). Values are
+     * written to the `page_overrides.tokens` JSON and consumed by the
+     * template's root via CSS custom properties.
+     */
+    protected static function designSection(): Section
+    {
+        $fontOptions = [
+            'Fraunces' => 'Fraunces',
+            'Cormorant Garamond' => 'Cormorant Garamond',
+            'Playfair Display' => 'Playfair Display',
+            'Inter' => 'Inter',
+            'DM Sans' => 'DM Sans',
+            'Poppins' => 'Poppins',
+            'Nunito' => 'Nunito',
+        ];
+
+        return Section::make('Design')
+            ->description('Brand colors and typography — live updates the preview')
+            ->collapsible()
+            ->collapsed()
+            ->columnSpanFull()
+            ->columns(['default' => 1, 'md' => 6])
+            ->components([
+                ColorPicker::make('page_overrides.tokens.palette.primary')
+                    ->label('Primary')
+                    ->hex()
+                    ->live(debounce: 500)
+                    ->columnSpan(1),
+                ColorPicker::make('page_overrides.tokens.palette.accent')
+                    ->label('Accent')
+                    ->hex()
+                    ->live(debounce: 500)
+                    ->columnSpan(1),
+                ColorPicker::make('page_overrides.tokens.palette.ink')
+                    ->label('Text')
+                    ->hex()
+                    ->live(debounce: 500)
+                    ->columnSpan(1),
+                ColorPicker::make('page_overrides.tokens.palette.paper')
+                    ->label('Background')
+                    ->hex()
+                    ->live(debounce: 500)
+                    ->columnSpan(1),
+                Select::make('page_overrides.tokens.headingFont')
+                    ->label('Heading font')
+                    ->options($fontOptions)
+                    ->native(false)
+                    ->live()
+                    ->placeholder('Template default')
+                    ->columnSpan(1),
+                Select::make('page_overrides.tokens.bodyFont')
+                    ->label('Body font')
+                    ->options($fontOptions)
+                    ->native(false)
+                    ->live()
+                    ->placeholder('Template default')
+                    ->columnSpan(1),
+            ]);
     }
 
     /**

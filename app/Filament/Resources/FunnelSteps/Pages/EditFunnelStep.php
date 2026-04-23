@@ -22,6 +22,17 @@ class EditFunnelStep extends EditRecord
 
     protected static string $layout = 'filament.layouts.focused';
 
+    /**
+     * Dispatch a browser event on any Livewire property update so the
+     * Alpine-powered preview iframe can debounce and push live content.
+     */
+    public function updated(string $name): void
+    {
+        if (str_starts_with($name, 'data.page_content') || str_starts_with($name, 'data.page_overrides')) {
+            $this->dispatch('form-updated');
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -103,6 +114,79 @@ class EditFunnelStep extends EditRecord
             ->builderListToMap($data['page_content'] ?? [], is_array($original) ? $original : null);
 
         return $data;
+    }
+
+    /**
+     * Prototype: receive an inline edit from the live-preview iframe and patch
+     * the form's Builder state. Path is `section.field` where section is the
+     * block type (e.g. `hero`) and field is dot-path into that block's data.
+     */
+    public function updateContentPath(string $path, string $value): void
+    {
+        [$section, $fieldPath] = array_pad(explode('.', $path, 2), 2, '');
+        if ($section === '' || $fieldPath === '') {
+            return;
+        }
+
+        $list = $this->data['page_content'] ?? [];
+        if (! is_array($list)) {
+            return;
+        }
+
+        foreach ($list as $i => $block) {
+            if (($block['type'] ?? null) !== $section) {
+                continue;
+            }
+            $data = is_array($block['data'] ?? null) ? $block['data'] : [];
+
+            // Simple-Repeater items (array-of-scalars) are stored as
+            // [{value: 'a'}, {value: 'b'}] internally. If the existing leaf has
+            // that shape, preserve it so Filament's form input keeps working.
+            $existing = data_get($data, $fieldPath);
+            $writeValue = (is_array($existing) && array_keys($existing) === ['value'])
+                ? ['value' => $value]
+                : $value;
+
+            data_set($data, $fieldPath, $writeValue);
+            $list[$i]['data'] = $data;
+            break;
+        }
+
+        $this->data['page_content'] = $list;
+
+        // Re-fill the form so the Builder input on the left reflects the patch,
+        // then tell the preview iframe to re-sync from the new form state.
+        $this->form->fill($this->data);
+        $this->dispatch('form-updated');
+    }
+
+    /**
+     * Return the current form's page_content converted to the canonical map
+     * format that Next.js expects. Called from Alpine via Livewire to feed
+     * the live preview iframe without saving to DB.
+     *
+     * @return array<string, mixed>
+     */
+    public function getPreviewContent(): array
+    {
+        $formData = $this->form->getState();
+        $original = $this->record->page_content;
+        $factory = app(TemplateBlockFactory::class);
+
+        $map = $factory->builderListToMap(
+            $formData['page_content'] ?? [],
+            is_array($original) ? $original : null,
+        );
+
+        // Phase 1 visual-editor: design-token overrides live on their own
+        // `page_overrides` column; ship them alongside so the iframe can
+        // re-render colors/fonts in real time.
+        $overrides = $formData['page_overrides'] ?? $this->record->page_overrides;
+        $map['tokens'] = is_array($overrides) && isset($overrides['tokens']) && is_array($overrides['tokens'])
+            ? $overrides['tokens']
+            : null;
+
+        return $map;
     }
 
     /**

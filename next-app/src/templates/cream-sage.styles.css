@@ -7,11 +7,28 @@
  * collisions with other templates or host app CSS.
  */
 
-.cream-sage-root { scroll-behavior: smooth; }
+/* CSS custom properties — the override seam the step editor writes to via
+   inline style on `.cream-sage-root`. Fallbacks match the current template
+   defaults so an unedited step renders exactly as before. */
+.cream-sage-root {
+  scroll-behavior: smooth;
+  --cs-primary: #C4663D;         /* CTA button base */
+  --cs-primary-hover: #A85430;   /* CTA button hover + eyebrow accent */
+  --cs-accent: #D89878;
+  --cs-accent-soft: #E8B9A0;
+  --cs-ink: #2A2419;
+  --cs-ink-soft: #3A3221;
+  --cs-paper: #FAF7F2;
+  --cs-paper-alt: #F4EDE2;
+  --cs-sage: #4A6B5D;
+  --cs-sage-deep: #2F4A40;
+  --heading-font: 'Fraunces', serif;
+  --body-font: 'DM Sans', system-ui, sans-serif;
+}
 .cream-sage-body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background: #FAF7F2;
-  color: #2A2419;
+  font-family: var(--body-font);
+  background: var(--cs-paper);
+  color: var(--cs-ink);
   font-feature-settings: "ss01";
   font-size: 18px;
   line-height: 1.65;
@@ -21,7 +38,7 @@
 .cream-sage-body h2,
 .cream-sage-body h3,
 .cream-sage-body h4 {
-  font-family: 'Fraunces', serif;
+  font-family: var(--heading-font);
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
 }
@@ -55,8 +72,8 @@
 }
 
 .cream-sage-body .cream-sage-btn-primary {
-  background: #C4663D;
-  color: #FAF7F2;
+  background: var(--cs-primary);
+  color: var(--cs-paper);
   padding: 1.1rem 2.25rem;
   border-radius: 999px;
   font-weight: 700;
@@ -68,7 +85,7 @@
   box-shadow: 0 10px 30px -10px rgba(196,102,61,0.45);
 }
 .cream-sage-body .cream-sage-btn-primary:hover {
-  background: #A85430;
+  background: var(--cs-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 16px 36px -8px rgba(196,102,61,0.55);
 }
