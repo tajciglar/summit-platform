@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\Templates\TemplateRegistry;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
 
@@ -38,5 +39,13 @@ class AppServiceProvider extends ServiceProvider
         // configured in composer dev (50 MB). Stock images can easily exceed
         // the default and produce a bare 422 with no visible error for the user.
         Config::set('livewire.temporary_file_upload.rules', ['required', 'file', 'max:51200']);
+
+        // Railway terminates TLS at the edge and forwards HTTP to the container.
+        // Trusting X-Forwarded-Proto in bootstrap/app.php handles most URL
+        // generation, but Livewire's signed upload URL is built before middleware
+        // runs in some paths — forcing the scheme here is the reliable fix.
+        if (env('APP_FORCE_HTTPS', false)) {
+            URL::forceScheme('https');
+        }
     }
 }
