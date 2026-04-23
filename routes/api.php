@@ -15,6 +15,8 @@ Route::middleware('internal-api')->group(function () {
         ->middleware('throttle:120,1');
     Route::get('/funnels/resolve', FunnelResolveController::class)
         ->middleware('throttle:60,1');
+    Route::get('/funnels/resolve-by-host', [PublicFunnelController::class, 'resolveByHost'])
+        ->middleware('throttle:120,1');
     Route::get('/optin/prefill/{token}', [CheckoutPrefillController::class, 'show'])
         ->middleware('throttle:60,1');
 });

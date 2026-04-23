@@ -69,6 +69,27 @@ export async function fetchStepPreview(stepId: string): Promise<PublicPayload | 
   return res.json();
 }
 
+/**
+ * Host-based public-page resolver used by the multi-domain funnel route.
+ * The Laravel side joins (Domain.hostname → Summit.domain_id → Funnel.slug →
+ * FunnelStep) and returns the same payload shape as fetchStepPreview.
+ */
+export async function fetchByHost(
+  host: string,
+  funnelSlug: string,
+  stepSlug?: string,
+): Promise<PublicPayload | null> {
+  const qs = new URLSearchParams({ host, funnel: funnelSlug });
+  if (stepSlug) qs.set('step', stepSlug);
+  const res = await fetch(`${BASE}/api/funnels/resolve-by-host?${qs.toString()}`, {
+    headers: internalHeaders(),
+    next: { revalidate: 60 },
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`resolve-by-host failed: ${res.status}`);
+  return res.json();
+}
+
 export function speakersById(speakers: Speaker[]): Record<string, Speaker> {
   return Object.fromEntries(speakers.map((s) => [s.id, s]));
 }
