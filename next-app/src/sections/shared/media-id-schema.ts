@@ -3,9 +3,14 @@ import { z } from 'zod';
 export type MediaIdMetadata = {
   /** Semantic role, e.g. 'hero-background', 'host-photo', 'bonus-thumbnail'. */
   role: string;
-  /** MediaCategory key — matches app/Enums/MediaCategory.php. */
-  category: 'hero' | 'product' | 'downloadables' | 'speaker' | 'logo' | 'brand';
-  /** Optional sub-category filter for the picker. */
+  /** MediaCategory key — mirrors app/Enums/MediaCategory.php. */
+  category: 'landing_page' | 'product' | 'speakers' | 'brand' | 'downloadable';
+  /**
+   * Optional sub-category filter — must come from
+   * MediaCategory::subCategoryOptions() for the chosen category
+   * (e.g. landing_page → 'hero' | 'side' | 'section' | 'press_logo' |
+   * 'testimonial' | 'background'; brand → 'logo' | 'favicon' | 'og_image').
+   */
   subCategory?: string;
 };
 

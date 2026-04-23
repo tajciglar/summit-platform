@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\LandingPageDraft;
+use App\Services\Templates\MediaContentResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -56,10 +57,10 @@ class LandingPageDraftResource extends JsonResource
         $isList = array_keys($raw) === range(0, count($raw) - 1);
         $looksLikeSections = $isList && is_array($raw[0] ?? null) && isset($raw[0]['type']);
 
-        if ($looksLikeSections) {
-            return SectionResource::collection($raw)->toArray($request);
-        }
+        $content = $looksLikeSections
+            ? SectionResource::collection($raw)->toArray($request)
+            : $raw;
 
-        return $raw;
+        return app(MediaContentResolver::class)->resolve($content);
     }
 }
