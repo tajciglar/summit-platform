@@ -46,7 +46,7 @@ function SpeakerCard({
   expandable: boolean
 }) {
   const [open, setOpen] = useState(false)
-  const description = open ? speaker.longDescription : speaker.shortDescription
+  const description = open ? speaker.longBio : speaker.shortBio
 
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
@@ -73,7 +73,7 @@ function SpeakerCard({
         {description && (
           <p className="mt-2 line-clamp-4 text-sm text-gray-700">{description}</p>
         )}
-        {expandable && speaker.longDescription && speaker.longDescription !== speaker.shortDescription && (
+        {expandable && speaker.longBio && speaker.longBio !== speaker.shortBio && (
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}

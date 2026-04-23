@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SpeakerResource;
 use App\Models\Funnel;
 use App\Models\FunnelStep;
 use App\Models\Summit;
@@ -38,9 +39,11 @@ class PublicFunnelController extends Controller
 
         // WP checkout redirect is a sales-page concept; other step types must
         // keep their native CTAs (e.g. optin → modal).
-        $wpUrl = $stepType === 'sales_page' ? $funnel->wp_checkout_redirect_url : null;
+        $isSales = $stepType === 'sales_page';
+        $wpUrl = $isSales ? $funnel->wp_checkout_redirect_url : null;
+        $wpThankyouUrl = $isSales ? $funnel->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl));
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl, $wpThankyouUrl));
     }
 
     /**
@@ -65,36 +68,23 @@ class PublicFunnelController extends Controller
             }
         }
 
-        $wpUrl = $step->step_type === 'sales_page' ? $funnel?->wp_checkout_redirect_url : null;
+        $isSales = $step->step_type === 'sales_page';
+        $wpUrl = $isSales ? $funnel?->wp_checkout_redirect_url : null;
+        $wpThankyouUrl = $isSales ? $funnel?->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl, $wpThankyouUrl));
     }
 
     /**
      * @param  array<string, mixed>  $content
      * @return array<string, mixed>
      */
-    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null): array
+    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null): array
     {
         $summit = $summitId ? Summit::query()->find($summitId) : null;
         $speakers = $summit
-            ? $summit->speakers()->get()->map(fn ($s) => [
-                'id' => $s->id,
-                'firstName' => $s->first_name,
-                'lastName' => $s->last_name,
-                'title' => $s->title,
-                'shortBio' => $s->short_bio,
-                'longBio' => $s->long_bio,
-                'photoUrl' => $s->photo_url,
-                'masterclassTitle' => $s->masterclass_title,
-                'masterclassDescription' => $s->masterclass_description,
-                'rating' => $s->rating,
-                'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
-                'sortOrder' => $s->pivot->sort_order ?? 0,
-                'isFeatured' => $s->is_featured,
-                'dayNumber' => $s->pivot->day_number,
-            ])
-            : collect();
+            ? SpeakerResource::collection($summit->speakers()->get())->toArray(request())
+            : [];
 
         return [
             'template_key' => $content['template_key'],
@@ -107,6 +97,7 @@ class PublicFunnelController extends Controller
             'funnel_step_id' => $funnelStepId,
             'summit_id' => $summitId,
             'wp_checkout_redirect_url' => $wpCheckoutRedirectUrl,
+            'wp_thankyou_redirect_url' => $wpThankyouRedirectUrl,
         ];
     }
 }

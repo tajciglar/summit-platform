@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SpeakerResource;
 use App\Models\LandingPageDraft;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
@@ -19,26 +20,8 @@ class LandingPageDraftController extends Controller
         $funnel = $batch?->funnel;
 
         $speakers = $summit
-            ? $summit->speakers()
-                ->get()
-                ->map(fn ($s) => [
-                    'id' => $s->id,
-                    'firstName' => $s->first_name,
-                    'lastName' => $s->last_name,
-                    'title' => $s->title,
-                    'shortBio' => $s->short_bio,
-                    'longBio' => $s->long_bio,
-                    'photoUrl' => $s->photo_url,
-                    'masterclassTitle' => $s->masterclass_title,
-                    'masterclassDescription' => $s->masterclass_description,
-                    'rating' => $s->rating,
-                    'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
-                    'sortOrder' => $s->pivot->sort_order ?? 0,
-                    'isFeatured' => $s->is_featured,
-                    'dayNumber' => $s->pivot->day_number,
-                ])
-                ->values()
-            : collect();
+            ? SpeakerResource::collection($summit->speakers()->get())->toArray(request())
+            : [];
 
         return response()->json([
             'template_key' => $draft->template_key,
@@ -49,6 +32,7 @@ class LandingPageDraftController extends Controller
             'speakers' => $speakers,
             'funnel_id' => $funnel?->id,
             'wp_checkout_redirect_url' => $funnel?->wp_checkout_redirect_url,
+            'wp_thankyou_redirect_url' => $funnel?->wp_thankyou_redirect_url,
             'status' => $draft->status?->value,
         ]);
     }

@@ -23,8 +23,8 @@ export interface DraftPreview {
     fullName: string
     title: string | null
     photoUrl: string | null
-    shortDescription: string | null
-    longDescription: string | null
+    shortBio: string | null
+    longBio: string | null
     dayNumber: number
     masterclassTitle: string | null
     sortOrder: number
