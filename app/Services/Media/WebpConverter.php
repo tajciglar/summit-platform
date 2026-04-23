@@ -23,6 +23,16 @@ class WebpConverter
     private const QUALITY = 82;
 
     /**
+     * Fast precheck used by callers that need to decide whether dispatching
+     * a conversion is worthwhile without instantiating the service.
+     */
+    public static function isConvertibleMime(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'image/')
+            && ! in_array($mimeType, self::SKIP_MIMES, true);
+    }
+
+    /**
      * Convert the file at `$sourcePath` to WebP.
      *
      * @return array{path: string, fileName: string, mimeType: string}|null

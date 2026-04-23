@@ -2,6 +2,7 @@
 
 namespace App\Services\Media;
 
+use App\Jobs\ConvertMediaItemToWebp;
 use App\Models\MediaItem;
 use Filament\Facades\Filament;
 use Illuminate\Http\UploadedFile;
@@ -23,10 +24,6 @@ class MediaItemCreator
      *                                       UploadedFile), or a path on the
      *                                       `local` disk.
      */
-    public function __construct(
-        private WebpConverter $webpConverter,
-    ) {}
-
     public function fromUpload(
         UploadedFile|string $source,
         string $category,
@@ -38,13 +35,7 @@ class MediaItemCreator
     ): MediaItem {
         [$realPath, $clientName, $mimeType] = $this->resolveSource($source);
 
-        $converted = $this->webpConverter->convert($realPath, $clientName, $mimeType);
-        if ($converted !== null) {
-            $realPath = $converted['path'];
-            $clientName = $converted['fileName'];
-        }
-
-        return DB::transaction(function () use ($realPath, $clientName, $category, $subCategory, $domainId, $createdByUserId, $caption, $altText) {
+        $item = DB::transaction(function () use ($realPath, $clientName, $category, $subCategory, $domainId, $createdByUserId, $caption, $altText) {
             $item = MediaItem::create([
                 'domain_id' => $domainId ?? Filament::getTenant()?->getKey(),
                 'category' => $category,
@@ -73,6 +64,14 @@ class MediaItemCreator
 
             return $item->fresh();
         });
+
+        // WebP conversion is queued so uploads return immediately. The job
+        // re-encodes and swaps the Spatie media once it runs.
+        if (WebpConverter::isConvertibleMime($mimeType)) {
+            ConvertMediaItemToWebp::dispatch($item->id);
+        }
+
+        return $item;
     }
 
     /**
