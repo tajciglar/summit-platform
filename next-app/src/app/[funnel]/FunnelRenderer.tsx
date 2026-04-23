@@ -40,12 +40,12 @@ export async function FunnelRenderer({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = template.Component as ComponentType<any>;
-  const isSales = !!data.wp_checkout_redirect_url;
+  const isSales = data.step_type === 'sales_page';
 
   return (
     <>
       <PageViewTracker
-        pageType={data.wp_checkout_redirect_url ? 'sales' : 'optin'}
+        pageType={isSales ? 'sales' : 'optin'}
         summitId={data.summit_id ?? ''}
         funnelId={data.funnel_id ?? ''}
         funnelStepId={data.funnel_step_id ?? ''}

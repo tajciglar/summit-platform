@@ -18,6 +18,7 @@ class LandingPageDraftResource extends JsonResource
         $batch = $draft->batch;
         $summit = $batch?->summit;
         $funnel = $batch?->funnel;
+        $step = $batch?->funnelStep;
 
         $rawSections = $draft->sections ?? $draft->blocks ?? [];
 
@@ -36,6 +37,7 @@ class LandingPageDraftResource extends JsonResource
                 ? SpeakerResource::collection($summit->speakers()->get())->toArray($request)
                 : [],
             'funnel_id' => $funnel?->id,
+            'step_type' => $step?->step_type,
             'wp_checkout_redirect_url' => $funnel?->wp_checkout_redirect_url,
             'wp_thankyou_redirect_url' => $funnel?->wp_thankyou_redirect_url,
             'status' => $draft->status?->value,

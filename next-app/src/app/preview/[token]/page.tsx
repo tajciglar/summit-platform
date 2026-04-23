@@ -2,6 +2,8 @@ import type { ComponentType } from 'react';
 import { notFound } from 'next/navigation';
 import { fetchDraft, speakersById } from '@/lib/api/laravel';
 import { getTemplate } from '@/templates/registry';
+import { SalesCountdownBar } from '@/components/SalesCountdownBar';
+import { resolveCheckoutHref } from '@/templates/lib/checkout-href';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,14 +30,20 @@ export default async function PreviewPage({
   // are simply skipped.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = template.Component as ComponentType<any>;
+  const isSales = draft.step_type === 'sales_page';
+
   return (
-    <Component
-      content={draft.content}
-      speakers={speakersById(draft.speakers)}
-      funnelId={draft.funnel_id}
-      enabledSections={draft.enabled_sections ?? undefined}
-      palette={draft.palette}
-      wpCheckoutRedirectUrl={draft.wp_checkout_redirect_url}
-    />
+    <>
+      {isSales && <SalesCountdownBar checkoutHref={resolveCheckoutHref(draft.wp_checkout_redirect_url)} />}
+      <Component
+        content={draft.content}
+        speakers={speakersById(draft.speakers)}
+        funnelId={draft.funnel_id}
+        enabledSections={draft.enabled_sections ?? undefined}
+        palette={draft.palette}
+        wpCheckoutRedirectUrl={draft.wp_checkout_redirect_url}
+        wpThankyouRedirectUrl={draft.wp_thankyou_redirect_url}
+      />
+    </>
   );
 }

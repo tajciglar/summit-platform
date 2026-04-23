@@ -21,6 +21,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 // Deterministic sparkline heights keyed by trend label. Keeps the AI-fillable
@@ -1847,7 +1848,8 @@ function UpgradeSection({ content }: { content: LimeInkContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: LimeInkContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: LimeInkContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1992,6 +1994,13 @@ function PriceCard({
               >
                 {p.guarantee}
               </p>
+              {wpThankyouRedirectUrl && (
+                <p style={{ marginTop: '1.25rem' }}>
+                  <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                    No thanks. Complete my free registration
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -2371,7 +2380,7 @@ function WhySection({ content }: { content: LimeInkContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function LimeInk({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
+export function LimeInk({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? limeInkDefaultEnabledSections);
   return (
     <div className="lime-ink-root lime-ink-body antialiased">
@@ -2403,7 +2412,7 @@ export function LimeInk({ content, speakers, funnelId, enabledSections, wpChecko
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

@@ -56,6 +56,8 @@ class Settings extends Page
                             ->subCategory('logo')
                             ->role('logo')
                             ->label('Logo')
+                            ->captionUsing(fn (AppSettings $record): string => ($record->company_name ?: 'Platform').' — logo')
+                            ->altTextUsing(fn (AppSettings $record): string => ($record->company_name ?: 'Platform').' logo')
                             ->columnSpanFull(),
                     ]),
 

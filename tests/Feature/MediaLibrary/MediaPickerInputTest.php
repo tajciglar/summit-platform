@@ -24,9 +24,24 @@ it('defaults role to image and category to product', function (): void {
         ->and($field->getCategory())->toBe('product');
 });
 
+it('allows inline upload by default and respects allowUpload(false)', function (): void {
+    $withUpload = MediaPickerInput::make('a');
+    $libraryOnly = MediaPickerInput::make('b')->allowUpload(false);
+
+    expect($withUpload->isUploadAllowed())->toBeTrue()
+        ->and($libraryOnly->isUploadAllowed())->toBeFalse();
+});
+
+it('builds an upload state path alongside the main state path', function (): void {
+    $field = MediaPickerInput::make('image_media_item_id');
+
+    expect($field->getUploadStatePath(false))->toBe('image_media_item_id_upload');
+});
+
 it('hydrates state from an existing pivot attachment', function (): void {
     $summit = Summit::factory()->create();
-    $product = Product::factory()->create(['summit_id' => $summit->id]);
+    $product = Product::factory()->create();
+    $product->summits()->attach($summit->id);
     $item = MediaItem::factory()->create();
     $product->setMediaFor('image', $item);
 
@@ -35,7 +50,8 @@ it('hydrates state from an existing pivot attachment', function (): void {
 
 it('writes a pivot row via setMediaFor', function (): void {
     $summit = Summit::factory()->create();
-    $product = Product::factory()->create(['summit_id' => $summit->id]);
+    $product = Product::factory()->create();
+    $product->summits()->attach($summit->id);
     $item = MediaItem::factory()->create();
 
     $product->setMediaFor('image', $item);
@@ -45,7 +61,8 @@ it('writes a pivot row via setMediaFor', function (): void {
 
 it('replaces the pivot row when a different item is set', function (): void {
     $summit = Summit::factory()->create();
-    $product = Product::factory()->create(['summit_id' => $summit->id]);
+    $product = Product::factory()->create();
+    $product->summits()->attach($summit->id);
     $first = MediaItem::factory()->create();
     $second = MediaItem::factory()->create();
 
@@ -57,7 +74,8 @@ it('replaces the pivot row when a different item is set', function (): void {
 
 it('clears the pivot row when null is set', function (): void {
     $summit = Summit::factory()->create();
-    $product = Product::factory()->create(['summit_id' => $summit->id]);
+    $product = Product::factory()->create();
+    $product->summits()->attach($summit->id);
     $item = MediaItem::factory()->create();
 
     $product->setMediaFor('image', $item);

@@ -21,6 +21,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 /* Visual gradients for speaker avatars — deterministic, cycled by index.
@@ -1342,7 +1343,8 @@ function UpgradeSection({ content }: { content: RustCreamContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: RustCreamContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: RustCreamContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1400,6 +1402,13 @@ function PriceCard({
               {p.ctaLabel} <SalesArrowRight size={20} />
             </TrackedCheckoutLink>
             <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: SALES_TOKENS.RUST500 }}>{p.guarantee}</p>
+            {wpThankyouRedirectUrl && (
+              <p style={{ marginTop: '1.25rem' }}>
+                <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                  No thanks. Complete my free registration
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1531,7 +1540,7 @@ function WhySection({ content }: { content: RustCreamContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function RustCream({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
+export function RustCream({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? rustCreamDefaultEnabledSections);
   return (
     <div className="rust-cream-root rust-cream-body antialiased">
@@ -1564,7 +1573,7 @@ export function RustCream({ content, speakers, funnelId, enabledSections, wpChec
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

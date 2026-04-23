@@ -68,7 +68,17 @@ it('resolves an explicit step slug', function () {
     $response = $this->getJson('/api/funnels/resolve-by-host?host=example.com&funnel=aps&step=vip');
 
     $response->assertOk()
-        ->assertJsonPath('content.salesHero.headline', 'Upgrade');
+        ->assertJsonPath('content.salesHero.headline', 'Upgrade')
+        ->assertJsonPath('step_type', 'sales_page');
+});
+
+it('exposes step_type for the optin default step', function () {
+    seedHostFixture('example.com', 'aps');
+
+    $response = $this->getJson('/api/funnels/resolve-by-host?host=example.com&funnel=aps');
+
+    $response->assertOk()
+        ->assertJsonPath('step_type', 'optin');
 });
 
 it('404s for an unknown hostname', function () {

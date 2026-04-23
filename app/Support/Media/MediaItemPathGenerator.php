@@ -28,11 +28,10 @@ class MediaItemPathGenerator implements PathGenerator
     {
         /** @var MediaItem $item */
         $item = $media->model;
-        $prefix = $item->domain_id ?: '_global';
         $category = $item->category instanceof BackedEnum
             ? $item->category->value
             : (string) $item->category;
 
-        return sprintf('%s/%s/%s', $prefix, $category, $item->id);
+        return sprintf('%s/%s', $category, $item->id);
     }
 }

@@ -44,7 +44,7 @@ class PublicFunnelController extends Controller
         $wpUrl = $isSales ? $funnel->wp_checkout_redirect_url : null;
         $wpThankyouUrl = $isSales ? $funnel->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl, $wpThankyouUrl, is_array($step?->page_overrides ?? null) ? $step->page_overrides : null));
+        return response()->json($this->payload($content, $funnel->summit_id, $funnel->id, $step?->id, $wpUrl, $wpThankyouUrl, is_array($step?->page_overrides ?? null) ? $step->page_overrides : null, $step?->step_type));
     }
 
     /**
@@ -131,6 +131,7 @@ class PublicFunnelController extends Controller
                 $wpUrl,
                 $wpThankyouUrl,
                 is_array($step->page_overrides) ? $step->page_overrides : null,
+                $step->step_type,
             ),
         );
     }
@@ -161,7 +162,7 @@ class PublicFunnelController extends Controller
         $wpUrl = $isSales ? $funnel?->wp_checkout_redirect_url : null;
         $wpThankyouUrl = $isSales ? $funnel?->wp_thankyou_redirect_url : null;
 
-        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl, $wpThankyouUrl, is_array($step->page_overrides) ? $step->page_overrides : null));
+        return response()->json($this->payload($content, $funnel?->summit_id, $funnel?->id, $step->id, $wpUrl, $wpThankyouUrl, is_array($step->page_overrides) ? $step->page_overrides : null, $step->step_type));
     }
 
     /**
@@ -169,7 +170,7 @@ class PublicFunnelController extends Controller
      * @param  array<string, mixed>|null  $pageOverrides
      * @return array<string, mixed>
      */
-    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null, ?array $pageOverrides = null): array
+    private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null, ?array $pageOverrides = null, ?string $stepType = null): array
     {
         $summit = $summitId ? Summit::query()->find($summitId) : null;
         $speakers = $summit
@@ -190,6 +191,7 @@ class PublicFunnelController extends Controller
             'speakers' => $speakers,
             'funnel_id' => $funnelId,
             'funnel_step_id' => $funnelStepId,
+            'step_type' => $stepType,
             'summit_id' => $summitId,
             'wp_checkout_redirect_url' => $wpCheckoutRedirectUrl,
             'wp_thankyou_redirect_url' => $wpThankyouRedirectUrl,

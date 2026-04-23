@@ -105,6 +105,15 @@ export function PriceCard({ content, context }: Props) {
               </TrackedCheckoutLink>
 
               <p className="figure-label mt-6 text-taupe-600">{content.guarantee}</p>
+
+              {context?.wpThankyouRedirectUrl && (
+                <a
+                  href={context.wpThankyouRedirectUrl}
+                  className="block mt-8 font-opus-serif text-sm text-taupe-500 hover:text-taupe-700 underline underline-offset-2 transition"
+                >
+                  No thanks. Complete my free registration
+                </a>
+              )}
             </div>
           </div>
         </article>

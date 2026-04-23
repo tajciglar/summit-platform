@@ -17,6 +17,7 @@ export type OchreInkLayoutProps = {
   funnelId: string;
   palette?: Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 export function OchreInkLayout({
@@ -26,6 +27,7 @@ export function OchreInkLayout({
   funnelId,
   palette,
   wpCheckoutRedirectUrl,
+  wpThankyouRedirectUrl,
 }: OchreInkLayoutProps) {
   const enabled = enabledSections ?? opusV1DefaultEnabledSections;
   const sections = opusV1ContentToSections(content);
@@ -38,6 +40,7 @@ export function OchreInkLayout({
     summitName: content.summit?.name ?? '',
     heroCtaLabel: content.hero?.ctaLabel ?? 'Get Started',
     wpCheckoutRedirectUrl,
+    wpThankyouRedirectUrl,
   };
 
   return (

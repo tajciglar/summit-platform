@@ -15,7 +15,7 @@
     :livewire="$livewire"
     class="fi-body-focused"
 >
-    <div class="fi-layout">
+    <div class="fi-layout" style="overflow: visible;">
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::LAYOUT_START, scopes: $renderHookScopes) }}
 
         <div class="fi-main-ctn" style="display: flex; opacity: 1;">

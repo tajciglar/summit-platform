@@ -148,7 +148,9 @@ class MediaLibraryMigrateCommand extends Command
     {
         return match ($class) {
             Summit::class => $owner->domain_id,
-            Product::class, Speaker::class, FunnelStepBump::class => $owner->summit?->domain_id,
+            Product::class => $owner->summits()->first()?->domain_id,
+            Speaker::class => $owner->summits()->first()?->domain_id,
+            FunnelStepBump::class => $owner->funnelStep?->funnel?->summit?->domain_id,
             Domain::class => $owner->id,
             AppSettings::class => null,
             default => null,

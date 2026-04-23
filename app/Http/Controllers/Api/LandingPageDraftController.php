@@ -11,7 +11,7 @@ class LandingPageDraftController extends Controller
 {
     public function showByToken(string $token): JsonResponse
     {
-        $draft = LandingPageDraft::with('batch.summit', 'batch.funnel')
+        $draft = LandingPageDraft::with('batch.summit', 'batch.funnel', 'batch.funnelStep')
             ->where('preview_token', $token)
             ->firstOrFail();
 

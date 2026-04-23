@@ -43,6 +43,7 @@ export type TemplateContext = {
   summitName: string;
   heroCtaLabel: string;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 export function initialsFromSpeaker(s: Speaker): string {

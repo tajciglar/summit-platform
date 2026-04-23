@@ -21,6 +21,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 // Deterministic gradient + accent cycles, drawn from the green-gold HTML palette
@@ -1602,7 +1603,8 @@ function UpgradeSection({ content }: { content: GreenGoldContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: GreenGoldContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: GreenGoldContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1660,6 +1662,13 @@ function PriceCard({
               {p.ctaLabel} <SalesArrowRight size={20} />
             </TrackedCheckoutLink>
             <p style={{ marginTop: '0.85rem', fontSize: '0.78rem', color: GG_SALES.INK600 }}>{p.guarantee}</p>
+            {wpThankyouRedirectUrl && (
+              <p style={{ marginTop: '1.25rem' }}>
+                <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                  No thanks. Complete my free registration
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1793,7 +1802,7 @@ function WhySection({ content }: { content: GreenGoldContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function GreenGold({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
+export function GreenGold({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? greenGoldDefaultEnabledSections);
   return (
     <div className="green-gold-root green-gold-body antialiased">
@@ -1827,7 +1836,7 @@ export function GreenGold({ content, speakers, funnelId, enabledSections, wpChec
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}
