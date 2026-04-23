@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit Platform - Database Diagram</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #e2e8f0; overflow: hidden; }
+
+  #canvas { width: 100vw; height: 100vh; position: relative; overflow: hidden; cursor: grab; }
+  #canvas.dragging { cursor: grabbing; }
+  #world { position: absolute; transform-origin: 0 0; }
+
+  .table-card {
+    position: absolute;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    min-width: 220px;
+    max-width: 280px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    cursor: move;
+    user-select: none;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .table-card:hover { box-shadow: 0 8px 32px rgba(99,102,241,0.3); border-color: #6366f1; }
+  .table-card.highlight { border-color: #f59e0b; box-shadow: 0 8px 32px rgba(245,158,11,0.4); }
+
+  .table-header {
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 13px;
+    border-bottom: 1px solid #334155;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .table-cols {
+    padding: 6px 0;
+    max-height: 260px;
+    overflow-y: auto;
+    font-size: 11px;
+  }
+  .table-cols::-webkit-scrollbar { width: 4px; }
+  .table-cols::-webkit-scrollbar-thumb { background: #475569; border-radius: 2px; }
+
+  .col-row {
+    padding: 2px 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .col-row:hover { background: #334155; }
+  .col-name { color: #e2e8f0; font-weight: 500; }
+  .col-name.pk { color: #fbbf24; }
+  .col-name.fk { color: #38bdf8; }
+  .col-type { color: #64748b; font-size: 10px; white-space: nowrap; }
+
+  .legend {
+    position: fixed; bottom: 16px; left: 16px; background: #1e293b; border: 1px solid #334155;
+    border-radius: 8px; padding: 12px 16px; font-size: 11px; z-index: 100;
+  }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  .controls {
+    position: fixed; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 100;
+  }
+  .controls button {
+    background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+    padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .controls button:hover { background: #334155; }
+
+  .title-bar {
+    position: fixed; top: 16px; left: 16px; z-index: 100;
+    font-size: 18px; font-weight: 700; color: #f1f5f9;
+  }
+  .title-bar small { font-size: 12px; color: #64748b; font-weight: 400; display: block; margin-top: 2px; }
+
+  .group-core .table-header { background: #312e81; color: #a5b4fc; }
+  .group-funnel .table-header { background: #7c2d12; color: #fed7aa; }
+  .group-sales .table-header { background: #14532d; color: #bbf7d0; }
+  .group-content .table-header { background: #581c87; color: #e9d5ff; }
+  .group-analytics .table-header { background: #0c4a6e; color: #bae6fd; }
+  .group-auth .table-header { background: #44403c; color: #d6d3d1; }
+  .group-system .table-header { background: #1e293b; color: #94a3b8; }
+  .group-crm .table-header { background: #831843; color: #fbcfe8; }
+  .group-media .table-header { background: #365314; color: #d9f99d; }
+  .group-ai .table-header { background: #4a1d96; color: #c4b5fd; }
+</style>
+</head>
+<body>
+<div class="title-bar">
+  Summit Platform DB
+  <small id="table-count"></small>
+</div>
+<div class="controls">
+  <button onclick="zoomIn()">+</button>
+  <button onclick="zoomOut()">-</button>
+  <button onclick="resetView()">Reset</button>
+</div>
+<div class="legend">
+  <div class="legend-row"><span class="dot" style="background:#6366f1"></span> Core (domains, summits, users)</div>
+  <div class="legend-row"><span class="dot" style="background:#f97316"></span> Funnel flow</div>
+  <div class="legend-row"><span class="dot" style="background:#22c55e"></span> Sales &amp; orders</div>
+  <div class="legend-row"><span class="dot" style="background:#a855f7"></span> Content (speakers)</div>
+  <div class="legend-row"><span class="dot" style="background:#0ea5e9"></span> Analytics</div>
+  <div class="legend-row"><span class="dot" style="background:#ec4899"></span> CRM &amp; contacts</div>
+  <div class="legend-row"><span class="dot" style="background:#84cc16"></span> Media</div>
+  <div class="legend-row"><span class="dot" style="background:#8b5cf6"></span> AI generation</div>
+  <div class="legend-row"><span class="dot" style="background:#78716c"></span> Auth &amp; system</div>
+  <div class="legend-row" style="margin-top: 6px; border-top: 1px solid #334155; padding-top: 6px;">
+    <span style="color:#fbbf24">PK</span> = primary key &nbsp;
+    <span style="color:#38bdf8">FK</span> = foreign key
+  </div>
+</div>
+
+<div id="canvas">
+  <div id="world">
+    <svg id="lines-svg" xmlns="http://www.w3.org/2000/svg"
+         style="position:absolute;top:0;left:0;width:5000px;height:4000px;pointer-events:none;overflow:visible;"></svg>
+  </div>
+</div>
+
+<script>
+var schema = {"domains":{"group":"core","cols":[["id","uuid","pk"],["name","varchar"],["hostname","varchar"],["slug","varchar"],["brand_color","varchar"],["is_active","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"summits":{"group":"core","cols":[["id","uuid","pk"],["domain_id","uuid","fk"],["slug","varchar"],["title","varchar"],["description","text"],["topic","varchar"],["audience","varchar"],["status","enum"],["current_phase","enum"],["timezone","varchar"],["pre_summit_starts_at","timestamp"],["late_pre_summit_starts_at","timestamp"],["during_summit_starts_at","timestamp"],["post_summit_starts_at","timestamp"],["ends_at","timestamp"],["ac_optin_tag","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"users":{"group":"core","cols":[["id","uuid","pk"],["email","varchar"],["first_name","varchar"],["last_name","varchar"],["role","enum"],["stripe_customer_id","varchar"],["activecampaign_id","varchar"],["phone","varchar"],["country","char(2)"],["is_active","bool"],["last_login_at","timestamp"],["created_at","timestamp"],["updated_at","timestamp"]]},"domain_user":{"group":"core","cols":[["user_id","uuid","fk"],["domain_id","uuid","fk"],["created_at","timestamp"]]},"summit_user":{"group":"core","cols":[["user_id","uuid","fk"],["summit_id","uuid","fk"],["created_at","timestamp"]]},"funnels":{"group":"funnel","cols":[["id","uuid","pk"],["summit_id","uuid","fk"],["slug","varchar"],["name","varchar"],["description","text"],["target_phase","enum"],["template_key","varchar"],["section_config","jsonb"],["wp_checkout_redirect_url","varchar"],["wp_thankyou_redirect_url","varchar"],["is_active","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"funnel_steps":{"group":"funnel","cols":[["id","uuid","pk"],["funnel_id","uuid","fk"],["step_type","enum"],["slug","varchar"],["name","varchar"],["page_content","jsonb"],["sort_order","int"],["product_id","uuid","fk"],["is_published","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"funnel_step_bumps":{"group":"funnel","cols":[["id","uuid","pk"],["funnel_step_id","uuid","fk"],["product_id","uuid","fk"],["headline","varchar"],["description","text"],["bullets","jsonb"],["checkbox_label","varchar"],["image_url","text"],["sort_order","int"],["is_active","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"funnel_step_revisions":{"group":"funnel","cols":[["id","uuid","pk"],["funnel_step_id","uuid","fk"],["page_content_snapshot","jsonb"],["published_at","timestamp"],["published_by","uuid","fk"],["created_at","timestamp"]]},"products":{"group":"sales","cols":[["id","uuid","pk"],["summit_id","uuid","fk"],["category","varchar"],["slug","varchar"],["name","varchar"],["description","text"],["product_type","enum"],["billing_interval","enum"],["tier","varchar"],["kind","enum"],["grants_vip_access","bool"],["is_active","bool"],["stripe_product_id","varchar"],["price_pre_summit_cents","int"],["price_late_pre_cents","int"],["price_during_cents","int"],["price_post_summit_cents","int"],["compare_pre_summit_cents","int"],["compare_late_pre_cents","int"],["compare_during_cents","int"],["compare_post_summit_cents","int"],["stripe_price_pre_id","varchar"],["stripe_price_late_id","varchar"],["stripe_price_during_id","varchar"],["stripe_price_post_id","varchar"],["intro_price_cents","int"],["intro_period_months","int"],["bundled_product_ids","jsonb"],["combo_discount_cents","int"],["created_at","timestamp"],["updated_at","timestamp"]]},"orders":{"group":"sales","cols":[["id","uuid","pk"],["order_number","varchar"],["user_id","uuid","fk"],["contact_id","uuid","fk"],["summit_id","uuid","fk"],["visitor_session_id","uuid","fk"],["funnel_id","uuid","fk"],["funnel_step_id","uuid","fk"],["phase_at_purchase","enum"],["status","enum"],["subtotal_cents","int"],["discount_cents","int"],["tax_cents","int"],["total_cents","int"],["currency","char(3)"],["items","jsonb"],["coupon_id","uuid","fk"],["affiliate_id","uuid","fk"],["stripe_payment_intent_id","varchar"],["stripe_checkout_session_id","varchar"],["stripe_subscription_id","varchar"],["subscription_status","varchar"],["subscription_period_end","timestamp"],["subscription_canceled_at","timestamp"],["completed_at","timestamp"],["created_at","timestamp"],["updated_at","timestamp"]]},"refunds":{"group":"sales","cols":[["id","uuid","pk"],["order_id","uuid","fk"],["amount_cents","int"],["reason","enum"],["reason_detail","text"],["stripe_refund_id","varchar"],["refunded_by","uuid","fk"],["created_at","timestamp"]]},"payment_events":{"group":"sales","cols":[["id","uuid","pk"],["order_id","uuid","fk"],["event_type","varchar"],["stripe_event_id","varchar"],["payload","jsonb"],["processed_at","timestamp"],["created_at","timestamp"]]},"coupons":{"group":"sales","cols":[["id","uuid","pk"],["code","varchar"],["coupon_type","enum"],["amount","int"],["max_uses","int"],["times_used","int"],["summit_id","uuid","fk"],["product_id","uuid","fk"],["starts_at","timestamp"],["expires_at","timestamp"],["is_active","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"affiliates":{"group":"sales","cols":[["id","uuid","pk"],["user_id","uuid","fk"],["code","varchar"],["first_name","varchar"],["last_name","varchar"],["email","varchar"],["company","varchar"],["commission_rate","decimal"],["payment_email","varchar"],["is_active","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"affiliate_referrals":{"group":"sales","cols":[["id","uuid","pk"],["affiliate_id","uuid","fk"],["visitor_session_id","uuid","fk"],["landing_url","text"],["ip_address","inet"],["user_agent","text"],["utm_source","varchar"],["utm_medium","varchar"],["utm_campaign","varchar"],["created_at","timestamp"]]},"affiliate_commissions":{"group":"sales","cols":[["id","uuid","pk"],["affiliate_id","uuid","fk"],["order_id","uuid","fk"],["commission_rate","decimal"],["order_amount_cents","int"],["commission_cents","int"],["status","enum"],["paid_at","timestamp"],["created_at","timestamp"],["updated_at","timestamp"]]},"speakers":{"group":"content","cols":[["id","uuid","pk"],["slug","varchar"],["first_name","varchar"],["last_name","varchar"],["email","varchar"],["title","varchar"],["short_bio","text"],["long_bio","text"],["website_url","text"],["social_links","jsonb"],["masterclass_title","varchar"],["masterclass_description","text"],["rating","smallint"],["free_video_url","text"],["vip_video_url","text"],["goes_live_at","timestamp"],["sort_order","int"],["is_featured","bool"],["free_access_window_hours","int"],["created_at","timestamp"],["updated_at","timestamp"]]},"speaker_summit":{"group":"content","cols":[["id","uuid","pk"],["speaker_id","uuid","fk"],["summit_id","uuid","fk"],["day_number","smallint"],["sort_order","int"],["created_at","timestamp"],["updated_at","timestamp"]]},"video_view_sessions":{"group":"content","cols":[["id","uuid","pk"],["user_id","uuid","fk"],["speaker_id","uuid","fk"],["started_at","timestamp"],["expires_at","timestamp"],["last_heartbeat_at","timestamp"]]},"contacts":{"group":"crm","cols":[["id","uuid","pk"],["email","varchar"],["first_name","varchar"],["last_name","varchar"],["ac_contact_id","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"optins":{"group":"crm","cols":[["id","uuid","pk"],["contact_id","uuid","fk"],["user_id","uuid","fk"],["funnel_id","uuid","fk"],["funnel_step_id","uuid","fk"],["summit_id","uuid","fk"],["email","varchar"],["first_name","varchar"],["source_url","text"],["utm_source","varchar"],["utm_medium","varchar"],["utm_campaign","varchar"],["utm_content","varchar"],["utm_term","varchar"],["referrer","text"],["ip_address","inet"],["ac_sync_status","varchar"],["ac_sync_error","text"],["ac_synced_at","timestamp"],["created_at","timestamp"]]},"visitor_sessions":{"group":"analytics","cols":[["id","uuid","pk"],["user_id","uuid","fk"],["utm_source","varchar"],["utm_medium","varchar"],["utm_campaign","varchar"],["utm_content","varchar"],["utm_term","varchar"],["landing_url","text"],["referrer_url","text"],["ip_address","inet"],["country_code","char(2)"],["device_type","varchar"],["created_at","timestamp"]]},"page_views":{"group":"analytics","cols":[["id","uuid","pk"],["visitor_session_id","uuid","fk"],["user_id","uuid","fk"],["summit_id","uuid","fk"],["funnel_id","uuid","fk"],["funnel_step_id","uuid","fk"],["page_url","text"],["page_type","varchar"],["referrer_url","text"],["utm_source","varchar"],["utm_medium","varchar"],["utm_campaign","varchar"],["ip_address","inet"],["country_code","char(2)"],["device_type","varchar"],["created_at","timestamp"]]},"media_items":{"group":"media","cols":[["id","uuid","pk"],["domain_id","uuid","fk"],["category","varchar"],["sub_category","varchar"],["disk","varchar"],["path","varchar"],["file_name","varchar"],["mime_type","varchar"],["size","bigint"],["width","int"],["height","int"],["caption","varchar"],["alt_text","varchar"],["created_by_user_id","uuid","fk"],["created_at","timestamp"],["updated_at","timestamp"]]},"media_item_attachments":{"group":"media","cols":[["id","uuid","pk"],["media_item_id","uuid","fk"],["attachable_id","uuid"],["attachable_type","varchar"],["role","varchar"],["sort_order","int"],["created_at","timestamp"],["updated_at","timestamp"]]},"media":{"group":"media","cols":[["id","bigint","pk"],["model_type","varchar"],["model_id","uuid"],["uuid","uuid"],["collection_name","varchar"],["name","varchar"],["file_name","varchar"],["mime_type","varchar"],["disk","varchar"],["size","bigint"],["order_column","int"],["created_at","timestamp"],["updated_at","timestamp"]]},"landing_page_batches":{"group":"ai","cols":[["id","uuid","pk"],["summit_id","uuid","fk"],["funnel_id","uuid","fk"],["funnel_step_id","uuid","fk"],["version_count","smallint"],["status","varchar"],["style_reference_url","text"],["override_url","text"],["template_pool","jsonb"],["audience_override","varchar"],["auto_publish","bool"],["published_by_user_id","uuid","fk"],["completed_at","timestamp"],["created_at","timestamp"],["updated_at","timestamp"]]},"landing_page_drafts":{"group":"ai","cols":[["id","uuid","pk"],["batch_id","uuid","fk"],["version_number","smallint"],["template_key","varchar"],["blocks","jsonb"],["sections","jsonb"],["enabled_sections","jsonb"],["audience","varchar"],["palette","json"],["published_html","text"],["status","varchar"],["preview_token","varchar"],["token_count","int"],["generation_ms","int"],["error_message","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"summit_pages":{"group":"core","cols":[["id","uuid","pk"],["summit_id","uuid","fk"],["slug","varchar"],["title","varchar"],["content","jsonb"],["sort_order","int"],["is_published","bool"],["created_at","timestamp"],["updated_at","timestamp"]]},"roles":{"group":"auth","cols":[["id","bigint","pk"],["name","varchar"],["guard_name","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"permissions":{"group":"auth","cols":[["id","bigint","pk"],["name","varchar"],["guard_name","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"model_has_roles":{"group":"auth","cols":[["role_id","bigint","fk"],["model_type","varchar"],["model_id","uuid"]]},"model_has_permissions":{"group":"auth","cols":[["permission_id","bigint","fk"],["model_type","varchar"],["model_id","uuid"]]},"role_has_permissions":{"group":"auth","cols":[["permission_id","bigint","fk"],["role_id","bigint","fk"]]},"app_settings":{"group":"system","cols":[["id","uuid","pk"],["company_name","varchar"],["support_email","varchar"],["sender_name","varchar"],["sender_email","varchar"],["default_currency","char(3)"],["stripe_publishable_key","varchar"],["activecampaign_list_id","varchar"],["brand_color","varchar"],["created_at","timestamp"],["updated_at","timestamp"]]},"sessions":{"group":"system","cols":[["id","varchar","pk"],["user_id","uuid","fk"],["ip_address","varchar"],["last_activity","int"]]},"jobs":{"group":"system","cols":[["id","bigint","pk"],["queue","varchar"],["payload","text"],["attempts","smallint"],["created_at","int"]]},"failed_jobs":{"group":"system","cols":[["id","bigint","pk"],["uuid","varchar"],["connection","text"],["queue","text"],["exception","text"],["failed_at","timestamp"]]},"job_batches":{"group":"system","cols":[["id","varchar","pk"],["name","varchar"],["total_jobs","int"],["pending_jobs","int"],["failed_jobs","int"]]},"cache":{"group":"system","cols":[["key","varchar","pk"],["value","text"],["expiration","bigint"]]},"cache_locks":{"group":"system","cols":[["key","varchar","pk"],["owner","varchar"],["expiration","bigint"]]}};
+
+var relationships = [
+  ["summits","domain_id","domains","id"],
+  ["domain_user","domain_id","domains","id"],
+  ["domain_user","user_id","users","id"],
+  ["summit_user","summit_id","summits","id"],
+  ["summit_user","user_id","users","id"],
+  ["summit_pages","summit_id","summits","id"],
+  ["funnels","summit_id","summits","id"],
+  ["funnel_steps","funnel_id","funnels","id"],
+  ["funnel_steps","product_id","products","id"],
+  ["funnel_step_bumps","funnel_step_id","funnel_steps","id"],
+  ["funnel_step_bumps","product_id","products","id"],
+  ["funnel_step_revisions","funnel_step_id","funnel_steps","id"],
+  ["products","summit_id","summits","id"],
+  ["orders","user_id","users","id"],
+  ["orders","contact_id","contacts","id"],
+  ["orders","summit_id","summits","id"],
+  ["orders","funnel_id","funnels","id"],
+  ["orders","funnel_step_id","funnel_steps","id"],
+  ["orders","coupon_id","coupons","id"],
+  ["orders","affiliate_id","affiliates","id"],
+  ["orders","visitor_session_id","visitor_sessions","id"],
+  ["refunds","order_id","orders","id"],
+  ["payment_events","order_id","orders","id"],
+  ["coupons","summit_id","summits","id"],
+  ["coupons","product_id","products","id"],
+  ["affiliates","user_id","users","id"],
+  ["affiliate_referrals","affiliate_id","affiliates","id"],
+  ["affiliate_referrals","visitor_session_id","visitor_sessions","id"],
+  ["affiliate_commissions","affiliate_id","affiliates","id"],
+  ["affiliate_commissions","order_id","orders","id"],
+  ["speaker_summit","speaker_id","speakers","id"],
+  ["speaker_summit","summit_id","summits","id"],
+  ["video_view_sessions","user_id","users","id"],
+  ["video_view_sessions","speaker_id","speakers","id"],
+  ["optins","contact_id","contacts","id"],
+  ["optins","funnel_id","funnels","id"],
+  ["optins","funnel_step_id","funnel_steps","id"],
+  ["optins","summit_id","summits","id"],
+  ["page_views","visitor_session_id","visitor_sessions","id"],
+  ["page_views","summit_id","summits","id"],
+  ["page_views","funnel_id","funnels","id"],
+  ["page_views","funnel_step_id","funnel_steps","id"],
+  ["media_items","domain_id","domains","id"],
+  ["media_item_attachments","media_item_id","media_items","id"],
+  ["landing_page_batches","summit_id","summits","id"],
+  ["landing_page_batches","funnel_id","funnels","id"],
+  ["landing_page_batches","funnel_step_id","funnel_steps","id"],
+  ["landing_page_drafts","batch_id","landing_page_batches","id"],
+  ["sessions","user_id","users","id"],
+];
+
+// Wider spacing layout
+var layout = {
+  // Core - top left
+  domains:[80,80], users:[80,500], domain_user:[80,340], summit_user:[320,340],
+  summits:[420,80], summit_pages:[420,340],
+
+  // Funnels - center
+  funnels:[800,80], funnel_steps:[800,340], funnel_step_bumps:[800,600], funnel_step_revisions:[1100,500],
+
+  // Sales - right
+  products:[1200,80], orders:[1600,80], refunds:[1950,80], payment_events:[1950,280],
+  coupons:[1200,400], affiliates:[1600,400], affiliate_referrals:[1600,650], affiliate_commissions:[1950,500],
+
+  // Content - bottom left
+  speakers:[80,750], speaker_summit:[420,650], video_view_sessions:[80,1000],
+
+  // CRM - bottom center-left
+  contacts:[420,880], optins:[800,880],
+
+  // Analytics - bottom center
+  visitor_sessions:[1200,650], page_views:[1200,880],
+
+  // Media - bottom left area
+  media_items:[420,1100], media_item_attachments:[800,1100], media:[80,1250],
+
+  // AI - bottom center-right
+  landing_page_batches:[1200,1100], landing_page_drafts:[1600,1100],
+
+  // Auth - far right
+  roles:[1950,720], permissions:[1950,880], model_has_roles:[1950,1020], model_has_permissions:[1950,1140], role_has_permissions:[1950,1260],
+
+  // System - bottom right
+  app_settings:[80,1450], sessions:[1600,880], jobs:[1600,1300], failed_jobs:[1950,1400], job_batches:[1200,1300], cache:[420,1350], cache_locks:[420,1500],
+};
+
+var groupColors = {
+  core:'#6366f1', funnel:'#f97316', sales:'#22c55e', content:'#a855f7',
+  analytics:'#0ea5e9', auth:'#78716c', system:'#475569', crm:'#ec4899',
+  media:'#84cc16', ai:'#8b5cf6'
+};
+
+var world = document.getElementById('world');
+var linesSvg = document.getElementById('lines-svg');
+var canvas = document.getElementById('canvas');
+
+var scale = 0.55, panX = 40, panY = 40;
+var isPanning = false, startX, startY;
+var dragEl = null, dragOffX, dragOffY;
+
+var groupIcons = {core:'\u{1F3DB}',funnel:'\u{1F3AF}',sales:'\u{1F4B3}',content:'\u{1F399}',analytics:'\u{1F4CA}',auth:'\u{1F512}',system:'⚙',crm:'\u{1F4E7}',media:'\u{1F5BC}',ai:'✨'};
+
+function updateTransform() {
+  world.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+}
+
+// Build cards
+var tableEls = {};
+var tableCount = 0;
+
+for (var name in schema) {
+  if (!schema.hasOwnProperty(name)) continue;
+  tableCount++;
+  var info = schema[name];
+  var card = document.createElement('div');
+  card.className = 'table-card group-' + info.group;
+  card.dataset.table = name;
+  card.dataset.group = info.group;
+  var pos = layout[name] || [100 + Math.random()*1200, 100 + Math.random()*800];
+  card.style.left = pos[0] + 'px';
+  card.style.top = pos[1] + 'px';
+
+  var header = document.createElement('div');
+  header.className = 'table-header';
+  header.appendChild(document.createTextNode((groupIcons[info.group] || '') + ' ' + name));
+  card.appendChild(header);
+
+  var colsDiv = document.createElement('div');
+  colsDiv.className = 'table-cols';
+  for (var ci = 0; ci < info.cols.length; ci++) {
+    var c = info.cols[ci];
+    var row = document.createElement('div');
+    row.className = 'col-row';
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'col-name' + (c[2] ? ' ' + c[2] : '');
+    nameSpan.textContent = (c[2] === 'pk' ? '\u{1F511} ' : '') + (c[2] === 'fk' ? '\u{1F517} ' : '') + c[0];
+    var typeSpan = document.createElement('span');
+    typeSpan.className = 'col-type';
+    typeSpan.textContent = c[1];
+    row.appendChild(nameSpan);
+    row.appendChild(typeSpan);
+    colsDiv.appendChild(row);
+  }
+  card.appendChild(colsDiv);
+
+  (function(n) {
+    card.addEventListener('mousedown', startDragHandler);
+    card.addEventListener('mouseenter', function() { highlightRelated(n); });
+    card.addEventListener('mouseleave', clearHighlights);
+  })(name);
+
+  world.appendChild(card);
+  tableEls[name] = card;
+}
+
+document.getElementById('table-count').textContent = tableCount + ' tables';
+
+function startDragHandler(e) {
+  if (e.target.closest('.table-cols')) return;
+  e.stopPropagation();
+  dragEl = e.currentTarget;
+  var rect = dragEl.getBoundingClientRect();
+  dragOffX = (e.clientX - rect.left) / scale;
+  dragOffY = (e.clientY - rect.top) / scale;
+  dragEl.style.zIndex = 999;
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (dragEl) {
+    var worldRect = world.getBoundingClientRect();
+    var x = (e.clientX - worldRect.left) / scale - dragOffX;
+    var y = (e.clientY - worldRect.top) / scale - dragOffY;
+    dragEl.style.left = x + 'px';
+    dragEl.style.top = y + 'px';
+    drawLines();
+  } else if (isPanning) {
+    panX += e.clientX - startX;
+    panY += e.clientY - startY;
+    startX = e.clientX;
+    startY = e.clientY;
+    updateTransform();
+  }
+});
+
+document.addEventListener('mouseup', function() {
+  if (dragEl) { dragEl.style.zIndex = ''; dragEl = null; }
+  isPanning = false;
+  canvas.classList.remove('dragging');
+});
+
+canvas.addEventListener('mousedown', function(e) {
+  if (!e.target.closest('.table-card')) {
+    isPanning = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    canvas.classList.add('dragging');
+  }
+});
+
+canvas.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  var delta = e.deltaY > 0 ? 0.92 : 1.08;
+  var newScale = Math.min(2, Math.max(0.15, scale * delta));
+  panX = e.clientX - (e.clientX - panX) * (newScale / scale);
+  panY = e.clientY - (e.clientY - panY) * (newScale / scale);
+  scale = newScale;
+  updateTransform();
+}, { passive: false });
+
+function zoomIn() { scale = Math.min(2, scale * 1.2); updateTransform(); }
+function zoomOut() { scale = Math.max(0.15, scale / 1.2); updateTransform(); }
+function resetView() { scale = 0.55; panX = 40; panY = 40; updateTransform(); }
+
+// Find the best edge + point to connect two cards
+function getConnectPoint(fromEl, toEl) {
+  var fl = parseFloat(fromEl.style.left), ft = parseFloat(fromEl.style.top);
+  var fw = fromEl.offsetWidth, fh = fromEl.offsetHeight;
+  var tl = parseFloat(toEl.style.left), tt = parseFloat(toEl.style.top);
+  var tw = toEl.offsetWidth, th = toEl.offsetHeight;
+
+  var fcx = fl + fw/2, fcy = ft + fh/2;
+  var tcx = tl + tw/2, tcy = tt + th/2;
+
+  // Determine which edges to connect from
+  var dx = tcx - fcx, dy = tcy - fcy;
+  var fromPt, toPt;
+
+  if (Math.abs(dx) * 0.6 > Math.abs(dy)) {
+    // Horizontal connection
+    if (dx > 0) {
+      fromPt = [fl + fw, fcy];
+      toPt = [tl, tcy];
+    } else {
+      fromPt = [fl, fcy];
+      toPt = [tl + tw, tcy];
+    }
+  } else {
+    // Vertical connection
+    if (dy > 0) {
+      fromPt = [fcx, ft + fh];
+      toPt = [tcx, tt];
+    } else {
+      fromPt = [fcx, ft];
+      toPt = [tcx, tt + th];
+    }
+  }
+
+  return { from: fromPt, to: toPt };
+}
+
+function drawLines() {
+  while (linesSvg.firstChild) linesSvg.removeChild(linesSvg.firstChild);
+
+  for (var i = 0; i < relationships.length; i++) {
+    var rel = relationships[i];
+    var elFrom = tableEls[rel[0]];
+    var elTo = tableEls[rel[2]];
+    if (!elFrom || !elTo) continue;
+
+    var pts = getConnectPoint(elFrom, elTo);
+    var x1 = pts.from[0], y1 = pts.from[1];
+    var x2 = pts.to[0], y2 = pts.to[1];
+
+    // Bezier control points for smooth curves
+    var midX = (x1 + x2) / 2;
+    var midY = (y1 + y2) / 2;
+    var cdx = Math.abs(x2 - x1) * 0.4;
+    var cdy = Math.abs(y2 - y1) * 0.4;
+
+    var cx1, cy1, cx2, cy2;
+    if (Math.abs(x2 - x1) > Math.abs(y2 - y1)) {
+      // Horizontal-ish: control points push horizontally
+      cx1 = x1 + (x2 > x1 ? cdx : -cdx);
+      cy1 = y1;
+      cx2 = x2 - (x2 > x1 ? cdx : -cdx);
+      cy2 = y2;
+    } else {
+      // Vertical-ish: control points push vertically
+      cx1 = x1;
+      cy1 = y1 + (y2 > y1 ? cdy : -cdy);
+      cx2 = x2;
+      cy2 = y2 - (y2 > y1 ? cdy : -cdy);
+    }
+
+    var color = groupColors[elFrom.dataset.group] || '#475569';
+
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + cx1 + ',' + cy1 + ' ' + cx2 + ',' + cy2 + ' ' + x2 + ',' + y2);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('stroke-opacity', '0.4');
+    path.dataset.from = rel[0];
+    path.dataset.to = rel[2];
+    linesSvg.appendChild(path);
+
+    // Small dot at the FK end (many side)
+    var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', x1);
+    dot.setAttribute('cy', y1);
+    dot.setAttribute('r', '3');
+    dot.setAttribute('fill', color);
+    dot.setAttribute('fill-opacity', '0.6');
+    dot.dataset.from = rel[0];
+    dot.dataset.to = rel[2];
+    linesSvg.appendChild(dot);
+
+    // Diamond at PK end (one side)
+    var diamond = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    var dx2 = x2, dy2 = y2;
+    diamond.setAttribute('points',
+      (dx2) + ',' + (dy2 - 4) + ' ' +
+      (dx2 + 4) + ',' + (dy2) + ' ' +
+      (dx2) + ',' + (dy2 + 4) + ' ' +
+      (dx2 - 4) + ',' + (dy2)
+    );
+    diamond.setAttribute('fill', color);
+    diamond.setAttribute('fill-opacity', '0.6');
+    diamond.dataset.from = rel[0];
+    diamond.dataset.to = rel[2];
+    linesSvg.appendChild(diamond);
+  }
+}
+
+function highlightRelated(name) {
+  var related = {};
+  for (var i = 0; i < relationships.length; i++) {
+    if (relationships[i][0] === name) related[relationships[i][2]] = true;
+    if (relationships[i][2] === name) related[relationships[i][0]] = true;
+  }
+  for (var n in tableEls) {
+    if (related[n]) tableEls[n].classList.add('highlight');
+  }
+  var paths = linesSvg.querySelectorAll('path, circle, polygon');
+  for (var j = 0; j < paths.length; j++) {
+    var el = paths[j];
+    if (el.dataset.from === name || el.dataset.to === name) {
+      if (el.tagName === 'path') {
+        el.setAttribute('stroke-width', '3');
+        el.setAttribute('stroke-opacity', '1');
+      } else {
+        el.setAttribute('fill-opacity', '1');
+        if (el.tagName === 'circle') el.setAttribute('r', '5');
+      }
+    }
+  }
+}
+
+function clearHighlights() {
+  var cards = document.querySelectorAll('.table-card.highlight');
+  for (var i = 0; i < cards.length; i++) cards[i].classList.remove('highlight');
+  var paths = linesSvg.querySelectorAll('path, circle, polygon');
+  for (var j = 0; j < paths.length; j++) {
+    var el = paths[j];
+    if (el.tagName === 'path') {
+      el.setAttribute('stroke-width', '1.5');
+      el.setAttribute('stroke-opacity', '0.4');
+    } else {
+      el.setAttribute('fill-opacity', '0.6');
+      if (el.tagName === 'circle') el.setAttribute('r', '3');
+    }
+  }
+}
+
+updateTransform();
+requestAnimationFrame(drawLines);
+</script>
+</body>
+</html>
