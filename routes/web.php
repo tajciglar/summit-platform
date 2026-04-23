@@ -3,9 +3,7 @@
 use App\Http\Controllers\Admin\CurrentSummitController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return inertia('Welcome');
-});
+Route::get('/', fn () => redirect('/admin'));
 
 // Admin-only: pick or clear the "current summit" filter for the active domain.
 // Linked from the tenant-picker dropdown's summit list.
