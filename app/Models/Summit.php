@@ -63,19 +63,9 @@ class Summit extends Model implements HasName
         ];
     }
 
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'summit_user')->withPivot('created_at');
-    }
-
     public function domain(): BelongsTo
     {
         return $this->belongsTo(Domain::class);
-    }
-
-    public function pages(): HasMany
-    {
-        return $this->hasMany(SummitPage::class);
     }
 
     /**
@@ -94,14 +84,46 @@ class Summit extends Model implements HasName
             ->orderByPivot('sort_order');
     }
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_summit')
+            ->withPivot(['sort_order', 'is_featured'])
+            ->withTimestamps()
+            ->orderByPivot('sort_order');
     }
 
     public function funnels(): HasMany
     {
         return $this->hasMany(Funnel::class);
+    }
+
+    /**
+     * Re-entrancy guard so Summit.status ↔ Funnel.is_active cascades don't
+     * loop. Mirrors Funnel::$skipStatusCascade.
+     */
+    public static bool $skipStatusCascade = false;
+
+    protected static function booted(): void
+    {
+        // Cascade: when a summit flips to draft, every one of its funnels
+        // must become inactive — enforces "summit drafted = no funnels live".
+        static::updated(function (Summit $summit): void {
+            if (self::$skipStatusCascade) {
+                return;
+            }
+            if (! $summit->wasChanged('status')) {
+                return;
+            }
+            if ($summit->status !== 'draft') {
+                return;
+            }
+            Funnel::$skipStatusCascade = true;
+            try {
+                $summit->funnels()->where('is_active', true)->update(['is_active' => false]);
+            } finally {
+                Funnel::$skipStatusCascade = false;
+            }
+        });
     }
 
     public function orders(): HasMany

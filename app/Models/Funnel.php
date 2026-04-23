@@ -23,6 +23,7 @@ class Funnel extends Model
         'template_key',
         'section_config',
         'wp_checkout_redirect_url',
+        'wp_thankyou_redirect_url',
         'is_active',
     ];
 
@@ -33,6 +34,13 @@ class Funnel extends Model
             'section_config' => 'array',
         ];
     }
+
+    /**
+     * Re-entrancy guard so Summit.status ↔ Funnel.is_active cascades don't
+     * loop: Summit saved → deactivate funnels → funnel saved → re-publish
+     * summit → summit saved → …
+     */
+    public static bool $skipStatusCascade = false;
 
     protected static function booted(): void
     {
@@ -50,6 +58,27 @@ class Funnel extends Model
             }
 
             $query->update(['is_active' => false]);
+        });
+
+        // Cascade: when a funnel is saved with is_active=true, its parent
+        // Summit must be marked `published` so the "summit draft = no live
+        // funnels" invariant holds without the operator touching two places.
+        static::saved(function (Funnel $funnel): void {
+            if (self::$skipStatusCascade) {
+                return;
+            }
+            if (! $funnel->is_active || ! $funnel->summit_id) {
+                return;
+            }
+            $summit = $funnel->summit;
+            if ($summit && $summit->status !== 'published') {
+                Summit::$skipStatusCascade = true;
+                try {
+                    $summit->forceFill(['status' => 'published'])->saveQuietly();
+                } finally {
+                    Summit::$skipStatusCascade = false;
+                }
+            }
         });
     }
 
