@@ -7,6 +7,7 @@ use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Domain;
 use App\Support\CurrentSummit;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -35,6 +36,13 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Summit Builder')
             ->login()
+            // Opt-in TOTP (Google Authenticator / 1Password / etc.) with
+            // recovery codes. Users enable it from their profile page. The
+            // built-in Filament login form handles the "enter the 6-digit
+            // code" challenge once a secret is set.
+            ->multiFactorAuthentication([
+                AppAuthentication::make()->recoverable(),
+            ])
             ->colors([
                 'primary' => Color::Indigo,
                 'gray' => Color::Slate,

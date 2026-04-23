@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasUuid;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
@@ -16,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser, HasName, HasTenants
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasName, HasTenants
 {
     use HasFactory, HasRoles, HasUuid, Notifiable;
 
@@ -46,7 +48,38 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
             'last_login_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            // Transparently encrypt at rest with APP_KEY so a leaked DB
+            // dump can't reconstruct the TOTP secrets or recovery codes.
+            'app_authentication_secret' => 'encrypted',
+            'app_authentication_recovery_codes' => 'encrypted:array',
         ];
+    }
+
+    public function getAppAuthenticationSecret(): ?string
+    {
+        return $this->app_authentication_secret;
+    }
+
+    public function saveAppAuthenticationSecret(?string $secret): void
+    {
+        $this->app_authentication_secret = $secret;
+        $this->save();
+    }
+
+    public function getAppAuthenticationHolderName(): string
+    {
+        return $this->getFilamentName();
+    }
+
+    public function getAppAuthenticationRecoveryCodes(): ?array
+    {
+        return $this->app_authentication_recovery_codes;
+    }
+
+    public function saveAppAuthenticationRecoveryCodes(?array $codes): void
+    {
+        $this->app_authentication_recovery_codes = $codes;
+        $this->save();
     }
 
     public function canAccessPanel(Panel $panel): bool
@@ -59,11 +92,6 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
         $full = trim(($this->first_name ?? '').' '.($this->last_name ?? ''));
 
         return $full !== '' ? $full : (string) $this->email;
-    }
-
-    public function summits(): BelongsToMany
-    {
-        return $this->belongsToMany(Summit::class, 'summit_user')->withPivot('created_at');
     }
 
     public function domains(): BelongsToMany
@@ -92,10 +120,5 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
-    }
-
-    public function videoViewSessions(): HasMany
-    {
-        return $this->hasMany(VideoViewSession::class);
     }
 }

@@ -35,11 +35,11 @@ class ActiveCampaignService
                 $this->addTag($contactId, $tagId);
             }
 
-            Log::info('ActiveCampaign contact synced', ['email' => $email, 'tags' => $tagIds]);
+            Log::info('ActiveCampaign contact synced', ['email_hash' => self::hashEmail($email), 'tags' => $tagIds]);
 
             return (string) $contactId;
         } catch (\Throwable $e) {
-            Log::error('ActiveCampaign sync failed', ['email' => $email, 'error' => $e->getMessage()]);
+            Log::error('ActiveCampaign sync failed', ['email_hash' => self::hashEmail($email), 'error' => $e->getMessage()]);
 
             return '';
         }
@@ -111,5 +111,16 @@ class ActiveCampaignService
         $response->throw();
 
         return $response->json();
+    }
+
+    /**
+     * Deterministic, non-reversible identifier for log correlation. We use a
+     * hash instead of the raw email so logs shipped to Railway / external
+     * services don't carry PII, while still letting us trace a single
+     * contact's sync events by matching the hash.
+     */
+    private static function hashEmail(string $email): string
+    {
+        return substr(hash('sha256', strtolower(trim($email))), 0, 16);
     }
 }
