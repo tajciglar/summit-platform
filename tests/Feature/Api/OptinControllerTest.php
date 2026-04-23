@@ -1,11 +1,15 @@
 <?php
+
+use App\Jobs\SyncOptinToActiveCampaign;
 use App\Models\Contact;
 use App\Models\Funnel;
 use App\Models\Optin;
 use App\Models\Summit;
+use App\Support\CheckoutPrefillToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Queue::fake();
@@ -24,8 +28,16 @@ it('creates contact and optin, returns redirect url', function () {
     $response->assertOk()
         ->assertJsonStructure(['redirect']);
 
-    expect($response->json('redirect'))->toContain('email=jane%40example.com');
-    expect($response->json('redirect'))->toContain('first_name=Jane');
+    // Redirect carries an encrypted prefill token, not the email/name in plain text.
+    $redirect = $response->json('redirect');
+    expect($redirect)->toContain('/aps25/main/sales?p=');
+    expect($redirect)->not->toContain('jane%40example.com');
+    expect($redirect)->not->toContain('first_name=Jane');
+
+    // The token decrypts back to the caller's values.
+    parse_str(parse_url($redirect, PHP_URL_QUERY), $q);
+    $payload = CheckoutPrefillToken::read($q['p']);
+    expect($payload)->toBe(['email' => 'jane@example.com', 'first_name' => 'Jane']);
 
     $contact = Contact::where('email', 'jane@example.com')->first();
     expect($contact)->not->toBeNull();
@@ -35,7 +47,7 @@ it('creates contact and optin, returns redirect url', function () {
     expect($optin)->not->toBeNull();
     expect($optin->ac_sync_status)->toBe('pending');
 
-    Queue::assertPushed(\App\Jobs\SyncOptinToActiveCampaign::class);
+    Queue::assertPushed(SyncOptinToActiveCampaign::class);
 });
 
 it('upserts contact when email already exists', function () {

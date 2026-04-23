@@ -1,12 +1,16 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
+import { useCheckoutPrefill } from '@/lib/checkout-prefill-context'
 
 const BASE_URL = process.env.NEXT_PUBLIC_FUNNELKIT_CHECKOUT_URL || ''
 
+/**
+ * Builds the WP/FunnelKit checkout URL with the buyer's email + first name
+ * pre-filled as billing_* params. Values come from the server-issued prefill
+ * context (populated via the encrypted ?p= token on the sales page) so they
+ * never appear in the browser URL on the way in.
+ */
 export function useCheckoutUrl(): string {
-  const params = useSearchParams()
-  const email = params.get('email') ?? ''
-  const firstName = params.get('first_name') ?? ''
+  const { email, firstName } = useCheckoutPrefill()
 
   if (!BASE_URL) return '#'
 

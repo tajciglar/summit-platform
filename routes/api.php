@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CheckoutPrefillController;
 use App\Http\Controllers\Api\FunnelResolveController;
 use App\Http\Controllers\Api\LandingPageDraftController;
 use App\Http\Controllers\Api\OptinController;
@@ -13,6 +14,8 @@ Route::middleware('internal-api')->group(function () {
     Route::get('/funnel-steps/{step}/preview-content', [PublicFunnelController::class, 'showStep'])
         ->middleware('throttle:120,1');
     Route::get('/funnels/resolve', FunnelResolveController::class)
+        ->middleware('throttle:60,1');
+    Route::get('/optin/prefill/{token}', [CheckoutPrefillController::class, 'show'])
         ->middleware('throttle:60,1');
 });
 

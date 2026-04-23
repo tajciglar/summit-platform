@@ -67,3 +67,23 @@ export async function fetchStepPreview(stepId: string): Promise<PublicPayload | 
 export function speakersById(speakers: Speaker[]): Record<string, Speaker> {
   return Object.fromEntries(speakers.map((s) => [s.id, s]));
 }
+
+export interface CheckoutPrefillPayload {
+  email: string;
+  first_name: string;
+}
+
+/**
+ * Exchanges the opaque ?p= token from the optin redirect for the buyer's
+ * email + first_name. Returns null for invalid/expired/tampered tokens — the
+ * sales page then renders without prefill (user can still check out manually).
+ */
+export async function fetchCheckoutPrefill(token: string): Promise<CheckoutPrefillPayload | null> {
+  const res = await fetch(`${BASE}/api/optin/prefill/${encodeURIComponent(token)}`, {
+    headers: internalHeaders(),
+    cache: 'no-store',
+  });
+  if (res.status === 404 || res.status === 401) return null;
+  if (!res.ok) throw new Error(`Prefill fetch failed: ${res.status}`);
+  return res.json();
+}

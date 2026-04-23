@@ -8,6 +8,7 @@ use App\Jobs\SyncOptinToActiveCampaign;
 use App\Models\Contact;
 use App\Models\Funnel;
 use App\Models\Optin;
+use App\Support\CheckoutPrefillToken;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -53,12 +54,16 @@ class OptinController extends Controller
 
         SyncOptinToActiveCampaign::dispatch($optin);
 
+        // Encrypt the prefill payload so email + first_name don't appear in
+        // the browser URL (or access logs, referrers, analytics). Next.js
+        // exchanges the token server-side via /api/optin/prefill/{token}.
+        $token = CheckoutPrefillToken::issue($data['email'], $data['first_name']);
+
         $redirect = sprintf(
-            '/%s/%s/sales?email=%s&first_name=%s',
+            '/%s/%s/sales?p=%s',
             $funnel->summit->slug,
             $funnel->slug,
-            urlencode($data['email']),
-            urlencode($data['first_name']),
+            urlencode($token),
         );
 
         return response()->json(['redirect' => $redirect]);
