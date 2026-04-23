@@ -23,6 +23,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -99,6 +100,12 @@ class FunnelResource extends Resource
                         ->url()
                         ->maxLength(2048)
                         ->helperText('Interim checkout redirect to the legacy WP cart. Leave blank once native checkout is live.')
+                        ->columnSpanFull(),
+                    TextInput::make('wp_thankyou_redirect_url')
+                        ->label('WordPress thank-you page URL')
+                        ->url()
+                        ->maxLength(2048)
+                        ->helperText('Interim thank-you redirect for visitors who decline the sales offer. Leave blank once native thank-you page is live.')
                         ->columnSpanFull(),
                     Toggle::make('is_active')
                         ->label('Live')
@@ -277,6 +284,29 @@ class FunnelResource extends Resource
                     ->sortable()
                     ->weight('bold'),
                 TextColumn::make('summit.title')->label('Summit')->searchable()->toggleable(),
+                // Live URL = hostname from the funnel's summit's domain +
+                // funnel slug. Renders as a clickable link when the funnel
+                // is_active + has an active domain; greyed out otherwise.
+                TextColumn::make('live_url')
+                    ->label('Live URL')
+                    ->state(function (Funnel $record): ?string {
+                        $host = optional($record->summit?->domain)->hostname;
+                        if (! $host) {
+                            return null;
+                        }
+
+                        return 'https://'.$host.'/'.$record->slug;
+                    })
+                    ->url(fn (Funnel $record): ?string => $record->is_active
+                        ? (($h = optional($record->summit?->domain)->hostname) ? 'https://'.$h.'/'.$record->slug : null)
+                        : null)
+                    ->openUrlInNewTab()
+                    ->color(fn (Funnel $record): string => $record->is_active ? 'primary' : 'gray')
+                    ->icon(fn (Funnel $record): ?string => $record->is_active ? 'heroicon-m-arrow-top-right-on-square' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->placeholder('— no domain —')
+                    ->copyable()
+                    ->toggleable(),
                 TextColumn::make('target_phase')
                     ->label('Phase')
                     ->badge()

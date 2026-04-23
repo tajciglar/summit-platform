@@ -13,9 +13,6 @@
         'thank_you' => 'Thank-you page',
     ];
 
-    // Preview URL points at the step itself — reflects live block edits via
-    // `funnel_steps.page_content` (no draft publish required). Falls back to
-    // null only when the step has never been populated.
     $nextBase = rtrim((string) config('next.url', 'http://localhost:3000'), '/');
     $previewUrl = (is_array($record->page_content) && isset($record->page_content['template_key']))
         ? "{$nextBase}/preview/step/{$record->id}"
@@ -49,14 +46,14 @@
     "
     x-on:step-saved.window="markSaved()"
 >
-    <div class="fi-focused-editor flex min-h-screen w-full items-stretch bg-gray-50 dark:bg-gray-950">
+    <div class="fi-focused-editor flex min-h-screen w-full items-stretch gap-px bg-gray-200 dark:bg-gray-800">
         {{-- Left: funnel drawer --}}
         @include('filament.funnels.drawer', ['funnel' => $funnel, 'currentStep' => $currentStep])
 
         {{-- Right: main editor --}}
-        <div class="flex min-w-0 flex-1 flex-col">
-            {{-- Sticky header with Save --}}
-            <header class="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-gray-200 bg-gray-50/90 px-10 py-4 backdrop-blur dark:border-white/10 dark:bg-gray-950/90">
+        <div class="flex min-w-0 flex-1 flex-col bg-gray-50 dark:bg-gray-950">
+            {{-- Sticky header --}}
+            <header class="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-gray-200 bg-gray-50 px-10 py-4 dark:border-white/10 dark:bg-gray-950">
                 <div class="min-w-0">
                     <nav class="mb-1.5 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
                         @if ($summitUrl)
@@ -107,25 +104,67 @@
             </header>
 
             {{-- Content --}}
-            <div class="flex-1 px-10 pt-6 pb-10">
-                {{-- Publish status pill (display-only mirror of is_published) --}}
+            <div class="flex-1 px-8 pt-6 pb-10">
+                {{-- Publish status pill with absolute live URL + open/copy --}}
                 @php
-                    $liveUrl = '/'.$funnel->slug.'/'.$record->slug;
+                    // Drop the `/optin` suffix from the default optin step so
+                    // the URL reads `https://host/funnel-slug` rather than
+                    // `/funnel-slug/optin` — matches the public route.
+                    $stepPath = ($record->step_type === 'optin' && $record->slug === 'optin')
+                        ? ''
+                        : '/'.$record->slug;
+                    $hostname = optional($funnel->summit?->domain)->hostname;
+                    $liveUrl = $hostname
+                        ? 'https://'.$hostname.'/'.$funnel->slug.$stepPath
+                        : '/'.$funnel->slug.$stepPath;
+                    $isLive = $record->is_published && (bool) $funnel->is_active && $hostname;
                 @endphp
-                <div class="mb-5 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-white/10">
+                <div
+                    x-data="{ copied: false }"
+                    class="mb-5 flex flex-wrap items-center gap-3 rounded-lg bg-white px-4 py-3 text-sm shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-white/10"
+                >
                     <span @class([
                         'h-2 w-2 shrink-0 rounded-full',
-                        'bg-emerald-500' => $record->is_published,
+                        'bg-emerald-500' => $isLive,
+                        'bg-amber-500' => ! $isLive && $record->is_published,
                         'bg-gray-300 dark:bg-gray-600' => ! $record->is_published,
                     ])></span>
 
-                    @if ($record->is_published)
-                        <span class="text-gray-700 dark:text-gray-200">Published — live at</span>
-                        <span class="font-mono text-[13px] text-gray-900 dark:text-white">{{ $liveUrl }}</span>
+                    @if ($isLive)
+                        <span class="text-gray-700 dark:text-gray-200">Live at</span>
+                    @elseif ($record->is_published && ! $funnel->is_active)
+                        <span class="text-amber-700 dark:text-amber-300">Step published, but funnel is inactive —</span>
+                    @elseif ($record->is_published && ! $hostname)
+                        <span class="text-amber-700 dark:text-amber-300">Step published, but summit has no domain —</span>
                     @else
-                        <span class="text-gray-500 dark:text-gray-400">Not published · preview only at</span>
-                        <span class="font-mono text-[13px] text-gray-700 dark:text-gray-300">{{ $liveUrl }}</span>
+                        <span class="text-gray-500 dark:text-gray-400">Not published · preview only ·</span>
                     @endif
+                    <a href="{{ $isLive ? $liveUrl : $previewUrl }}" target="_blank" rel="noopener noreferrer"
+                       class="font-mono text-[13px] text-primary-600 hover:underline dark:text-primary-400">
+                        {{ $liveUrl }}
+                    </a>
+
+                    <span class="ml-auto flex items-center gap-1.5">
+                        <button type="button"
+                                x-on:click="navigator.clipboard.writeText({{ json_encode($liveUrl) }}); copied=true; setTimeout(() => copied=false, 1500)"
+                                class="inline-flex items-center gap-1 rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 dark:border-white/10 dark:text-gray-300 dark:hover:bg-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+                                <path fill-rule="evenodd" d="M10.362 1.093a1 1 0 0 0-.724 0L2.523 3.854a1 1 0 0 0-.523.879v8.534a1 1 0 0 0 .523.879l7.115 2.761a1 1 0 0 0 .724 0l7.115-2.761a1 1 0 0 0 .523-.879V4.733a1 1 0 0 0-.523-.879L10.362 1.093ZM10 3.109l5.538 2.15L10 7.408 4.462 5.259 10 3.109Z" clip-rule="evenodd" />
+                            </svg>
+                            <span x-show="!copied">Copy</span>
+                            <span x-show="copied" x-cloak class="text-emerald-600">Copied</span>
+                        </button>
+                        @if ($isLive)
+                            <a href="{{ $liveUrl }}" target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center gap-1 rounded bg-emerald-600 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+                                    <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z" clip-rule="evenodd" />
+                                </svg>
+                                Open live
+                            </a>
+                        @endif
+                    </span>
                 </div>
 
                 <form
