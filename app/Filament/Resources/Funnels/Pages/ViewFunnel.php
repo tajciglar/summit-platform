@@ -34,7 +34,20 @@ class ViewFunnel extends EditRecord
 
     protected function getHeaderActions(): array
     {
+        /** @var Funnel $funnel */
+        $funnel = $this->record;
+        $hostname = optional($funnel?->summit?->domain)->hostname;
+        $isLive = (bool) $funnel?->is_active && $hostname;
+        $liveUrl = $hostname ? 'https://'.$hostname.'/'.$funnel->slug : null;
+
         return [
+            Action::make('open_live')
+                ->label('Open live')
+                ->icon('heroicon-m-arrow-top-right-on-square')
+                ->color('success')
+                ->url($liveUrl)
+                ->openUrlInNewTab()
+                ->visible($isLive),
             Action::make('new_step')
                 ->label('New step')
                 ->icon('heroicon-o-plus')

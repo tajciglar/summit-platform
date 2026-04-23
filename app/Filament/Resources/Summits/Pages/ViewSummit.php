@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\SummitResource;
+use App\Models\Summit;
 use App\Support\CurrentSummit;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
@@ -42,7 +44,24 @@ class ViewSummit extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        /** @var Summit $summit */
+        $summit = $this->record;
+        $hostname = optional($summit?->domain)->hostname;
+        // Pick any one active funnel on the summit as the "open live" target.
+        // A summit can only have one live funnel at a time anyway (Funnel's
+        // saving hook enforces that), so this is deterministic.
+        $liveFunnel = $summit?->funnels()->where('is_active', true)->first();
+        $isLive = $liveFunnel && $hostname && $summit->status === 'published';
+        $liveUrl = $isLive ? 'https://'.$hostname.'/'.$liveFunnel->slug : null;
+
         return [
+            Action::make('open_live')
+                ->label('Open live')
+                ->icon('heroicon-m-arrow-top-right-on-square')
+                ->color('success')
+                ->url($liveUrl)
+                ->openUrlInNewTab()
+                ->visible($isLive),
             EditAction::make()
                 ->url(fn (): string => SummitResource::getUrl('edit', ['record' => $this->record])),
             DeleteAction::make(),
@@ -127,11 +146,21 @@ class ViewSummit extends ViewRecord
                                 ->placeholder('—'),
                         ]),
 
-                    TextEntry::make('domain.name')
-                        ->label('Published on')
-                        ->badge()
-                        ->color('primary')
-                        ->placeholder('Not published to any domain'),
+                    Grid::make(12)
+                        ->schema([
+                            TextEntry::make('domain.name')
+                                ->label('Published on')
+                                ->badge()
+                                ->color('primary')
+                                ->placeholder('Not published to any domain')
+                                ->columnSpan(6),
+                            TextEntry::make('ac_optin_tag')
+                                ->label('AC optin tag')
+                                ->placeholder('Not configured')
+                                ->badge()
+                                ->color(fn (?string $state): string => $state ? 'success' : 'gray')
+                                ->columnSpan(6),
+                        ]),
                 ]),
         ]);
     }
