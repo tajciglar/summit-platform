@@ -60,9 +60,18 @@ class Funnel extends Model
             $query->update(['is_active' => false]);
         });
 
-        // Cascade: when a funnel is saved with is_active=true, its parent
-        // Summit must be marked `published` so the "summit draft = no live
-        // funnels" invariant holds without the operator touching two places.
+        // Cascade (upward + downward) fired after save when a funnel is
+        // is_active=true:
+        //   - Summit → `published` so the "draft summit has no live funnels"
+        //     invariant holds.
+        //   - Steps → is_published=true so the resolver can actually reach
+        //     them. Without this, flipping "Live" in the funnels list left
+        //     the steps as drafts and the public URL 404'd.
+        //
+        // Note on the inverse: we deliberately DO NOT unpublish steps when a
+        // funnel is turned off. A step-level `is_published` stays as the
+        // operator's authoring intent; funnel inactivation already makes the
+        // URL unreachable (resolver requires funnel.is_active).
         static::saved(function (Funnel $funnel): void {
             if (self::$skipStatusCascade) {
                 return;
@@ -70,6 +79,7 @@ class Funnel extends Model
             if (! $funnel->is_active || ! $funnel->summit_id) {
                 return;
             }
+
             $summit = $funnel->summit;
             if ($summit && $summit->status !== 'published') {
                 Summit::$skipStatusCascade = true;
@@ -79,6 +89,14 @@ class Funnel extends Model
                     Summit::$skipStatusCascade = false;
                 }
             }
+
+            // Auto-publish the funnel's steps. Targets any step that has
+            // actual page_content; empty/stubby steps stay drafts so they
+            // don't become accessible garbage.
+            $funnel->steps()
+                ->where('is_published', false)
+                ->whereNotNull('page_content')
+                ->update(['is_published' => true]);
         });
     }
 

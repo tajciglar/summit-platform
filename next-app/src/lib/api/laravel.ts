@@ -18,6 +18,7 @@ export interface DraftPayload extends PublishedContent {
   status: string;
   funnel_id: string;
   funnel_step_id: string | null;
+  step_type: string | null;
   summit_id: string | null;
   enabled_sections: string[] | null;
   audience: string | null;
@@ -32,6 +33,7 @@ export interface PublicPayload extends PublishedContent {
   speakers: Speaker[];
   funnel_id: string;
   funnel_step_id: string | null;
+  step_type: string | null;
   summit_id: string | null;
   enabled_sections: string[] | null;
   audience: string | null;
@@ -83,7 +85,10 @@ export async function fetchByHost(
   if (stepSlug) qs.set('step', stepSlug);
   const res = await fetch(`${BASE}/api/funnels/resolve-by-host?${qs.toString()}`, {
     headers: internalHeaders(),
-    next: { revalidate: 60 },
+    // Short TTL so publish → view iterations don't hand the operator a
+    // stale page. Bump back up once the editor has explicit cache-bust on
+    // save via revalidateTag.
+    next: { revalidate: 5 },
   });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`resolve-by-host failed: ${res.status}`);
