@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Forms\Components\MediaPickerField;
 use App\Services\Templates\FilamentSchemaMapper;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -185,4 +186,54 @@ it('turns speaker-id arrays into a multi-select when a summit id is given', func
     $components = (new FilamentSchemaMapper)->map($schema, '00000000-0000-0000-0000-000000000000');
 
     expect($components[0])->toBeInstanceOf(Select::class);
+});
+
+it('emits a MediaPickerField when the property carries x-media metadata', function () {
+    $schema = [
+        'type' => 'object',
+        'properties' => [
+            'backgroundImageId' => [
+                'anyOf' => [
+                    ['type' => 'string', 'format' => 'uuid'],
+                    ['type' => 'null'],
+                ],
+                'description' => json_encode([
+                    'x-media' => [
+                        'role' => 'hero-background',
+                        'category' => 'hero',
+                        'subCategory' => 'background',
+                    ],
+                ]),
+            ],
+        ],
+    ];
+
+    $components = (new FilamentSchemaMapper)->map($schema);
+
+    expect($components)->toHaveCount(1);
+    expect($components[0])->toBeInstanceOf(MediaPickerField::class);
+    expect($components[0]->getName())->toBe('backgroundImageId');
+    expect($components[0]->getCategory())->toBe('hero');
+    expect($components[0]->getRole())->toBe('hero-background');
+    expect($components[0]->getSubCategoryFilter())->toBe('background');
+});
+
+it('emits a MediaPickerField without subCategory when none supplied', function () {
+    $schema = [
+        'type' => 'object',
+        'properties' => [
+            'logoMediaId' => [
+                'type' => 'string',
+                'format' => 'uuid',
+                'description' => json_encode([
+                    'x-media' => ['role' => 'logo', 'category' => 'brand'],
+                ]),
+            ],
+        ],
+    ];
+
+    $components = (new FilamentSchemaMapper)->map($schema);
+
+    expect($components[0])->toBeInstanceOf(MediaPickerField::class);
+    expect($components[0]->getSubCategoryFilter())->toBeNull();
 });

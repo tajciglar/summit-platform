@@ -2,6 +2,7 @@
 
 namespace App\Services\Templates;
 
+use App\Filament\Forms\Components\MediaPickerField;
 use App\Models\Speaker;
 use App\Models\Summit;
 use Filament\Forms\Components\Repeater;
@@ -60,6 +61,11 @@ class FilamentSchemaMapper
      */
     private function mapProperty(string $name, array $schema, bool $required, ?string $summitId): Component
     {
+        // Media-id slots are detected before unwrapping because Zod puts
+        // `.describe()` metadata on the outer schema, which the anyOf-unwrap
+        // step below would otherwise drop.
+        $mediaMeta = $this->extractMediaMetadata($schema);
+
         // Zod's `.nullable()` / `.optional().nullable()` exports as
         // `anyOf: [<real schema>, {type: null}]`. Unwrap to the real branch so
         // enums (and other typed schemas) still map to their proper widgets.
@@ -68,6 +74,19 @@ class FilamentSchemaMapper
         $label = $this->humanizeLabel($name);
         $type = $schema['type'] ?? null;
         $enforceRequired = $required && $this->enforceRequired;
+
+        if ($media = $mediaMeta) {
+            $picker = MediaPickerField::make($name)
+                ->label($label)
+                ->category($media['category'])
+                ->role($media['role']);
+
+            if (isset($media['subCategory'])) {
+                $picker->subCategory($media['subCategory']);
+            }
+
+            return $picker;
+        }
 
         // Speaker UUID arrays become a multi-select populated from the summit's speakers.
         if ($this->isSpeakerIdArray($name, $schema) && $summitId !== null) {
@@ -204,6 +223,30 @@ class FilamentSchemaMapper
         }
 
         return is_array($nonNull) ? $nonNull : $schema;
+    }
+
+    /**
+     * @param  array<string, mixed>  $schema
+     * @return array{role: string, category: string, subCategory?: string}|null
+     */
+    private function extractMediaMetadata(array $schema): ?array
+    {
+        $description = $schema['description'] ?? null;
+        if (! is_string($description) || ! str_contains($description, 'x-media')) {
+            return null;
+        }
+
+        $decoded = json_decode($description, true);
+        if (! is_array($decoded) || ! isset($decoded['x-media']) || ! is_array($decoded['x-media'])) {
+            return null;
+        }
+
+        $meta = $decoded['x-media'];
+        if (! isset($meta['role'], $meta['category']) || ! is_string($meta['role']) || ! is_string($meta['category'])) {
+            return null;
+        }
+
+        return $meta;
     }
 
     private function humanizeLabel(string $name): string
