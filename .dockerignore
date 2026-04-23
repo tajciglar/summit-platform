@@ -1,0 +1,15 @@
+node_modules
+vendor
+.env
+.git
+next-app/*
+!next-app/public
+next-app/public/*
+!next-app/public/template-manifest.json
+!next-app/public/block-catalog.json
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+tests
+docs
