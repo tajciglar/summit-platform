@@ -5,6 +5,8 @@ use App\Models\FunnelStep;
 use App\Models\Speaker;
 use App\Models\Summit;
 
+beforeEach(fn () => test()->withHeaders(withInternalApiToken()));
+
 it('returns page_content for any step by id (including non-optin)', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();

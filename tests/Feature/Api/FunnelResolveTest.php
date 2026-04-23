@@ -5,6 +5,8 @@ use App\Models\FunnelStep;
 use App\Models\Speaker;
 use App\Models\Summit;
 
+beforeEach(fn () => test()->withHeaders(withInternalApiToken()));
+
 it('resolves a funnel by summit slug + funnel slug + step slug', function () {
     $summit = Summit::factory()->create([
         'slug' => 'test-summit',

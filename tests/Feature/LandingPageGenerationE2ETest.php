@@ -80,7 +80,7 @@ it('runs the full generate → approve → publish flow', function () {
     app(PublishDraftService::class)->publish($draft, $user);
 
     // Verify live
-    $response = $this->getJson("/api/funnels/{$funnel->id}/published-content");
+    $response = $this->withHeaders(withInternalApiToken())->getJson("/api/funnels/{$funnel->id}/published-content");
     $response->assertOk();
     $response->assertJsonPath('template_key', 'ochre-ink');
     $response->assertJsonPath('content.summit.name', 'Integration Summit');

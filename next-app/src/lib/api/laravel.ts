@@ -2,6 +2,15 @@ import type { PublishedContent, Speaker } from '@/templates/types';
 import type { Palette } from '../palette';
 
 const BASE = process.env.LARAVEL_API_URL ?? 'http://localhost:8000';
+const INTERNAL_TOKEN = process.env.INTERNAL_API_TOKEN ?? '';
+
+function internalHeaders(extra: Record<string, string> = {}): Record<string, string> {
+  return {
+    Accept: 'application/json',
+    ...(INTERNAL_TOKEN ? { Authorization: `Bearer ${INTERNAL_TOKEN}` } : {}),
+    ...extra,
+  };
+}
 
 export interface DraftPayload extends PublishedContent {
   speakers: Speaker[];
@@ -13,6 +22,7 @@ export interface DraftPayload extends PublishedContent {
   audience: string | null;
   palette: Palette | null;
   wp_checkout_redirect_url: string | null;
+  wp_thankyou_redirect_url: string | null;
 }
 
 export interface PublicPayload extends PublishedContent {
@@ -24,6 +34,7 @@ export interface PublicPayload extends PublishedContent {
   audience: string | null;
   palette: Palette | null;
   wp_checkout_redirect_url: string | null;
+  wp_thankyou_redirect_url: string | null;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {
@@ -37,7 +48,7 @@ export async function fetchDraft(token: string): Promise<DraftPayload | null> {
 
 export async function fetchPublished(funnelId: string, stepType = 'optin'): Promise<PublicPayload | null> {
   const url = `${BASE}/api/funnels/${encodeURIComponent(funnelId)}/published-content?step_type=${encodeURIComponent(stepType)}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
+  const res = await fetch(url, { headers: internalHeaders(), next: { revalidate: 60 } });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Published fetch failed: ${res.status}`);
   return res.json();
@@ -45,6 +56,7 @@ export async function fetchPublished(funnelId: string, stepType = 'optin'): Prom
 
 export async function fetchStepPreview(stepId: string): Promise<PublicPayload | null> {
   const res = await fetch(`${BASE}/api/funnel-steps/${encodeURIComponent(stepId)}/preview-content`, {
+    headers: internalHeaders(),
     cache: 'no-store',
   });
   if (res.status === 404) return null;

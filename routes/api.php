@@ -7,14 +7,16 @@ use App\Http\Controllers\Api\PublicFunnelController;
 use App\Http\Controllers\Api\TrackPageViewController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/funnels/{funnelId}/published-content', [PublicFunnelController::class, 'show']);
-Route::get('/funnel-steps/{step}/preview-content', [PublicFunnelController::class, 'showStep'])
-    ->middleware('throttle:120,1');
+// Server-to-server endpoints (called by Next.js with INTERNAL_API_TOKEN).
+Route::middleware('internal-api')->group(function () {
+    Route::get('/funnels/{funnelId}/published-content', [PublicFunnelController::class, 'show']);
+    Route::get('/funnel-steps/{step}/preview-content', [PublicFunnelController::class, 'showStep'])
+        ->middleware('throttle:120,1');
+    Route::get('/funnels/resolve', FunnelResolveController::class)
+        ->middleware('throttle:60,1');
+});
 
-Route::get('/funnels/resolve', FunnelResolveController::class)
-    ->middleware('throttle:60,1');
-
-// Preview token is the only access control — intentionally no session/bearer auth.
+// Public endpoints — access control baked in (preview token / throttle / browser-origin).
 Route::get('/landing-page-drafts/{token}', [LandingPageDraftController::class, 'showByToken'])
     ->middleware('throttle:120,1');
 

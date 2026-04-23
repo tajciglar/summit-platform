@@ -5,6 +5,8 @@ use App\Models\FunnelStep;
 use App\Models\Speaker;
 use App\Models\Summit;
 
+beforeEach(fn () => test()->withHeaders(withInternalApiToken()));
+
 it('returns the published page_content for an optin step', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create();
@@ -61,6 +63,36 @@ it('omits wp_checkout_redirect_url on optin step even when funnel has one', func
     $this->getJson("/api/funnels/{$funnel->id}/published-content")
         ->assertOk()
         ->assertJsonPath('wp_checkout_redirect_url', null);
+});
+
+it('surfaces wp_thankyou_redirect_url on sales_page step', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create([
+        'wp_thankyou_redirect_url' => 'https://althea-academy.com/thank-you',
+    ]);
+    FunnelStep::factory()->for($funnel)->create([
+        'step_type' => 'sales_page',
+        'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
+    ]);
+
+    $this->getJson("/api/funnels/{$funnel->id}/published-content?step_type=sales_page")
+        ->assertOk()
+        ->assertJsonPath('wp_thankyou_redirect_url', 'https://althea-academy.com/thank-you');
+});
+
+it('omits wp_thankyou_redirect_url on optin step', function () {
+    $summit = Summit::factory()->create();
+    $funnel = Funnel::factory()->for($summit)->create([
+        'wp_thankyou_redirect_url' => 'https://althea-academy.com/thank-you',
+    ]);
+    FunnelStep::factory()->for($funnel)->create([
+        'step_type' => 'optin',
+        'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
+    ]);
+
+    $this->getJson("/api/funnels/{$funnel->id}/published-content")
+        ->assertOk()
+        ->assertJsonPath('wp_thankyou_redirect_url', null);
 });
 
 it('returns null wp_checkout_redirect_url when funnel has no redirect', function () {

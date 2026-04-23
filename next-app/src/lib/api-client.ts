@@ -2,7 +2,7 @@ import type { BlockRow, StepType } from '@/types/block'
 import type { Theme } from './theme-context'
 
 const API_BASE = process.env.NEXT_PUBLIC_LARAVEL_API_URL || 'http://localhost:8000'
-const API_TOKEN = process.env.LARAVEL_API_TOKEN || ''
+const API_TOKEN = process.env.INTERNAL_API_TOKEN || ''
 
 export interface ResolvedFunnel {
   funnel: { id: string; slug: string; name: string }

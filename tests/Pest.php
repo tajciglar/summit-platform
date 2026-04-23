@@ -50,3 +50,8 @@ function something()
 {
     // ..
 }
+
+function withInternalApiToken(): array
+{
+    return ['Authorization' => 'Bearer '.config('services.next_app.token')];
+}
