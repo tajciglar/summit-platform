@@ -92,7 +92,7 @@ class CreateFunnel extends CreateRecord
                 'slug' => $defaults['slug'],
                 'name' => $defaults['name'],
                 'sort_order' => $defaults['sort_order'],
-                'is_published' => false,
+                'is_published' => (bool) $funnel->is_active,
                 'page_content' => $pageContent,
             ]);
             $created++;

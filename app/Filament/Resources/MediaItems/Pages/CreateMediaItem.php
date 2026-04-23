@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MediaItems\Pages;
 use App\Filament\Resources\MediaItems\MediaItemResource;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class CreateMediaItem extends CreateRecord
 {
@@ -29,33 +30,32 @@ class CreateMediaItem extends CreateRecord
     }
 
     /**
-     * After the MediaItem row exists, attach the uploaded file via
-     * addMediaFromDisk and back-fill path / file_name / size / mime_type
-     * from the resulting Spatie Media instance.
+     * Hand the uploaded file to Spatie (via MediaItem::addMedia) with an
+     * explicit filename, then back-fill the NOT NULL columns from the
+     * resulting Media row. Uploads go to the `media-library.disk_name` disk
+     * via MediaItemPathGenerator → `<category>/<media-item-uuid>/<filename>`.
      */
     protected function afterCreate(): void
     {
-        /**
-         * Use the raw Livewire component state instead of $this->form->getState()
-         * because `->dehydrated(false)` excludes file_upload from the dehydrated
-         * output. After form validation, saveUploadedFiles() has already moved the
-         * temp file to the target disk and updated $this->data in place.
-         *
-         * @var string|null $uploadedPath
-         */
         $raw = $this->data['file_upload'] ?? null;
+        $file = is_array($raw) ? (array_values($raw)[0] ?? null) : $raw;
 
-        // FileUpload stores state as an array of paths, even for single-file uploads.
-        $uploadedPath = is_array($raw) ? (array_values($raw)[0] ?? null) : $raw;
-
-        if (! $uploadedPath) {
+        if (! $file) {
             return;
         }
 
-        $disk = config('media-library.disk_name');
+        if ($file instanceof TemporaryUploadedFile) {
+            $realPath = $file->getRealPath();
+            $clientName = $file->getClientOriginalName();
+        } else {
+            $realPath = \Storage::disk('local')->path((string) $file);
+            $clientName = basename((string) $file);
+        }
 
         $media = $this->record
-            ->addMediaFromDisk($uploadedPath, $disk)
+            ->addMedia($realPath)
+            ->usingName(pathinfo($clientName, PATHINFO_FILENAME))
+            ->usingFileName($clientName)
             ->toMediaCollection('file');
 
         $this->record->update([
