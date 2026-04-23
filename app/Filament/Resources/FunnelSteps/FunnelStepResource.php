@@ -21,6 +21,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ViewField;
 use Filament\Panel;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -47,81 +48,108 @@ class FunnelStepResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->columns(1)->components([
-            // Meta row: Name / URL slug / Step type / Order.
-            // `is_published` rides along here too (rendered compactly) so we
-            // don't need a separate publish-section chrome — the live URL pill
-            // is rendered in the page blade above the form.
-            Section::make()
-                ->columnSpanFull()
-                ->columns(['default' => 1, 'md' => 4])
-                ->components([
-                    TextInput::make('name')
-                        ->required()
-                        ->maxLength(500)
-                        ->columnSpan(1),
-                    TextInput::make('slug')
-                        ->label('URL slug')
-                        ->required()
-                        ->maxLength(255)
-                        ->prefix(fn (?FunnelStep $record): string => $record?->funnel ? '/'.$record->funnel->slug.'/' : '/')
-                        ->columnSpan(1),
-                    Select::make('step_type')
-                        ->options([
-                            'optin' => 'Opt-in',
-                            'sales_page' => 'Sales page',
-                            'checkout' => 'Checkout',
-                            'upsell' => 'Upsell',
-                            'downsell' => 'Downsell',
-                            'thank_you' => 'Thank you',
-                        ])
-                        ->required()
-                        ->native(false)
-                        ->live()
-                        ->columnSpan(1),
-                    TextInput::make('sort_order')
-                        ->label('Order')
-                        ->numeric()
-                        ->default(0)
-                        ->columnSpan(1),
-                    Toggle::make('is_published')
-                        ->label('Published')
-                        ->inline(false)
-                        ->default(false)
-                        ->columnSpan(['default' => 1, 'md' => 4]),
-                    // Product linkage is optional per step_type. Hidden for
-                    // optin / thank-you; shown for any step that actually
-                    // sells something: checkout (the main offer), sales_page
-                    // (e.g. a VIP upgrade page), upsell, downsell.
-                    Select::make('product_id')
-                        ->label('Product')
-                        ->helperText('Checkout = main offer. Sales page = VIP upgrade. Upsell / downsell = the single product being offered.')
-                        ->relationship('product', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->placeholder('No product linked')
-                        ->visible(fn (Get $get): bool => in_array($get('step_type'), ['checkout', 'sales_page', 'upsell', 'downsell'], true))
-                        ->columnSpan(['default' => 1, 'md' => 4]),
-                ]),
-
-            Section::make('Page content blocks')
-                ->columnSpanFull()
-                ->description(fn (Get $get): string => is_array($get('page_content'))
-                    ? count($get('page_content')).' blocks'
-                    : '0 blocks')
-                ->components([
-                    ViewField::make('blocks_empty_state')
-                        ->view('filament.components.step-blocks-empty-state')
-                        ->visible(fn (Get $get): bool => ! is_array($get('page_content')) || count($get('page_content')) === 0),
-
-                    Builder::make('page_content')
-                        ->label('')
-                        ->blocks(fn (?FunnelStep $record) => self::builderBlocks($record))
-                        ->addActionLabel('Add block')
-                        ->collapsible()
-                        ->blockNumbers(false)
-                        ->visible(fn (Get $get): bool => is_array($get('page_content')) && count($get('page_content')) > 0),
-                ]),
+            self::metaSection(),
+            self::pageContentRow(),
         ]);
+    }
+
+    /**
+     * Meta row: Name / URL slug / Step type / Order.
+     * `is_published` rides along here too (rendered compactly) so we don't
+     * need a separate publish-section chrome — the live URL pill is rendered
+     * in the page blade above the form.
+     */
+    protected static function metaSection(): Section
+    {
+        return Section::make()
+            ->key('meta')
+            ->columnSpanFull()
+            ->columns(['default' => 1, 'md' => 4])
+            ->components([
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(500)
+                    ->columnSpan(1),
+                TextInput::make('slug')
+                    ->label('URL slug')
+                    ->required()
+                    ->maxLength(255)
+                    ->prefix(fn (?FunnelStep $record): string => $record?->funnel ? '/'.$record->funnel->slug.'/' : '/')
+                    ->columnSpan(1),
+                Select::make('step_type')
+                    ->options(self::stepTypeOptions())
+                    ->required()
+                    ->native(false)
+                    ->live()
+                    ->columnSpan(1),
+                TextInput::make('sort_order')
+                    ->label('Order')
+                    ->numeric()
+                    ->default(0)
+                    ->columnSpan(1),
+                Toggle::make('is_published')
+                    ->label('Published')
+                    ->inline(false)
+                    ->default(false)
+                    ->columnSpan(['default' => 1, 'md' => 4]),
+                // Product linkage is optional per step_type. Hidden for
+                // optin / thank-you; shown for any step that actually
+                // sells something: checkout (the main offer), sales_page
+                // (e.g. a VIP upgrade page), upsell, downsell.
+                Select::make('product_id')
+                    ->label('Product')
+                    ->helperText('Checkout = main offer. Sales page = VIP upgrade. Upsell / downsell = the single product being offered.')
+                    ->relationship('product', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('No product linked')
+                    ->visible(fn (Get $get): bool => in_array($get('step_type'), ['checkout', 'sales_page', 'upsell', 'downsell'], true))
+                    ->columnSpan(['default' => 1, 'md' => 4]),
+            ]);
+    }
+
+    protected static function pageContentRow(): Grid
+    {
+        return Grid::make(2)
+            ->columnSpanFull()
+            ->schema([
+                Section::make('Page content blocks')
+                    ->key('page-content-blocks')
+                    ->columnSpan(1)
+                    ->description(fn (Get $get): string => is_array($get('page_content'))
+                        ? count($get('page_content')).' blocks'
+                        : '0 blocks')
+                    ->components([
+                        ViewField::make('blocks_empty_state')
+                            ->view('filament.components.step-blocks-empty-state')
+                            ->visible(fn (Get $get): bool => ! is_array($get('page_content')) || count($get('page_content')) === 0),
+
+                        Builder::make('page_content')
+                            ->label('')
+                            ->blocks(fn (?FunnelStep $record) => self::builderBlocks($record))
+                            ->addActionLabel('Add block')
+                            ->collapsible()
+                            ->blockNumbers(false)
+                            ->visible(fn (Get $get): bool => is_array($get('page_content')) && count($get('page_content')) > 0),
+                    ]),
+
+                ViewField::make('step_preview')
+                    ->view('filament.components.step-preview-iframe')
+                    ->columnSpan(1),
+            ]);
+    }
+
+    /** @return array<string, string> */
+    protected static function stepTypeOptions(): array
+    {
+        return [
+            'optin' => 'Opt-in',
+            'sales_page' => 'Sales page',
+            'checkout' => 'Checkout',
+            'upsell' => 'Upsell',
+            'downsell' => 'Downsell',
+            'thank_you' => 'Thank you',
+        ];
     }
 
     public static function table(Table $table): Table
@@ -153,14 +181,7 @@ class FunnelStepResource extends Resource
                     ->relationship('funnel', 'name')
                     ->label('Funnel')
                     ->preload(),
-                SelectFilter::make('step_type')->options([
-                    'optin' => 'Opt-in',
-                    'sales_page' => 'Sales page',
-                    'checkout' => 'Checkout',
-                    'upsell' => 'Upsell',
-                    'downsell' => 'Downsell',
-                    'thank_you' => 'Thank you',
-                ]),
+                SelectFilter::make('step_type')->options(self::stepTypeOptions()),
                 TernaryFilter::make('is_published'),
             ])
             ->recordActions([
