@@ -11,8 +11,40 @@ import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
 import { groupSpeakersByDay } from './shared/speakers-by-day';
 import type { Speaker } from './types';
 
+/**
+ * Resolved media sidecar attached by the Laravel API next to every
+ * `*MediaId` / `*ImageId` field. Present only when the operator has
+ * selected an image; absent otherwise.
+ */
+type MediaSidecar = {
+  id: string;
+  url: string | null;
+  alt: string | null;
+  width: number | null;
+  height: number | null;
+};
+
+type BonusItem = BlueCoralContent['bonuses']['items'][number];
+type FounderItem = BlueCoralContent['founders']['items'][number];
+
+/**
+ * Render-time content type: Zod-inferred shape plus post-parse sidecars.
+ * Only declare sidecars for slots the skin actually renders.
+ */
+type RenderContent = Omit<BlueCoralContent, 'hero' | 'overview' | 'bonuses' | 'founders' | 'footer'> & {
+  hero: BlueCoralContent['hero'] & { lifestyleImage?: MediaSidecar };
+  overview: BlueCoralContent['overview'] & { featureImage?: MediaSidecar };
+  bonuses: Omit<BlueCoralContent['bonuses'], 'items'> & {
+    items: Array<BonusItem & { thumbnail?: MediaSidecar }>;
+  };
+  founders: Omit<BlueCoralContent['founders'], 'items'> & {
+    items: Array<FounderItem & { photo?: MediaSidecar }>;
+  };
+  footer: BlueCoralContent['footer'] & { logo?: MediaSidecar };
+};
+
 type Props = {
-  content: BlueCoralContent;
+  content: RenderContent;
   speakers: Record<string, Speaker>;
 };
 
@@ -21,6 +53,7 @@ type RootProps = Props & {
   enabledSections?: string[];
   palette?: import('@/lib/palette').Palette | null;
   wpCheckoutRedirectUrl?: string | null;
+  wpThankyouRedirectUrl?: string | null;
 };
 
 /* -------------------------- VISUAL TOKENS -------------------------- */
@@ -152,6 +185,7 @@ function TopBar({ content }: { content: BlueCoralContent }) {
 /* ============== 02. HERO ============== */
 function Hero({ content, speakers }: Props) {
   const h = content.hero;
+  const lifestyle = h.lifestyleImage;
   const heroSpeakers = h.avatarSpeakerIds
     .map((id) => speakers[id])
     .filter((s): s is Speaker => Boolean(s))
@@ -182,6 +216,17 @@ function Hero({ content, speakers }: Props) {
       />
 
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+        {lifestyle?.url ? (
+          <img
+            src={lifestyle.url}
+            alt={lifestyle.alt ?? ''}
+            width={lifestyle.width ?? undefined}
+            height={lifestyle.height ?? undefined}
+            className="w-full max-w-2xl mx-auto mb-8 rounded-2xl shadow-xl object-cover aspect-[16/9]"
+            loading="eager"
+            data-testid="blue-coral-hero-lifestyle"
+          />
+        ) : null}
         <p
           className="blue-coral-heading font-bold text-sm mb-4 uppercase tracking-wider"
           style={{ color: '#2563EB' }}
@@ -378,12 +423,22 @@ function Stats({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== 05. WHAT IS THIS? ============== */
-function Overview({ content }: { content: BlueCoralContent }) {
+function Overview({ content }: { content: RenderContent }) {
   const o = content.overview;
+  const feature = o.featureImage;
   return (
     <section id="what-is-this" className="bg-white py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-        {/* Illustration on LEFT */}
+        {feature?.url ? (
+          <img
+            src={feature.url}
+            alt={feature.alt ?? o.headline}
+            width={feature.width ?? undefined}
+            height={feature.height ?? undefined}
+            className="rounded-2xl aspect-[4/3] object-cover shadow-lg w-full"
+            data-testid="blue-coral-overview-feature"
+          />
+        ) : (
         <div
           className="rounded-2xl aspect-[4/3] flex items-center justify-center"
           style={{
@@ -463,6 +518,7 @@ function Overview({ content }: { content: BlueCoralContent }) {
             </p>
           </div>
         </div>
+        )}
         {/* Text on RIGHT */}
         <div>
           <p
@@ -735,7 +791,7 @@ function FreeGift({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== 08. BONUS STACK ============== */
-function Bonuses({ content }: { content: BlueCoralContent }) {
+function Bonuses({ content }: { content: RenderContent }) {
   const b = content.bonuses;
   return (
     <section
@@ -768,6 +824,16 @@ function Bonuses({ content }: { content: BlueCoralContent }) {
                 boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
               }}
             >
+              {bonus.thumbnail?.url ? (
+                <img
+                  src={bonus.thumbnail.url}
+                  alt={bonus.thumbnail.alt ?? bonus.title}
+                  width={bonus.thumbnail.width ?? undefined}
+                  height={bonus.thumbnail.height ?? undefined}
+                  className="w-full aspect-video rounded-lg object-cover mb-4"
+                  data-testid={`blue-coral-bonus-thumbnail-${idx}`}
+                />
+              ) : null}
               <span
                 className="inline-block text-white blue-coral-heading font-bold text-xs px-4 py-1.5 rounded-full mb-4"
                 style={{ background: '#F87171' }}
@@ -813,7 +879,7 @@ function Bonuses({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== 09. FOUNDERS ============== */
-function Founders({ content }: { content: BlueCoralContent }) {
+function Founders({ content }: { content: RenderContent }) {
   const f = content.founders;
   return (
     <section className="bg-white py-16 md:py-24">
@@ -830,15 +896,26 @@ function Founders({ content }: { content: BlueCoralContent }) {
               key={`founder-${idx}`}
               className="flex flex-col items-center text-center"
             >
-              <div
-                className="blue-coral-avatar-md mb-4"
-                style={{
-                  background:
-                    FOUNDER_GRADIENTS[idx % FOUNDER_GRADIENTS.length],
-                }}
-              >
-                {founder.initials}
-              </div>
+              {founder.photo?.url ? (
+                <img
+                  src={founder.photo.url}
+                  alt={founder.photo.alt ?? founder.name}
+                  width={founder.photo.width ?? undefined}
+                  height={founder.photo.height ?? undefined}
+                  className="blue-coral-avatar-md mb-4 object-cover"
+                  data-testid={`blue-coral-founder-photo-${idx}`}
+                />
+              ) : (
+                <div
+                  className="blue-coral-avatar-md mb-4"
+                  style={{
+                    background:
+                      FOUNDER_GRADIENTS[idx % FOUNDER_GRADIENTS.length],
+                  }}
+                >
+                  {founder.initials}
+                </div>
+              )}
               <h3
                 className="blue-coral-heading font-bold text-xl"
                 style={{ color: '#1E293B' }}
@@ -1217,13 +1294,24 @@ function FAQ({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== FOOTER ============== */
-function Footer({ content }: { content: BlueCoralContent }) {
+function Footer({ content }: { content: RenderContent }) {
   const f = content.footer;
+  const logo = f.logo;
   return (
     <footer className="py-10" style={{ background: '#0F172A', color: '#93C5FD' }}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
+            {logo?.url ? (
+              <img
+                src={logo.url}
+                alt={logo.alt ?? f.brandName}
+                width={logo.width ?? undefined}
+                height={logo.height ?? undefined}
+                className="w-10 h-10 rounded-lg object-cover"
+                data-testid="blue-coral-footer-logo"
+              />
+            ) : (
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center"
               style={{ background: '#2563EB' }}
@@ -1235,6 +1323,7 @@ function Footer({ content }: { content: BlueCoralContent }) {
                 {f.brandInitial}
               </span>
             </div>
+            )}
             <div>
               <p
                 className="blue-coral-heading font-bold text-sm"
@@ -1585,7 +1674,8 @@ function UpgradeSection({ content }: { content: BlueCoralContent }) {
 function PriceCard({
   content,
   wpCheckoutRedirectUrl,
-}: { content: BlueCoralContent; wpCheckoutRedirectUrl?: string | null }) {
+  wpThankyouRedirectUrl,
+}: { content: BlueCoralContent; wpCheckoutRedirectUrl?: string | null; wpThankyouRedirectUrl?: string | null }) {
   if (!content.priceCard) return null;
   const p = content.priceCard;
   return (
@@ -1643,6 +1733,13 @@ function PriceCard({
               {p.ctaLabel} <BcSalesArrowRight size={20} />
             </TrackedCheckoutLink>
             <p style={{ marginTop: '0.85rem', fontSize: '0.8rem', color: BC_SALES.NAVY700 }}>{p.guarantee}</p>
+            {wpThankyouRedirectUrl && (
+              <p style={{ marginTop: '1.25rem' }}>
+                <a href={wpThankyouRedirectUrl} style={{ color: '#64748b', fontSize: '0.85rem', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                  No thanks. Complete my free registration
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1778,7 +1875,7 @@ function WhySection({ content }: { content: BlueCoralContent }) {
 }
 
 /* ============== ROOT COMPONENT ============== */
-export function BlueCoral({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl }: RootProps) {
+export function BlueCoral({ content, speakers, funnelId, enabledSections, wpCheckoutRedirectUrl, wpThankyouRedirectUrl }: RootProps) {
   const enabled = new Set(enabledSections ?? blueCoralDefaultEnabledSections);
   return (
     <div className="blue-coral-root blue-coral-body">
@@ -1811,7 +1908,7 @@ export function BlueCoral({ content, speakers, funnelId, enabledSections, wpChec
         {enabled.has('vip-bonuses') && <VipBonuses content={content} />}
         {enabled.has('free-gifts') && <FreeGifts content={content} />}
         {enabled.has('upgrade-section') && <UpgradeSection content={content} />}
-        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} />}
+        {enabled.has('price-card') && <PriceCard content={content} wpCheckoutRedirectUrl={wpCheckoutRedirectUrl} wpThankyouRedirectUrl={wpThankyouRedirectUrl} />}
         {enabled.has('sales-speakers') && <SalesSpeakers content={content} speakers={speakers} />}
         {enabled.has('comparison-table') && <ComparisonTable content={content} />}
         {enabled.has('guarantee') && <Guarantee content={content} />}

@@ -77,4 +77,32 @@ describe('BlueCoralSchema', () => {
     };
     expect(() => BlueCoralSchema.parse(bad)).toThrow();
   });
+
+  it('accepts optional image slots (hero, overview, per-bonus, per-founder, footer)', () => {
+    const uuid = '550e8400-e29b-41d4-a716-446655440000';
+    const input = {
+      ...blueCoralFixture,
+      hero: { ...blueCoralFixture.hero, lifestyleImageId: uuid },
+      overview: { ...blueCoralFixture.overview, featureImageId: uuid },
+      bonuses: {
+        ...blueCoralFixture.bonuses,
+        items: blueCoralFixture.bonuses.items.map((b) => ({ ...b, thumbnailMediaId: uuid })),
+      },
+      founders: {
+        ...blueCoralFixture.founders,
+        items: blueCoralFixture.founders.items.map((f) => ({ ...f, photoMediaId: uuid })),
+      },
+      footer: { ...blueCoralFixture.footer, logoMediaId: uuid },
+    };
+    expect(BlueCoralSchema.safeParse(input).success).toBe(true);
+  });
+
+  it('accepts drafts without any image-slot fields (all optional)', () => {
+    expect(BlueCoralSchema.safeParse(blueCoralFixture).success).toBe(true);
+  });
+
+  it('rejects non-UUID values for image-slot fields', () => {
+    const bad = { ...blueCoralFixture, hero: { ...blueCoralFixture.hero, lifestyleImageId: 'x' } };
+    expect(BlueCoralSchema.safeParse(bad).success).toBe(false);
+  });
 });

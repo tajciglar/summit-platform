@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MediaIdSchema } from '../sections/shared/media-id-schema';
 
 /**
  * Variant 2 — "friendly blue + coral" summit layout.
@@ -32,6 +33,14 @@ export const BlueCoralSchema = z.object({
     socialProofCount: z.string().min(1), // "73,124"
     socialProofSuffix: z.string().min(1), // " committed parents"
     avatarSpeakerIds: z.array(z.string().uuid()).min(1).max(4),
+    // Optional single hero image — lifestyle/brand shot that sits beside
+    // the headline. When set, the hero shifts into an image+text composition;
+    // when null the existing text+avatar layout stands.
+    lifestyleImageId: MediaIdSchema({
+      role: 'hero-lifestyle',
+      category: 'landing_page',
+      subCategory: 'hero',
+    }),
   }),
   press: z.object({
     eyebrow: z.string().min(1),
@@ -56,6 +65,13 @@ export const BlueCoralSchema = z.object({
     ctaLabel: z.string().min(1),
     illustrationCaption: z.string().min(1), // "5 Days. 40+ Experts. 100% Free."
     illustrationSubcaption: z.string().min(1), // "Watch live or catch the replays"
+    // Optional image for the overview panel. When set, it replaces the
+    // illustration card with a real photo/artwork; captions still render.
+    featureImageId: MediaIdSchema({
+      role: 'overview-feature',
+      category: 'landing_page',
+      subCategory: 'section',
+    }),
   }),
   // Speakers section derived at render time from the summit's Speaker
   // table: one day block per distinct `speaker.day_number`. No per-speaker
@@ -88,6 +104,13 @@ export const BlueCoralSchema = z.object({
       title: z.string().min(1),
       description: z.string().min(1),
       bullets: z.array(z.string().min(1)).min(1).max(5),
+      // Optional per-bonus thumbnail. When present the card becomes
+      // visual; empty slots keep the text-only card layout.
+      thumbnailMediaId: MediaIdSchema({
+        role: 'bonus-thumbnail',
+        category: 'product',
+        subCategory: 'bump',
+      }),
     })).min(1).max(5),
   }),
   founders: z.object({
@@ -97,6 +120,13 @@ export const BlueCoralSchema = z.object({
       role: z.string().min(1),
       quote: z.string().min(1),
       initials: z.string().min(1).max(4),
+      // Optional founder portrait. When present it replaces the initials
+      // circle; per-founder so a pair can mix photo+initials.
+      photoMediaId: MediaIdSchema({
+        role: 'founder-photo',
+        category: 'speakers',
+        subCategory: 'author',
+      }),
     })).length(2),
   }),
   testimonials: z.object({
@@ -152,6 +182,12 @@ export const BlueCoralSchema = z.object({
     brandInitial: z.string().min(1).max(2),
     brandName: z.string().min(1),
     tagline: z.string().min(1),
+    // Optional logo — replaces the brandInitial mark when set.
+    logoMediaId: MediaIdSchema({
+      role: 'footer-logo',
+      category: 'brand',
+      subCategory: 'logo',
+    }),
     links: z.array(z.object({
       label: z.string().min(1),
       href: z.string().min(1),
