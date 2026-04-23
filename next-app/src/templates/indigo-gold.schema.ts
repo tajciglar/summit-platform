@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EventStatusSchema } from '../components/event-status';
+import { MediaIdSchema } from '../sections/shared/media-id-schema';
 
 /**
  * IndigoGold — warm "trusted family" aesthetic.
@@ -55,6 +56,13 @@ export const IndigoGoldSchema = z.object({
     // Length may be shorter than collageSpeakerIds; the component falls back
     // to the speaker's own photoUrl or initials otherwise.
     collagePhotoUrls: z.array(z.string().url()).max(6).nullish(),
+    // Optional hero background image. When set, the skin renders it behind
+    // the collage; when null the existing gradient/palette backdrop stands.
+    backgroundImageId: MediaIdSchema({
+      role: 'hero-background',
+      category: 'landing_page',
+      subCategory: 'background',
+    }),
   }),
   press: z.object({
     eyebrow: z.string().min(1),                 // "Our Speakers Have Been Featured In"
@@ -176,6 +184,13 @@ export const IndigoGoldSchema = z.object({
     brandName: z.string().min(1),
     tagline: z.string().min(1),                 // "Parenting you can rely on"
     brandInitial: z.string().min(1).max(2),     // "A"
+    // Optional uploaded logo — when present, replaces the `brandInitial`
+    // circle in the footer. Empty slot keeps the initials fallback.
+    logoMediaId: MediaIdSchema({
+      role: 'footer-logo',
+      category: 'brand',
+      subCategory: 'logo',
+    }),
     links: z.array(z.object({
       label: z.string().min(1),
       href: z.string().min(1),

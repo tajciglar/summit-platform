@@ -117,4 +117,31 @@ describe('IndigoGoldSchema', () => {
     };
     expect(() => IndigoGoldSchema.parse(bad)).toThrow();
   });
+
+  it('accepts optional hero.backgroundImageId and footer.logoMediaId as UUIDs', () => {
+    const input = {
+      ...indigoGoldFixture,
+      hero: {
+        ...indigoGoldFixture.hero,
+        backgroundImageId: '550e8400-e29b-41d4-a716-446655440000',
+      },
+      footer: {
+        ...indigoGoldFixture.footer,
+        logoMediaId: '550e8400-e29b-41d4-a716-446655440001',
+      },
+    };
+    expect(IndigoGoldSchema.safeParse(input).success).toBe(true);
+  });
+
+  it('accepts drafts without any image-slot fields (all optional)', () => {
+    expect(IndigoGoldSchema.safeParse(indigoGoldFixture).success).toBe(true);
+  });
+
+  it('rejects non-UUID values for image-slot fields', () => {
+    const bad = {
+      ...indigoGoldFixture,
+      hero: { ...indigoGoldFixture.hero, backgroundImageId: 'not-uuid' },
+    };
+    expect(IndigoGoldSchema.safeParse(bad).success).toBe(false);
+  });
 });
