@@ -22,8 +22,6 @@ class StripeProductSyncService
         foreach (self::PHASES as $phase) {
             $this->ensureStripePrice($product, $phase);
         }
-
-        $product->save();
     }
 
     private function ensureStripeProduct(Product $product): void
@@ -86,6 +84,7 @@ class StripeProductSyncService
             'late_pre' => 'stripe_price_late_id',
             'during' => 'stripe_price_during_id',
             'post' => 'stripe_price_post_id',
+            default => throw new \InvalidArgumentException("Unknown phase: {$phase}"),
         };
     }
 }

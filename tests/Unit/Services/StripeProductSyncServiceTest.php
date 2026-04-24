@@ -3,15 +3,15 @@
 use App\Models\Product;
 use App\Services\Stripe\StripeProductSyncService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Stripe\Service\PriceService;
+use Stripe\Service\ProductService;
 use Stripe\StripeClient;
 
 uses(RefreshDatabase::class);
 
 function fakeStripeClient(array &$calls = []): StripeClient
 {
-    $client = Mockery::mock(StripeClient::class);
-
-    $products = Mockery::mock();
+    $products = Mockery::mock(ProductService::class);
     $products->shouldReceive('create')
         ->andReturnUsing(function (array $params, array $opts) use (&$calls) {
             $calls[] = ['products.create', $params, $opts];
@@ -19,7 +19,7 @@ function fakeStripeClient(array &$calls = []): StripeClient
             return (object) ['id' => 'prod_fake_'.count($calls)];
         });
 
-    $prices = Mockery::mock();
+    $prices = Mockery::mock(PriceService::class);
     $prices->shouldReceive('create')
         ->andReturnUsing(function (array $params, array $opts) use (&$calls) {
             $calls[] = ['prices.create', $params, $opts];
@@ -39,8 +39,9 @@ function fakeStripeClient(array &$calls = []): StripeClient
             return (object) ['id' => $id, 'unit_amount' => 9700];
         });
 
-    $client->products = $products;
-    $client->prices = $prices;
+    $client = Mockery::mock(StripeClient::class);
+    $client->shouldReceive('getService')->with('products')->andReturn($products);
+    $client->shouldReceive('getService')->with('prices')->andReturn($prices);
 
     return $client;
 }
@@ -62,6 +63,7 @@ it('creates a Stripe Product when missing and Prices for each priced phase', fun
     $service = new StripeProductSyncService(fakeStripeClient($calls));
 
     $service->sync($product);
+    $product->save();
 
     $product->refresh();
     expect($product->stripe_product_id)->toStartWith('prod_fake_');
@@ -88,6 +90,7 @@ it('uses deterministic idempotency keys', function () {
     $calls = [];
     $service = new StripeProductSyncService(fakeStripeClient($calls));
     $service->sync($product);
+    $product->save();
 
     $productCreate = collect($calls)->firstWhere(0, 'products.create');
     expect($productCreate[2]['idempotency_key'])->toBe("product-create-{$product->id}");
@@ -111,6 +114,7 @@ it('creates recurring Prices when billing_interval is set', function () {
     $calls = [];
     $service = new StripeProductSyncService(fakeStripeClient($calls));
     $service->sync($product);
+    $product->save();
 
     $priceCreate = collect($calls)->firstWhere(0, 'prices.create');
     expect($priceCreate[1])->toHaveKey('recurring');
