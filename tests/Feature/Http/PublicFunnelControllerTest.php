@@ -95,19 +95,6 @@ it('omits wp_thankyou_redirect_url on optin step', function () {
         ->assertJsonPath('wp_thankyou_redirect_url', null);
 });
 
-it('returns null wp_checkout_redirect_url when funnel has no redirect', function () {
-    $summit = Summit::factory()->create();
-    $funnel = Funnel::factory()->for($summit)->create();
-    FunnelStep::factory()->for($funnel)->create([
-        'step_type' => 'sales_page',
-        'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
-    ]);
-
-    $this->getJson("/api/funnels/{$funnel->id}/published-content?step_type=sales_page")
-        ->assertOk()
-        ->assertJsonPath('wp_checkout_redirect_url', null);
-});
-
 it('falls back to funnel.section_config for enabled_sections when step has none', function () {
     $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->for($summit)->create([

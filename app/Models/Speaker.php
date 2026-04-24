@@ -28,7 +28,6 @@ class Speaker extends Model
         'social_links',
         'masterclass_title',
         'masterclass_description',
-        'rating',
         'free_video_url',
         'vip_video_url',
         'goes_live_at',
@@ -43,7 +42,6 @@ class Speaker extends Model
             'social_links' => 'array',
             'goes_live_at' => 'datetime',
             'is_featured' => 'boolean',
-            'rating' => 'integer',
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
         ];

@@ -55,7 +55,6 @@ class FunnelStepResource extends Resource
     {
         return $schema->columns(1)->components([
             self::metaSection(),
-            self::designSection(),
             self::pageContentRow(),
         ]);
     }

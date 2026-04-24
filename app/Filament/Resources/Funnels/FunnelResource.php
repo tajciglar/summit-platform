@@ -15,7 +15,6 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -100,18 +99,19 @@ class FunnelResource extends Resource
                         }),
                     TextInput::make('slug')->required()->maxLength(255)
                         ->helperText('Auto-fills from summit initials + funnel purpose. Edit freely.'),
-                    Textarea::make('description')->rows(3)->columnSpanFull(),
                     TextInput::make('wp_checkout_redirect_url')
                         ->label('WordPress checkout URL')
                         ->url()
+                        ->required()
                         ->maxLength(2048)
-                        ->helperText('Interim checkout redirect to the legacy WP cart. Leave blank once native checkout is live.')
+                        ->helperText('Interim checkout redirect to the legacy WP cart.')
                         ->columnSpanFull(),
                     TextInput::make('wp_thankyou_redirect_url')
                         ->label('WordPress thank-you page URL')
                         ->url()
+                        ->required()
                         ->maxLength(2048)
-                        ->helperText('Interim thank-you redirect for visitors who decline the sales offer. Leave blank once native thank-you page is live.')
+                        ->helperText('Interim thank-you redirect for visitors who decline the sales offer.')
                         ->columnSpanFull(),
                     Toggle::make('is_active')
                         ->label('Live')
@@ -120,7 +120,7 @@ class FunnelResource extends Resource
                 ]),
 
             Section::make('Design')
-                ->description('One skin drives every step. Palette is inherited from the summit audience. Pick which sections show up per step type; generate all steps in one click.')
+                ->description('One skin drives every step. Pick which sections show up per step type; generate all steps in one click.')
                 ->components([
                     Select::make('template_key')
                         ->label('Skin')
@@ -148,26 +148,29 @@ class FunnelResource extends Resource
                     CheckboxList::make('section_config.optin')
                         ->label('Optin sections')
                         ->options(fn (Get $get) => self::optinSectionOptionsFor($get('template_key')))
-                        ->columns(2)
+                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::optinSectionOptionsFor($get('template_key'))))
+                        ->columns(1)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections rendered on optin steps (lead capture).'),
+                        ->helperText('Sections render top → bottom in the order shown.'),
 
                     CheckboxList::make('section_config.sales_page')
                         ->label('Sales page sections')
                         ->options(fn (Get $get) => self::salesSectionOptionsFor($get('template_key')))
-                        ->columns(2)
+                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::salesSectionOptionsFor($get('template_key'))))
+                        ->columns(1)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections rendered on sales-page steps (VIP / upgrade).'),
+                        ->helperText('Sections render top → bottom in the order shown.'),
 
                     CheckboxList::make('section_config.thank_you')
                         ->label('Thank-you sections')
                         ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
-                        ->columns(2)
+                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::sectionOptionsFor($get('template_key'))))
+                        ->columns(1)
                         ->bulkToggleable()
                         ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections rendered on thank-you steps.'),
+                        ->helperText('Sections render top → bottom in the order shown.'),
                 ])
                 ->collapsed(fn (?Funnel $record): bool => $record !== null),
         ]);
@@ -196,10 +199,36 @@ class FunnelResource extends Resource
         }
 
         return collect($registry->supportedSections($templateKey))
-            ->mapWithKeys(fn (string $key) => [
-                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ->values()
+            ->mapWithKeys(fn (string $key, int $i) => [
+                $key => str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT).'.  '.ucwords(str_replace(['-', '_'], ' ', $key)),
             ])
             ->all();
+    }
+
+    /**
+     * Returns a descriptions array for the CheckboxList where each value is a
+     * short "Position 3 of 7 · sales-page" style hint. Keys line up with the
+     * CheckboxList options so Filament renders them directly beneath each row.
+     *
+     * @param  array<string, string>  $options
+     * @return array<string, string>
+     */
+    private static function sectionPositionDescriptions(?string $templateKey, array $options): array
+    {
+        if (! $templateKey || $options === []) {
+            return [];
+        }
+
+        $total = count($options);
+        $i = 0;
+        $out = [];
+        foreach (array_keys($options) as $key) {
+            $i++;
+            $out[$key] = "Position {$i} of {$total}";
+        }
+
+        return $out;
     }
 
     /** @return array<string, string> */
@@ -218,8 +247,9 @@ class FunnelResource extends Resource
 
         return collect($registry->supportedSections($templateKey))
             ->reject(fn (string $key) => isset($sales[$key]))
-            ->mapWithKeys(fn (string $key) => [
-                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ->values()
+            ->mapWithKeys(fn (string $key, int $i) => [
+                $key => str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT).'.  '.ucwords(str_replace(['-', '_'], ' ', $key)),
             ])
             ->all();
     }
@@ -242,8 +272,9 @@ class FunnelResource extends Resource
         }
 
         return collect($sales)
-            ->mapWithKeys(fn (string $key) => [
-                $key => ucwords(str_replace(['-', '_'], ' ', $key)),
+            ->values()
+            ->mapWithKeys(fn (string $key, int $i) => [
+                $key => str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT).'.  '.ucwords(str_replace(['-', '_'], ' ', $key)),
             ])
             ->all();
     }

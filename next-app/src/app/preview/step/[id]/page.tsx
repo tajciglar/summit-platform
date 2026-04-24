@@ -30,7 +30,6 @@ export default async function StepPreviewPage({
       speakers={speakersById(preview.speakers)}
       funnelId={preview.funnel_id ?? ''}
       enabledSections={preview.enabled_sections ?? undefined}
-      palette={preview.palette}
       initialTokens={preview.tokens ?? null}
       initialSections={preview.sections ?? null}
       wpCheckoutRedirectUrl={preview.wp_checkout_redirect_url}

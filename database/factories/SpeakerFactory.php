@@ -34,7 +34,6 @@ class SpeakerFactory extends Factory
             ],
             'masterclass_title' => fake()->catchPhrase(),
             'masterclass_description' => fake()->paragraph(),
-            'rating' => fake()->numberBetween(3, 5),
             'goes_live_at' => fake()->dateTimeBetween('-7 days', '+14 days'),
             'sort_order' => fake()->numberBetween(0, 100),
             'is_featured' => fake()->boolean(25),

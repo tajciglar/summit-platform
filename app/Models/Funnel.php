@@ -49,6 +49,12 @@ class Funnel extends Model
                 return;
             }
 
+            if (empty($funnel->wp_checkout_redirect_url) || empty($funnel->wp_thankyou_redirect_url)) {
+                throw new \DomainException(
+                    'Funnel cannot go live without both the WordPress checkout URL and thank-you URL set.'
+                );
+            }
+
             $query = static::query()
                 ->where('summit_id', $funnel->summit_id)
                 ->where('is_active', true);

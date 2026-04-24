@@ -31,7 +31,6 @@ export default async function OptinPage({
         speakers={speakersById(published.speakers)}
         funnelId={funnel}
         enabledSections={published.enabled_sections ?? undefined}
-        palette={published.palette}
       />
     </>
   );

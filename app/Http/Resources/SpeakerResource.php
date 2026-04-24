@@ -36,7 +36,6 @@ class SpeakerResource extends JsonResource
             'longBio' => $this->long_bio,
             'masterclassTitle' => $this->masterclass_title,
             'masterclassDescription' => $this->masterclass_description,
-            'rating' => $this->rating,
             'goesLiveAt' => $this->goes_live_at?->toIso8601String(),
             'isFeatured' => (bool) $this->is_featured,
             'sortOrder' => $this->pivot->sort_order ?? 0,

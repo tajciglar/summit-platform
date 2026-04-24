@@ -37,6 +37,8 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
             'name' => 'Test Funnel',
             'slug' => 'tf',
             'template_key' => 'ochre-ink',
+            'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
+            'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
             'section_config.optin' => ['masthead', 'hero', 'footer'],
             'section_config.sales_page' => ['sales-hero', 'intro', 'price-card', 'guarantee'],
         ])
@@ -93,6 +95,8 @@ it('seeds sales_page steps with sales-section content, not optin content', funct
             'name' => "Sales {$templateKey}",
             'slug' => $slug,
             'template_key' => $templateKey,
+            'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
+            'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
             'section_config.optin' => ['hero'],
             'section_config.sales_page' => $enabledSales,
         ])
@@ -138,6 +142,8 @@ it('creates no steps when no skin is picked', function () {
             'summit_id' => $this->summit->id,
             'name' => 'No Skin Funnel',
             'slug' => 'ns',
+            'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
+            'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
         ])
         ->call('create')
         ->assertHasNoFormErrors();

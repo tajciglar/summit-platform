@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Funnels\RelationManagers;
 
 use App\Enums\LandingPageDraftStatus;
-use App\Enums\SummitAudience;
 use App\Filament\Concerns\ManagesLandingPageDrafts;
 use App\Filament\Resources\Funnels\Pages\EditLandingPageDraftPage;
 use App\Jobs\GenerateLandingPageBatchJob;
@@ -40,19 +39,11 @@ class LandingPageDraftsRelationManager extends RelationManager
                     ->label('Template')
                     ->formatStateUsing(function (string $state, LandingPageDraft $record) use ($registry): string {
                         $label = $registry->exists($state) ? ($registry->get($state)['label'] ?? $state) : $state;
-                        $palette = array_slice(array_values((array) ($record->palette ?? [])), 0, 5);
-                        $swatches = collect($palette)
-                            ->map(fn (string $hex): string => sprintf(
-                                "<span style='display:inline-block;width:12px;height:12px;margin-right:2px;border-radius:3px;background:%s;border:1px solid rgba(0,0,0,.08)'></span>",
-                                e($hex)
-                            ))
-                            ->implode('');
 
                         return "<div style='line-height:1.3'>
                             <div style='font-weight:600;color:#0f172a'>".e($label)."</div>
-                            <div style='font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#94a3b8'>".e($state)."</div>
-                            <div style='margin-top:3px'>{$swatches}</div>
-                        </div>";
+                            <div style='font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#94a3b8'>".e($state).'</div>
+                        </div>';
                     })
                     ->html()
                     ->searchable(),
@@ -61,11 +52,6 @@ class LandingPageDraftsRelationManager extends RelationManager
                     ->label('v')
                     ->formatStateUsing(fn (?int $state): string => $state !== null ? "v{$state}" : '—')
                     ->sortable(),
-
-                TextColumn::make('audience')
-                    ->label('Audience')
-                    ->badge()
-                    ->formatStateUsing(fn (?SummitAudience $state): string => $state?->label() ?? '—'),
 
                 TextColumn::make('status')
                     ->label('Status')
@@ -87,13 +73,6 @@ class LandingPageDraftsRelationManager extends RelationManager
                             ->all()
                     ),
 
-                SelectFilter::make('audience')
-                    ->options(
-                        collect(SummitAudience::cases())
-                            ->mapWithKeys(fn (SummitAudience $s): array => [$s->value => $s->label()])
-                            ->all()
-                    ),
-
                 SelectFilter::make('template_key')
                     ->options(fn () => collect($registry->allKeys())
                         ->mapWithKeys(fn (string $key): array => [
@@ -108,17 +87,6 @@ class LandingPageDraftsRelationManager extends RelationManager
                     ->color('primary')
                     ->modalWidth('2xl')
                     ->schema([
-                        Select::make('audience_override')
-                            ->label('Audience')
-                            ->options(
-                                collect(SummitAudience::cases())
-                                    ->mapWithKeys(fn (SummitAudience $s): array => [$s->value => $s->label()])
-                                    ->all()
-                            )
-                            ->default(fn (): ?string => $this->ownerRecord->summit?->audience?->value)
-                            ->required()
-                            ->helperText('Determines copy tone and resolved palette tokens.'),
-
                         Repeater::make('template_selections')
                             ->label('Templates')
                             ->helperText('Pick the templates to generate from, and how many variants each.')
@@ -161,7 +129,6 @@ class LandingPageDraftsRelationManager extends RelationManager
                             'summit_id' => $this->ownerRecord->summit_id,
                             'funnel_id' => $this->ownerRecord->id,
                             'status' => 'queued',
-                            'audience_override' => $data['audience_override'],
                             'template_pool' => array_keys($countsMap),
                             'versions_per_template' => $countsMap,
                             'version_count' => array_sum($countsMap),

@@ -31,17 +31,15 @@ it('normalizes a flat list of Section-shaped items via SectionResource', functio
     expect($result['content'][1]['type'])->toBe('price-card');
 });
 
-it('includes funnel + status + palette fields', function () {
+it('includes funnel + status fields', function () {
     $draft = makeDraftForResourceTest([
         'sections' => [],
         'status' => LandingPageDraftStatus::Ready,
-        'palette' => ['primary' => '#123'],
     ]);
 
     $result = (new LandingPageDraftResource($draft))->toArray(request());
 
     expect($result['status'])->toBe('ready');
-    expect($result['palette'])->toBe(['primary' => '#123']);
     expect($result)->toHaveKeys(['funnel_id', 'wp_checkout_redirect_url', 'wp_thankyou_redirect_url']);
 });
 

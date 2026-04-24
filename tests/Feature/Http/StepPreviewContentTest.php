@@ -16,7 +16,6 @@ it('returns page_content for any step by id (including non-optin)', function () 
             'template_key' => 'indigo-gold',
             'content' => ['hero' => ['title' => 'Upgrade to VIP']],
             'enabled_sections' => ['hero'],
-            'palette' => ['primary' => '#000'],
         ],
     ]);
 
@@ -26,7 +25,6 @@ it('returns page_content for any step by id (including non-optin)', function () 
     $response->assertJsonPath('template_key', 'indigo-gold');
     $response->assertJsonPath('content.hero.title', 'Upgrade to VIP');
     $response->assertJsonPath('enabled_sections.0', 'hero');
-    $response->assertJsonPath('palette.primary', '#000');
     $response->assertJsonPath('funnel_id', $funnel->id);
     $response->assertJsonStructure(['speakers']);
 });

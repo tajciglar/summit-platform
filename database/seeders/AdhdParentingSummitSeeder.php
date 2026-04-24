@@ -38,7 +38,6 @@ class AdhdParentingSummitSeeder extends Seeder
                 'description' => 'A 5-day virtual summit for parents navigating ADHD.',
                 'status' => 'published',
                 'current_phase' => 'post',
-                'audience' => 'adhd-parenting',
                 'timezone' => 'America/New_York',
                 'pre_summit_starts_at' => '2025-02-03 00:00:00',
                 'late_pre_summit_starts_at' => '2025-02-07 00:00:00',
@@ -186,8 +185,6 @@ class AdhdParentingSummitSeeder extends Seeder
                 'template_key' => $payload['template_key'],
                 'sections' => $payload['content'],
                 'enabled_sections' => null,
-                'audience' => null,
-                'palette' => null,
                 'status' => LandingPageDraftStatus::Published,
             ]);
         }

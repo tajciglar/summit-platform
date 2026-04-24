@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\LandingPageDraftStatus;
-use App\Enums\SummitAudience;
 use App\Filament\Resources\Funnels\Pages\EditFunnel;
 use App\Filament\Resources\Funnels\RelationManagers\LandingPageDraftsRelationManager;
 use App\Jobs\GenerateLandingPageBatchJob;
@@ -89,9 +88,7 @@ it('publish action is hidden when status is not publishable', function () {
 it('generate action creates batch and dispatches job', function () {
     Queue::fake();
 
-    $summit = Summit::factory()->create([
-        'audience' => SummitAudience::AdhdParenting,
-    ]);
+    $summit = Summit::factory()->create();
     $funnel = Funnel::factory()->create(['summit_id' => $summit->id]);
 
     // Mount the action, then set state + call to work around Filament Repeater
@@ -104,7 +101,6 @@ it('generate action creates batch and dispatches job', function () {
         'pageClass' => EditFunnel::class,
     ])
         ->mountAction(TestAction::make('generate')->table())
-        ->set('mountedActions.0.data.audience_override', SummitAudience::AdhdParenting->value)
         ->set('mountedActions.0.data.style_reference_url', 'https://parenting-summits.com')
         ->set('mountedActions.0.data.template_selections', [
             $uuid1 => ['template_key' => 'ochre-ink', 'count' => '2'],

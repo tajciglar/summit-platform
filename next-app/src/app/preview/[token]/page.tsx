@@ -40,7 +40,6 @@ export default async function PreviewPage({
         speakers={speakersById(draft.speakers)}
         funnelId={draft.funnel_id}
         enabledSections={draft.enabled_sections ?? undefined}
-        palette={draft.palette}
         wpCheckoutRedirectUrl={draft.wp_checkout_redirect_url}
         wpThankyouRedirectUrl={draft.wp_thankyou_redirect_url}
       />

@@ -24,6 +24,8 @@ class FunnelFactory extends Factory
             'name' => $name,
             'description' => fake()->sentence(),
             'target_phase' => fake()->randomElement(['pre', 'late_pre', 'during', 'post', null]),
+            'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
+            'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
             'is_active' => true,
         ];
     }

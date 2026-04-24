@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\SummitAudience;
 use App\Models\Concerns\HasMediaAttachments;
 use App\Models\Concerns\HasUuid;
 use Filament\Models\Contracts\HasName;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,18 +30,12 @@ class Summit extends Model implements HasName
             ->implode('');
     }
 
-    protected function heroImageUrl(): Attribute
-    {
-        return Attribute::get(fn ($value) => $this->imageUrl('hero') ?: $value);
-    }
-
     protected $fillable = [
         'domain_id',
-        'slug', 'title', 'description', 'topic', 'hero_image_url',
+        'slug', 'title', 'description', 'topic',
         'status', 'current_phase', 'timezone',
         'pre_summit_starts_at', 'late_pre_summit_starts_at',
         'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
-        'audience',
         'summit_type',
         'ac_optin_tag',
         'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
@@ -52,7 +44,6 @@ class Summit extends Model implements HasName
     protected function casts(): array
     {
         return [
-            'audience' => SummitAudience::class,
             'pre_summit_starts_at' => 'datetime',
             'late_pre_summit_starts_at' => 'datetime',
             'during_summit_starts_at' => 'datetime',

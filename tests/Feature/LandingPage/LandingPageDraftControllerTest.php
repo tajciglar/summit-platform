@@ -29,7 +29,6 @@ it('returns draft payload for a ready draft', function () {
         'template_key' => 'ochre-ink',
         'sections' => ['hero' => ['headline' => 'Join us']],
         'enabled_sections' => ['hero'],
-        'palette' => ['#000', '#fff'],
     ]);
 
     $this->getJson('/api/landing-page-drafts/test-token-ready-1')
@@ -38,7 +37,6 @@ it('returns draft payload for a ready draft', function () {
             'template_key',
             'content',
             'enabled_sections',
-            'palette',
             'speakers',
             'funnel_id',
             'wp_checkout_redirect_url',

@@ -89,7 +89,7 @@ class TemplateBlockFactory
 
     /**
      * Convert Builder list back to canonical page_content map, preserving
-     * non-content metadata (template_key, enabled_sections, audience, palette)
+     * non-content metadata (template_key, enabled_sections)
      * from the original record.
      *
      * @param  list<array{type: string, data: array}>  $list

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Domain;
 use App\Models\MediaItem;
 use App\Models\Speaker;
 use App\Models\Summit;
@@ -47,21 +46,6 @@ it('Speaker.photo_url keeps the legacy column when no picker attachment exists',
     ]);
 
     expect($speaker->photo_url)->toBe('https://legacy.example/kept.jpg');
-});
-
-it('Summit.hero_image_url prefers the picker attachment', function () {
-    $domain = Domain::factory()->create();
-    $summit = Summit::factory()->create([
-        'domain_id' => $domain->id,
-        'hero_image_url' => 'https://legacy.example/hero.jpg',
-    ]);
-
-    expect($summit->hero_image_url)->toBe('https://legacy.example/hero.jpg');
-
-    $item = makeAttachedMediaItem(['domain_id' => $domain->id]);
-    $summit->setMediaFor('hero', $item);
-
-    expect($summit->fresh()->hero_image_url)->toContain($item->id);
 });
 
 it('mediaFor helper on the trait exposes a URL shortcut', function () {

@@ -92,10 +92,6 @@ class SpeakerResource extends Resource
                                 ->description('Applies to this speaker across every summit.')
                                 ->columns(2)
                                 ->components([
-                                    Select::make('rating')
-                                        ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])
-                                        ->placeholder('Unrated')
-                                        ->helperText('Internal quality rating.'),
                                     Toggle::make('is_featured'),
                                 ]),
                         ]),
@@ -226,15 +222,6 @@ class SpeakerResource extends Resource
                 TextColumn::make('masterclass_title')
                     ->label('Masterclass')
                     ->limit(40)
-                    ->toggleable(),
-                TextColumn::make('rating')
-                    ->badge()
-                    ->color(fn (?int $state): string => match (true) {
-                        $state === null => 'gray',
-                        $state >= 4 => 'success',
-                        $state >= 3 => 'warning',
-                        default => 'danger',
-                    })
                     ->toggleable(),
                 IconColumn::make('is_featured')->boolean()->toggleable(),
                 TextColumn::make('goes_live_at')->dateTime()->sortable()->toggleable(),

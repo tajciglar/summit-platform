@@ -31,8 +31,6 @@ class LandingPageDraftResource extends JsonResource
             // one we have so both render paths keep working.
             'content' => self::normalizeContent($rawSections, $request),
             'enabled_sections' => $draft->enabled_sections,
-            'audience' => $draft->audience?->value,
-            'palette' => $draft->palette,
             'speakers' => $summit
                 ? SpeakerResource::collection($summit->speakers()->get())->toArray($request)
                 : [],

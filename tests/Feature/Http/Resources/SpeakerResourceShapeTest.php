@@ -30,7 +30,6 @@ it('returns the canonical camelCase speaker shape', function () {
         'longBio',
         'masterclassTitle',
         'masterclassDescription',
-        'rating',
         'goesLiveAt',
         'isFeatured',
         'sortOrder',

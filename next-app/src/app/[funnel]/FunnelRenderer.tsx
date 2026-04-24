@@ -58,7 +58,6 @@ export async function FunnelRenderer({
         speakers={speakersById(data.speakers)}
         funnelId={data.funnel_id ?? ''}
         enabledSections={data.enabled_sections ?? undefined}
-        palette={data.palette}
         tokens={data.tokens ?? undefined}
         sections={data.sections ?? undefined}
         wpCheckoutRedirectUrl={data.wp_checkout_redirect_url}

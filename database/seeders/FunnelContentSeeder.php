@@ -36,7 +36,6 @@ class FunnelContentSeeder extends Seeder
             'title' => "Women's Health & Longevity Summit 2026",
             'slug' => 'womens-health-longevity-2026',
             'topic' => "women's health and longevity",
-            'audience' => 'women-longevity',
         ]);
 
         $this->seedDomain('Haley, Bahringer and Homenick', null, [
@@ -47,7 +46,6 @@ class FunnelContentSeeder extends Seeder
             'title' => 'Future of AI & Business Summit 2026',
             'slug' => 'ai-business-summit-2026',
             'topic' => 'AI and business innovation',
-            'audience' => 'ai',
         ]);
     }
 
@@ -66,7 +64,6 @@ class FunnelContentSeeder extends Seeder
                     'domain_id' => $domain->id,
                     'title' => $newSummitData['title'],
                     'topic' => $newSummitData['topic'],
-                    'audience' => $newSummitData['audience'],
                     'description' => "A 5-day virtual summit on {$newSummitData['topic']}.",
                     'status' => 'published',
                     'current_phase' => 'pre',
@@ -187,7 +184,6 @@ class FunnelContentSeeder extends Seeder
                 'short_bio' => "Expert in {$summit->topic}.",
                 'masterclass_title' => $masterclass,
                 'photo_url' => "https://i.pravatar.cc/300?u={$slug}",
-                'rating' => 5,
                 'sort_order' => $i,
                 'is_featured' => $i < 3,
                 'free_access_window_hours' => 24,

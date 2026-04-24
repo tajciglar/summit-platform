@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Summits;
 
 use App\Actions\DuplicateSummit;
-use App\Enums\SummitAudience;
-use App\Filament\Forms\Components\MediaPickerInput;
 use App\Filament\Resources\Summits\RelationManagers\FunnelsRelationManager;
 use App\Filament\Resources\Summits\RelationManagers\SpeakersRelationManager;
 use App\Models\Summit;
@@ -114,14 +112,7 @@ class SummitResource extends Resource
                                 ->unique(ignoreRecord: true)
                                 ->prefix('/')
                                 ->helperText('URL-safe identifier. Auto-filled from title.')
-                                ->columnSpan(6),
-                            Select::make('audience')
-                                ->label('Audience')
-                                ->options(SummitAudience::options())
-                                ->native(false)
-                                ->placeholder('— neutral / none —')
-                                ->helperText('Controls the palette colors applied to every generated landing page.')
-                                ->columnSpan(6),
+                                ->columnSpan(12),
                         ]),
 
                     Grid::make(5)
@@ -142,15 +133,6 @@ class SummitResource extends Resource
                                 ->label('Ends')
                                 ->seconds(false),
                         ]),
-
-                    MediaPickerInput::make('hero_media_item_id')
-                        ->category('landing_page')
-                        ->subCategory('hero')
-                        ->role('hero')
-                        ->label('Hero image')
-                        ->captionUsing(fn (Summit $record): string => $record->title.' — hero')
-                        ->altTextUsing(fn (Summit $record): string => $record->title.' hero image')
-                        ->columnSpanFull(),
 
                     Select::make('domain_id')
                         ->label('Published on domain')

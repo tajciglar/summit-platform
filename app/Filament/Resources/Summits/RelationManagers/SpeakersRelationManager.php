@@ -50,15 +50,6 @@ class SpeakersRelationManager extends RelationManager
                     ->label('Masterclass')
                     ->limit(48)
                     ->toggleable(),
-                TextColumn::make('rating')
-                    ->badge()
-                    ->placeholder('—')
-                    ->color(fn (?int $state): string => match (true) {
-                        $state === null => 'gray',
-                        $state >= 4 => 'success',
-                        $state >= 3 => 'warning',
-                        default => 'danger',
-                    }),
                 IconColumn::make('is_featured')->boolean()->toggleable(),
                 TextColumn::make('goes_live_at')
                     ->dateTime()

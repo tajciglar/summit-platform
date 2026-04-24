@@ -118,7 +118,7 @@ class EditFunnelStep extends EditRecord
 
     /**
      * Convert Builder list back to the canonical map before persisting,
-     * preserving template_key / enabled_sections / audience / palette that
+     * preserving template_key / enabled_sections that
      * live outside the Builder-editable section bodies.
      *
      * @param  array<string, mixed>  $data

@@ -20,6 +20,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 
@@ -48,6 +49,34 @@ class ViewFunnel extends EditRecord
                 ->url($liveUrl)
                 ->openUrlInNewTab()
                 ->visible($isLive),
+            Action::make('publish')
+                ->label('Publish')
+                ->icon('heroicon-o-rocket-launch')
+                ->color('primary')
+                ->visible(fn (): bool => ! (bool) $funnel?->is_active)
+                ->requiresConfirmation()
+                ->modalHeading('Publish this funnel?')
+                ->modalDescription('This will flip it live, deactivate any other live funnel on the same summit, and publish its steps.')
+                ->action(function () use ($funnel): void {
+                    try {
+                        $funnel->update(['is_active' => true]);
+                        Notification::make()->title('Funnel published')->success()->send();
+                    } catch (\DomainException $e) {
+                        Notification::make()->title('Cannot publish')->body($e->getMessage())->danger()->send();
+                    }
+                }),
+            Action::make('unpublish')
+                ->label('Unpublish')
+                ->icon('heroicon-o-pause-circle')
+                ->color('warning')
+                ->visible(fn (): bool => (bool) $funnel?->is_active)
+                ->requiresConfirmation()
+                ->modalHeading('Unpublish this funnel?')
+                ->modalDescription('The public URL will stop resolving.')
+                ->action(function () use ($funnel): void {
+                    $funnel->update(['is_active' => false]);
+                    Notification::make()->title('Funnel unpublished')->success()->send();
+                }),
             Action::make('new_step')
                 ->label('New step')
                 ->icon('heroicon-o-plus')
@@ -100,8 +129,19 @@ class ViewFunnel extends EditRecord
                         ->label('Live')
                         ->inline(false)
                         ->live()
-                        ->afterStateUpdated(function ($state, Funnel $record): void {
-                            $record->update(['is_active' => (bool) $state]);
+                        ->afterStateUpdated(function ($state, Funnel $record, Set $set): void {
+                            try {
+                                $record->update(['is_active' => (bool) $state]);
+                            } catch (\DomainException $e) {
+                                $set('is_active', false);
+                                Notification::make()
+                                    ->title('Cannot go live')
+                                    ->body($e->getMessage())
+                                    ->danger()
+                                    ->send();
+
+                                return;
+                            }
                             Notification::make()
                                 ->title($state ? 'Funnel set live' : 'Funnel paused')
                                 ->success()
@@ -168,9 +208,10 @@ class ViewFunnel extends EditRecord
                     TextInput::make('wp_checkout_redirect_url')
                         ->label('WordPress checkout URL')
                         ->url()
+                        ->required()
                         ->maxLength(2048)
                         ->placeholder('https://...')
-                        ->helperText('Sales-page CTAs redirect here. Leave blank once native checkout is live.')
+                        ->helperText('Sales-page CTAs redirect here.')
                         ->live(onBlur: true)
                         ->afterStateUpdated(function ($state, Funnel $record): void {
                             $record->update(['wp_checkout_redirect_url' => $state]);
@@ -181,9 +222,10 @@ class ViewFunnel extends EditRecord
                     TextInput::make('wp_thankyou_redirect_url')
                         ->label('WordPress thank-you page URL')
                         ->url()
+                        ->required()
                         ->maxLength(2048)
                         ->placeholder('https://...')
-                        ->helperText('"No thanks" link on sales page redirects here. Leave blank to hide the link.')
+                        ->helperText('"No thanks" link on sales page redirects here.')
                         ->live(onBlur: true)
                         ->afterStateUpdated(function ($state, Funnel $record): void {
                             $record->update(['wp_thankyou_redirect_url' => $state]);
