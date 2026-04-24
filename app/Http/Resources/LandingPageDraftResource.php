@@ -40,6 +40,7 @@ class LandingPageDraftResource extends JsonResource
             'step_type' => $step?->step_type,
             'wp_checkout_redirect_url' => $funnel?->wp_checkout_redirect_url,
             'wp_thankyou_redirect_url' => $funnel?->wp_thankyou_redirect_url,
+            'meta_pixel_id' => $summit?->domain?->meta_pixel_id,
             'status' => $draft->status?->value,
         ];
     }

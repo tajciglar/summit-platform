@@ -1,5 +1,6 @@
 import { resolveCheckoutHref } from '../../lib/checkout-href';
 import { TrackedCheckoutLink } from '@/lib/analytics/TrackedCheckoutLink';
+import { TrackedDeclineLink } from '@/lib/analytics/TrackedDeclineLink';
 import type { SectionContentMap } from '../bridge';
 import type { TemplateContext } from './shared';
 
@@ -107,12 +108,12 @@ export function PriceCard({ content, context }: Props) {
               <p className="figure-label mt-6 text-taupe-600">{content.guarantee}</p>
 
               {context?.wpThankyouRedirectUrl && (
-                <a
+                <TrackedDeclineLink
                   href={context.wpThankyouRedirectUrl}
                   className="block mt-8 font-opus-serif text-sm text-taupe-500 hover:text-taupe-700 underline underline-offset-2 transition"
                 >
                   No thanks. Complete my free registration
-                </a>
+                </TrackedDeclineLink>
               )}
             </div>
           </div>

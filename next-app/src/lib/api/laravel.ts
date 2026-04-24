@@ -27,6 +27,7 @@ export interface DraftPayload extends PublishedContent {
   sections?: Record<string, DesignTokens> | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
+  meta_pixel_id: string | null;
 }
 
 export interface PublicPayload extends PublishedContent {
@@ -42,6 +43,7 @@ export interface PublicPayload extends PublishedContent {
   sections?: Record<string, DesignTokens> | null;
   wp_checkout_redirect_url: string | null;
   wp_thankyou_redirect_url: string | null;
+  meta_pixel_id: string | null;
 }
 
 export async function fetchDraft(token: string): Promise<DraftPayload | null> {

@@ -27,6 +27,7 @@ class Domain extends Model implements HasName
         'slug',
         'brand_color',
         'is_active',
+        'meta_pixel_id',
     ];
 
     protected function casts(): array

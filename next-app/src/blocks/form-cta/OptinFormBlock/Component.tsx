@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/cn'
 import { useFunnel } from '@/lib/funnel-context'
+import { trackPixelEvent } from '@/lib/analytics/trackPixelEvent'
 import type { Props } from './schema'
 
 const API_BASE = process.env.NEXT_PUBLIC_LARAVEL_API_URL || 'http://localhost:8000'
@@ -49,6 +50,7 @@ export function OptinFormBlock(props: Props) {
 
       const body = await res.json().catch(() => ({}))
       if (!body?.redirect) throw new Error('Invalid response from server')
+      trackPixelEvent('Lead')
       router.push(body.redirect)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')

@@ -172,7 +172,7 @@ class PublicFunnelController extends Controller
      */
     private function payload(array $content, ?string $summitId, ?string $funnelId, ?string $funnelStepId = null, ?string $wpCheckoutRedirectUrl = null, ?string $wpThankyouRedirectUrl = null, ?array $pageOverrides = null, ?string $stepType = null): array
     {
-        $summit = $summitId ? Summit::query()->find($summitId) : null;
+        $summit = $summitId ? Summit::query()->with('domain:id,meta_pixel_id')->find($summitId) : null;
         $speakers = $summit
             ? SpeakerResource::collection($summit->speakers()->get())->toArray(request())
             : [];
@@ -195,6 +195,7 @@ class PublicFunnelController extends Controller
             'summit_id' => $summitId,
             'wp_checkout_redirect_url' => $wpCheckoutRedirectUrl,
             'wp_thankyou_redirect_url' => $wpThankyouRedirectUrl,
+            'meta_pixel_id' => $summit?->domain?->meta_pixel_id,
         ];
     }
 }

@@ -91,6 +91,22 @@ class DomainResource extends Resource
                         ->columnSpanFull(),
                 ]),
 
+            Section::make('Tracking')
+                ->description('Analytics IDs injected on every public page under this brand.')
+                ->collapsed()
+                ->columnSpanFull()
+                ->components([
+                    TextInput::make('meta_pixel_id')
+                        ->label('Meta Pixel ID')
+                        ->maxLength(32)
+                        ->placeholder('1234567890123456')
+                        ->regex('/^\d{8,20}$/')
+                        ->validationMessages([
+                            'regex' => 'Pixel IDs are 8–20 digits. Copy it from Meta Events Manager.',
+                        ])
+                        ->helperText('Find it at business.facebook.com/events_manager. Leave blank to disable tracking for this brand.'),
+                ]),
+
         ]);
     }
 

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { fetchByHost, speakersById } from '@/lib/api/laravel';
 import { getTemplate } from '@/templates/registry';
 import { PageViewTracker } from '@/lib/analytics/PageViewTracker';
+import { MetaPixel } from '@/lib/analytics/MetaPixel';
 import { SalesCountdownBar } from '@/components/SalesCountdownBar';
 import { resolveCheckoutHref } from '@/templates/lib/checkout-href';
 
@@ -44,6 +45,7 @@ export async function FunnelRenderer({
 
   return (
     <>
+      <MetaPixel pixelId={data.meta_pixel_id} />
       <PageViewTracker
         pageType={isSales ? 'sales' : 'optin'}
         summitId={data.summit_id ?? ''}

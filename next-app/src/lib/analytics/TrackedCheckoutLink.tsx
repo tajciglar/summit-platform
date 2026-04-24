@@ -2,6 +2,8 @@
 
 import type { AnchorHTMLAttributes } from 'react';
 import { trackPageView } from './trackPageView';
+import { trackPixelEvent } from './trackPixelEvent';
+import { buildTrackingUrl } from './buildTrackingUrl';
 import { useCheckoutTracking } from './CheckoutTrackingContext';
 
 type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'> & {
@@ -19,13 +21,15 @@ export function TrackedCheckoutLink({ href, children, ...rest }: Props) {
     // Only intercept real external redirects — fall through for hash anchors
     if (!href.startsWith('#')) {
       e.preventDefault();
+      trackPixelEvent('InitiateCheckout');
+      const destination = buildTrackingUrl(href);
       trackPageView({
         page_type: 'checkout_click',
         summit_id: summitId,
         funnel_id: funnelId,
         funnel_step_id: funnelStepId,
       }).finally(() => {
-        window.location.href = href;
+        window.location.href = destination;
       });
     }
   }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { trackPixelEvent } from '@/lib/analytics/trackPixelEvent';
 
 interface OptinModalProps {
   funnelId: string;
@@ -67,6 +68,7 @@ export function OptinModal({
         setStatus('error');
         return;
       }
+      trackPixelEvent('Lead');
       setStatus('success');
     } catch {
       setErrorMessage('Network error. Please try again.');
