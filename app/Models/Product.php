@@ -70,6 +70,13 @@ class Product extends Model
      * Stripe line items to send at checkout. For standalone/bump/upsell: one
      * item with this product's own stripe_price_id. For combos: one per child.
      *
+     * HISTORICAL INTEGRITY CONTRACT: When the checkout flow is built, the
+     * returned `unit_price_cents` and `stripe_price_id` MUST be snapshotted
+     * onto each order line item at purchase time, alongside the summit phase.
+     * Stripe Prices can be archived and recreated when operators edit prices,
+     * so orders must never re-resolve price data from the current Product.
+     * See docs/superpowers/specs/2026-04-24-stripe-auto-provisioning-design.md
+     *
      * @return array<int, array{product_id:string, product_name:string, stripe_price_id:?string, unit_price_cents:?int}>
      */
     public function checkoutLineItemsForPhase(string $phase): array

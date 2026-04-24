@@ -7,6 +7,20 @@ use App\Models\Product;
 
 class ProductObserver
 {
+    /**
+     * Columns whose change must trigger a Stripe resync.
+     *
+     * Intentionally excluded:
+     *  - `description`: Stripe Product.description is not currently synced after
+     *    initial creation, so changing it locally has no Stripe-side effect.
+     *  - `intro_price_cents` / `intro_period_months`: subscription intro pricing
+     *    is deferred per the Stripe auto-provisioning spec's open questions.
+     *  - `grants_vip_access`, `slug`, `product_type`, `tier`, etc.: internal-only
+     *    fields with no Stripe counterpart.
+     *
+     * Note: `name` IS in the list, but the current service only writes it on
+     * Product creation. Renames on an existing Stripe Product are a follow-up.
+     */
     private const TRIGGER_COLUMNS = [
         'is_active',
         'name',
