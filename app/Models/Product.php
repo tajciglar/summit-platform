@@ -25,6 +25,9 @@ class Product extends Model
         'grants_vip_access',
         'is_active',
         'stripe_product_id',
+        'stripe_sync_status',
+        'stripe_sync_error',
+        'stripe_synced_at',
         'price_pre_summit_cents',
         'price_late_pre_cents',
         'price_during_cents',
@@ -49,6 +52,7 @@ class Product extends Model
             'grants_vip_access' => 'boolean',
             'is_active' => 'boolean',
             'bundled_product_ids' => 'array',
+            'stripe_synced_at' => 'datetime',
         ];
     }
 
@@ -140,6 +144,16 @@ class Product extends Model
     public function orderBumps(): HasMany
     {
         return $this->hasMany(FunnelStepBump::class);
+    }
+
+    /**
+     * Whether this product should auto-provision to Stripe.
+     * Combo products render as child line items at checkout; they have no
+     * Stripe Price of their own.
+     */
+    public function isSyncableToStripe(): bool
+    {
+        return $this->is_active && $this->kind !== 'combo';
     }
 
     public function priceCentsForPhase(string $phase): ?int
