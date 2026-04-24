@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { buildTrackingUrl } from '@/lib/analytics/buildTrackingUrl';
+import { trackPixelEvent } from '@/lib/analytics/trackPixelEvent';
 
 const DURATION_SECONDS = 15 * 60;
 
@@ -62,6 +64,12 @@ export function SalesCountdownBar({ checkoutHref }: { checkoutHref?: string }) {
       {checkoutHref && (
         <a
           href={checkoutHref}
+          onClick={(e) => {
+            if (checkoutHref.startsWith('#')) return;
+            e.preventDefault();
+            trackPixelEvent('InitiateCheckout');
+            window.location.href = buildTrackingUrl(checkoutHref);
+          }}
           style={{
             marginLeft: '4px',
             background: '#dc2626',
