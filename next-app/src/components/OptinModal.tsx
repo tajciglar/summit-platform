@@ -69,6 +69,11 @@ export function OptinModal({
         return;
       }
       trackPixelEvent('Lead');
+      const body = await res.json().catch(() => ({}));
+      if (body?.redirect) {
+        window.location.href = body.redirect;
+        return;
+      }
       setStatus('success');
     } catch {
       setErrorMessage('Network error. Please try again.');

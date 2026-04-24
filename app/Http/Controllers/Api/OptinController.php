@@ -17,22 +17,24 @@ class OptinController extends Controller
     public function store(Request $request, RecordPageView $recorder): JsonResponse
     {
         $data = $request->validate([
-            'first_name' => ['required', 'string', 'max:100'],
+            'first_name' => ['nullable', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255'],
             'funnel_id' => ['required', 'uuid', 'exists:funnels,id'],
         ]);
+
+        $firstName = $data['first_name'] ?? null;
 
         $funnel = Funnel::with('summit')->findOrFail($data['funnel_id']);
 
         $contact = Contact::updateOrCreate(
             ['email' => $data['email']],
-            ['first_name' => $data['first_name']],
+            $firstName ? ['first_name' => $firstName] : [],
         );
 
         $optin = Optin::create([
             'contact_id' => $contact->id,
             'email' => $data['email'],
-            'first_name' => $data['first_name'],
+            'first_name' => $firstName,
             'funnel_id' => $funnel->id,
             'summit_id' => $funnel->summit->id,
             'ip_address' => $request->ip(),
@@ -57,7 +59,7 @@ class OptinController extends Controller
         // Encrypt the prefill payload so email + first_name don't appear in
         // the browser URL (or access logs, referrers, analytics). Next.js
         // exchanges the token server-side via /api/optin/prefill/{token}.
-        $token = CheckoutPrefillToken::issue($data['email'], $data['first_name']);
+        $token = CheckoutPrefillToken::issue($data['email'], $firstName ?? '');
 
         $redirect = sprintf(
             '/%s/%s/sales?p=%s',
