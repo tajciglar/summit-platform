@@ -22,7 +22,9 @@ export function SalesHero({ content, context }: Props) {
         </div>
 
         <div className="text-center max-w-3xl mx-auto">
-          <p className="eyebrow text-ochre-700 mb-6 tracking-[0.3em]">{content.badge}</p>
+          {content.badge && (
+            <p className="eyebrow text-ochre-700 mb-6 tracking-[0.3em]">{content.badge}</p>
+          )}
 
           <h1 className="font-display font-black text-4xl md:text-6xl lg:text-7xl text-ink-700 leading-[1.02] tracking-[-0.02em] mb-8">
             {content.headline}

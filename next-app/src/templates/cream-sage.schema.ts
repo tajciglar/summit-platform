@@ -174,7 +174,7 @@ export const CreamSageSchema = z.object({
   // mirrors the shared family contract so `GoldenTemplates::vipContent()`
   // validates.
   salesHero: z.object({
-    badge: z.string().min(1),
+    badge: z.string().min(1).optional(),
     headline: z.string().min(1),
     subheadline: z.string().min(1),
     productLabel: z.string().min(1),

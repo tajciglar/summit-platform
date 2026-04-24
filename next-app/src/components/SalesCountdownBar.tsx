@@ -25,10 +25,8 @@ export function SalesCountdownBar({ checkoutHref }: { checkoutHref?: string }) {
   return (
     <div
       style={{
-        position: 'fixed',
+        position: 'sticky',
         top: 0,
-        left: 0,
-        right: 0,
         zIndex: 9999,
         background: 'linear-gradient(90deg, #1e293b 0%, #0f172a 100%)',
         color: '#f8fafc',

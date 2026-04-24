@@ -189,7 +189,7 @@ export const VioletSunSchema = z.object({
   // accents, DM Serif Display italic highlights, Space Grotesk display.
   // ─────────────────────────────────────────────────────────────────
   salesHero: z.object({
-    badge: z.string().min(1),
+    badge: z.string().min(1).optional(),
     headline: z.string().min(1),
     subheadline: z.string().min(1),
     productLabel: z.string().min(1),

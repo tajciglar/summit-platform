@@ -161,7 +161,7 @@ export const RustCreamSchema = z.object({
   // Shapes mirror the IndigoGold family contract so operators see the
   // same editable fields across templates.
   salesHero: z.object({
-    badge: z.string().min(1),
+    badge: z.string().min(1).optional(),
     headline: z.string().min(1),
     subheadline: z.string().min(1),
     productLabel: z.string().min(1),

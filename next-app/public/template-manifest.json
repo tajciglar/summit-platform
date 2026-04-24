@@ -2056,7 +2056,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -4446,7 +4445,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -5786,7 +5784,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -7213,7 +7210,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -8507,7 +8503,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -9116,6 +9111,19 @@
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                 }
+              },
+              "lifestyleImageId": {
+                "description": "{\"x-media\":{\"role\":\"hero-lifestyle\",\"category\":\"landing_page\",\"subCategory\":\"hero\"}}",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -9257,6 +9265,19 @@
               "illustrationSubcaption": {
                 "type": "string",
                 "minLength": 1
+              },
+              "featureImageId": {
+                "description": "{\"x-media\":{\"role\":\"overview-feature\",\"category\":\"landing_page\",\"subCategory\":\"section\"}}",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -9406,6 +9427,19 @@
                         "type": "string",
                         "minLength": 1
                       }
+                    },
+                    "thumbnailMediaId": {
+                      "description": "{\"x-media\":{\"role\":\"bonus-thumbnail\",\"category\":\"product\",\"subCategory\":\"bump\"}}",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -9456,6 +9490,19 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 4
+                    },
+                    "photoMediaId": {
+                      "description": "{\"x-media\":{\"role\":\"founder-photo\",\"category\":\"speakers\",\"subCategory\":\"author\"}}",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -9744,6 +9791,19 @@
                 "type": "string",
                 "minLength": 1
               },
+              "logoMediaId": {
+                "description": "{\"x-media\":{\"role\":\"footer-logo\",\"category\":\"brand\",\"subCategory\":\"logo\"}}",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
               "links": {
                 "minItems": 1,
                 "maxItems": 6,
@@ -9814,7 +9874,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -11096,7 +11155,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",
@@ -11795,6 +11853,19 @@
                     "type": "null"
                   }
                 ]
+              },
+              "backgroundImageId": {
+                "description": "{\"x-media\":{\"role\":\"hero-background\",\"category\":\"landing_page\",\"subCategory\":\"background\"}}",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -12437,6 +12508,19 @@
                 "minLength": 1,
                 "maxLength": 2
               },
+              "logoMediaId": {
+                "description": "{\"x-media\":{\"role\":\"footer-logo\",\"category\":\"brand\",\"subCategory\":\"logo\"}}",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
               "links": {
                 "minItems": 1,
                 "maxItems": 6,
@@ -12507,7 +12591,6 @@
               }
             },
             "required": [
-              "badge",
               "headline",
               "subheadline",
               "productLabel",

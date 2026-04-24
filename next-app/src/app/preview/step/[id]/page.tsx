@@ -25,6 +25,7 @@ export default async function StepPreviewPage({
   return (
     <LivePreviewShell
       templateKey={preview.template_key}
+      stepType={preview.step_type}
       initialContent={preview.content}
       speakers={speakersById(preview.speakers)}
       funnelId={preview.funnel_id ?? ''}

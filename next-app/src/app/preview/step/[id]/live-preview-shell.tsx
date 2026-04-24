@@ -11,6 +11,7 @@ import { resolveCheckoutHref } from '@/templates/lib/checkout-href';
 
 interface LivePreviewShellProps {
   templateKey: string;
+  stepType: string | null;
   initialContent: unknown;
   speakers: Record<string, Speaker>;
   funnelId: string;
@@ -39,6 +40,7 @@ function setByPath(obj: Record<string, unknown>, path: string, value: unknown): 
 
 export default function LivePreviewShell({
   templateKey,
+  stepType,
   initialContent,
   speakers,
   funnelId,
@@ -149,7 +151,7 @@ export default function LivePreviewShell({
   if (!template) return null;
 
   const Component = template.Component;
-  const isSales = !!wpCheckoutRedirectUrl;
+  const isSales = stepType === 'sales_page';
 
   return (
     <>

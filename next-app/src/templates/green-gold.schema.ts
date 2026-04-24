@@ -169,7 +169,7 @@ export const GreenGoldSchema = z.object({
   // re-skinned in GreenGold.tsx with the heartland-green + gold palette.
   // ─────────────────────────────────────────────────────────────────
   salesHero: z.object({
-    badge: z.string().min(1),
+    badge: z.string().min(1).optional(),
     headline: z.string().min(1),
     subheadline: z.string().min(1),
     productLabel: z.string().min(1),
