@@ -20,6 +20,7 @@ class OptinController extends Controller
             'first_name' => ['nullable', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255'],
             'funnel_id' => ['required', 'uuid', 'exists:funnels,id'],
+            'fbclid' => ['nullable', 'string', 'max:500'],
         ]);
 
         $firstName = $data['first_name'] ?? null;
@@ -61,10 +62,23 @@ class OptinController extends Controller
         // exchanges the token server-side via /api/optin/prefill/{token}.
         $token = CheckoutPrefillToken::issue($data['email'], $firstName ?? '');
 
+        // Forward UTM params + fbclid onto the sales page so the sales CTA's
+        // TrackedCheckoutLink can re-append them to the WP checkout URL. Dropped
+        // at the optin step, the attribution chain breaks before reaching WP.
+        $forward = array_filter([
+            'utm_source' => $request->input('utm_source'),
+            'utm_medium' => $request->input('utm_medium'),
+            'utm_campaign' => $request->input('utm_campaign'),
+            'utm_term' => $request->input('utm_term'),
+            'utm_content' => $request->input('utm_content'),
+            'fbclid' => $request->input('fbclid'),
+        ], fn ($v) => is_string($v) && $v !== '');
+
         // Public funnel URLs are host-based: summit is implicit via the domain,
         // so the path is /{funnel-slug}/{step-slug}. Assumes a sales_page step
         // with slug "sales" exists; falls back to / if no sales step is set up.
-        $redirect = sprintf('/%s/sales?p=%s', $funnel->slug, urlencode($token));
+        $query = http_build_query(array_merge(['p' => $token], $forward));
+        $redirect = sprintf('/%s/sales?%s', $funnel->slug, $query);
 
         return response()->json(['redirect' => $redirect]);
     }
