@@ -19,7 +19,6 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -95,7 +94,7 @@ class SummitResource extends Resource
                                 ->default('draft')
                                 ->required()
                                 ->native(false)
-                                ->columnSpan(2),
+                                ->columnSpan(3),
                             Select::make('current_phase')
                                 ->label('Current phase')
                                 ->options([
@@ -108,23 +107,13 @@ class SummitResource extends Resource
                                 ->required()
                                 ->native(false)
                                 ->helperText('Updated automatically by cron.')
-                                ->columnSpan(2),
-                            TextInput::make('timezone')
-                                ->label('Timezone')
-                                ->default('America/New_York')
-                                ->required()
-                                ->maxLength(100)
-                                ->columnSpan(2),
+                                ->columnSpan(3),
                             TextInput::make('slug')
                                 ->required()
                                 ->maxLength(255)
                                 ->unique(ignoreRecord: true)
                                 ->prefix('/')
                                 ->helperText('URL-safe identifier. Auto-filled from title.')
-                                ->columnSpan(6),
-                            TextInput::make('topic')
-                                ->maxLength(255)
-                                ->helperText('e.g. ADHD parenting, productivity, mindset')
                                 ->columnSpan(6),
                             Select::make('audience')
                                 ->label('Audience')
@@ -133,10 +122,6 @@ class SummitResource extends Resource
                                 ->placeholder('— neutral / none —')
                                 ->helperText('Controls the palette colors applied to every generated landing page.')
                                 ->columnSpan(6),
-                            Textarea::make('description')
-                                ->rows(3)
-                                ->maxLength(2000)
-                                ->columnSpanFull(),
                         ]),
 
                     Grid::make(5)

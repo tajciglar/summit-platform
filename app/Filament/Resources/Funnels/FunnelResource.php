@@ -44,6 +44,12 @@ class FunnelResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
+    /**
+     * Hidden from sidebar — funnels are always reached via a Summit,
+     * so a cross-summit funnel list is not meaningful.
+     */
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
@@ -318,6 +324,14 @@ class FunnelResource extends Resource
                         'post' => 'gray',
                         default => 'primary',
                     }),
+                TextColumn::make('template_key')
+                    ->label('Skin')
+                    ->badge()
+                    ->color('gray')
+                    ->formatStateUsing(fn (?string $state): string => $state
+                        ? (self::skinOptions()[$state] ?? $state)
+                        : '—')
+                    ->toggleable(),
                 TextColumn::make('steps_count')
                     ->counts('steps')
                     ->label('Steps')

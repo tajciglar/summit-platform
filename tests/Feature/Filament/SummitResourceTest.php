@@ -39,7 +39,6 @@ it('creates a summit with an audience', function () {
             'slug' => 'adhd-women-2026',
             'status' => 'draft',
             'current_phase' => 'pre',
-            'timezone' => 'America/New_York',
             'audience' => SummitAudience::AdhdWomen->value,
         ])
         ->call('create')
@@ -57,7 +56,6 @@ it('allows creating a summit without an audience', function () {
             'slug' => 'neutral-2026',
             'status' => 'draft',
             'current_phase' => 'pre',
-            'timezone' => 'America/New_York',
             'audience' => null,
         ])
         ->call('create')

@@ -44,6 +44,11 @@ class FunnelStepResource extends Resource
 
     protected static ?int $navigationSort = 20;
 
+    /**
+     * Hidden from sidebar — steps are always reached via their parent Funnel.
+     */
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema

@@ -33,14 +33,16 @@ it('persists day_number on the pivot when creating a speaker', function () {
             'speakerSummits' => [
                 ['summit_id' => $this->summitA->id, 'day_number' => 2],
             ],
-            'slug' => 'jane-doe',
             'first_name' => 'Jane',
             'last_name' => 'Doe',
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $speaker = Speaker::with('summits')->firstWhere('slug', 'jane-doe');
+    $speaker = Speaker::with('summits')
+        ->where('first_name', 'Jane')
+        ->where('last_name', 'Doe')
+        ->first();
     expect($speaker)->not->toBeNull();
     expect($speaker->summits)->toHaveCount(1);
     expect($speaker->summits->first()->id)->toBe($this->summitA->id);
@@ -53,14 +55,16 @@ it('allows a null day_number (unassigned)', function () {
             'speakerSummits' => [
                 ['summit_id' => $this->summitA->id, 'day_number' => null],
             ],
-            'slug' => 'no-day',
             'first_name' => 'Nada',
             'last_name' => 'Day',
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $speaker = Speaker::with('summits')->firstWhere('slug', 'no-day');
+    $speaker = Speaker::with('summits')
+        ->where('first_name', 'Nada')
+        ->where('last_name', 'Day')
+        ->first();
     expect($speaker->summits->first()->pivot->day_number)->toBeNull();
 });
 
@@ -71,18 +75,38 @@ it('attaches a speaker to multiple summits at create time', function () {
                 ['summit_id' => $this->summitA->id, 'day_number' => 2],
                 ['summit_id' => $this->summitB->id, 'day_number' => 5],
             ],
-            'slug' => 'multi-attach',
             'first_name' => 'Multi',
             'last_name' => 'Attach',
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $speaker = Speaker::with('summits')->firstWhere('slug', 'multi-attach');
+    $speaker = Speaker::with('summits')
+        ->where('first_name', 'Multi')
+        ->where('last_name', 'Attach')
+        ->first();
     expect($speaker->summits)->toHaveCount(2);
     $byId = $speaker->summits->keyBy('id');
     expect($byId[$this->summitA->id]->pivot->day_number)->toBe(2);
     expect($byId[$this->summitB->id]->pivot->day_number)->toBe(5);
+});
+
+it('auto-generates a slug when creating a speaker', function () {
+    livewire(CreateSpeaker::class)
+        ->fillForm([
+            'speakerSummits' => [
+                ['summit_id' => $this->summitA->id, 'day_number' => 1],
+            ],
+            'first_name' => 'Taylor',
+            'last_name' => 'Jones',
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $speaker = Speaker::query()->firstWhere('first_name', 'Taylor');
+
+    expect($speaker)->not->toBeNull();
+    expect($speaker?->slug)->toBe('taylor-jones');
 });
 
 it('shows an All tab plus one tab per domain summit on the list page', function () {

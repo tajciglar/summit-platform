@@ -33,7 +33,6 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class SpeakerResource extends Resource
 {
@@ -59,39 +58,19 @@ class SpeakerResource extends Resource
                 ->columnSpanFull()
                 ->persistTabInQueryString()
                 ->tabs([
-                    Tab::make('Identity')
+                    Tab::make('Identity & bio')
                         ->icon(Heroicon::OutlinedUser)
                         ->schema([
                             Section::make()
                                 ->columns(2)
                                 ->components([
-                                    TextInput::make('first_name')->required()->maxLength(255)
-                                        ->live(onBlur: true)
-                                        ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get): void {
-                                            if ($operation === 'create' && ! $get('slug')) {
-                                                $set('slug', Str::slug((string) $state.'-'.(string) $get('last_name')));
-                                            }
-                                        }),
+                                    TextInput::make('first_name')->required()->maxLength(255),
                                     TextInput::make('last_name')->required()->maxLength(255),
-                                    TextInput::make('slug')
-                                        ->required()
-                                        ->maxLength(255)
-                                        ->helperText('URL slug within this summit.'),
                                     TextInput::make('email')->email()->maxLength(255),
                                     TextInput::make('title')
                                         ->label('Professional title')
                                         ->maxLength(500)
-                                        ->helperText('e.g. CEO of Company X')
-                                        ->columnSpanFull(),
-                                ]),
-                        ]),
-
-                    Tab::make('Bio & media')
-                        ->icon(Heroicon::OutlinedPhoto)
-                        ->schema([
-                            Section::make()
-                                ->columns(2)
-                                ->components([
+                                        ->helperText('e.g. CEO of Company X'),
                                     MediaPickerInput::make('photo_media_item_id')
                                         ->category('speakers')
                                         ->subCategory('headshot')
@@ -109,24 +88,15 @@ class SpeakerResource extends Resource
                                         ->columnSpanFull()
                                         ->helperText('e.g. twitter, linkedin, instagram'),
                                 ]),
-                        ]),
-
-                    Tab::make('Masterclass')
-                        ->icon(Heroicon::OutlinedPlayCircle)
-                        ->schema([
-                            Section::make()
+                            Section::make('Global settings')
+                                ->description('Applies to this speaker across every summit.')
                                 ->columns(2)
                                 ->components([
-                                    TextInput::make('masterclass_title')->maxLength(500)->columnSpanFull(),
-                                    Textarea::make('masterclass_description')->rows(3)->columnSpanFull(),
-                                    TextInput::make('free_video_url')->url()->maxLength(1000),
-                                    TextInput::make('vip_video_url')->url()->maxLength(1000),
-                                    DateTimePicker::make('goes_live_at')
-                                        ->seconds(false)
-                                        ->helperText('When the video becomes available.'),
-                                    TextInput::make('free_access_window_hours')
-                                        ->numeric()->default(24)->minValue(1)->maxValue(168)
-                                        ->helperText('Free viewing window after a user clicks play.'),
+                                    Select::make('rating')
+                                        ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])
+                                        ->placeholder('Unrated')
+                                        ->helperText('Internal quality rating.'),
+                                    Toggle::make('is_featured'),
                                 ]),
                         ]),
 
@@ -135,14 +105,24 @@ class SpeakerResource extends Resource
                         ->badge(fn (?Speaker $record): ?int => $record?->summits()->count() ?: null)
                         ->schema([
                             Section::make()
-                                ->description('Which summits this speaker appears on, and which day of each summit they present. The same video can be used in multiple events, scheduled on a different day per summit.')
+                                ->description('Which summits this speaker appears on. Per-summit day and display order live here — the same speaker can sit on Day 2 of one summit and Day 5 of another, with a different order in each.')
                                 ->components([
                                     Repeater::make('speakerSummits')
                                         ->relationship()
                                         ->label('')
                                         ->addActionLabel('Attach to another summit')
                                         ->minItems(1)
-                                        ->columns(2)
+                                        ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                                            $data['sort_order'] ??= 0;
+
+                                            return $data;
+                                        })
+                                        ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                                            $data['sort_order'] ??= 0;
+
+                                            return $data;
+                                        })
+                                        ->columns(3)
                                         ->itemLabel(function (array $state): ?string {
                                             $summitId = $state['summit_id'] ?? null;
                                             if (! $summitId) {
@@ -173,6 +153,7 @@ class SpeakerResource extends Resource
                                                 ->preload()
                                                 ->distinct()
                                                 ->live()
+                                                ->columnSpan(3)
                                                 ->validationMessages(['distinct' => 'This speaker is already attached to that summit.']),
                                             Select::make('day_number')
                                                 ->label('Day')
@@ -187,23 +168,34 @@ class SpeakerResource extends Resource
                                                 ])
                                                 ->placeholder('Unassigned')
                                                 ->live()
+                                                ->columnSpan(2)
                                                 ->helperText('Which day of this summit the speaker presents.'),
+                                            TextInput::make('sort_order')
+                                                ->label('Order')
+                                                ->numeric()
+                                                ->default(0)
+                                                ->columnSpan(1)
+                                                ->helperText('Sort position within the summit.'),
                                         ]),
                                 ]),
                         ]),
 
-                    Tab::make('Display')
-                        ->icon(Heroicon::OutlinedStar)
+                    Tab::make('Masterclass')
+                        ->icon(Heroicon::OutlinedPlayCircle)
                         ->schema([
                             Section::make()
-                                ->columns(3)
+                                ->columns(2)
                                 ->components([
-                                    TextInput::make('sort_order')->numeric()->default(0),
-                                    Select::make('rating')
-                                        ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])
-                                        ->placeholder('Unrated')
-                                        ->helperText('Internal quality rating.'),
-                                    Toggle::make('is_featured'),
+                                    TextInput::make('masterclass_title')->maxLength(500)->columnSpanFull(),
+                                    Textarea::make('masterclass_description')->rows(3)->columnSpanFull(),
+                                    TextInput::make('free_video_url')->url()->maxLength(1000),
+                                    TextInput::make('vip_video_url')->url()->maxLength(1000),
+                                    DateTimePicker::make('goes_live_at')
+                                        ->seconds(false)
+                                        ->helperText('When the video becomes available.'),
+                                    TextInput::make('free_access_window_hours')
+                                        ->numeric()->default(24)->minValue(1)->maxValue(168)
+                                        ->helperText('Free viewing window after a user clicks play.'),
                                 ]),
                         ]),
                 ]),
@@ -246,7 +238,6 @@ class SpeakerResource extends Resource
                     ->toggleable(),
                 IconColumn::make('is_featured')->boolean()->toggleable(),
                 TextColumn::make('goes_live_at')->dateTime()->sortable()->toggleable(),
-                TextColumn::make('sort_order')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('summit')
@@ -264,8 +255,7 @@ class SpeakerResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->reorderable('sort_order')
-            ->defaultSort('sort_order');
+            ->defaultSort('last_name');
     }
 
     public static function getPages(): array

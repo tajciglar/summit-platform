@@ -18,11 +18,13 @@ use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -113,6 +115,45 @@ class AdminPanelProvider extends PanelProvider
                 // Roles are a global concept — don't scope them to the current summit.
                 FilamentShieldPlugin::make()->scopeToTenant(false),
             ])
+            // Warn-on-navigate for unsaved form changes. Tracks dirty state on
+            // any input inside a Filament form; clears it when a Save/Create/
+            // Update button is clicked or a form is submitted. The native
+            // beforeunload prompt catches tab-close, back, and sidebar clicks.
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): HtmlString => new HtmlString(<<<'HTML'
+<script>
+(function () {
+    let dirty = false;
+    const FORM_SEL = '.fi-form, form[wire\\:submit], form[wire\\:submit\\.prevent]';
+    const SAVE_LABELS = ['save', 'save changes', 'save & close', 'create', 'update'];
+
+    document.addEventListener('input', (e) => {
+        const t = e.target;
+        if (!t) return;
+        if (t.matches && t.matches('input, textarea, select, [contenteditable="true"]') && t.closest(FORM_SEL)) {
+            dirty = true;
+        }
+    }, true);
+
+    document.addEventListener('submit', () => { dirty = false; }, true);
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button, a');
+        if (!btn) return;
+        const label = (btn.textContent || '').trim().toLowerCase();
+        if (SAVE_LABELS.includes(label)) dirty = false;
+    }, true);
+
+    window.addEventListener('beforeunload', (e) => {
+        if (!dirty) return;
+        e.preventDefault();
+        e.returnValue = '';
+    });
+})();
+</script>
+HTML),
+            )
             ->authMiddleware([
                 Authenticate::class,
             ])

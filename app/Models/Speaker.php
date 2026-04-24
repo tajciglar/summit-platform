@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Speaker extends Model
 {
@@ -46,6 +47,27 @@ class Speaker extends Model
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
         ];
+    }
+
+    /**
+     * Slug is legacy (vestige of the old summit-scoped URL scheme) but the
+     * column is still NOT NULL + UNIQUE. Nothing reads it today, but we keep
+     * it auto-populated so saves don't fail. Hidden from the UI.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (self $speaker): void {
+            if (! $speaker->slug) {
+                $base = Str::slug(trim("{$speaker->first_name} {$speaker->last_name}")) ?: 'speaker';
+                $slug = $base;
+                $n = 2;
+                while (static::query()->where('slug', $slug)->exists()) {
+                    $slug = "{$base}-{$n}";
+                    $n++;
+                }
+                $speaker->slug = $slug;
+            }
+        });
     }
 
     /**

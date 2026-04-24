@@ -93,7 +93,7 @@ class ViewSummit extends ViewRecord
                                     'archived' => 'warning',
                                     default => 'gray',
                                 })
-                                ->columnSpan(2),
+                                ->columnSpan(3),
                             TextEntry::make('current_phase')
                                 ->label('Current phase')
                                 ->badge()
@@ -105,21 +105,12 @@ class ViewSummit extends ViewRecord
                                     'post' => 'gray',
                                     default => 'gray',
                                 })
-                                ->columnSpan(2),
-                            TextEntry::make('timezone')
-                                ->label('Timezone')
-                                ->columnSpan(2),
+                                ->columnSpan(3),
                             TextEntry::make('slug')
                                 ->prefix('/')
                                 ->color('gray')
                                 ->copyable()
                                 ->columnSpan(6),
-                            TextEntry::make('topic')
-                                ->placeholder('—')
-                                ->columnSpan(6),
-                            TextEntry::make('description')
-                                ->placeholder('—')
-                                ->columnSpanFull(),
                         ]),
 
                     Grid::make(5)
