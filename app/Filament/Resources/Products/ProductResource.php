@@ -282,19 +282,39 @@ class ProductResource extends Resource
                         ->visible(fn (callable $get): bool => $get('kind') !== 'combo')
                         ->schema([
                             Section::make()
-                                ->description('Product and price IDs from Stripe. Leave phases blank if you don\'t sell during that phase.')
+                                ->description('Stripe Product and Price IDs are managed automatically when the product is active. Edit prices on the Pricing tab; this panel shows the current Stripe state.')
                                 ->components([
-                                    TextInput::make('stripe_product_id')
+                                    Placeholder::make('stripe_sync_status_display')
+                                        ->label('Sync status')
+                                        ->content(function (?Product $record): HtmlString {
+                                            if (! $record) {
+                                                return new HtmlString('<span class="text-gray-500">Save the product to trigger the first sync.</span>');
+                                            }
+                                            $status = $record->stripe_sync_status ?? 'pending';
+                                            $color = match ($status) {
+                                                'synced' => 'text-green-600',
+                                                'failed' => 'text-red-600',
+                                                default => 'text-gray-500',
+                                            };
+                                            $when = $record->stripe_synced_at?->diffForHumans() ?? 'never';
+                                            $err = $record->stripe_sync_error ? "<div class=\"mt-1 text-xs text-red-600\">{$record->stripe_sync_error}</div>" : '';
+
+                                            return new HtmlString("<div class=\"{$color} font-medium\">".ucfirst($status)."</div><div class=\"text-xs text-gray-500\">Last synced: {$when}</div>{$err}");
+                                        }),
+                                    Placeholder::make('stripe_product_id_display')
                                         ->label('Stripe product ID')
-                                        ->maxLength(255)
-                                        ->placeholder('prod_...'),
+                                        ->content(fn (?Product $record) => $record?->stripe_product_id ?? '—'),
                                     Fieldset::make('Stripe price IDs')
                                         ->columns(4)
                                         ->schema([
-                                            TextInput::make('stripe_price_pre_id')->label('Pre')->maxLength(255)->placeholder('price_...'),
-                                            TextInput::make('stripe_price_late_id')->label('Late pre')->maxLength(255)->placeholder('price_...'),
-                                            TextInput::make('stripe_price_during_id')->label('During')->maxLength(255)->placeholder('price_...'),
-                                            TextInput::make('stripe_price_post_id')->label('Post')->maxLength(255)->placeholder('price_...'),
+                                            Placeholder::make('stripe_price_pre_id_display')->label('Pre')
+                                                ->content(fn (?Product $r) => $r?->stripe_price_pre_id ?? '—'),
+                                            Placeholder::make('stripe_price_late_id_display')->label('Late pre')
+                                                ->content(fn (?Product $r) => $r?->stripe_price_late_id ?? '—'),
+                                            Placeholder::make('stripe_price_during_id_display')->label('During')
+                                                ->content(fn (?Product $r) => $r?->stripe_price_during_id ?? '—'),
+                                            Placeholder::make('stripe_price_post_id_display')->label('Post')
+                                                ->content(fn (?Product $r) => $r?->stripe_price_post_id ?? '—'),
                                         ]),
                                 ]),
                         ]),
