@@ -1,0 +1,118 @@
+<?php
+
+use App\Models\Product;
+use App\Services\Stripe\StripeProductSyncService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Stripe\StripeClient;
+
+uses(RefreshDatabase::class);
+
+function fakeStripeClient(array &$calls = []): StripeClient
+{
+    $client = Mockery::mock(StripeClient::class);
+
+    $products = Mockery::mock();
+    $products->shouldReceive('create')
+        ->andReturnUsing(function (array $params, array $opts) use (&$calls) {
+            $calls[] = ['products.create', $params, $opts];
+
+            return (object) ['id' => 'prod_fake_'.count($calls)];
+        });
+
+    $prices = Mockery::mock();
+    $prices->shouldReceive('create')
+        ->andReturnUsing(function (array $params, array $opts) use (&$calls) {
+            $calls[] = ['prices.create', $params, $opts];
+
+            return (object) ['id' => 'price_fake_'.count($calls), 'unit_amount' => $params['unit_amount']];
+        });
+    $prices->shouldReceive('update')
+        ->andReturnUsing(function (string $id, array $params) use (&$calls) {
+            $calls[] = ['prices.update', $id, $params];
+
+            return (object) ['id' => $id];
+        });
+    $prices->shouldReceive('retrieve')
+        ->andReturnUsing(function (string $id) use (&$calls) {
+            $calls[] = ['prices.retrieve', $id];
+
+            return (object) ['id' => $id, 'unit_amount' => 9700];
+        });
+
+    $client->products = $products;
+    $client->prices = $prices;
+
+    return $client;
+}
+
+it('creates a Stripe Product when missing and Prices for each priced phase', function () {
+    $product = Product::factory()->create([
+        'name' => 'Main Offer',
+        'kind' => 'standalone',
+        'is_active' => true,
+        'stripe_product_id' => null,
+        'price_pre_summit_cents' => 9700,
+        'price_late_pre_cents' => 12700,
+        'price_during_cents' => null,
+        'price_post_summit_cents' => null,
+        'billing_interval' => null,
+    ]);
+
+    $calls = [];
+    $service = new StripeProductSyncService(fakeStripeClient($calls));
+
+    $service->sync($product);
+
+    $product->refresh();
+    expect($product->stripe_product_id)->toStartWith('prod_fake_');
+    expect($product->stripe_price_pre_id)->toStartWith('price_fake_');
+    expect($product->stripe_price_late_id)->toStartWith('price_fake_');
+    expect($product->stripe_price_during_id)->toBeNull();
+    expect($product->stripe_price_post_id)->toBeNull();
+
+    $createPriceCalls = collect($calls)->where(0, 'prices.create')->values();
+    expect($createPriceCalls)->toHaveCount(2);
+});
+
+it('uses deterministic idempotency keys', function () {
+    $product = Product::factory()->create([
+        'kind' => 'standalone',
+        'is_active' => true,
+        'stripe_product_id' => null,
+        'price_pre_summit_cents' => 9700,
+        'price_late_pre_cents' => null,
+        'price_during_cents' => null,
+        'price_post_summit_cents' => null,
+    ]);
+
+    $calls = [];
+    $service = new StripeProductSyncService(fakeStripeClient($calls));
+    $service->sync($product);
+
+    $productCreate = collect($calls)->firstWhere(0, 'products.create');
+    expect($productCreate[2]['idempotency_key'])->toBe("product-create-{$product->id}");
+
+    $priceCreate = collect($calls)->firstWhere(0, 'prices.create');
+    expect($priceCreate[2]['idempotency_key'])->toBe("price-create-{$product->id}-pre-9700");
+});
+
+it('creates recurring Prices when billing_interval is set', function () {
+    $product = Product::factory()->create([
+        'kind' => 'standalone',
+        'is_active' => true,
+        'stripe_product_id' => null,
+        'price_pre_summit_cents' => 1900,
+        'price_late_pre_cents' => null,
+        'price_during_cents' => null,
+        'price_post_summit_cents' => null,
+        'billing_interval' => 'month',
+    ]);
+
+    $calls = [];
+    $service = new StripeProductSyncService(fakeStripeClient($calls));
+    $service->sync($product);
+
+    $priceCreate = collect($calls)->firstWhere(0, 'prices.create');
+    expect($priceCreate[1])->toHaveKey('recurring');
+    expect($priceCreate[1]['recurring'])->toBe(['interval' => 'month']);
+});
