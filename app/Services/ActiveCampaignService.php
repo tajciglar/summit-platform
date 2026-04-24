@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -74,22 +75,50 @@ class ActiveCampaignService
 
     public function findOrCreateTagByName(string $tagName): string
     {
-        $response = $this->request('GET', '/api/3/tags?search='.urlencode($tagName));
+        if ($id = $this->findTagId($tagName)) {
+            return $id;
+        }
+
+        try {
+            $created = $this->request('POST', '/api/3/tags', [
+                'tag' => [
+                    'tag' => $tagName,
+                    'tagType' => 'contact',
+                ],
+            ]);
+
+            return (string) $created['tag']['id'];
+        } catch (RequestException $e) {
+            // AC returns 422 "Duplicate entry" when the tag already exists but
+            // our search missed it (e.g. multi-word names where AC's search
+            // tokenizer doesn't produce an exact match). Re-resolve via the
+            // paginated list and return the existing ID.
+            if ($e->response?->status() === 422 && str_contains((string) $e->response?->body(), 'Duplicate entry')) {
+                if ($id = $this->findTagId($tagName)) {
+                    return $id;
+                }
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Case-insensitive exact-match lookup against /api/3/tags. Uses Laravel's
+     * query-array encoding (spaces → %20), which AC's search endpoint needs
+     * for multi-word tag names — `urlencode()` emits `+` and AC treats that
+     * as a literal character, silently missing any tag with spaces in it.
+     */
+    private function findTagId(string $tagName): ?string
+    {
+        $response = $this->request('GET', '/api/3/tags', ['search' => $tagName, 'limit' => 100]);
 
         foreach ($response['tags'] ?? [] as $tag) {
-            if (strcasecmp($tag['tag'], $tagName) === 0) {
+            if (strcasecmp((string) ($tag['tag'] ?? ''), $tagName) === 0) {
                 return (string) $tag['id'];
             }
         }
 
-        $created = $this->request('POST', '/api/3/tags', [
-            'tag' => [
-                'tag' => $tagName,
-                'tagType' => 'contact',
-            ],
-        ]);
-
-        return (string) $created['tag']['id'];
+        return null;
     }
 
     public function addContactToList(string $contactId, string $listId): void
