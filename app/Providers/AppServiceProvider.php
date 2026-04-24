@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use App\Models\User;
+use App\Observers\ProductObserver;
 use App\Services\Templates\TemplateRegistry;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Product::observe(ProductObserver::class);
+
         // Admins bypass all policy checks — permissions are used for non-admin
         // roles only. Returning true (not null) short-circuits every gate check.
         Gate::before(function (User $user) {
