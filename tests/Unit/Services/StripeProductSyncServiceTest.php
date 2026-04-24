@@ -3,11 +3,14 @@
 use App\Models\Product;
 use App\Services\Stripe\StripeProductSyncService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Stripe\Service\PriceService;
 use Stripe\Service\ProductService;
 use Stripe\StripeClient;
 
 uses(RefreshDatabase::class);
+
+beforeEach(fn () => Queue::fake());
 
 function fakeStripeClient(array &$calls = []): StripeClient
 {
