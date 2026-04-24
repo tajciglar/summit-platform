@@ -29,6 +29,15 @@ class TemplateBlockFactory
     ) {}
 
     /**
+     * Per-request memoization for blocksForStep(). The Builder's `blocks()`
+     * closure fires repeatedly during one Livewire tick; rebuilding the full
+     * 17-section Component tree each time caused OOM on edit pages.
+     *
+     * @var array<string, list<Block>>
+     */
+    private static array $blocksForStepCache = [];
+
+    /**
      * @param  array<string, mixed>|null  $pageContent
      * @return list<array{type: string, data: array}>
      */
@@ -172,10 +181,15 @@ class TemplateBlockFactory
         }
 
         $summitId = $step?->funnel?->summit_id;
+        $cacheKey = ($step?->getKey() ?? 'new').'|'.$templateKey.'|'.($summitId ?? '');
+        if (isset(self::$blocksForStepCache[$cacheKey])) {
+            return self::$blocksForStepCache[$cacheKey];
+        }
+
         $schema = $this->registry->get($templateKey)['jsonSchema'] ?? null;
 
         if (! is_array($schema) || ($schema['type'] ?? null) !== 'object') {
-            return [];
+            return self::$blocksForStepCache[$cacheKey] = [];
         }
 
         $blocks = [];
@@ -194,7 +208,7 @@ class TemplateBlockFactory
                 ));
         }
 
-        return $blocks;
+        return self::$blocksForStepCache[$cacheKey] = $blocks;
     }
 
     /**

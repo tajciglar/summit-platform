@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Fieldset;
+use Throwable;
 
 /**
  * Convert a JSON Schema (exported from Zod via the template manifest) into a
@@ -32,6 +33,15 @@ class FilamentSchemaMapper
     public function __construct(
         private bool $enforceRequired = false,
     ) {}
+
+    /**
+     * Per-request cache of speaker option maps, keyed by summit id. Speaker
+     * lookups happen once per section rendered; without this, a 17-section
+     * template hammers the DB and balloons memory on every Livewire tick.
+     *
+     * @var array<string, array<string, string>>
+     */
+    private static array $speakerOptionsCache = [];
 
     /**
      * @param  array<string, mixed>  $schema  JSON Schema subtree (expects `type: object`).
@@ -90,15 +100,7 @@ class FilamentSchemaMapper
 
         // Speaker UUID arrays become a multi-select populated from the summit's speakers.
         if ($this->isSpeakerIdArray($name, $schema) && $summitId !== null) {
-            $summit = Summit::query()->find($summitId);
-            $options = $summit
-                ? $summit->speakers()
-                    ->get()
-                    ->mapWithKeys(fn (Speaker $s) => [
-                        $s->id => trim("{$s->first_name} {$s->last_name}") !== '' ? "{$s->first_name} {$s->last_name}" : 'Unnamed',
-                    ])
-                    ->all()
-                : [];
+            $options = $this->speakerOptionsFor($summitId);
 
             $select = Select::make($name)
                 ->label($label)
@@ -179,6 +181,32 @@ class FilamentSchemaMapper
         }
 
         return $component;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function speakerOptionsFor(string $summitId): array
+    {
+        if (array_key_exists($summitId, self::$speakerOptionsCache)) {
+            return self::$speakerOptionsCache[$summitId];
+        }
+
+        try {
+            $summit = Summit::query()->find($summitId);
+            $options = $summit
+                ? $summit->speakers()
+                    ->get()
+                    ->mapWithKeys(fn (Speaker $speaker) => [
+                        $speaker->id => trim("{$speaker->first_name} {$speaker->last_name}") !== '' ? "{$speaker->first_name} {$speaker->last_name}" : 'Unnamed',
+                    ])
+                    ->all()
+                : [];
+        } catch (Throwable) {
+            $options = [];
+        }
+
+        return self::$speakerOptionsCache[$summitId] = $options;
     }
 
     /**
