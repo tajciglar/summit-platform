@@ -61,12 +61,10 @@ class OptinController extends Controller
         // exchanges the token server-side via /api/optin/prefill/{token}.
         $token = CheckoutPrefillToken::issue($data['email'], $firstName ?? '');
 
-        $redirect = sprintf(
-            '/%s/%s/sales?p=%s',
-            $funnel->summit->slug,
-            $funnel->slug,
-            urlencode($token),
-        );
+        // Public funnel URLs are host-based: summit is implicit via the domain,
+        // so the path is /{funnel-slug}/{step-slug}. Assumes a sales_page step
+        // with slug "sales" exists; falls back to / if no sales step is set up.
+        $redirect = sprintf('/%s/sales?p=%s', $funnel->slug, urlencode($token));
 
         return response()->json(['redirect' => $redirect]);
     }
