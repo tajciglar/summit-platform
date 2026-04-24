@@ -51,7 +51,13 @@ class StripeProductSyncService
         }
 
         if ($existingId !== null) {
-            return; // price-change reconciliation lands in Task 4
+            $existing = $this->stripe->prices->retrieve($existingId);
+
+            if ((int) $existing->unit_amount === $cents) {
+                return;
+            }
+
+            $this->stripe->prices->update($existingId, ['active' => false]);
         }
 
         $params = [

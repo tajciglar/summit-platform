@@ -120,3 +120,82 @@ it('creates recurring Prices when billing_interval is set', function () {
     expect($priceCreate[1])->toHaveKey('recurring');
     expect($priceCreate[1]['recurring'])->toBe(['interval' => 'month']);
 });
+
+it('archives old Price and creates new when cents value changes', function () {
+    $product = Product::factory()->create([
+        'kind' => 'standalone',
+        'is_active' => true,
+        'stripe_product_id' => 'prod_existing',
+        'stripe_price_pre_id' => 'price_old',
+        'price_pre_summit_cents' => 12700, // raised from 9700
+        'price_late_pre_cents' => null,
+        'price_during_cents' => null,
+        'price_post_summit_cents' => null,
+    ]);
+
+    $calls = [];
+
+    $products = Mockery::mock(ProductService::class);
+    $prices = Mockery::mock(PriceService::class);
+
+    $prices->shouldReceive('retrieve')
+        ->with('price_old')
+        ->andReturn((object) ['id' => 'price_old', 'unit_amount' => 9700])
+        ->once();
+    $prices->shouldReceive('update')
+        ->with('price_old', ['active' => false])
+        ->andReturn((object) ['id' => 'price_old'])
+        ->once();
+    $prices->shouldReceive('create')
+        ->andReturnUsing(function (array $params, array $opts) use (&$calls) {
+            $calls[] = $params;
+
+            return (object) ['id' => 'price_new'];
+        })
+        ->once();
+
+    $client = Mockery::mock(StripeClient::class);
+    $client->shouldReceive('getService')->with('products')->andReturn($products);
+    $client->shouldReceive('getService')->with('prices')->andReturn($prices);
+
+    $service = new StripeProductSyncService($client);
+    $service->sync($product);
+    $product->save();
+
+    $product->refresh();
+    expect($product->stripe_price_pre_id)->toBe('price_new');
+    expect($calls[0]['unit_amount'])->toBe(12700);
+});
+
+it('leaves existing Price alone when cents value matches', function () {
+    $product = Product::factory()->create([
+        'kind' => 'standalone',
+        'is_active' => true,
+        'stripe_product_id' => 'prod_existing',
+        'stripe_price_pre_id' => 'price_ok',
+        'price_pre_summit_cents' => 9700,
+        'price_late_pre_cents' => null,
+        'price_during_cents' => null,
+        'price_post_summit_cents' => null,
+    ]);
+
+    $products = Mockery::mock(ProductService::class);
+    $prices = Mockery::mock(PriceService::class);
+
+    $prices->shouldReceive('retrieve')
+        ->with('price_ok')
+        ->andReturn((object) ['id' => 'price_ok', 'unit_amount' => 9700])
+        ->once();
+    $prices->shouldNotReceive('create');
+    $prices->shouldNotReceive('update');
+
+    $client = Mockery::mock(StripeClient::class);
+    $client->shouldReceive('getService')->with('products')->andReturn($products);
+    $client->shouldReceive('getService')->with('prices')->andReturn($prices);
+
+    $service = new StripeProductSyncService($client);
+    $service->sync($product);
+    $product->save();
+
+    expect($product->fresh()->stripe_price_pre_id)->toBe('price_ok');
+});
