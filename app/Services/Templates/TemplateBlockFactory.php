@@ -6,6 +6,7 @@ use App\Models\FunnelStep;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Component;
+use Tiptap\Editor;
 
 /**
  * Bridges Filament Builder ↔ page_content map.
@@ -301,8 +302,9 @@ class TemplateBlockFactory
     }
 
     /**
-     * On save: take a section data map with `__headline` (HTML) and replace it
-     * with the canonical headlineLead/Accent/Trail strings.
+     * On save: take a section data map with `__headline` (HTML or TipTap JSON
+     * array as stored by Filament's RichEditor) and replace it with the
+     * canonical headlineLead/Accent/Trail strings.
      *
      * @param  array<string, mixed>  $sectionData
      * @return array<string, mixed>
@@ -313,7 +315,15 @@ class TemplateBlockFactory
             return $sectionData;
         }
 
-        $parts = HeadlineRichText::split((string) $sectionData['__headline']);
+        $raw = $sectionData['__headline'];
+
+        // Filament's RichEditor stores state as TipTap JSON (array) internally.
+        // Convert to HTML before splitting into lead/accent/trail.
+        if (is_array($raw)) {
+            $raw = (new Editor)->setContent($raw)->getHTML();
+        }
+
+        $parts = HeadlineRichText::split((string) $raw);
         unset($sectionData['__headline']);
 
         $sectionData['headlineLead'] = $parts['lead'];
