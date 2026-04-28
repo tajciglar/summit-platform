@@ -48,7 +48,6 @@ class AdhdParentingSummitSeeder extends Seeder
 
         $admin = User::where('email', 'admin@example.test')->first();
         if ($admin) {
-            $admin->summits()->syncWithoutDetaching([$summit->id]);
             $admin->domains()->syncWithoutDetaching([$domain->id]);
         }
 
@@ -69,19 +68,25 @@ class AdhdParentingSummitSeeder extends Seeder
             $slug = Str::slug("dr-{$first}-{$last}");
 
             $speaker = Speaker::updateOrCreate(
-                ['summit_id' => $summit->id, 'slug' => $slug],
+                ['slug' => $slug],
                 [
                     'first_name' => $first,
                     'last_name' => $last,
                     'title' => $title,
                     'short_bio' => 'Expert in ADHD parenting and child development.',
                     'masterclass_title' => $masterclass,
-                    'rating' => 5,
                     'sort_order' => $order,
                     'is_featured' => $order < 3,
                     'free_access_window_hours' => 24,
                 ]
             );
+
+            $summit->speakers()->syncWithoutDetaching([
+                $speaker->id => [
+                    'day_number' => ($order % 5) + 1,
+                    'sort_order' => $order,
+                ],
+            ]);
 
             $speakers->push($speaker);
         }
@@ -114,6 +119,8 @@ class AdhdParentingSummitSeeder extends Seeder
                 'description' => 'Post-summit funnel: replay-access optin followed by VIP upgrade pitch.',
                 'target_phase' => 'post',
                 'is_active' => true,
+                'wp_checkout_redirect_url' => 'https://althea-academy.com/checkout',
+                'wp_thankyou_redirect_url' => 'https://althea-academy.com/thank-you',
                 'template_key' => 'indigo-gold',
                 'section_config' => [
                     'optin' => [

@@ -70,9 +70,6 @@ class DemoSeeder extends Seeder
             'current_phase' => 'pre',
         ]);
 
-        // Legacy pivot (kept for back-compat).
-        $admin->summits()->syncWithoutDetaching([$summit->id]);
-
         // Second demo summit so the tenant switcher has something to switch to.
         $secondSummit = Summit::factory()->create([
             'domain_id' => $vzgoja->id,
@@ -83,11 +80,20 @@ class DemoSeeder extends Seeder
             'status' => 'draft',
             'current_phase' => 'pre',
         ]);
-        $admin->summits()->syncWithoutDetaching([$secondSummit->id]);
 
-        Speaker::factory()->count(4)->create(['summit_id' => $secondSummit->id]);
+        Speaker::factory()->count(4)->create()->each(function (Speaker $speaker, int $i) use ($secondSummit) {
+            $secondSummit->speakers()->attach($speaker->id, [
+                'day_number' => ($i % 3) + 1,
+                'sort_order' => $i,
+            ]);
+        });
 
-        Speaker::factory()->count(8)->create(['summit_id' => $summit->id]);
+        Speaker::factory()->count(8)->create()->each(function (Speaker $speaker, int $i) use ($summit) {
+            $summit->speakers()->attach($speaker->id, [
+                'day_number' => ($i % 5) + 1,
+                'sort_order' => $i,
+            ]);
+        });
 
         $vipPass = Product::factory()->create([
             'slug' => 'vip-pass',
