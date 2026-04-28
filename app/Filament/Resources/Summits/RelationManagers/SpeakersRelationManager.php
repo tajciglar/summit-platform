@@ -66,9 +66,6 @@ class SpeakersRelationManager extends RelationManager
                     ->url(fn () => SpeakerResource::getUrl('create')),
             ])
             ->recordActions([
-                Action::make('view')
-                    ->icon('heroicon-o-eye')
-                    ->url(fn (Speaker $record) => SpeakerResource::getUrl('view', ['record' => $record])),
                 Action::make('edit')
                     ->icon('heroicon-o-pencil-square')
                     ->url(fn (Speaker $record) => SpeakerResource::getUrl('edit', ['record' => $record])),
