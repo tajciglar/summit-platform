@@ -4,10 +4,8 @@ namespace App\Services\Templates;
 
 use App\Models\FunnelStep;
 use Filament\Forms\Components\Builder\Block;
-use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Component;
-use Filament\Schemas\Components\Fieldset;
 
 /**
  * Bridges Filament Builder ↔ page_content map.
@@ -202,52 +200,10 @@ class TemplateBlockFactory
             $blocks[] = Block::make($name)
                 ->label($this->humanize($name))
                 ->icon($this->iconFor($name))
-                ->schema(array_merge(
-                    $this->fieldsForSection($propSchema, $summitId),
-                    [$this->sectionDesignFieldset()],
-                ));
+                ->schema($this->fieldsForSection($propSchema, $summitId));
         }
 
         return self::$blocksForStepCache[$cacheKey] = $blocks;
-    }
-
-    /**
-     * Per-section design-token overrides. Rendered as a collapsed fieldset at
-     * the bottom of every block's form. Values write to `data.__design.*`;
-     * EditFunnelStep moves them to `page_overrides.sections[type]` on save and
-     * injects them back on fill, keeping block `data` pure content (so Zod
-     * validation on the Next side is unchanged).
-     */
-    private function sectionDesignFieldset(): Fieldset
-    {
-        $fonts = [
-            'Fraunces' => 'Fraunces',
-            'Cormorant Garamond' => 'Cormorant Garamond',
-            'Playfair Display' => 'Playfair Display',
-            'Inter' => 'Inter',
-            'DM Sans' => 'DM Sans',
-            'Poppins' => 'Poppins',
-            'Nunito' => 'Nunito',
-        ];
-
-        return Fieldset::make('Design (this section)')
-            ->columns(6)
-            ->schema([
-                ColorPicker::make('__design.palette.primary')
-                    ->label('Primary')->hex()->live(debounce: 500)->columnSpan(1),
-                ColorPicker::make('__design.palette.accent')
-                    ->label('Accent')->hex()->live(debounce: 500)->columnSpan(1),
-                ColorPicker::make('__design.palette.ink')
-                    ->label('Text')->hex()->live(debounce: 500)->columnSpan(1),
-                ColorPicker::make('__design.palette.paper')
-                    ->label('Background')->hex()->live(debounce: 500)->columnSpan(1),
-                Select::make('__design.headingFont')
-                    ->label('Heading font')->options($fonts)->native(false)->live()
-                    ->placeholder('— inherit —')->columnSpan(1),
-                Select::make('__design.bodyFont')
-                    ->label('Body font')->options($fonts)->native(false)->live()
-                    ->placeholder('— inherit —')->columnSpan(1),
-            ]);
     }
 
     /**
@@ -256,7 +212,6 @@ class TemplateBlockFactory
      */
     private function fieldsForSection(array $propSchema, ?string $summitId): array
     {
-        // Scalar or array top-level — wrap in a single field named 'value'.
         if (($propSchema['type'] ?? null) !== 'object') {
             return $this->mapper->map([
                 'type' => 'object',
@@ -265,7 +220,106 @@ class TemplateBlockFactory
             ], $summitId);
         }
 
-        return $this->mapper->map($propSchema, $summitId);
+        $consolidated = $this->consolidateHeadlineTrio($propSchema);
+
+        $fields = $this->mapper->map($consolidated['schema'], $summitId);
+
+        if ($consolidated['hasTrio']) {
+            $fields = array_merge([$this->buildHeadlineRichEditor()], $fields);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Strip headlineLead/Accent/Trail from a section's properties so the mapper
+     * doesn't emit three text inputs for them. The caller prepends a single
+     * RichEditor instead.
+     *
+     * @param  array<string, mixed>  $propSchema
+     * @return array{schema: array<string, mixed>, hasTrio: bool}
+     */
+    private function consolidateHeadlineTrio(array $propSchema): array
+    {
+        $properties = $propSchema['properties'] ?? [];
+        $hasTrio = isset($properties['headlineLead'], $properties['headlineAccent'], $properties['headlineTrail']);
+
+        if (! $hasTrio) {
+            return ['schema' => $propSchema, 'hasTrio' => false];
+        }
+
+        unset(
+            $properties['headlineLead'],
+            $properties['headlineAccent'],
+            $properties['headlineTrail'],
+        );
+        $propSchema['properties'] = $properties;
+
+        if (isset($propSchema['required']) && is_array($propSchema['required'])) {
+            $propSchema['required'] = array_values(array_diff(
+                $propSchema['required'],
+                ['headlineLead', 'headlineAccent', 'headlineTrail'],
+            ));
+        }
+
+        return ['schema' => $propSchema, 'hasTrio' => true];
+    }
+
+    private function buildHeadlineRichEditor(): RichEditor
+    {
+        return RichEditor::make('__headline')
+            ->label('Title')
+            ->toolbarButtons(['bold', 'italic', 'link'])
+            ->columnSpanFull();
+    }
+
+    /**
+     * On fill: take a section data map containing headlineLead/Accent/Trail
+     * (canonical on-disk shape) and replace them with a single `__headline`
+     * HTML field that the RichEditor binds to.
+     *
+     * @param  array<string, mixed>  $sectionData
+     * @return array<string, mixed>
+     */
+    public function splitToEditorShape(array $sectionData): array
+    {
+        if (! isset($sectionData['headlineLead'], $sectionData['headlineAccent'], $sectionData['headlineTrail'])
+            && ! isset($sectionData['headlineLead'])) {
+            return $sectionData;
+        }
+
+        $sectionData['__headline'] = HeadlineRichText::join([
+            'lead' => (string) ($sectionData['headlineLead'] ?? ''),
+            'accent' => (string) ($sectionData['headlineAccent'] ?? ''),
+            'trail' => (string) ($sectionData['headlineTrail'] ?? ''),
+        ]);
+
+        unset($sectionData['headlineLead'], $sectionData['headlineAccent'], $sectionData['headlineTrail']);
+
+        return $sectionData;
+    }
+
+    /**
+     * On save: take a section data map with `__headline` (HTML) and replace it
+     * with the canonical headlineLead/Accent/Trail strings.
+     *
+     * @param  array<string, mixed>  $sectionData
+     * @return array<string, mixed>
+     */
+    public function joinFromEditorShape(array $sectionData): array
+    {
+        if (! array_key_exists('__headline', $sectionData)) {
+            return $sectionData;
+        }
+
+        $parts = HeadlineRichText::split((string) $sectionData['__headline']);
+        unset($sectionData['__headline']);
+
+        $sectionData['headlineLead'] = $parts['lead'];
+        $sectionData['headlineAccent'] = $parts['accent'];
+        $sectionData['headlineTrail'] = $parts['trail'];
+
+        return $sectionData;
     }
 
     private function humanize(string $name): string
