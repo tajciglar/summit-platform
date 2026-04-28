@@ -26,6 +26,7 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -216,10 +217,10 @@ class SpeakerResource extends Resource
             ->filters([
                 SelectFilter::make('summits')
                     ->label('Summit')
+                    ->placeholder('All summits')
                     ->relationship('summits', 'title')
-                    ->multiple()
                     ->preload(),
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
