@@ -3,9 +3,7 @@
 namespace App\Filament\Resources\Summits\Pages;
 
 use App\Filament\Resources\Summits\SummitResource;
-use App\Models\Summit;
 use App\Support\CurrentSummit;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
@@ -44,24 +42,10 @@ class ViewSummit extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        /** @var Summit $summit */
-        $summit = $this->record;
-        $hostname = optional($summit?->domain)->hostname;
-        // Pick any one active funnel on the summit as the "open live" target.
-        // A summit can only have one live funnel at a time anyway (Funnel's
-        // saving hook enforces that), so this is deterministic.
-        $liveFunnel = $summit?->funnels()->where('is_active', true)->first();
-        $isLive = $liveFunnel && $hostname && $summit->status === 'published';
-        $liveUrl = $isLive ? 'https://'.$hostname.'/'.$liveFunnel->slug : null;
-
+        // "Open live" intentionally lives on the funnels list as a per-row
+        // action — the summit page can host multiple funnels, so a single
+        // summit-level "open live" was misleading.
         return [
-            Action::make('open_live')
-                ->label('Open live')
-                ->icon('heroicon-m-arrow-top-right-on-square')
-                ->color('success')
-                ->url($liveUrl)
-                ->openUrlInNewTab()
-                ->visible($isLive),
             EditAction::make()
                 ->url(fn (): string => SummitResource::getUrl('edit', ['record' => $this->record])),
             DeleteAction::make(),
@@ -99,10 +83,10 @@ class ViewSummit extends ViewRecord
                                 ->badge()
                                 ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
                                 ->color(fn (?string $state): string => match ($state) {
-                                    'during' => 'success',
-                                    'late_pre' => 'warning',
-                                    'pre' => 'info',
-                                    'post' => 'gray',
+                                    'summit_starts' => 'info',
+                                    'summit_live' => 'success',
+                                    'open_all_pages' => 'warning',
+                                    'summit_end' => 'gray',
                                     default => 'gray',
                                 })
                                 ->columnSpan(3),
@@ -144,13 +128,7 @@ class ViewSummit extends ViewRecord
                                 ->badge()
                                 ->color('primary')
                                 ->placeholder('Not published to any domain')
-                                ->columnSpan(6),
-                            TextEntry::make('ac_optin_tag')
-                                ->label('AC optin tag')
-                                ->placeholder('Not configured')
-                                ->badge()
-                                ->color(fn (?string $state): string => $state ? 'success' : 'gray')
-                                ->columnSpan(6),
+                                ->columnSpanFull(),
                         ]),
                 ]),
         ]);

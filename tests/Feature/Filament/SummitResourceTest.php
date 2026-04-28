@@ -30,7 +30,7 @@ it('creates a summit', function () {
             'title' => 'Neutral Summit 2026',
             'slug' => 'neutral-2026',
             'status' => 'draft',
-            'current_phase' => 'pre',
+            'current_phase' => 'summit_starts',
         ])
         ->call('create')
         ->assertHasNoFormErrors();

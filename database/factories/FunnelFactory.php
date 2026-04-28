@@ -23,7 +23,7 @@ class FunnelFactory extends Factory
             'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(100, 999),
             'name' => $name,
             'description' => fake()->sentence(),
-            'target_phase' => fake()->randomElement(['pre', 'late_pre', 'during', 'post', null]),
+            'target_phase' => fake()->randomElement(['summit_starts', 'summit_live', 'open_all_pages', 'summit_end', null]),
             'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
             'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
             'is_active' => true,

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Funnels\Pages;
 
 use App\Filament\Resources\Funnels\FunnelResource;
-use App\Filament\Resources\FunnelSteps\FunnelStepResource;
 use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Funnel;
 use App\Services\Templates\TemplateRegistry;
@@ -77,11 +76,8 @@ class ViewFunnel extends EditRecord
                     $funnel->update(['is_active' => false]);
                     Notification::make()->title('Funnel unpublished')->success()->send();
                 }),
-            Action::make('new_step')
-                ->label('New step')
-                ->icon('heroicon-o-plus')
-                ->color('gray')
-                ->url(fn () => FunnelStepResource::getUrl('create')),
+            // "+ New step" intentionally not here — the inline "Add new
+            // step" affordance below the steps list is the single entry point.
             DeleteAction::make(),
         ];
     }
@@ -151,10 +147,10 @@ class ViewFunnel extends EditRecord
                     Select::make('target_phase')
                         ->label('Phase')
                         ->options([
-                            'pre' => 'Pre-summit',
-                            'late_pre' => 'Late pre-summit',
-                            'during' => 'During summit',
-                            'post' => 'Post-summit',
+                            'summit_starts' => 'Summit starts',
+                            'summit_live' => 'Summit live',
+                            'open_all_pages' => 'All pages open',
+                            'summit_end' => 'Summit ended',
                         ])
                         ->placeholder('All phases')
                         ->native(false)

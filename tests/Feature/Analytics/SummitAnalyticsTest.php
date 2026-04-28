@@ -20,7 +20,7 @@ function makeOrder(Summit $summit, int $totalCents, Carbon $createdAt, array $it
         'order_number' => 'O-'.Str::random(6),
         'user_id' => $user->id,
         'summit_id' => $summit->id,
-        'phase_at_purchase' => 'pre',
+        'phase_at_purchase' => 'summit_starts',
         'status' => $status,
         'subtotal_cents' => $totalCents,
         'discount_cents' => 0,

@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Funnels;
 
+use App\Actions\DuplicateFunnel;
 use App\Filament\Resources\Concerns\ScopesTenantViaSummitDomains;
 use App\Models\Funnel;
 use App\Models\Summit;
 use App\Services\Templates\TemplateRegistry;
 use App\Support\CurrentSummit;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -15,8 +17,9 @@ use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
@@ -53,6 +56,10 @@ class FunnelResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        // Edit form keeps only fields that operators actually update post-creation:
+        // identity (name/slug), wiring (summit, WP redirects), AC tag, notes.
+        // Removed per spec: live (is_active), phase (target_phase), summit
+        // category, skin (template_key), description.
         return $schema->components([
             Section::make('Funnel')
                 ->columns(2)
@@ -74,16 +81,6 @@ class FunnelResource extends Resource
                         ->required()
                         ->searchable()
                         ->preload(),
-                    Select::make('target_phase')
-                        ->label('Active during')
-                        ->options([
-                            'pre' => 'Pre-summit',
-                            'late_pre' => 'Late pre-summit',
-                            'during' => 'During summit',
-                            'post' => 'Post-summit',
-                        ])
-                        ->placeholder('All phases')
-                        ->native(false),
                     TextInput::make('name')
                         ->required()->maxLength(500)
                         ->live(onBlur: true)
@@ -99,6 +96,11 @@ class FunnelResource extends Resource
                         }),
                     TextInput::make('slug')->required()->maxLength(255)
                         ->helperText('Auto-fills from summit initials + funnel purpose. Edit freely.'),
+                    TextInput::make('ac_optin_tag')
+                        ->label('ActiveCampaign optin tag')
+                        ->placeholder('e.g. ATS1 APR26 SIGNUP')
+                        ->maxLength(255)
+                        ->helperText('Tag applied to contacts who opt in via this funnel. Leave blank to skip AC sync.'),
                     TextInput::make('wp_checkout_redirect_url')
                         ->label('WordPress checkout URL')
                         ->url()
@@ -113,26 +115,28 @@ class FunnelResource extends Resource
                         ->maxLength(2048)
                         ->helperText('Interim thank-you redirect for visitors who decline the sales offer.')
                         ->columnSpanFull(),
-                    Toggle::make('is_active')
-                        ->label('Live')
-                        ->helperText('Only one funnel per summit can be live. Marking this live will flip the current live funnel to draft.')
-                        ->default(false),
+                    Textarea::make('notes')
+                        ->label('Internal notes')
+                        ->rows(4)
+                        ->maxLength(10000)
+                        ->placeholder('Operator-only notes about this funnel.')
+                        ->columnSpanFull(),
                 ]),
 
+            // Skin + section choices live behind the create flow only — the
+            // edit form is intentionally slim per spec. Operators reach skin
+            // changes via the per-funnel ViewFunnel page.
             Section::make('Design')
-                ->description('One skin drives every step. Pick which sections show up per step type; generate all steps in one click.')
+                ->description('Pick a skin and the sections each step type renders. Steps are auto-seeded from this on create.')
+                ->visibleOn('create')
                 ->components([
                     Select::make('template_key')
                         ->label('Skin')
                         ->options(fn () => self::skinOptions())
-                        ->helperText('The visual language (typography, spacing, layout). All steps share this skin.')
                         ->native(false)
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(function (?string $state, Set $set, Get $get): void {
-                            // Auto-seed section_config with the template's defaults
-                            // so new funnels get distinct optin vs sales layouts
-                            // without the operator having to pick every section.
                             if (! $state) {
                                 return;
                             }
@@ -148,31 +152,24 @@ class FunnelResource extends Resource
                     CheckboxList::make('section_config.optin')
                         ->label('Optin sections')
                         ->options(fn (Get $get) => self::optinSectionOptionsFor($get('template_key')))
-                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::optinSectionOptionsFor($get('template_key'))))
                         ->columns(1)
                         ->bulkToggleable()
-                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections render top → bottom in the order shown.'),
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key'))),
 
                     CheckboxList::make('section_config.sales_page')
                         ->label('Sales page sections')
                         ->options(fn (Get $get) => self::salesSectionOptionsFor($get('template_key')))
-                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::salesSectionOptionsFor($get('template_key'))))
                         ->columns(1)
                         ->bulkToggleable()
-                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections render top → bottom in the order shown.'),
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key'))),
 
                     CheckboxList::make('section_config.thank_you')
                         ->label('Thank-you sections')
                         ->options(fn (Get $get) => self::sectionOptionsFor($get('template_key')))
-                        ->descriptions(fn (Get $get) => self::sectionPositionDescriptions($get('template_key'), self::sectionOptionsFor($get('template_key'))))
                         ->columns(1)
                         ->bulkToggleable()
-                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key')))
-                        ->helperText('Sections render top → bottom in the order shown.'),
-                ])
-                ->collapsed(fn (?Funnel $record): bool => $record !== null),
+                        ->visible(fn (Get $get): bool => self::skinSupportsSections($get('template_key'))),
+                ]),
         ]);
     }
 
@@ -349,24 +346,45 @@ class FunnelResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : 'all')
                     ->color(fn (?string $state): string => match ($state) {
-                        'during' => 'success',
-                        'late_pre' => 'warning',
-                        'pre' => 'info',
-                        'post' => 'gray',
+                        'summit_starts' => 'info',
+                        'summit_live' => 'success',
+                        'open_all_pages' => 'warning',
+                        'summit_end' => 'gray',
                         default => 'primary',
-                    }),
-                TextColumn::make('template_key')
-                    ->label('Skin')
-                    ->badge()
-                    ->color('gray')
-                    ->formatStateUsing(fn (?string $state): string => $state
-                        ? (self::skinOptions()[$state] ?? $state)
-                        : '—')
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('ac_optin_tag')
+                    ->label('AC tag')
+                    ->placeholder('—')
                     ->toggleable(),
                 TextColumn::make('steps_count')
                     ->counts('steps')
                     ->label('Steps')
                     ->alignCenter()
+                    ->toggleable(),
+                TextColumn::make('notes')
+                    ->label('Notes')
+                    ->state(fn (Funnel $record): string => $record->notes ? Str::limit($record->notes, 60) : '+ Add notes')
+                    ->color(fn (Funnel $record): string => $record->notes ? 'primary' : 'gray')
+                    ->action(
+                        Action::make('viewNotes')
+                            ->modalHeading('Funnel notes')
+                            ->modalDescription(fn (Funnel $record): string => $record->name)
+                            ->modalIcon('heroicon-o-document-text')
+                            ->modalCancelActionLabel('Close')
+                            ->modalSubmitActionLabel('Save notes')
+                            ->schema([
+                                Textarea::make('notes')
+                                    ->label('Internal notes')
+                                    ->rows(8)
+                                    ->maxLength(10000),
+                            ])
+                            ->fillForm(fn (Funnel $record): array => ['notes' => $record->notes])
+                            ->action(function (array $data, Funnel $record): void {
+                                $record->update(['notes' => $data['notes'] ?? null]);
+                                Notification::make()->title('Notes saved')->success()->send();
+                            })
+                    )
                     ->toggleable(),
                 IconColumn::make('is_active')->boolean(),
             ])
@@ -376,15 +394,67 @@ class FunnelResource extends Resource
                     ->label('Summit')
                     ->preload(),
                 SelectFilter::make('target_phase')->options([
-                    'pre' => 'Pre-summit',
-                    'late_pre' => 'Late pre-summit',
-                    'during' => 'During summit',
-                    'post' => 'Post-summit',
+                    'summit_starts' => 'Summit starts',
+                    'summit_live' => 'Summit live',
+                    'open_all_pages' => 'All pages open',
+                    'summit_end' => 'Summit ended',
                 ]),
                 TernaryFilter::make('is_active'),
             ])
             ->recordActions([
                 ViewAction::make(),
+                Action::make('open_live')
+                    ->label('Open live')
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->color('success')
+                    ->url(fn (Funnel $record): ?string => $record->is_active && ($h = optional($record->summit?->domain)->hostname)
+                        ? 'https://'.$h.'/'.$record->slug
+                        : null)
+                    ->openUrlInNewTab()
+                    ->visible(fn (Funnel $record): bool => $record->is_active && optional($record->summit?->domain)->hostname !== null),
+                Action::make('duplicate')
+                    ->label('Duplicate')
+                    ->icon(Heroicon::OutlinedDocumentDuplicate)
+                    ->color('gray')
+                    ->modalHeading('Duplicate this funnel')
+                    ->modalDescription('Copies the funnel with all steps, block content, and bumps. Pick a destination summit and skin to apply.')
+                    ->modalSubmitActionLabel('Duplicate')
+                    ->schema(fn (Funnel $record): array => [
+                        Select::make('template_key')
+                            ->label('Skin')
+                            ->options(fn () => self::skinOptions())
+                            ->default($record->template_key)
+                            ->placeholder('Keep current skin')
+                            ->native(false)
+                            ->searchable(),
+                        Select::make('destination_summit_id')
+                            ->label('Destination summit')
+                            ->options(function () {
+                                $query = Summit::query();
+                                $domain = Filament::getTenant();
+                                if ($domain) {
+                                    $query->where('domain_id', $domain->getKey());
+                                }
+
+                                return $query->orderBy('title')->pluck('title', 'id')->all();
+                            })
+                            ->default(fn () => $record->summit_id)
+                            ->required()
+                            ->searchable(),
+                    ])
+                    ->action(function (array $data, Funnel $record): void {
+                        $clone = app(DuplicateFunnel::class)->handle(
+                            $record,
+                            destinationSummitId: (string) $data['destination_summit_id'],
+                            templateKey: $data['template_key'] ?? null,
+                        );
+
+                        Notification::make()
+                            ->title('Funnel duplicated')
+                            ->body('Created '.$clone->name.'.')
+                            ->success()
+                            ->send();
+                    }),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

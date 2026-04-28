@@ -37,7 +37,7 @@ class AdhdParentingSummitSeeder extends Seeder
                 'topic' => 'ADHD parenting',
                 'description' => 'A 5-day virtual summit for parents navigating ADHD.',
                 'status' => 'published',
-                'current_phase' => 'post',
+                'current_phase' => 'summit_end',
                 'pre_summit_starts_at' => '2025-02-03 00:00:00',
                 'late_pre_summit_starts_at' => '2025-02-07 00:00:00',
                 'during_summit_starts_at' => '2025-02-10 00:00:00',
@@ -116,7 +116,7 @@ class AdhdParentingSummitSeeder extends Seeder
             [
                 'name' => 'Post Main Funnel',
                 'description' => 'Post-summit funnel: replay-access optin followed by VIP upgrade pitch.',
-                'target_phase' => 'post',
+                'target_phase' => 'summit_end',
                 'is_active' => true,
                 'wp_checkout_redirect_url' => 'https://althea-academy.com/checkout',
                 'wp_thankyou_redirect_url' => 'https://althea-academy.com/thank-you',

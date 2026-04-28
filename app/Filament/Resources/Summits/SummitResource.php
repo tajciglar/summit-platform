@@ -96,12 +96,12 @@ class SummitResource extends Resource
                             Select::make('current_phase')
                                 ->label('Current phase')
                                 ->options([
-                                    'pre' => 'Pre-summit',
-                                    'late_pre' => 'Late pre-summit',
-                                    'during' => 'During summit',
-                                    'post' => 'Post-summit',
+                                    'summit_starts' => 'Summit starts',
+                                    'summit_live' => 'Summit live',
+                                    'open_all_pages' => 'All pages open',
+                                    'summit_end' => 'Summit ended',
                                 ])
-                                ->default('pre')
+                                ->default('summit_starts')
                                 ->required()
                                 ->native(false)
                                 ->helperText('Updated automatically by cron.')
@@ -144,17 +144,6 @@ class SummitResource extends Resource
                         ->columnSpanFull()
                         ->helperText('Which brand site hosts this summit. One summit belongs to exactly one domain.'),
                 ]),
-            Section::make('ActiveCampaign')
-                ->description('Tag applied to contacts who opt in via this summit\'s funnels.')
-                ->collapsed()
-                ->columnSpanFull()
-                ->components([
-                    TextInput::make('ac_optin_tag')
-                        ->label('Optin tag')
-                        ->placeholder('e.g. ATS1 APR26 SIGNUP')
-                        ->maxLength(255)
-                        ->helperText('Contacts will be tagged with this value in ActiveCampaign when they opt in. Leave blank to skip AC sync.'),
-                ]),
         ]);
     }
 
@@ -182,10 +171,10 @@ class SummitResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
                     ->color(fn (?string $state): string => match ($state) {
-                        'during' => 'success',
-                        'late_pre' => 'warning',
-                        'pre' => 'info',
-                        'post' => 'gray',
+                        'summit_starts' => 'info',
+                        'summit_live' => 'success',
+                        'open_all_pages' => 'warning',
+                        'summit_end' => 'gray',
                         default => 'gray',
                     }),
                 TextColumn::make('speakers_count')
@@ -211,10 +200,10 @@ class SummitResource extends Resource
                     'archived' => 'Archived',
                 ]),
                 SelectFilter::make('current_phase')->options([
-                    'pre' => 'Pre-summit',
-                    'late_pre' => 'Late pre-summit',
-                    'during' => 'During summit',
-                    'post' => 'Post-summit',
+                    'summit_starts' => 'Summit starts',
+                    'summit_live' => 'Summit live',
+                    'open_all_pages' => 'All pages open',
+                    'summit_end' => 'Summit ended',
                 ]),
             ])
             ->recordActions([

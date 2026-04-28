@@ -19,6 +19,8 @@ class Funnel extends Model
         'slug',
         'name',
         'description',
+        'notes',
+        'ac_optin_tag',
         'target_phase',
         'template_key',
         'section_config',

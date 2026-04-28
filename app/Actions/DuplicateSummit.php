@@ -23,7 +23,7 @@ class DuplicateSummit
             $newSummit->slug = $this->uniqueSlug($summit->slug, Summit::class);
             $newSummit->title = $summit->title.' (copy)';
             $newSummit->status = 'draft';
-            $newSummit->current_phase = 'pre';
+            $newSummit->current_phase = 'summit_starts';
 
             foreach (['pre_summit_starts_at', 'late_pre_summit_starts_at', 'during_summit_starts_at', 'post_summit_starts_at', 'ends_at'] as $field) {
                 if ($summit->{$field}) {

@@ -17,21 +17,21 @@ class FunnelContentSeeder extends Seeder
     public function run(): void
     {
         $this->seedDomain('Parenting Summits', 'adhd-parenting-summit-2026', [
-            ['indigo-gold', true, 'Main Optin Funnel', 'main-optin', 'pre'],
-            ['blue-coral', false, 'Blue Coral Variant', 'blue-coral-variant', 'pre'],
-            ['ochre-ink', false, 'Editorial Variant', 'editorial-variant', 'post'],
+            ['indigo-gold', true, 'Main Optin Funnel', 'main-optin', 'summit_starts'],
+            ['blue-coral', false, 'Blue Coral Variant', 'blue-coral-variant', 'summit_starts'],
+            ['ochre-ink', false, 'Editorial Variant', 'editorial-variant', 'summit_end'],
         ]);
 
         $this->seedDomain('Vzgoja', 'productivity-summit-2026', [
-            ['green-gold', true, 'Main Green Gold Funnel', 'main-green-gold', 'pre'],
-            ['lime-ink', false, 'Lime Ink Variant', 'lime-ink-variant', 'during'],
-            ['violet-sun', false, 'Violet Sun Variant', 'violet-sun-variant', 'post'],
+            ['green-gold', true, 'Main Green Gold Funnel', 'main-green-gold', 'summit_starts'],
+            ['lime-ink', false, 'Lime Ink Variant', 'lime-ink-variant', 'summit_live'],
+            ['violet-sun', false, 'Violet Sun Variant', 'violet-sun-variant', 'summit_end'],
         ]);
 
         $this->seedDomain('Althea Academy', null, [
-            ['cream-sage', true, 'Cream Sage Funnel', 'cream-sage-main', 'pre'],
-            ['rust-cream', false, 'Rust Cream Variant', 'rust-cream-variant', 'late_pre'],
-            ['indigo-gold', false, 'Indigo Gold Variant', 'indigo-gold-variant', 'post'],
+            ['cream-sage', true, 'Cream Sage Funnel', 'cream-sage-main', 'summit_starts'],
+            ['rust-cream', false, 'Rust Cream Variant', 'rust-cream-variant', 'summit_starts'],
+            ['indigo-gold', false, 'Indigo Gold Variant', 'indigo-gold-variant', 'summit_end'],
         ], [
             'title' => "Women's Health & Longevity Summit 2026",
             'slug' => 'womens-health-longevity-2026',
@@ -39,9 +39,9 @@ class FunnelContentSeeder extends Seeder
         ]);
 
         $this->seedDomain('Haley, Bahringer and Homenick', null, [
-            ['blue-coral', true, 'Blue Coral Main', 'blue-coral-main', 'pre'],
-            ['lime-ink', false, 'Lime System Draft', 'lime-system-draft', 'during'],
-            ['ochre-ink', false, 'Editorial Draft', 'ochre-editorial-draft', 'post'],
+            ['blue-coral', true, 'Blue Coral Main', 'blue-coral-main', 'summit_starts'],
+            ['lime-ink', false, 'Lime System Draft', 'lime-system-draft', 'summit_live'],
+            ['ochre-ink', false, 'Editorial Draft', 'ochre-editorial-draft', 'summit_end'],
         ], [
             'title' => 'Future of AI & Business Summit 2026',
             'slug' => 'ai-business-summit-2026',
@@ -66,7 +66,7 @@ class FunnelContentSeeder extends Seeder
                     'topic' => $newSummitData['topic'],
                     'description' => "A 5-day virtual summit on {$newSummitData['topic']}.",
                     'status' => 'published',
-                    'current_phase' => 'pre',
+                    'current_phase' => 'summit_starts',
                     'pre_summit_starts_at' => now()->addDays(30),
                     'late_pre_summit_starts_at' => now()->addDays(37),
                     'during_summit_starts_at' => now()->addDays(44),

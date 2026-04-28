@@ -67,7 +67,7 @@ class DemoSeeder extends Seeder
             'topic' => 'ADHD parenting',
             'description' => 'A 5-day virtual summit for parents navigating ADHD.',
             'status' => 'published',
-            'current_phase' => 'pre',
+            'current_phase' => 'summit_starts',
         ]);
 
         // Second demo summit so the tenant switcher has something to switch to.
@@ -78,7 +78,7 @@ class DemoSeeder extends Seeder
             'topic' => 'productivity',
             'description' => 'A 3-day virtual summit on focus and deep work.',
             'status' => 'draft',
-            'current_phase' => 'pre',
+            'current_phase' => 'summit_starts',
         ]);
 
         Speaker::factory()->count(4)->create()->each(function (Speaker $speaker, int $i) use ($secondSummit) {
@@ -126,7 +126,7 @@ class DemoSeeder extends Seeder
             'summit_id' => $summit->id,
             'slug' => 'aps',
             'name' => 'Main Opt-in Funnel',
-            'target_phase' => 'pre',
+            'target_phase' => 'summit_starts',
         ]);
 
         foreach ([
@@ -147,7 +147,7 @@ class DemoSeeder extends Seeder
             'summit_id' => $summit->id,
             'slug' => 'aps-sales',
             'name' => 'VIP Sales Page',
-            'target_phase' => 'late_pre',
+            'target_phase' => 'summit_starts',
         ]);
         foreach ([
             ['step_type' => 'sales_page', 'name' => 'VIP Pitch', 'slug' => 'vip', 'sort_order' => 0, 'product_id' => $vipPass->id],
@@ -166,7 +166,7 @@ class DemoSeeder extends Seeder
             'summit_id' => $summit->id,
             'slug' => 'aps-recordings',
             'name' => 'Recordings Offer',
-            'target_phase' => 'during',
+            'target_phase' => 'summit_live',
         ]);
         foreach ([
             ['step_type' => 'sales_page', 'name' => 'Recordings Pitch', 'slug' => 'pitch', 'sort_order' => 0, 'product_id' => $recordings->id],
@@ -185,7 +185,7 @@ class DemoSeeder extends Seeder
             'summit_id' => $summit->id,
             'slug' => 'aps-last-chance',
             'name' => 'Last Chance Offer',
-            'target_phase' => 'post',
+            'target_phase' => 'summit_end',
         ]);
         foreach ([
             ['step_type' => 'sales_page', 'name' => 'Last Chance', 'slug' => 'last-chance', 'sort_order' => 0, 'product_id' => $vipPass->id],

@@ -25,9 +25,12 @@ class SyncOptinToActiveCampaign implements ShouldQueue
 
     public function handle(ActiveCampaignService $ac): void
     {
-        $this->optin->loadMissing(['summit', 'contact']);
+        $this->optin->loadMissing(['funnel', 'summit', 'contact']);
 
-        $tagName = $this->optin->summit?->ac_optin_tag;
+        // The opt-in tag now lives on the funnel. Fall back to the funnel's
+        // summit's tag is intentionally not provided — once migrated, the tag
+        // is funnel-scoped only.
+        $tagName = $this->optin->funnel?->ac_optin_tag;
 
         if (! $tagName) {
             $this->optin->update(['ac_sync_status' => 'synced', 'ac_synced_at' => now()]);

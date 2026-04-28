@@ -37,7 +37,6 @@ class Summit extends Model implements HasName
         'pre_summit_starts_at', 'late_pre_summit_starts_at',
         'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
         'summit_type',
-        'ac_optin_tag',
         'style_reference_url', 'style_brief', 'style_brief_built_at', 'style_brief_status',
     ];
 
@@ -132,21 +131,34 @@ class Summit extends Model implements HasName
         return $this->hasMany(SummitChecklistItem::class)->orderBy('sort_order');
     }
 
+    /**
+     * Computes the lifecycle phase based on configured date thresholds.
+     *
+     * Mapping:
+     *   - before pre_summit_starts_at        → null  (not yet announced)
+     *   - pre_summit_starts_at..during_starts → summit_starts (optins open)
+     *   - during_summit_starts_at..post_starts → summit_live (event running)
+     *   - post_summit_starts_at..ends_at     → open_all_pages (replays open)
+     *   - after ends_at                      → summit_end
+     */
     public function computePhase(?Carbon $now = null): ?string
     {
         $now ??= now();
 
+        if ($this->ends_at && $now->gte($this->ends_at)) {
+            return 'summit_end';
+        }
         if ($this->post_summit_starts_at && $now->gte($this->post_summit_starts_at)) {
-            return 'post';
+            return 'open_all_pages';
         }
         if ($this->during_summit_starts_at && $now->gte($this->during_summit_starts_at)) {
-            return 'during';
+            return 'summit_live';
         }
         if ($this->late_pre_summit_starts_at && $now->gte($this->late_pre_summit_starts_at)) {
-            return 'late_pre';
+            return 'summit_starts';
         }
         if ($this->pre_summit_starts_at && $now->gte($this->pre_summit_starts_at)) {
-            return 'pre';
+            return 'summit_starts';
         }
 
         return null;
@@ -182,10 +194,10 @@ class Summit extends Model implements HasName
     {
         $phase = $this->computePhase();
 
-        if ($phase === 'during') {
+        if ($phase === 'summit_live') {
             return 'Event live';
         }
-        if ($phase === 'post') {
+        if ($phase === 'open_all_pages' || $phase === 'summit_end') {
             return 'Event ended';
         }
 

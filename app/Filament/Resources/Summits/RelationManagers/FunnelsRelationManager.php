@@ -13,7 +13,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -53,37 +52,12 @@ class FunnelsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('slug')
-                    ->color('gray')
-                    ->toggleable(),
-                TextColumn::make('target_phase')
-                    ->label('Phase')
-                    ->badge()
-                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : 'all')
-                    ->color(fn (?string $state): string => match ($state) {
-                        'during' => 'success',
-                        'late_pre' => 'warning',
-                        'pre' => 'info',
-                        'post' => 'gray',
-                        default => 'primary',
-                    }),
-                TextColumn::make('steps_count')
-                    ->counts('steps')
-                    ->label('Steps')
-                    ->alignCenter(),
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->date()
                     ->sortable(),
             ])
-            ->filters([
-                SelectFilter::make('target_phase')->options([
-                    'pre' => 'Pre-summit',
-                    'late_pre' => 'Late pre-summit',
-                    'during' => 'During summit',
-                    'post' => 'Post-summit',
-                ]),
-            ])
+            ->filters([])
             ->headerActions([
                 Action::make('new')
                     ->label('New funnel')

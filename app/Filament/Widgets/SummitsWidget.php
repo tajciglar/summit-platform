@@ -65,10 +65,10 @@ class SummitsWidget extends TableWidget
                     ->badge()
                     ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
                     ->color(fn (?string $state): string => match ($state) {
-                        'during' => 'success',
-                        'late_pre' => 'warning',
-                        'pre' => 'info',
-                        'post' => 'gray',
+                        'summit_starts' => 'info',
+                        'summit_live' => 'success',
+                        'open_all_pages' => 'warning',
+                        'summit_end' => 'gray',
                         default => 'gray',
                     }),
                 TextColumn::make('funnels_count')
