@@ -52,7 +52,7 @@ function fakeStripeClient(array &$calls = []): StripeClient
 it('creates a Stripe Product when missing and Prices for each priced phase', function () {
     $product = Product::factory()->create([
         'name' => 'Main Offer',
-        'kind' => 'standalone',
+        'kind' => 'main',
         'is_active' => true,
         'stripe_product_id' => null,
         'price_pre_summit_cents' => 9700,
@@ -81,7 +81,7 @@ it('creates a Stripe Product when missing and Prices for each priced phase', fun
 
 it('uses deterministic idempotency keys', function () {
     $product = Product::factory()->create([
-        'kind' => 'standalone',
+        'kind' => 'main',
         'is_active' => true,
         'stripe_product_id' => null,
         'price_pre_summit_cents' => 9700,
@@ -104,7 +104,7 @@ it('uses deterministic idempotency keys', function () {
 
 it('creates recurring Prices when billing_interval is set', function () {
     $product = Product::factory()->create([
-        'kind' => 'standalone',
+        'kind' => 'main',
         'is_active' => true,
         'stripe_product_id' => null,
         'price_pre_summit_cents' => 1900,
@@ -126,7 +126,7 @@ it('creates recurring Prices when billing_interval is set', function () {
 
 it('archives old Price and creates new when cents value changes', function () {
     $product = Product::factory()->create([
-        'kind' => 'standalone',
+        'kind' => 'main',
         'is_active' => true,
         'stripe_product_id' => 'prod_existing',
         'stripe_price_pre_id' => 'price_old',
@@ -172,7 +172,7 @@ it('archives old Price and creates new when cents value changes', function () {
 
 it('leaves existing Price alone when cents value matches', function () {
     $product = Product::factory()->create([
-        'kind' => 'standalone',
+        'kind' => 'main',
         'is_active' => true,
         'stripe_product_id' => 'prod_existing',
         'stripe_price_pre_id' => 'price_ok',

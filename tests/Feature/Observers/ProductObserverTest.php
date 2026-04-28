@@ -12,7 +12,7 @@ it('dispatches sync job when product is saved active and non-combo', function ()
 
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
     ]);
 
     Bus::assertDispatched(SyncProductToStripe::class, fn ($job) => $job->productId === $product->id);
@@ -21,7 +21,7 @@ it('dispatches sync job when product is saved active and non-combo', function ()
 it('does not dispatch when product is inactive', function () {
     Bus::fake();
 
-    Product::factory()->create(['is_active' => false, 'kind' => 'standalone']);
+    Product::factory()->create(['is_active' => false, 'kind' => 'main']);
 
     Bus::assertNotDispatched(SyncProductToStripe::class);
 });
@@ -37,7 +37,7 @@ it('does not dispatch when product is a combo', function () {
 it('dispatches again when a price cents column changes', function () {
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'price_pre_summit_cents' => 9700,
     ]);
 
@@ -50,7 +50,7 @@ it('dispatches again when a price cents column changes', function () {
 it('does not dispatch on irrelevant updates', function () {
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'description' => 'Before',
     ]);
 

@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 it('marks product synced on success', function () {
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'pending',
     ]);
 
@@ -30,7 +30,7 @@ it('marks product synced on success', function () {
 it('records failure and rethrows when service throws', function () {
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'pending',
     ]);
 
@@ -51,7 +51,7 @@ it('records failure and rethrows when service throws', function () {
 it('no-ops when product is no longer syncable', function () {
     $product = Product::factory()->create([
         'is_active' => false,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'pending',
     ]);
 
@@ -72,7 +72,7 @@ it('persists Stripe IDs written by the service alongside sync status', function 
 
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'pending',
         'stripe_product_id' => null,
         'stripe_price_pre_id' => null,

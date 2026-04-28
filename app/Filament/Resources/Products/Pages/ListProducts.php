@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Products\Pages;
 use App\Filament\Resources\Products\ProductResource;
 use App\Models\Product;
 use Filament\Actions\CreateAction;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListProducts extends ListRecords
@@ -35,10 +35,10 @@ class ListProducts extends ListRecords
                 ->icon('heroicon-o-squares-2x2')
                 ->badge(Product::query()->count() ?: null),
 
-            'standalone' => Tab::make('Standalone')
+            'main' => Tab::make('Main products')
                 ->icon('heroicon-o-cube')
-                ->badge($badge($counts['standalone'] ?? 0))
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('kind', 'standalone')),
+                ->badge($badge($counts['main'] ?? 0))
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('kind', 'main')),
 
             'bumps' => Tab::make('Order bumps')
                 ->icon('heroicon-o-plus-circle')

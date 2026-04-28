@@ -87,12 +87,12 @@ class ProductResource extends Resource
                                     Select::make('kind')
                                         ->label('Product kind')
                                         ->options([
-                                            'standalone' => 'Standalone — sold on its own',
+                                            'main' => 'Main product — sold on its own',
                                             'bump' => 'Order bump — added at checkout',
                                             'upsell' => 'Upsell — offered after purchase',
                                             'combo' => 'Combo — bundles multiple products',
                                         ])
-                                        ->default('standalone')
+                                        ->default('main')
                                         ->required()
                                         ->native(false)
                                         ->live(),
@@ -395,7 +395,7 @@ class ProductResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('kind')->options([
-                    'standalone' => 'Standalone',
+                    'main' => 'Main',
                     'bump' => 'Order bump',
                     'upsell' => 'Upsell',
                     'combo' => 'Combo',

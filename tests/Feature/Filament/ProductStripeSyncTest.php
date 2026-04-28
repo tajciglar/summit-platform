@@ -32,7 +32,7 @@ it('shows retry sync action when status is failed', function () {
 
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'failed',
         'stripe_sync_error' => 'boom',
     ]);
@@ -47,7 +47,7 @@ it('shows retry sync action when status is failed', function () {
 it('hides retry action when status is synced', function () {
     $product = Product::factory()->create([
         'is_active' => true,
-        'kind' => 'standalone',
+        'kind' => 'main',
         'stripe_sync_status' => 'synced',
     ]);
 

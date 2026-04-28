@@ -67,7 +67,7 @@ class Product extends Model
     }
 
     /**
-     * Stripe line items to send at checkout. For standalone/bump/upsell: one
+     * Stripe line items to send at checkout. For main/bump/upsell: one
      * item with this product's own stripe_price_id. For combos: one per child.
      *
      * HISTORICAL INTEGRITY CONTRACT: When the checkout flow is built, the
