@@ -25,7 +25,7 @@ export const VioletSunSchema = z.object({
   hero: z.object({
     pillLabel: z.string().min(1),                // "Seventh annual · Feb 10–14, 2026"
     headlineAccent: z.string().optional(),           // italic-serif fragment: "Rewire"
-    headlineTrail: z.string().min(1),            // " the way your family handles hard moments."
+    headlineTrail: z.string().optional(),            // " the way your family handles hard moments."
     subheadline: z.string().min(3),
     primaryCtaLabel: z.string().min(1),          // "Claim your free seat"
     secondaryCtaLabel: z.string().min(1),        // "See what's inside"
@@ -51,11 +51,11 @@ export const VioletSunSchema = z.object({
   }),
   overview: z.object({
     eyebrow: z.string().min(1),                  // "What is this?"
-    headlineLead: z.string().min(1),             // "A "
+    headlineLead: z.string().optional(),             // "A "
     headlineHighlight: z.string().min(1),        // "5-day intensive" (yellow highlight)
     headlineMid: z.string().min(1),              // " for the parent who is "
     headlineAccent: z.string().optional(),           // italic-serif "done winging it"
-    headlineTrail: z.string().min(1),            // "."
+    headlineTrail: z.string().optional(),            // "."
     bodyParagraphs: z.array(z.string().min(1)).min(1).max(3),
     ctaLabel: z.string().min(1),
     cardEyebrow: z.string().min(1),              // "What's inside"
@@ -68,7 +68,7 @@ export const VioletSunSchema = z.object({
   // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "Six shifts by Day 5"
-    headlineLead: z.string().min(1),             // "What the end of the week "
+    headlineLead: z.string().optional(),             // "What the end of the week "
     headlineAccent: z.string().optional(),           // italic-serif "may sound like"
     items: z.array(z.object({
       title: z.string().min(1),
@@ -77,9 +77,9 @@ export const VioletSunSchema = z.object({
   }),
   freeGift: z.object({
     eyebrow: z.string().min(1),                  // "Included with Registration"
-    headlineLead: z.string().min(1),             // "The Parenting Mastery "
+    headlineLead: z.string().optional(),             // "The Parenting Mastery "
     headlineAccent: z.string().optional(),           // italic-serif "Collection"
-    headlineTrail: z.string().min(1),            // "."
+    headlineTrail: z.string().optional(),            // "."
     body: z.string().min(1),
     bullets: z.array(z.string().min(1)).min(2).max(6),
     ctaLabel: z.string().min(1),
@@ -90,7 +90,7 @@ export const VioletSunSchema = z.object({
   bonuses: z.object({
     eyebrow: z.string().min(1),                  // "Plus three bonuses"
     headlineHighlight: z.string().min(1),        // "$291 value" (yellow hl)
-    headlineTrail: z.string().min(1),            // " — yours free."
+    headlineTrail: z.string().optional(),            // " — yours free."
     ctaLabel: z.string().min(1),
     items: z.array(z.object({
       label: z.string().min(1),                  // "Bonus 01"
@@ -101,7 +101,7 @@ export const VioletSunSchema = z.object({
     })).min(1).max(5),
   }),
   founders: z.object({
-    headlineLead: z.string().min(1),             // "From the "
+    headlineLead: z.string().optional(),             // "From the "
     headlineAccent: z.string().optional(),           // italic-serif "founders"
     items: z.array(z.object({
       name: z.string().min(1),
@@ -112,7 +112,7 @@ export const VioletSunSchema = z.object({
   }),
   testimonials: z.object({
     eyebrow: z.string().min(1),                  // "Reviews"
-    headlineLead: z.string().min(1),             // "73,124 parents. "
+    headlineLead: z.string().optional(),             // "73,124 parents. "
     headlineAccent: z.string().optional(),           // italic-serif "4.9 out of 5."
     items: z.array(z.object({
       quote: z.string().min(1),
@@ -127,9 +127,9 @@ export const VioletSunSchema = z.object({
   }),
   figures: z.object({
     eyebrow: z.string().min(1),                  // "Why this matters"
-    headlineLead: z.string().min(1),             // "The "
+    headlineLead: z.string().optional(),             // "The "
     headlineAccent: z.string().optional(),           // italic-serif "reality"
-    headlineTrail: z.string().min(1),            // " of ADHD in families today."
+    headlineTrail: z.string().optional(),            // " of ADHD in families today."
     items: z.array(z.object({
       label: z.string().min(1),                  // "Fig. 01"
       value: z.string().min(1),
@@ -139,7 +139,7 @@ export const VioletSunSchema = z.object({
   }),
   shifts: z.object({
     eyebrow: z.string().min(1),                  // "Five big shifts"
-    headlineLead: z.string().min(1),             // "What changes by "
+    headlineLead: z.string().optional(),             // "What changes by "
     headlineAccent: z.string().optional(),           // italic-serif "Day Five"
     items: z.array(z.object({
       title: z.string().min(1),
@@ -148,7 +148,7 @@ export const VioletSunSchema = z.object({
   }),
   faqSection: z.object({
     eyebrow: z.string().min(1),                  // "Common questions"
-    headlineLead: z.string().min(1),             // "Quick "
+    headlineLead: z.string().optional(),             // "Quick "
     headlineAccent: z.string().optional(),           // italic-serif "answers"
   }),
   faqs: z.array(z.object({
@@ -157,9 +157,9 @@ export const VioletSunSchema = z.object({
   })).min(3).max(10),
   closing: z.object({
     eyebrow: z.string().min(1),                  // "Registration closes Feb 9"
-    headlineLead: z.string().min(1),             // "Rewire your family's "
+    headlineLead: z.string().optional(),             // "Rewire your family's "
     headlineAccent: z.string().optional(),           // italic-serif "hard moments"
-    headlineTrail: z.string().min(1),            // "."
+    headlineTrail: z.string().optional(),            // "."
     subheadline: z.string().min(1),
     ctaLabel: z.string().min(1),
     fineprint: z.string().min(1).optional(),

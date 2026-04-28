@@ -28,9 +28,9 @@ export const CreamSageSchema = z.object({
     eventStatus: EventStatusSchema.optional(),   // 'before' | 'live' | 'ended'
     liveLabel: z.string().optional(),
     endedLabel: z.string().optional(),
-    headlineLead: z.string().min(1),             // "Your bright, "
+    headlineLead: z.string().optional(),             // "Your bright, "
     headlineAccent: z.string().optional(),           // "busy-minded" (italic/clay)
-    headlineTrail: z.string().min(1),            // " child is not a problem to be solved."
+    headlineTrail: z.string().optional(),            // " child is not a problem to be solved."
     subheadline: z.string().min(3),
     primaryCtaLabel: z.string().min(1),          // "Reserve your free seat"
     secondaryCtaLabel: z.string().min(1),        // "Learn more"
@@ -54,9 +54,9 @@ export const CreamSageSchema = z.object({
   }),
   overview: z.object({
     eyebrow: z.string().min(1),                  // "What is This?"
-    headlineLead: z.string().min(1),             // "An "
+    headlineLead: z.string().optional(),             // "An "
     headlineAccent: z.string().optional(),           // "unhurried"
-    headlineTrail: z.string().min(1),            // " answer to an overwhelming question."
+    headlineTrail: z.string().optional(),            // " answer to an overwhelming question."
     bodyParagraphs: z.array(z.string().min(1)).min(1).max(3),
     ctaLabel: z.string().min(1),                 // "Reserve your seat"
     imageCaption: z.string().min(1),             // "Live talks · a printed Collection · a quiet community"
@@ -65,9 +65,9 @@ export const CreamSageSchema = z.object({
   // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "Six Shifts by Day Five"
-    headlineLead: z.string().min(1),             // "What the end of the week "
+    headlineLead: z.string().optional(),             // "What the end of the week "
     headlineAccent: z.string().optional(),           // "may sound like"
-    headlineTrail: z.string().min(1).optional(),
+    headlineTrail: z.string().optional(),
     items: z.array(z.object({
       title: z.string().min(1),
       description: z.string().min(1),
@@ -75,9 +75,9 @@ export const CreamSageSchema = z.object({
   }),
   freeGift: z.object({
     eyebrow: z.string().min(1),                  // "Enclosed with Registration"
-    headlineLead: z.string().min(1),             // "A "
+    headlineLead: z.string().optional(),             // "A "
     headlineAccent: z.string().optional(),           // "gentle collection"
-    headlineTrail: z.string().min(1),            // ", enclosed."
+    headlineTrail: z.string().optional(),            // ", enclosed."
     body: z.string().min(1),
     bullets: z.array(z.string().min(1)).min(2).max(6),
     ctaLabel: z.string().min(1),
@@ -89,9 +89,9 @@ export const CreamSageSchema = z.object({
   }),
   bonuses: z.object({
     eyebrow: z.string().min(1),                  // "Three Gentle Bonuses"
-    headlineLead: z.string().min(1),             // "Three gifts, "
+    headlineLead: z.string().optional(),             // "Three gifts, "
     headlineAccent: z.string().optional(),           // "worth $291"
-    headlineTrail: z.string().min(1),            // ", yours free."
+    headlineTrail: z.string().optional(),            // ", yours free."
     ctaLabel: z.string().min(1),
     items: z.array(z.object({
       valueLabel: z.string().min(1),             // "$97 VALUE"
@@ -111,7 +111,7 @@ export const CreamSageSchema = z.object({
   }),
   testimonials: z.object({
     eyebrow: z.string().min(1),                  // "What Parents Say"
-    headlineLead: z.string().min(1),             // "73,124 parents. "
+    headlineLead: z.string().optional(),             // "73,124 parents. "
     headlineAccent: z.string().optional(),           // "One common theme."
     items: z.array(z.object({
       quote: z.string().min(1),
@@ -134,9 +134,9 @@ export const CreamSageSchema = z.object({
   }),
   shifts: z.object({
     eyebrow: z.string().min(1),                  // "Five Gentle Shifts"
-    headlineLead: z.string().min(1),             // "What changes by "
+    headlineLead: z.string().optional(),             // "What changes by "
     headlineAccent: z.string().optional(),           // "Day Five"
-    headlineTrail: z.string().min(1).optional(),
+    headlineTrail: z.string().optional(),
     items: z.array(z.object({
       title: z.string().min(1),
       description: z.string().min(1),
@@ -152,9 +152,9 @@ export const CreamSageSchema = z.object({
   })).min(3).max(10),
   closing: z.object({
     badgeLabel: z.string().min(1),               // "Registration closes Feb 9, 2026"
-    headlineLead: z.string().min(1),             // "Take a deep "
+    headlineLead: z.string().optional(),             // "Take a deep "
     headlineAccent: z.string().optional(),           // "breath"
-    headlineTrail: z.string().min(1),            // ". Then reserve your seat."
+    headlineTrail: z.string().optional(),            // ". Then reserve your seat."
     subheadline: z.string().min(1),
     ctaLabel: z.string().min(1),
     fineprint: z.string().min(1).optional(),

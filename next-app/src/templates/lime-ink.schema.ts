@@ -32,9 +32,9 @@ export const LimeInkSchema = z.object({
     endedLabel: z.string().optional(),
     eyebrow: z.string().min(1),                  // "A 5-day intensive · for parents · science-backed"
     heroLine1: z.string().min(1),                // First line, rendered before <br>
-    headlineLead: z.string().min(1),             // Second line, before accent
+    headlineLead: z.string().optional(),             // Second line, before accent
     headlineAccent: z.string().optional(),           // Second line, lime-colored fragment
-    headlineTrail: z.string().min(1),            // Second line, after accent
+    headlineTrail: z.string().optional(),            // Second line, after accent
     subheadline: z.string().min(3),
     primaryCtaLabel: z.string().min(1),          // "Register free"
     secondaryCtaLabel: z.string().min(1),        // "See what's inside"
@@ -60,9 +60,9 @@ export const LimeInkSchema = z.object({
   }),
   overview: z.object({
     sectionLabel: z.string().min(1),             // "03 → OVERVIEW"
-    headlineLead: z.string().min(1),             // "It's a five-day ADHD "
+    headlineLead: z.string().optional(),             // "It's a five-day ADHD "
     headlineAccent: z.string().optional(),           // "operating system"
-    headlineTrail: z.string().min(1),            // " update for your family."
+    headlineTrail: z.string().optional(),            // " update for your family."
     bodyParagraphs: z.array(z.string().min(1)).min(1).max(3),
     ctaLabel: z.string().min(1),
     systemCardLabel: z.string().min(1),          // "SYSTEM COMPONENTS"
@@ -75,9 +75,9 @@ export const LimeInkSchema = z.object({
   // table: one day block per distinct `speaker.day_number`.
   outcomes: z.object({
     sectionLabel: z.string().min(1),             // "05 → OUTCOMES"
-    headlineLead: z.string().min(1),             // "Six shifts by Day Five. "
+    headlineLead: z.string().optional(),             // "Six shifts by Day Five. "
     headlineAccent: z.string().optional(),// optional lime-colored fragment
-    headlineTrail: z.string().min(1),            // "Measured, not aspirational."
+    headlineTrail: z.string().optional(),            // "Measured, not aspirational."
     itemBadge: z.string().min(1),                // "OUTCOME"
     items: z.array(z.object({
       title: z.string().min(1),
@@ -98,9 +98,9 @@ export const LimeInkSchema = z.object({
   }),
   bonuses: z.object({
     sectionLabel: z.string().min(1),             // "06 → BONUSES"
-    headlineLead: z.string().min(1),             // "Three bonuses, "
+    headlineLead: z.string().optional(),             // "Three bonuses, "
     headlineAccent: z.string().optional(),           // "$291 value"
-    headlineTrail: z.string().min(1),            // ", zero cost."
+    headlineTrail: z.string().optional(),            // ", zero cost."
     subhead: z.string().min(1),
     ctaLabel: z.string().min(1),
     items: z.array(z.object({
@@ -123,9 +123,9 @@ export const LimeInkSchema = z.object({
   }),
   testimonials: z.object({
     sectionLabel: z.string().min(1),             // "08 → REVIEWS"
-    headlineLead: z.string().min(1),             // "73,124 parents. "
+    headlineLead: z.string().optional(),             // "73,124 parents. "
     headlineAccent: z.string().optional(),// optional lime-colored fragment
-    headlineTrail: z.string().min(1),            // "4.9 / 5."
+    headlineTrail: z.string().optional(),            // "4.9 / 5."
     subhead: z.string().min(1),
     items: z.array(z.object({
       quote: z.string().min(1),
