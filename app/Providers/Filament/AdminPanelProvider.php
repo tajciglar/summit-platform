@@ -196,7 +196,6 @@ HTML),
                     $items[] = NavigationItem::make($summit->title)
                         ->group('Summit')
                         ->icon('heroicon-o-calendar-days')
-                        ->iconActive('heroicon-s-calendar-days')
                         ->sort($sort++)
                         ->url(route('admin.current-summit.set', ['summit' => $summit->id]))
                         ->isActiveWhen(fn (): bool => $summitId === CurrentSummit::getId());
@@ -205,7 +204,6 @@ HTML),
                 $items[] = NavigationItem::make('Manage summits')
                     ->group('Summit')
                     ->icon('heroicon-o-pencil-square')
-                    ->iconActive('heroicon-s-pencil-square')
                     ->sort(998)
                     ->url(fn (): string => SummitResource::getUrl('index'));
 
