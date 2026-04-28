@@ -175,13 +175,15 @@ HTML),
                     return;
                 }
 
+                // Live summits only: event hasn't ended yet (or end date unknown).
                 $summits = $domain->summits()
                     ->withoutGlobalScopes()
+                    ->where(function ($q): void {
+                        $q->whereNull('event_end_date')
+                            ->orWhere('event_end_date', '>=', now()->toDateString());
+                    })
                     ->orderBy('title')
                     ->get();
-                if ($summits->isEmpty()) {
-                    return;
-                }
 
                 // isActiveWhen runs at render time, so it correctly sees the
                 // session (panel boot runs BEFORE StartSession middleware).
@@ -198,15 +200,9 @@ HTML),
 
                 $items[] = NavigationItem::make('Manage summits')
                     ->group('Summit')
+                    ->icon('heroicon-o-cog-6-tooth')
                     ->sort(998)
                     ->url(fn (): string => SummitResource::getUrl('index'));
-
-                // "+ New summit" sits at the bottom of the group. No icon —
-                // Filament errors if group AND item both have icons.
-                $items[] = NavigationItem::make('+ New summit')
-                    ->group('Summit')
-                    ->sort(999)
-                    ->url(fn (): string => SummitResource::getUrl('create'));
 
                 $panel->navigationItems($items);
             });

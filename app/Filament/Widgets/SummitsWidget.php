@@ -6,6 +6,8 @@ use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Domain;
 use App\Models\Summit;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -16,7 +18,7 @@ class SummitsWidget extends TableWidget
 {
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Summits';
+    protected static ?string $heading = 'Live summits';
 
     public function table(Table $table): Table
     {
@@ -29,13 +31,27 @@ class SummitsWidget extends TableWidget
                     $query->where('domain_id', $domain->getKey());
                 }
 
-                return $query->orderBy('title');
+                // Live = event hasn't ended yet (or end date unknown).
+                return $query
+                    ->where(function ($q): void {
+                        $q->whereNull('ends_at')
+                            ->orWhere('ends_at', '>=', now());
+                    })
+                    ->orderBy('title');
             })
             ->columns([
                 TextColumn::make('title')
                     ->weight('bold')
                     ->searchable()
                     ->url(fn (Summit $record): string => SummitResource::getUrl('view', ['record' => $record])),
+                TextColumn::make('pre_summit_starts_at')
+                    ->label('Start')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('ends_at')
+                    ->label('End')
+                    ->date()
+                    ->sortable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -63,25 +79,18 @@ class SummitsWidget extends TableWidget
                     ->counts('speakers')
                     ->label('Speakers')
                     ->alignCenter(),
-                TextColumn::make('ends_at')
-                    ->label('Ends')
-                    ->date()
-                    ->sortable(),
             ])
             ->recordActions([
-                Action::make('open')
-                    ->label('Open')
-                    ->icon('heroicon-o-arrow-top-right-on-square')
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
                     ->url(fn (Summit $record): string => SummitResource::getUrl('view', ['record' => $record])),
+                EditAction::make()
+                    ->url(fn (Summit $record): string => SummitResource::getUrl('edit', ['record' => $record])),
+                DeleteAction::make(),
             ])
-            ->headerActions([
-                Action::make('new')
-                    ->label('New summit')
-                    ->icon('heroicon-o-plus')
-                    ->url(fn (): string => SummitResource::getUrl('create')),
-            ])
-            ->emptyStateHeading('No summits yet')
-            ->emptyStateDescription('Create your first summit to get started.')
+            ->emptyStateHeading('No live summits')
+            ->emptyStateDescription('Past summits live in Manage summits.')
             ->emptyStateIcon('heroicon-o-sparkles')
             ->paginated(false);
     }
