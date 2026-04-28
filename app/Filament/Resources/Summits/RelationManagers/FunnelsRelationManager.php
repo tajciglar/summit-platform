@@ -2,17 +2,23 @@
 
 namespace App\Filament\Resources\Summits\RelationManagers;
 
+use App\Actions\DuplicateFunnel;
 use App\Filament\Resources\Funnels\FunnelResource;
 use App\Models\Funnel;
+use App\Models\Summit;
+use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
@@ -115,6 +121,51 @@ class FunnelsRelationManager extends RelationManager
                     ->visible(fn (Funnel $record): bool => $record->is_active && optional($record->summit?->domain)->hostname !== null),
                 ViewAction::make()
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
+                Action::make('duplicate')
+                    ->label('Duplicate')
+                    ->icon(Heroicon::OutlinedDocumentDuplicate)
+                    ->color('gray')
+                    ->modalHeading('Duplicate this funnel')
+                    ->modalDescription('Copies the funnel with all steps, block content, and bumps. Pick a destination summit and skin to apply.')
+                    ->modalSubmitActionLabel('Duplicate')
+                    ->schema(fn (Funnel $record): array => [
+                        Select::make('template_key')
+                            ->label('Skin')
+                            ->options(fn () => collect(app(TemplateRegistry::class)->allKeys())
+                                ->mapWithKeys(fn (string $k) => [$k => app(TemplateRegistry::class)->get($k)['label'] ?? $k])
+                                ->all())
+                            ->default($record->template_key)
+                            ->placeholder('Keep current skin')
+                            ->native(false)
+                            ->searchable(),
+                        Select::make('destination_summit_id')
+                            ->label('Destination summit')
+                            ->options(function () {
+                                $query = Summit::query();
+                                $domain = Filament::getTenant();
+                                if ($domain) {
+                                    $query->where('domain_id', $domain->getKey());
+                                }
+
+                                return $query->orderBy('title')->pluck('title', 'id')->all();
+                            })
+                            ->default(fn () => $record->summit_id)
+                            ->required()
+                            ->searchable(),
+                    ])
+                    ->action(function (array $data, Funnel $record): void {
+                        $clone = app(DuplicateFunnel::class)->handle(
+                            $record,
+                            destinationSummitId: (string) $data['destination_summit_id'],
+                            templateKey: $data['template_key'] ?? null,
+                        );
+
+                        Notification::make()
+                            ->title('Funnel duplicated')
+                            ->body('Created '.$clone->name.'.')
+                            ->success()
+                            ->send();
+                    }),
                 DeleteAction::make()
                     ->modalHeading('Delete funnel?')
                     ->modalDescription('This will permanently remove the funnel and its steps. This cannot be undone.'),
