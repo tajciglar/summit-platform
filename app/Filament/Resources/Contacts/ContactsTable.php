@@ -11,7 +11,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -109,10 +108,13 @@ class ContactsTable
                         false: fn (Builder $q) => $q->whereDoesntHave('orders', fn (Builder $o) => $o->whereIn('status', ['completed', 'partial_refund'])),
                         blank: fn (Builder $q) => $q,
                     ),
-                Filter::make('synced_to_ac')
-                    ->label('Synced to AC')
-                    ->query(fn (Builder $query) => $query->whereNotNull('ac_contact_id')),
-            ], layout: FiltersLayout::AboveContent)
+            ])
+            ->deferFilters(false)
+            ->filtersTriggerAction(
+                fn ($action) => $action
+                    ->label('Filters')
+                    ->icon('heroicon-o-funnel')
+            )
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
