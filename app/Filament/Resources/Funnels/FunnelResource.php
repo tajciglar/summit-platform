@@ -440,8 +440,7 @@ class FunnelResource extends Resource
                             })
                             ->default(fn () => $record->summit_id)
                             ->required()
-                            ->preload()
-                            ->searchable(),
+                            ->native(false),
                     ])
                     ->action(function (array $data, Funnel $record): void {
                         $clone = app(DuplicateFunnel::class)->handle(
