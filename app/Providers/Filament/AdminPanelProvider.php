@@ -179,8 +179,8 @@ HTML),
                 $summits = $domain->summits()
                     ->withoutGlobalScopes()
                     ->where(function ($q): void {
-                        $q->whereNull('event_end_date')
-                            ->orWhere('event_end_date', '>=', now()->toDateString());
+                        $q->whereNull('ends_at')
+                            ->orWhere('ends_at', '>=', now());
                     })
                     ->orderBy('title')
                     ->get();
