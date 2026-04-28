@@ -25,6 +25,10 @@
                         $currentDay = $start && $end ? min($totalDays, (int) $start->diffInDays($now) + 1) : null;
                         $progress = $totalDays ? round(($currentDay / $totalDays) * 100, 1) : null;
                     @endphp
+                    @php
+                        $viewUrl = \App\Filament\Resources\Summits\SummitResource::getUrl('view', ['record' => $summit]);
+                        $editUrl = \App\Filament\Resources\Summits\SummitResource::getUrl('edit', ['record' => $summit]);
+                    @endphp
                     <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/40 p-5 shadow-sm">
                         <div class="mb-4 flex items-start justify-between gap-4">
                             <div class="min-w-0">
@@ -44,6 +48,16 @@
                                 <div class="text-xs text-gray-500">
                                     {{ $start?->toFormattedDateString() }} – {{ $end?->toFormattedDateString() }}
                                 </div>
+                            </div>
+                            <div class="flex shrink-0 items-center gap-2">
+                                <a href="{{ $viewUrl }}" class="inline-flex items-center gap-1 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    View
+                                </a>
+                                <a href="{{ $editUrl }}" class="inline-flex items-center gap-1 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1.5 text-xs font-medium text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                    Edit
+                                </a>
                             </div>
                         </div>
 
