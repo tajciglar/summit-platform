@@ -6,7 +6,6 @@ export const blueCoralFixture: BlueCoralContent = {
     tagline: 'Parenting you can rely on',
     startDate: '2026-02-10',
     endDate: '2026-02-14',
-    timezone: 'America/New_York',
   },
   topBar: {
     title: 'ADHD PARENTING SUMMIT 2026',

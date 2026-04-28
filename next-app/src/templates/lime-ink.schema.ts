@@ -15,7 +15,6 @@ export const LimeInkSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
   }),
   topBar: z.object({
     codeTag: z.string().min(1),                  // "[ADHD-SUMMIT]"
@@ -32,7 +31,7 @@ export const LimeInkSchema = z.object({
     eyebrow: z.string().min(1),                  // "A 5-day intensive · for parents · science-backed"
     heroLine1: z.string().min(1),                // First line, rendered before <br>
     headlineLead: z.string().min(1),             // Second line, before accent
-    headlineAccent: z.string().min(1),           // Second line, lime-colored fragment
+    headlineAccent: z.string().optional(),           // Second line, lime-colored fragment
     headlineTrail: z.string().min(1),            // Second line, after accent
     subheadline: z.string().min(3),
     primaryCtaLabel: z.string().min(1),          // "Register free"
@@ -60,7 +59,7 @@ export const LimeInkSchema = z.object({
   overview: z.object({
     sectionLabel: z.string().min(1),             // "03 → OVERVIEW"
     headlineLead: z.string().min(1),             // "It's a five-day ADHD "
-    headlineAccent: z.string().min(1),           // "operating system"
+    headlineAccent: z.string().optional(),           // "operating system"
     headlineTrail: z.string().min(1),            // " update for your family."
     bodyParagraphs: z.array(z.string().min(1)).min(1).max(3),
     ctaLabel: z.string().min(1),
@@ -75,7 +74,7 @@ export const LimeInkSchema = z.object({
   outcomes: z.object({
     sectionLabel: z.string().min(1),             // "05 → OUTCOMES"
     headlineLead: z.string().min(1),             // "Six shifts by Day Five. "
-    headlineAccent: z.string().min(1).optional(),// optional lime-colored fragment
+    headlineAccent: z.string().optional(),// optional lime-colored fragment
     headlineTrail: z.string().min(1),            // "Measured, not aspirational."
     itemBadge: z.string().min(1),                // "OUTCOME"
     items: z.array(z.object({
@@ -98,7 +97,7 @@ export const LimeInkSchema = z.object({
   bonuses: z.object({
     sectionLabel: z.string().min(1),             // "06 → BONUSES"
     headlineLead: z.string().min(1),             // "Three bonuses, "
-    headlineAccent: z.string().min(1),           // "$291 value"
+    headlineAccent: z.string().optional(),           // "$291 value"
     headlineTrail: z.string().min(1),            // ", zero cost."
     subhead: z.string().min(1),
     ctaLabel: z.string().min(1),
@@ -123,7 +122,7 @@ export const LimeInkSchema = z.object({
   testimonials: z.object({
     sectionLabel: z.string().min(1),             // "08 → REVIEWS"
     headlineLead: z.string().min(1),             // "73,124 parents. "
-    headlineAccent: z.string().min(1).optional(),// optional lime-colored fragment
+    headlineAccent: z.string().optional(),// optional lime-colored fragment
     headlineTrail: z.string().min(1),            // "4.9 / 5."
     subhead: z.string().min(1),
     items: z.array(z.object({

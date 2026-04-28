@@ -7,7 +7,6 @@ export const OchreInkSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
   }),
   masthead: z.object({
     volume: z.string().min(1),                // e.g. "Vol. VII · Feb 2026"

@@ -24,7 +24,6 @@ export const GreenGoldSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
   }),
   topBar: z.object({
     title: z.string().min(1),                    // centered title, no CTA

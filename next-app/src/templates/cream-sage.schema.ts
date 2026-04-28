@@ -15,7 +15,6 @@ export const CreamSageSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
   }),
   topBar: z.object({
     brandName: z.string().min(1),                // "ADHD Parenting Summit"
@@ -29,7 +28,7 @@ export const CreamSageSchema = z.object({
     liveLabel: z.string().optional(),
     endedLabel: z.string().optional(),
     headlineLead: z.string().min(1),             // "Your bright, "
-    headlineAccent: z.string().min(1),           // "busy-minded" (italic/clay)
+    headlineAccent: z.string().optional(),           // "busy-minded" (italic/clay)
     headlineTrail: z.string().min(1),            // " child is not a problem to be solved."
     subheadline: z.string().min(3),
     primaryCtaLabel: z.string().min(1),          // "Reserve your free seat"
@@ -55,7 +54,7 @@ export const CreamSageSchema = z.object({
   overview: z.object({
     eyebrow: z.string().min(1),                  // "What is This?"
     headlineLead: z.string().min(1),             // "An "
-    headlineAccent: z.string().min(1),           // "unhurried"
+    headlineAccent: z.string().optional(),           // "unhurried"
     headlineTrail: z.string().min(1),            // " answer to an overwhelming question."
     bodyParagraphs: z.array(z.string().min(1)).min(1).max(3),
     ctaLabel: z.string().min(1),                 // "Reserve your seat"
@@ -66,7 +65,7 @@ export const CreamSageSchema = z.object({
   outcomes: z.object({
     eyebrow: z.string().min(1),                  // "Six Shifts by Day Five"
     headlineLead: z.string().min(1),             // "What the end of the week "
-    headlineAccent: z.string().min(1),           // "may sound like"
+    headlineAccent: z.string().optional(),           // "may sound like"
     headlineTrail: z.string().min(1).optional(),
     items: z.array(z.object({
       title: z.string().min(1),
@@ -76,7 +75,7 @@ export const CreamSageSchema = z.object({
   freeGift: z.object({
     eyebrow: z.string().min(1),                  // "Enclosed with Registration"
     headlineLead: z.string().min(1),             // "A "
-    headlineAccent: z.string().min(1),           // "gentle collection"
+    headlineAccent: z.string().optional(),           // "gentle collection"
     headlineTrail: z.string().min(1),            // ", enclosed."
     body: z.string().min(1),
     bullets: z.array(z.string().min(1)).min(2).max(6),
@@ -90,7 +89,7 @@ export const CreamSageSchema = z.object({
   bonuses: z.object({
     eyebrow: z.string().min(1),                  // "Three Gentle Bonuses"
     headlineLead: z.string().min(1),             // "Three gifts, "
-    headlineAccent: z.string().min(1),           // "worth $291"
+    headlineAccent: z.string().optional(),           // "worth $291"
     headlineTrail: z.string().min(1),            // ", yours free."
     ctaLabel: z.string().min(1),
     items: z.array(z.object({
@@ -112,7 +111,7 @@ export const CreamSageSchema = z.object({
   testimonials: z.object({
     eyebrow: z.string().min(1),                  // "What Parents Say"
     headlineLead: z.string().min(1),             // "73,124 parents. "
-    headlineAccent: z.string().min(1),           // "One common theme."
+    headlineAccent: z.string().optional(),           // "One common theme."
     items: z.array(z.object({
       quote: z.string().min(1),
       name: z.string().min(1),
@@ -135,7 +134,7 @@ export const CreamSageSchema = z.object({
   shifts: z.object({
     eyebrow: z.string().min(1),                  // "Five Gentle Shifts"
     headlineLead: z.string().min(1),             // "What changes by "
-    headlineAccent: z.string().min(1),           // "Day Five"
+    headlineAccent: z.string().optional(),           // "Day Five"
     headlineTrail: z.string().min(1).optional(),
     items: z.array(z.object({
       title: z.string().min(1),
@@ -153,7 +152,7 @@ export const CreamSageSchema = z.object({
   closing: z.object({
     badgeLabel: z.string().min(1),               // "Registration closes Feb 9, 2026"
     headlineLead: z.string().min(1),             // "Take a deep "
-    headlineAccent: z.string().min(1),           // "breath"
+    headlineAccent: z.string().optional(),           // "breath"
     headlineTrail: z.string().min(1),            // ". Then reserve your seat."
     subheadline: z.string().min(1),
     ctaLabel: z.string().min(1),

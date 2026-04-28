@@ -15,7 +15,6 @@ export const BlueCoralSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
   }),
   topBar: z.object({
     title: z.string().min(1), // "ADHD PARENTING SUMMIT 2026"

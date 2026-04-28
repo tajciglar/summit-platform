@@ -6,7 +6,6 @@ export const greenGoldFixture: GreenGoldContent = {
     tagline: 'A 5-day virtual summit for parents',
     startDate: '2026-02-10',
     endDate: '2026-02-14',
-    timezone: 'America/New_York',
   },
   topBar: {
     title: 'ADHD PARENTING SUMMIT 2026',

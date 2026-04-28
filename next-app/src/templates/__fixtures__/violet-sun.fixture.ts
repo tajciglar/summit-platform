@@ -6,7 +6,6 @@ export const violetSunFixture: VioletSunContent = {
     tagline: 'Rewire the way your family handles hard moments',
     startDate: '2026-02-10',
     endDate: '2026-02-14',
-    timezone: 'America/New_York',
   },
   topBar: {
     brandName: 'ADHD Parenting Summit',
