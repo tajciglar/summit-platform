@@ -7,6 +7,7 @@ export const OchreInkSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
+    eventStatusLabel: z.string().optional(),     // computed by backend: e.g. "ONLINE Event, 27–29 April"
   }),
   masthead: z.object({
     volume: z.string().min(1),                // e.g. "Vol. VII · Feb 2026"
@@ -15,6 +16,7 @@ export const OchreInkSchema = z.object({
   hero: z.object({
     issueLabel: z.string().min(1),            // e.g. "Issue No. VII"
     dateRangeLabel: z.string().min(1),        // e.g. "Feb 10–14, 2026"
+    eventStatusLabel: z.string().optional(),  // computed by backend; overrides dateRangeLabel when present
     eventStatus: EventStatusSchema.optional(),
     liveLabel: z.string().optional(),
     endedLabel: z.string().optional(),

@@ -15,6 +15,7 @@ export const LimeInkSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
+    eventStatusLabel: z.string().optional(),     // computed by backend: e.g. "ONLINE Event, 27–29 April"
   }),
   topBar: z.object({
     codeTag: z.string().min(1),                  // "[ADHD-SUMMIT]"
@@ -25,6 +26,7 @@ export const LimeInkSchema = z.object({
   hero: z.object({
     sectionLabel: z.string().min(1),             // "01 → HERO"
     dateRangeLabel: z.string().min(1),           // "Feb 10–14 · 2026"
+    eventStatusLabel: z.string().optional(),     // computed by backend; overrides dateRangeLabel when present
     eventStatus: EventStatusSchema.optional(),   // 'before' | 'live' | 'ended'
     liveLabel: z.string().optional(),
     endedLabel: z.string().optional(),

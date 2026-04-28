@@ -49,7 +49,13 @@ export function opusV1ContentToSections(c: Partial<OchreInkContent>): Partial<Se
   // anyway and skips entries whose content is missing.
   return {
     ...(c.masthead && { masthead: c.masthead }),
-    ...(c.hero && { hero: c.hero }),
+    ...(c.hero && {
+      hero: {
+        ...c.hero,
+        // Prefer the backend-computed label over the hand-typed dateRangeLabel.
+        eventStatusLabel: c.summit?.eventStatusLabel ?? c.hero.eventStatusLabel,
+      },
+    }),
     ...(c.featuredIn && { marquee: { items: [...c.featuredIn] } }),
     ...(c.socialProof && { 'stats-hero': c.socialProof }),
     ...(c.whatIsThis && c.featureBand && {

@@ -180,6 +180,14 @@ class PublicFunnelController extends Controller
         $tokens = is_array($pageOverrides['tokens'] ?? null) ? $pageOverrides['tokens'] : null;
         $sections = is_array($pageOverrides['sections'] ?? null) ? $pageOverrides['sections'] : null;
 
+        // Inject the computed event-status label into content.summit so every
+        // renderer can read summit.eventStatusLabel without needing a separate prop.
+        if ($summit && isset($content['content']) && is_array($content['content'])) {
+            $summitBlock = is_array($content['content']['summit'] ?? null) ? $content['content']['summit'] : [];
+            $summitBlock['eventStatusLabel'] = $summit->eventStatusLabel();
+            $content['content']['summit'] = $summitBlock;
+        }
+
         return [
             'template_key' => $content['template_key'],
             'content' => $content['content'] ?? [],

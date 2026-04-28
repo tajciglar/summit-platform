@@ -41,7 +41,13 @@ export type SectionContentMap = {
 export function limeInkContentToSections(c: Partial<LimeInkContent>): Partial<SectionContentMap> {
   return {
     ...(c.topBar && { 'top-bar': c.topBar }),
-    ...(c.hero && { hero: c.hero }),
+    ...(c.hero && {
+      hero: {
+        ...c.hero,
+        // Prefer the backend-computed label over the hand-typed dateRangeLabel.
+        eventStatusLabel: c.summit?.eventStatusLabel ?? c.hero.eventStatusLabel,
+      },
+    }),
     ...(c.press && { press: c.press }),
     ...(c.stats && { stats: c.stats }),
     ...(c.overview && { overview: c.overview }),
