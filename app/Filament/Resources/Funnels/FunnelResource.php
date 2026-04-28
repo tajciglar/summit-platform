@@ -440,6 +440,7 @@ class FunnelResource extends Resource
                             })
                             ->default(fn () => $record->summit_id)
                             ->required()
+                            ->preload()
                             ->searchable(),
                     ])
                     ->action(function (array $data, Funnel $record): void {

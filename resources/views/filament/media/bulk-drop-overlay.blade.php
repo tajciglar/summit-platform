@@ -82,14 +82,25 @@
                     return;
                 }
 
-                const root = document.querySelector('[wire\\:id]');
-                if (! root || ! window.Livewire) {
+                if (! window.Livewire) {
                     this.active = false;
                     return;
                 }
 
-                const component = window.Livewire.find(root.getAttribute('wire:id'));
+                // The page renders multiple Livewire components (topbar,
+                // sidebar, page). Pick the one that actually exposes
+                // `bulkDropFiles` — that's the ListMediaItems page.
+                const component = window.Livewire.all().find((c) => {
+                    try {
+                        const data = c.snapshot?.data ?? {};
+                        return Object.prototype.hasOwnProperty.call(data, 'bulkDropFiles');
+                    } catch (_) {
+                        return false;
+                    }
+                });
+
                 if (! component) {
+                    console.warn('Bulk drop: ListMediaItems component not found on page');
                     this.active = false;
                     return;
                 }
