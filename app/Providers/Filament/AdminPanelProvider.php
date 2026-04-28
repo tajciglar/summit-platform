@@ -76,6 +76,9 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Content')
                     ->icon('heroicon-o-sparkles')
                     ->collapsible(false),
+                NavigationGroup::make('Media')
+                    ->icon('heroicon-o-photo')
+                    ->collapsible(false),
                 NavigationGroup::make('Funnels')
                     ->icon('heroicon-o-funnel')
                     ->collapsible(false),

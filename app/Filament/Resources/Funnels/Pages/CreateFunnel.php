@@ -34,26 +34,33 @@ class CreateFunnel extends CreateRecord
     }
 
     /**
-     * For every step type that has sections selected in `section_config`,
-     * create the matching FunnelStep and seed its `page_content` with the
-     * funnel skin + enabled sections and empty content. Copywriters fill the
-     * sections from the block editor — no AI call, no queue dependency.
+     * For every step type the operator picked in the create form, create the
+     * matching FunnelStep and seed its `page_content` with the funnel skin +
+     * the registry's default enabled sections. Copywriters fill the sections
+     * from the block editor — no AI call, no queue dependency.
      */
     protected function afterCreate(): void
     {
         /** @var Funnel $funnel */
         $funnel = $this->record;
 
-        $sectionConfig = $funnel->section_config ?? [];
+        // No skin picked → nothing to scaffold. Operator can add steps later
+        // by hand once they choose a template.
+        if (! $funnel->template_key) {
+            return;
+        }
+
+        $selectedSteps = $this->data['steps_to_create'] ?? array_keys(self::AUTO_STEP_TYPES);
+        if (! is_array($selectedSteps) || $selectedSteps === []) {
+            return;
+        }
+
         $created = 0;
+        $sectionConfigOut = $funnel->section_config ?? [];
 
         $registry = app(TemplateRegistry::class);
         $filler = app(SectionPlaceholderFiller::class);
 
-        // The whole-template jsonSchema is authoritative — Next's Zod
-        // validates `content` against every top-level (camelCase) property,
-        // so we fill the full schema. `enabled_sections` (kebab) is a
-        // separate render-time toggle and lives alongside `content`.
         $wholeSchema = $funnel->template_key && $registry->exists($funnel->template_key)
             ? ($registry->get($funnel->template_key)['jsonSchema'] ?? [])
             : [];
@@ -61,12 +68,14 @@ class CreateFunnel extends CreateRecord
         $speakersByDay = SectionPlaceholderFiller::speakersByDayFor($funnel->summit_id);
 
         foreach (self::AUTO_STEP_TYPES as $stepType => $defaults) {
-            $sections = $sectionConfig[$stepType] ?? [];
-            if (! is_array($sections) || count($sections) === 0) {
+            if (! in_array($stepType, $selectedSteps, true)) {
                 continue;
             }
 
-            $pageContent = null;
+            $sections = self::defaultSectionsForStep($registry, $funnel->template_key, $stepType);
+            $sectionConfigOut[$stepType] = $sections;
+
+            $pageContent = [];
             if ($funnel->template_key) {
                 $enabled = array_values($sections);
                 $stepSchema = $this->scopeSchemaForStepType(
@@ -98,6 +107,10 @@ class CreateFunnel extends CreateRecord
             $created++;
         }
 
+        if ($sectionConfigOut !== ($funnel->section_config ?? [])) {
+            $funnel->update(['section_config' => $sectionConfigOut]);
+        }
+
         if ($created > 0) {
             Notification::make()
                 ->title('Created '.$created.' step'.($created === 1 ? '' : 's'))
@@ -105,6 +118,33 @@ class CreateFunnel extends CreateRecord
                 ->success()
                 ->send();
         }
+    }
+
+    /**
+     * Default section list for a given step type, sourced from the template
+     * registry. Optin = supportedSections minus the sales sections; sales =
+     * defaultSalesSections (or all supported when the skin doesn't split);
+     * thank_you = supportedSections.
+     *
+     * @return list<string>
+     */
+    private static function defaultSectionsForStep(TemplateRegistry $registry, ?string $templateKey, string $stepType): array
+    {
+        if (! $templateKey || ! $registry->exists($templateKey) || ! $registry->supportsSections($templateKey)) {
+            return [];
+        }
+
+        $supported = $registry->supportedSections($templateKey);
+        $sales = $registry->defaultSalesSections($templateKey);
+
+        return match ($stepType) {
+            'optin' => $sales !== []
+                ? array_values(array_diff($supported, $sales))
+                : ($registry->defaultEnabledSections($templateKey) ?: $supported),
+            'sales_page' => $sales !== [] ? $sales : $supported,
+            'thank_you' => $supported,
+            default => [],
+        };
     }
 
     /**

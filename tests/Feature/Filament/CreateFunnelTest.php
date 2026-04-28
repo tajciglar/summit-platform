@@ -39,8 +39,7 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
             'template_key' => 'ochre-ink',
             'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
             'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
-            'section_config.optin' => ['masthead', 'hero', 'footer'],
-            'section_config.sales_page' => ['sales-hero', 'intro', 'price-card', 'guarantee'],
+            'steps_to_create' => ['optin', 'sales_page'],
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -56,7 +55,14 @@ it('seeds steps with empty page_content and dispatches no AI jobs', function () 
 
     $optin = $steps->firstWhere('step_type', 'optin');
     expect($optin->page_content['template_key'])->toBe('ochre-ink');
-    expect($optin->page_content['enabled_sections'])->toEqualCanonicalizing(['masthead', 'hero', 'footer']);
+    // Optin's enabled_sections come from the registry default (full optin
+    // body) when no per-step picker is in the form anymore.
+    $registry = app(TemplateRegistry::class);
+    $expectedOptin = array_values(array_diff(
+        $registry->supportedSections('ochre-ink'),
+        $registry->defaultSalesSections('ochre-ink'),
+    ));
+    expect($optin->page_content['enabled_sections'])->toEqualCanonicalizing($expectedOptin);
 
     // Content keys come from the whole-template jsonSchema (camelCase),
     // which is what Next's Zod validates. Every required top-level
@@ -80,12 +86,14 @@ it('seeds sales_page steps with sales-section content, not optin content', funct
     // steps so placeholder content covers the sales camelCase keys.
     Queue::fake();
 
+    // The new CreateFunnel flow no longer takes per-step section CheckboxLists
+    // — it scaffolds steps from the registry's defaults for the chosen skin.
+    // Default sales sections come straight from the template manifest.
     $registry = app(TemplateRegistry::class);
-    $salesKebab = $registry->defaultSalesSections($templateKey);
-    $enabledSales = array_slice($salesKebab, 0, 5);
+    $expectedSales = $registry->defaultSalesSections($templateKey);
     $salesCamel = array_map(
         static fn (string $k): string => lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $k)))),
-        $enabledSales,
+        $expectedSales,
     );
     $slug = 'sf-'.str_replace('-', '', $templateKey);
 
@@ -97,8 +105,6 @@ it('seeds sales_page steps with sales-section content, not optin content', funct
             'template_key' => $templateKey,
             'wp_checkout_redirect_url' => 'https://wp.example.com/checkout',
             'wp_thankyou_redirect_url' => 'https://wp.example.com/thank-you',
-            'section_config.optin' => ['hero'],
-            'section_config.sales_page' => $enabledSales,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -106,7 +112,7 @@ it('seeds sales_page steps with sales-section content, not optin content', funct
     $funnel = $this->summit->funnels()->where('slug', $slug)->firstOrFail();
     $sales = $funnel->steps()->where('step_type', 'sales_page')->firstOrFail();
 
-    expect($sales->page_content['enabled_sections'])->toEqualCanonicalizing($enabledSales);
+    expect($sales->page_content['enabled_sections'])->toEqualCanonicalizing($expectedSales);
 
     // Seeded content must contain the sales camelCase keys the skin actually
     // reads — otherwise the sales page renders blank.

@@ -93,19 +93,6 @@ class SummitResource extends Resource
                                 ->required()
                                 ->native(false)
                                 ->columnSpan(3),
-                            Select::make('current_phase')
-                                ->label('Current phase')
-                                ->options([
-                                    'pre' => 'Pre-summit',
-                                    'late_pre' => 'Late pre-summit',
-                                    'during' => 'During summit',
-                                    'post' => 'Post-summit',
-                                ])
-                                ->default('pre')
-                                ->required()
-                                ->native(false)
-                                ->helperText('Updated automatically by cron.')
-                                ->columnSpan(3),
                             TextInput::make('slug')
                                 ->required()
                                 ->maxLength(255)
@@ -178,16 +165,6 @@ class SummitResource extends Resource
                         'archived' => 'warning',
                         default => 'gray',
                     }),
-                TextColumn::make('current_phase')
-                    ->badge()
-                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
-                    ->color(fn (?string $state): string => match ($state) {
-                        'during' => 'success',
-                        'late_pre' => 'warning',
-                        'pre' => 'info',
-                        'post' => 'gray',
-                        default => 'gray',
-                    }),
                 TextColumn::make('speakers_count')
                     ->counts('speakers')
                     ->label('Speakers')
@@ -209,12 +186,6 @@ class SummitResource extends Resource
                     'draft' => 'Draft',
                     'published' => 'Published',
                     'archived' => 'Archived',
-                ]),
-                SelectFilter::make('current_phase')->options([
-                    'pre' => 'Pre-summit',
-                    'late_pre' => 'Late pre-summit',
-                    'during' => 'During summit',
-                    'post' => 'Post-summit',
                 ]),
             ])
             ->recordActions([

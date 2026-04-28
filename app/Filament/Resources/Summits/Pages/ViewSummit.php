@@ -94,18 +94,6 @@ class ViewSummit extends ViewRecord
                                     default => 'gray',
                                 })
                                 ->columnSpan(3),
-                            TextEntry::make('current_phase')
-                                ->label('Current phase')
-                                ->badge()
-                                ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
-                                ->color(fn (?string $state): string => match ($state) {
-                                    'during' => 'success',
-                                    'late_pre' => 'warning',
-                                    'pre' => 'info',
-                                    'post' => 'gray',
-                                    default => 'gray',
-                                })
-                                ->columnSpan(3),
                             TextEntry::make('slug')
                                 ->prefix('/')
                                 ->color('gray')

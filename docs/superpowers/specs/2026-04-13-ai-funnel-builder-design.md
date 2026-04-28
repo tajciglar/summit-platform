@@ -282,7 +282,7 @@ Output: full validated props for every block. Steps run in parallel (4 API calls
 ### What AI does vs. doesn't do
 
 | Does | Doesn't |
-|------|---------|
+|------|---------|v
 | Pick blocks from catalog | Invent new block types |
 | Order blocks into a sensible funnel | Generate React code |
 | Write copy fitting each block's schema | Upload or generate images |
