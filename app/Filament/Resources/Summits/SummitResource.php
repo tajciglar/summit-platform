@@ -209,8 +209,9 @@ class SummitResource extends Resource
     }
 
     /**
-     * Summit scopes to domain via its `domain_id` FK. Also narrows to the
-     * picked summit when one is selected in the tenant dropdown.
+     * Summit scopes to domain via its `domain_id` FK. Manage summits is the
+     * full list for the active domain — do NOT narrow to CurrentSummit here,
+     * otherwise picking a summit in the sidebar would hide all the others.
      */
     public static function scopeEloquentQueryToTenant(
         Builder $query,
@@ -221,13 +222,7 @@ class SummitResource extends Resource
             return $query;
         }
 
-        $query->where('domain_id', $tenant->getKey());
-
-        if ($summitId = CurrentSummit::getId()) {
-            $query->whereKey($summitId);
-        }
-
-        return $query;
+        return $query->where('domain_id', $tenant->getKey());
     }
 
     public static function getTenantOwnershipRelationshipName(): string
