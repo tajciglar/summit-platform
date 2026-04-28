@@ -221,6 +221,7 @@ class SpeakerResource extends Resource
                     ->relationship('summits', 'title')
                     ->preload(),
             ], layout: FiltersLayout::AboveContent)
+            ->deferFilters(false)
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
