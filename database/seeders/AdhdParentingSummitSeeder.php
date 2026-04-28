@@ -38,7 +38,6 @@ class AdhdParentingSummitSeeder extends Seeder
                 'description' => 'A 5-day virtual summit for parents navigating ADHD.',
                 'status' => 'published',
                 'current_phase' => 'post',
-                'timezone' => 'America/New_York',
                 'pre_summit_starts_at' => '2025-02-03 00:00:00',
                 'late_pre_summit_starts_at' => '2025-02-07 00:00:00',
                 'during_summit_starts_at' => '2025-02-10 00:00:00',
@@ -204,7 +203,6 @@ class AdhdParentingSummitSeeder extends Seeder
                     'tagline' => 'Parenting you can rely on',
                     'startDate' => '2025-02-10',
                     'endDate' => '2025-02-14',
-                    'timezone' => 'America/New_York',
                 ],
                 'topBar' => ['name' => 'ADHD PARENTING SUMMIT'],
                 'hero' => [

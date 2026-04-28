@@ -33,7 +33,7 @@ class Summit extends Model implements HasName
     protected $fillable = [
         'domain_id',
         'slug', 'title', 'description', 'topic',
-        'status', 'current_phase', 'timezone',
+        'status', 'current_phase',
         'pre_summit_starts_at', 'late_pre_summit_starts_at',
         'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
         'summit_type',

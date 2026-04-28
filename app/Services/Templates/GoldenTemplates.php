@@ -77,7 +77,6 @@ class GoldenTemplates
                 'tagline' => 'Parenting you can rely on',
                 'startDate' => '2025-02-10',
                 'endDate' => '2025-02-14',
-                'timezone' => 'America/New_York',
             ],
             'topBar' => ['name' => 'ADHD PARENTING SUMMIT'],
             'hero' => [
