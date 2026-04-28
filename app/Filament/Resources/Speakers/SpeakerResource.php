@@ -26,7 +26,6 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -220,8 +219,13 @@ class SpeakerResource extends Resource
                     ->placeholder('All summits')
                     ->relationship('summits', 'title')
                     ->preload(),
-            ], layout: FiltersLayout::AboveContent)
+            ])
             ->deferFilters(false)
+            ->filtersTriggerAction(
+                fn ($action) => $action
+                    ->label('Summit filter')
+                    ->icon('heroicon-o-funnel')
+            )
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

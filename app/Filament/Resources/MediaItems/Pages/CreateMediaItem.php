@@ -35,6 +35,37 @@ class CreateMediaItem extends CreateRecord
 {
     protected static string $resource = MediaItemResource::class;
 
+    public function mount(): void
+    {
+        parent::mount();
+
+        $drop = session()->pull('media_bulk_drop');
+
+        if (! is_array($drop) || empty($drop)) {
+            return;
+        }
+
+        $uploads = [];
+        $items = [];
+
+        foreach (array_values($drop) as $i => $row) {
+            $key = (string) $i;
+            $uploads[$key] = $row['path'];
+            $items[] = [
+                'file_key' => $key,
+                'file_name' => $row['name'],
+                'title' => $row['title'] ?? MediaTitle::fromFilename($row['name']),
+                'category' => null,
+                'sub_category' => null,
+            ];
+        }
+
+        $this->form->fill([
+            'uploads' => $uploads,
+            'items' => $items,
+        ]);
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema->components([

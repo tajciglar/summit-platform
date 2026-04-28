@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\Domains\DomainResource;
+use App\Filament\Resources\MediaItems\Pages\ListMediaItems;
 use App\Filament\Resources\Summits\SummitResource;
 use App\Models\Domain;
 use App\Support\CurrentSummit;
@@ -19,6 +20,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -158,6 +160,11 @@ class AdminPanelProvider extends PanelProvider
 })();
 </script>
 HTML),
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): View => view('filament.media.bulk-drop-overlay'),
+                scopes: ListMediaItems::class,
             )
             ->authMiddleware([
                 Authenticate::class,

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\MediaItems\Pages;
 
 use App\Enums\MediaCategory;
 use App\Filament\Resources\MediaItems\MediaItemResource;
+use App\Support\MediaTitle;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\EmbeddedTable;
@@ -13,6 +14,7 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\UploadedFile;
 
 class ListMediaItems extends ListRecords
 {
@@ -20,9 +22,58 @@ class ListMediaItems extends ListRecords
 
     public ?string $activeSubCategory = null;
 
+    /**
+     * Receives files dropped anywhere on the list page (window-level dropzone
+     * rendered via the BODY_END render hook). Livewire stores them as
+     * TemporaryUploadedFile instances; `updatedBulkDropFiles` then persists
+     * them and redirects to the Create page with rows pre-populated.
+     *
+     * @var array<int, UploadedFile>
+     */
+    public array $bulkDropFiles = [];
+
     protected function getHeaderActions(): array
     {
         return [CreateAction::make()];
+    }
+
+    /**
+     * Persist dropped files to the local disk (matching CreateMediaItem's
+     * FileUpload directory) and stash their metadata in the session so the
+     * Create page can hydrate the form with one repeater row per file.
+     */
+    public function updatedBulkDropFiles(): void
+    {
+        $rows = [];
+
+        foreach ($this->bulkDropFiles as $file) {
+            if (! $file instanceof UploadedFile) {
+                continue;
+            }
+
+            $original = $file->getClientOriginalName();
+            $path = $file->store('media-uploads', 'local');
+
+            if (! $path) {
+                continue;
+            }
+
+            $rows[] = [
+                'path' => $path,
+                'name' => $original,
+                'title' => MediaTitle::fromFilename($original),
+            ];
+        }
+
+        $this->bulkDropFiles = [];
+
+        if (empty($rows)) {
+            return;
+        }
+
+        session()->put('media_bulk_drop', $rows);
+
+        $this->redirect(MediaItemResource::getUrl('create'), navigate: false);
     }
 
     /**
