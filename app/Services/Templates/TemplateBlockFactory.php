@@ -283,8 +283,9 @@ class TemplateBlockFactory
      */
     public function splitToEditorShape(array $sectionData): array
     {
-        if (! isset($sectionData['headlineLead'], $sectionData['headlineAccent'], $sectionData['headlineTrail'])
-            && ! isset($sectionData['headlineLead'])) {
+        if (! isset($sectionData['headlineLead'])
+            && ! isset($sectionData['headlineAccent'])
+            && ! isset($sectionData['headlineTrail'])) {
             return $sectionData;
         }
 
