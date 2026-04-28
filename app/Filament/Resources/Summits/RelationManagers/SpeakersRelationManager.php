@@ -32,6 +32,10 @@ class SpeakersRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->reorder()
+                ->orderBy('speaker_summit.day_number')
+                ->orderBy('speaker_summit.sort_order'))
             ->columns([
                 ImageColumn::make('photo')
                     ->state(fn (Speaker $record): ?string => $record->mediaFor('photo')?->thumbUrl())
