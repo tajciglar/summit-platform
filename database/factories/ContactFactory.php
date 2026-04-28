@@ -18,6 +18,7 @@ class ContactFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->optional()->lastName(),
+            'country' => fake()->optional()->countryCode(),
             'ac_contact_id' => null,
         ];
     }

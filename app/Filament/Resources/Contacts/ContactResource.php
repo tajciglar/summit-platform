@@ -52,11 +52,11 @@ class ContactResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return false;
+        return true;
     }
 
     public static function canDelete(Model $record): bool
     {
-        return false;
+        return true;
     }
 }
