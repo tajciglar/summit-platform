@@ -24,6 +24,9 @@ class MediaItemResource extends Resource
 {
     protected static ?string $model = MediaItem::class;
 
+    // Media library is global; opt out of tenant scoping at the panel level.
+    protected static bool $isScopedToTenant = false;
+
     protected static string|\BackedEnum|null $navigationIcon = Heroicon::Photo;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Media';

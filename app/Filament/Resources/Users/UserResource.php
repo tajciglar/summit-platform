@@ -63,6 +63,17 @@ class UserResource extends Resource
                     Toggle::make('is_active')->default(true),
                 ]),
 
+            Section::make('Permissions')
+                ->description('Shield roles control which resources and actions this user can access in the admin panel.')
+                ->components([
+                    Select::make('roles')
+                        ->relationship('roles', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
+                        ->visible(fn (?User $record): bool => auth()->user()?->hasRole('super_admin') ?? false),
+                ]),
+
             Section::make('Password')
                 ->components([
                     TextInput::make('password')

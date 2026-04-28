@@ -90,11 +90,11 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Analytics')
                     ->icon('heroicon-o-chart-bar-square')
                     ->collapsible(false),
-                NavigationGroup::make('Admin')
-                    ->icon('heroicon-o-shield-check')
-                    ->collapsed(),
                 NavigationGroup::make('Settings')
                     ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsed(),
+                NavigationGroup::make('Admin')
+                    ->icon('heroicon-o-shield-check')
                     ->collapsed(),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
