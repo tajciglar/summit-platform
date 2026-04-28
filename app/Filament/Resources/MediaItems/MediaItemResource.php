@@ -26,7 +26,7 @@ class MediaItemResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = Heroicon::Photo;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Content';
+    protected static string|\UnitEnum|null $navigationGroup = 'Media';
 
     protected static ?string $navigationLabel = 'Media library';
 

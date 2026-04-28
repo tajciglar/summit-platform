@@ -71,10 +71,12 @@ class AdminPanelProvider extends PanelProvider
                 // Summit group goes first; items are injected per-request in
                 // AppServiceProvider based on the current domain's summits.
                 NavigationGroup::make('Summit')
-                    ->icon('heroicon-o-calendar-days')
                     ->collapsible(false),
                 NavigationGroup::make('Content')
                     ->icon('heroicon-o-sparkles')
+                    ->collapsible(false),
+                NavigationGroup::make('Media')
+                    ->icon('heroicon-o-photo')
                     ->collapsible(false),
                 NavigationGroup::make('Funnels')
                     ->icon('heroicon-o-funnel')
@@ -193,6 +195,8 @@ HTML),
                     $summitId = $summit->id;
                     $items[] = NavigationItem::make($summit->title)
                         ->group('Summit')
+                        ->icon('heroicon-o-calendar-days')
+                        ->iconActive('heroicon-s-calendar-days')
                         ->sort($sort++)
                         ->url(route('admin.current-summit.set', ['summit' => $summit->id]))
                         ->isActiveWhen(fn (): bool => $summitId === CurrentSummit::getId());
@@ -200,7 +204,8 @@ HTML),
 
                 $items[] = NavigationItem::make('Manage summits')
                     ->group('Summit')
-                    ->icon('heroicon-o-cog-6-tooth')
+                    ->icon('heroicon-o-pencil-square')
+                    ->iconActive('heroicon-s-pencil-square')
                     ->sort(998)
                     ->url(fn (): string => SummitResource::getUrl('index'));
 
