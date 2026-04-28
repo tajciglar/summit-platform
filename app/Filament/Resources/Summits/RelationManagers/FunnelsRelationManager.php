@@ -9,6 +9,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
@@ -16,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class FunnelsRelationManager extends RelationManager
 {
@@ -43,15 +46,41 @@ class FunnelsRelationManager extends RelationManager
                     ->orderQueryUsing(fn (Builder $query) => $query->orderByDesc('is_active')),
             ])
             ->defaultGroup('is_active')
+            ->searchable(false)
             ->columns([
                 IconColumn::make('is_active')
                     ->label('')
                     ->icon(fn (Funnel $record): ?string => $record->is_active ? 'heroicon-s-bolt' : null)
                     ->color('success'),
                 TextColumn::make('name')
-                    ->searchable()
                     ->sortable()
                     ->weight('bold'),
+                TextColumn::make('ac_optin_tag')
+                    ->label('AC tag')
+                    ->placeholder('—'),
+                TextColumn::make('notes')
+                    ->label('Notes')
+                    ->state(fn (Funnel $record): string => $record->notes ? Str::limit($record->notes, 60) : '+ Add notes')
+                    ->color(fn (Funnel $record): string => $record->notes ? 'primary' : 'gray')
+                    ->action(
+                        Action::make('viewNotes')
+                            ->modalHeading('Funnel notes')
+                            ->modalDescription(fn (Funnel $record): string => $record->name)
+                            ->modalIcon('heroicon-o-document-text')
+                            ->modalCancelActionLabel('Close')
+                            ->modalSubmitActionLabel('Save notes')
+                            ->schema([
+                                Textarea::make('notes')
+                                    ->label('Internal notes')
+                                    ->rows(8)
+                                    ->maxLength(10000),
+                            ])
+                            ->fillForm(fn (Funnel $record): array => ['notes' => $record->notes])
+                            ->action(function (array $data, Funnel $record): void {
+                                $record->update(['notes' => $data['notes'] ?? null]);
+                                Notification::make()->title('Notes saved')->success()->send();
+                            })
+                    ),
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->date()
@@ -75,6 +104,15 @@ class FunnelsRelationManager extends RelationManager
                     ->modalDescription('Only one funnel can be live per summit. The currently live funnel will become a draft.')
                     ->modalSubmitActionLabel('Yes, make live')
                     ->action(fn (Funnel $record) => $record->update(['is_active' => true])),
+                Action::make('open_live')
+                    ->label('Open live')
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->color('success')
+                    ->url(fn (Funnel $record): ?string => $record->is_active && ($h = optional($record->summit?->domain)->hostname)
+                        ? 'https://'.$h.'/'.$record->slug
+                        : null)
+                    ->openUrlInNewTab()
+                    ->visible(fn (Funnel $record): bool => $record->is_active && optional($record->summit?->domain)->hostname !== null),
                 ViewAction::make()
                     ->url(fn (Funnel $record): string => FunnelResource::getUrl('view', ['record' => $record])),
                 DeleteAction::make()

@@ -10,7 +10,6 @@ use App\Support\CurrentSummit;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -25,7 +24,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -115,22 +113,23 @@ class SummitResource extends Resource
                                 ->columnSpan(12),
                         ]),
 
-                    Grid::make(5)
+                    Grid::make(4)
                         ->schema([
                             DateTimePicker::make('pre_summit_starts_at')
-                                ->label('Pre-summit starts')
-                                ->seconds(false),
-                            DateTimePicker::make('late_pre_summit_starts_at')
-                                ->label('Late pre-summit')
+                                ->label('Summit starts')
+                                ->helperText('Date funnel pages go live for optins.')
                                 ->seconds(false),
                             DateTimePicker::make('during_summit_starts_at')
-                                ->label('During summit')
+                                ->label('Summit live')
+                                ->helperText('Event start (videos begin unlocking).')
                                 ->seconds(false),
                             DateTimePicker::make('post_summit_starts_at')
-                                ->label('Post-summit')
+                                ->label('Open all pages')
+                                ->helperText('All-access window — every day unlocks.')
                                 ->seconds(false),
                             DateTimePicker::make('ends_at')
-                                ->label('Ends')
+                                ->label('Summit end')
+                                ->helperText('Event ends; price increases trigger.')
                                 ->seconds(false),
                         ]),
 
@@ -155,57 +154,20 @@ class SummitResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('slug')
-                    ->searchable()
-                    ->toggleable()
-                    ->color('gray'),
-                TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'published' => 'success',
-                        'draft' => 'gray',
-                        'archived' => 'warning',
-                        default => 'gray',
-                    }),
-                TextColumn::make('current_phase')
-                    ->badge()
-                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
-                    ->color(fn (?string $state): string => match ($state) {
-                        'summit_starts' => 'info',
-                        'summit_live' => 'success',
-                        'open_all_pages' => 'warning',
-                        'summit_end' => 'gray',
-                        default => 'gray',
-                    }),
-                TextColumn::make('speakers_count')
-                    ->counts('speakers')
-                    ->label('Speakers')
-                    ->alignCenter()
-                    ->toggleable(),
-                TextColumn::make('funnels_count')
-                    ->counts('funnels')
-                    ->label('Funnels')
-                    ->alignCenter()
-                    ->toggleable(),
+                TextColumn::make('pre_summit_starts_at')
+                    ->label('Starts')
+                    ->date()
+                    ->sortable(),
                 TextColumn::make('ends_at')
                     ->label('Ends')
                     ->date()
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Created')
+                    ->date()
+                    ->sortable(),
             ])
-            ->filters([
-                SelectFilter::make('status')->options([
-                    'draft' => 'Draft',
-                    'published' => 'Published',
-                    'archived' => 'Archived',
-                ]),
-                SelectFilter::make('current_phase')->options([
-                    'summit_starts' => 'Summit starts',
-                    'summit_live' => 'Summit live',
-                    'open_all_pages' => 'All pages open',
-                    'summit_end' => 'Summit ended',
-                ]),
-            ])
+            ->filters([])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
@@ -231,7 +193,6 @@ class SummitResource extends Resource
                             ])
                             ->send();
                     }),
-                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

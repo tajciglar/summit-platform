@@ -115,7 +115,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 // Roles are a global concept — don't scope them to the current summit.
-                FilamentShieldPlugin::make()->scopeToTenant(false),
+                FilamentShieldPlugin::make()
+                    ->scopeToTenant(false)
+                    ->navigationGroup('Admin')
+                    ->navigationSort(20),
             ])
             // Warn-on-navigate for unsaved form changes. Tracks dirty state on
             // any input inside a Filament form; clears it when a Save/Create/

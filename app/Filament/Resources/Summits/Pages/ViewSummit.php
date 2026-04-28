@@ -97,26 +97,22 @@ class ViewSummit extends ViewRecord
                                 ->columnSpan(6),
                         ]),
 
-                    Grid::make(5)
+                    Grid::make(4)
                         ->schema([
                             TextEntry::make('pre_summit_starts_at')
-                                ->label('Pre-summit starts')
-                                ->dateTime()
-                                ->placeholder('—'),
-                            TextEntry::make('late_pre_summit_starts_at')
-                                ->label('Late pre-summit')
+                                ->label('Summit starts')
                                 ->dateTime()
                                 ->placeholder('—'),
                             TextEntry::make('during_summit_starts_at')
-                                ->label('During summit')
+                                ->label('Summit live')
                                 ->dateTime()
                                 ->placeholder('—'),
                             TextEntry::make('post_summit_starts_at')
-                                ->label('Post-summit')
+                                ->label('Open all pages')
                                 ->dateTime()
                                 ->placeholder('—'),
                             TextEntry::make('ends_at')
-                                ->label('Ends')
+                                ->label('Summit end')
                                 ->dateTime()
                                 ->placeholder('—'),
                         ]),
