@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Widgets\LiveSummitsFunnelWidget;
+use App\Livewire\SummitAnalyticsBlock;
 use App\Models\Domain;
 use App\Models\PageView;
 use App\Models\Summit;
@@ -43,40 +44,19 @@ it('renders only summits that are currently live on the active domain', function
         ->assertDontSee($upcoming->title);
 });
 
-it('renders the four funnel counts and conversion rates', function () {
+it('renders the analytics block once per live summit', function () {
     $summit = Summit::factory()->create([
         'domain_id' => $this->domain->id,
         'pre_summit_starts_at' => now()->subDay(),
         'ends_at' => now()->addDay(),
     ]);
-    PageView::factory()->count(100)->for($summit)->state(['page_type' => 'optin'])->create();
-    PageView::factory()->count(30)->for($summit)->state(['page_type' => 'optin_submit'])->create();
-    PageView::factory()->count(20)->for($summit)->state(['page_type' => 'sales'])->create();
-    PageView::factory()->count(5)->for($summit)->state(['page_type' => 'checkout_click'])->create();
+    PageView::factory()->count(5)->for($summit)->state(['page_type' => 'optin'])->create();
 
+    // The header still belongs to the parent widget; the Overview/Performance
+    // KPI grid lives inside a child Livewire component (SummitAnalyticsBlock).
     livewire(LiveSummitsFunnelWidget::class)
-        ->assertSee('100')
-        ->assertSee('30')
-        ->assertSee('20')
-        ->assertSee('5')
-        ->assertSee('30.0%')
-        ->assertSee('66.7%')
-        ->assertSee('25.0%');
-});
-
-it('shows a leak alert when a step conversion is below the threshold', function () {
-    $summit = Summit::factory()->create([
-        'domain_id' => $this->domain->id,
-        'pre_summit_starts_at' => now()->subDay(),
-        'ends_at' => now()->addDay(),
-    ]);
-    PageView::factory()->count(100)->for($summit)->state(['page_type' => 'optin'])->create();
-    PageView::factory()->count(10)->for($summit)->state(['page_type' => 'optin_submit'])->create();
-    PageView::factory()->count(9)->for($summit)->state(['page_type' => 'sales'])->create();
-    PageView::factory()->count(1)->for($summit)->state(['page_type' => 'checkout_click'])->create();
-
-    livewire(LiveSummitsFunnelWidget::class)
-        ->assertSee('Leak alert');
+        ->assertSee($summit->title)
+        ->assertSeeLivewire(SummitAnalyticsBlock::class);
 });
 
 it('handles a summit with zero traffic without crashing', function () {

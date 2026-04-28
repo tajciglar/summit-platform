@@ -67,7 +67,7 @@
                             </div>
                         @endif
 
-                        @include('filament.widgets.partials.funnel-bar', ['report' => $row['report']])
+                        <livewire:summit-analytics-block :summit="$summit" :key="'summit-analytics-'.$summit->id" />
                     </div>
                 @endforeach
             </div>
