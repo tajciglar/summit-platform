@@ -28,8 +28,6 @@ class EditFunnelStep extends EditRecord
      */
     public function updated(string $name): void
     {
-        // Also fires for `data.page_content.N.data.__design.*` which is where
-        // per-section design edits live during an edit session.
         if (str_starts_with($name, 'data.page_content') || str_starts_with($name, 'data.page_overrides')) {
             $this->dispatch('form-updated');
         }
@@ -94,24 +92,17 @@ class EditFunnelStep extends EditRecord
      */
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $data['page_content'] = app(TemplateBlockFactory::class)
-            ->mapToBuilderList($data['page_content'] ?? null);
+        $factory = app(TemplateBlockFactory::class);
+        $list = $factory->mapToBuilderList($data['page_content'] ?? null);
 
-        // Inject per-section design overrides (stored in page_overrides.sections)
-        // into each block's __design key so the per-block form fieldset shows
-        // the saved values.
-        $sections = is_array($data['page_overrides']['sections'] ?? null) ? $data['page_overrides']['sections'] : [];
-        if ($sections !== [] && is_array($data['page_content'])) {
-            foreach ($data['page_content'] as $i => $block) {
-                if (! is_array($block) || ! isset($block['type'])) {
-                    continue;
-                }
-                $type = (string) $block['type'];
-                if (isset($sections[$type]) && is_array($sections[$type])) {
-                    $data['page_content'][$i]['data']['__design'] = $sections[$type];
-                }
+        foreach ($list as $i => $block) {
+            if (! is_array($block) || ! isset($block['data']) || ! is_array($block['data'])) {
+                continue;
             }
+            $list[$i]['data'] = $factory->splitToEditorShape($block['data']);
         }
+
+        $data['page_content'] = $list;
 
         return $data;
     }
@@ -126,55 +117,23 @@ class EditFunnelStep extends EditRecord
      */
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $factory = app(TemplateBlockFactory::class);
         $original = $this->record->page_content;
 
-        // Extract per-section design overrides before building the canonical
-        // page_content map so Zod validation on the Next side sees pure
-        // content. Overrides flow to page_overrides.sections[type].
-        $sections = [];
-        if (is_array($data['page_content'] ?? null)) {
-            foreach ($data['page_content'] as $i => $block) {
-                if (! is_array($block) || ! isset($block['type'])) {
-                    continue;
-                }
-                $design = $block['data']['__design'] ?? null;
-                unset($data['page_content'][$i]['data']['__design']);
-                if (is_array($design) && self::isNonEmptyDesign($design)) {
-                    $sections[(string) $block['type']] = $design;
-                }
+        $list = is_array($data['page_content'] ?? null) ? $data['page_content'] : [];
+        foreach ($list as $i => $block) {
+            if (! is_array($block) || ! isset($block['data']) || ! is_array($block['data'])) {
+                continue;
             }
+            $list[$i]['data'] = $factory->joinFromEditorShape($block['data']);
         }
 
-        $data['page_content'] = app(TemplateBlockFactory::class)
-            ->builderListToMap($data['page_content'] ?? [], is_array($original) ? $original : null);
-
-        $existingOverrides = is_array($data['page_overrides'] ?? null) ? $data['page_overrides'] : [];
-        $existingOverrides['sections'] = $sections;
-        $data['page_overrides'] = $existingOverrides;
+        $data['page_content'] = $factory->builderListToMap(
+            $list,
+            is_array($original) ? $original : null,
+        );
 
         return $data;
-    }
-
-    /**
-     * Treat an all-empty design map as "nothing to persist" so an untouched
-     * block doesn't leave an empty row in page_overrides.sections.
-     */
-    private static function isNonEmptyDesign(array $design): bool
-    {
-        if (isset($design['headingFont']) && $design['headingFont'] !== '' && $design['headingFont'] !== null) {
-            return true;
-        }
-        if (isset($design['bodyFont']) && $design['bodyFont'] !== '' && $design['bodyFont'] !== null) {
-            return true;
-        }
-        $palette = is_array($design['palette'] ?? null) ? $design['palette'] : [];
-        foreach ($palette as $v) {
-            if ($v !== '' && $v !== null) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -234,34 +193,20 @@ class EditFunnelStep extends EditRecord
         $original = $this->record->page_content;
         $factory = app(TemplateBlockFactory::class);
 
-        // Strip per-block __design so Zod-matched content stays pure; collect
-        // them for the live sections override payload below.
-        $sections = [];
         $list = is_array($formData['page_content'] ?? null) ? $formData['page_content'] : [];
         foreach ($list as $i => $block) {
-            if (! is_array($block) || ! isset($block['type'])) {
+            if (! is_array($block) || ! isset($block['data']) || ! is_array($block['data'])) {
                 continue;
             }
-            $design = $block['data']['__design'] ?? null;
-            unset($list[$i]['data']['__design']);
-            if (is_array($design) && self::isNonEmptyDesign($design)) {
-                $sections[(string) $block['type']] = $design;
-            }
+            $list[$i]['data'] = $factory->joinFromEditorShape($block['data']);
         }
 
-        $map = $factory->builderListToMap(
-            $list,
-            is_array($original) ? $original : null,
-        );
+        $map = $factory->builderListToMap($list, is_array($original) ? $original : null);
 
-        // Phase 1 visual-editor: design-token overrides live on their own
-        // `page_overrides` column; ship them alongside so the iframe can
-        // re-render colors/fonts in real time.
         $overrides = $formData['page_overrides'] ?? $this->record->page_overrides;
         $map['tokens'] = is_array($overrides) && isset($overrides['tokens']) && is_array($overrides['tokens'])
             ? $overrides['tokens']
             : null;
-        $map['sections'] = $sections;
 
         return $map;
     }

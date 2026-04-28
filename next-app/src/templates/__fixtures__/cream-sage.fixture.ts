@@ -6,7 +6,6 @@ export const creamSageFixture: CreamSageContent = {
     tagline: 'A softer way to parent a bright, busy mind',
     startDate: '2026-02-10',
     endDate: '2026-02-14',
-    timezone: 'America/New_York',
   },
   topBar: {
     brandName: 'ADHD Parenting Summit',

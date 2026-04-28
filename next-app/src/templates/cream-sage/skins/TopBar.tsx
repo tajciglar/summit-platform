@@ -32,7 +32,7 @@ export function TopBar({ content }: Props) {
             className="hidden md:inline text-base font-semibold"
             style={{ color: '#2F4A40' }}
           >
-            <Node id="topBar.dateRangeLabel">{t.dateRangeLabel}</Node>
+            <Node id="topBar.dateRangeLabel">{content.summit.eventStatusLabel ?? t.dateRangeLabel}</Node>
           </span>
           <a
             href="#optin"

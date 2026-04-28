@@ -27,7 +27,7 @@ export const IndigoGoldSchema = z.object({
     tagline: z.string().min(1),
     startDate: z.string().date(),
     endDate: z.string().date(),
-    timezone: z.string(),
+    eventStatusLabel: z.string().optional(),     // computed by backend: e.g. "ONLINE Event, 27–29 April"
   }),
   topBar: z.object({
     name: z.string().min(1),                    // "ADHD PARENTING SUMMIT 2026"

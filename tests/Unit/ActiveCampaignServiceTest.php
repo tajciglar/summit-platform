@@ -25,7 +25,7 @@ it('finds existing tag by name', function () {
 
 it('creates tag when not found', function () {
     Http::fake([
-        'test.api-us1.com/api/3/tags?search=NEW+TAG' => Http::response(['tags' => []]),
+        'test.api-us1.com/api/3/tags?search=*' => Http::response(['tags' => []]),
         'test.api-us1.com/api/3/tags' => Http::response(['tag' => ['id' => '99']]),
     ]);
 

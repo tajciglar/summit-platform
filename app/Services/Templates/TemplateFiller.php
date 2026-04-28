@@ -154,7 +154,6 @@ PROMPT;
             'title' => $summit->title,
             'description' => $summit->description,
             'topic' => $summit->topic,
-            'timezone' => $summit->timezone,
             'preSummitStartsAt' => $summit->pre_summit_starts_at?->toIso8601String(),
             'duringSummitStartsAt' => $summit->during_summit_starts_at?->toIso8601String(),
             'endsAt' => $summit->ends_at?->toIso8601String(),

@@ -6,7 +6,6 @@ export const limeInkFixture: LimeInkContent = {
     tagline: 'A neurosciency intensive for parents',
     startDate: '2026-02-10',
     endDate: '2026-02-14',
-    timezone: 'America/New_York',
   },
   topBar: {
     codeTag: '[ADHD-SUMMIT]',

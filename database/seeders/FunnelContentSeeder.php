@@ -67,7 +67,6 @@ class FunnelContentSeeder extends Seeder
                     'description' => "A 5-day virtual summit on {$newSummitData['topic']}.",
                     'status' => 'published',
                     'current_phase' => 'pre',
-                    'timezone' => 'America/New_York',
                     'pre_summit_starts_at' => now()->addDays(30),
                     'late_pre_summit_starts_at' => now()->addDays(37),
                     'during_summit_starts_at' => now()->addDays(44),
@@ -245,7 +244,6 @@ class FunnelContentSeeder extends Seeder
             'tagline' => 'Real strategies. Real results.',
             'startDate' => $summit->during_summit_starts_at?->format('Y-m-d') ?? '2026-06-01',
             'endDate' => $summit->post_summit_starts_at?->format('Y-m-d') ?? '2026-06-05',
-            'timezone' => $summit->timezone,
         ];
     }
 

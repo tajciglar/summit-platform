@@ -26,7 +26,6 @@ class SummitFactory extends Factory
             'topic' => fake()->word(),
             'status' => 'published',
             'current_phase' => 'pre',
-            'timezone' => 'America/New_York',
             'pre_summit_starts_at' => now()->subDays(30),
             'late_pre_summit_starts_at' => now()->subDays(7),
             'during_summit_starts_at' => now()->addDays(7),

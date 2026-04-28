@@ -52,7 +52,7 @@ export function Hero({ content, speakers }: Props) {
           <div className="mb-6">
             <EventStatusBadge
               status={h.eventStatus ?? (h.eventStatusLabel ? 'ended' : 'before')}
-              dateLabel={h.dateRangeLabel ?? h.eventStatusLabel ?? ''}
+              dateLabel={h.eventStatusLabel ?? h.dateRangeLabel ?? ''}
               liveLabel={h.liveLabel ?? undefined}
               endedLabel={h.endedLabel ?? h.eventStatusLabel ?? undefined}
               style={{ '--esb-primary': LAV.c700, '--esb-fg': '#ffffff' } as CSSProperties}

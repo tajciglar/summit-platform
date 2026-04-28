@@ -43,7 +43,7 @@ export function Hero({ content, speakers }: Props) {
             <span className="figure-label">{content.issueLabel}</span>
             <EventStatusBadge
               status={content.eventStatus}
-              dateLabel={content.dateRangeLabel}
+              dateLabel={content.eventStatusLabel ?? content.dateRangeLabel}
               liveLabel={content.liveLabel}
               endedLabel={content.endedLabel}
               style={{ '--esb-primary': '#3B3027', '--esb-fg': '#FAF7F2' } as CSSProperties}

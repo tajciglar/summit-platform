@@ -14,6 +14,7 @@ export const HeroSchema = z.object({
   ratingText: z.string().min(1),
   figCaption: z.string().min(1),
   heroSpeakerIds: z.array(z.string().uuid()).min(1).max(4),
+  eventStatusLabel: z.string().optional(),  // computed by backend; overrides dateRangeLabel when present
   eventStatus: EventStatusSchema.optional(),
   liveLabel: z.string().min(1).optional(),
   endedLabel: z.string().min(1).optional(),

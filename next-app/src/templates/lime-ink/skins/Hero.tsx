@@ -41,7 +41,7 @@ export function Hero({ content, speakers }: Props) {
           </span>
           <EventStatusBadge
             status={h.eventStatus}
-            dateLabel={h.dateRangeLabel}
+            dateLabel={h.eventStatusLabel ?? h.dateRangeLabel}
             liveLabel={h.liveLabel}
             endedLabel={h.endedLabel}
             style={{ '--esb-primary': '#DCFF6B', '--esb-fg': '#0A0A0B' } as CSSProperties} />

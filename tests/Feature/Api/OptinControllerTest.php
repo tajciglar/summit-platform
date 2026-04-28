@@ -30,7 +30,7 @@ it('creates contact and optin, returns redirect url', function () {
 
     // Redirect carries an encrypted prefill token, not the email/name in plain text.
     $redirect = $response->json('redirect');
-    expect($redirect)->toContain('/aps25/main/sales?p=');
+    expect($redirect)->toContain('/main/sales?p=');
     expect($redirect)->not->toContain('jane%40example.com');
     expect($redirect)->not->toContain('first_name=Jane');
 

@@ -33,7 +33,7 @@ class Summit extends Model implements HasName
     protected $fillable = [
         'domain_id',
         'slug', 'title', 'description', 'topic',
-        'status', 'current_phase', 'timezone',
+        'status', 'current_phase',
         'pre_summit_starts_at', 'late_pre_summit_starts_at',
         'during_summit_starts_at', 'post_summit_starts_at', 'ends_at',
         'summit_type',
@@ -176,5 +176,44 @@ class Summit extends Model implements HasName
             'toneBrief' => '',
             'product' => null,
         ];
+    }
+
+    public function eventStatusLabel(): string
+    {
+        $phase = $this->computePhase();
+
+        if ($phase === 'during') {
+            return 'Event live';
+        }
+        if ($phase === 'post') {
+            return 'Event ended';
+        }
+
+        $range = $this->formattedDateRange();
+        if ($range === '') {
+            return '';
+        }
+
+        return 'ONLINE Event, '.$range;
+    }
+
+    public function formattedDateRange(): string
+    {
+        $start = $this->during_summit_starts_at ?? $this->pre_summit_starts_at;
+        $end = $this->ends_at;
+
+        if (! $start || ! $end) {
+            return '';
+        }
+
+        if ($start->year !== $end->year) {
+            return $start->format('j M Y').' – '.$end->format('j M Y');
+        }
+
+        if ($start->month !== $end->month) {
+            return $start->format('j F').' – '.$end->format('j F');
+        }
+
+        return $start->format('j').'–'.$end->format('j F');
     }
 }

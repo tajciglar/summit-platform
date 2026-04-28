@@ -6,7 +6,6 @@ export const ochreInkFixture: OchreInkContent = {
     tagline: 'Real strategies for real families',
     startDate: '2026-04-22',
     endDate: '2026-04-26',
-    timezone: 'America/New_York',
   },
   masthead: {
     volume: 'Vol. VII · Feb 2026',
