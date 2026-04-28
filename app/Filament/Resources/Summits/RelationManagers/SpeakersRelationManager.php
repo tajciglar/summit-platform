@@ -9,10 +9,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,14 +44,9 @@ class SpeakersRelationManager extends RelationManager
                     ->searchable(['first_name', 'last_name'])
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('masterclass_title')
+                TextColumn::make('pivot.masterclass_title')
                     ->label('Masterclass')
                     ->limit(48)
-                    ->toggleable(),
-                IconColumn::make('is_featured')->boolean()->toggleable(),
-                TextColumn::make('goes_live_at')
-                    ->dateTime()
-                    ->sortable()
                     ->toggleable(),
             ])
             ->groups([
@@ -66,9 +59,6 @@ class SpeakersRelationManager extends RelationManager
                     ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('speaker_summit.day_number', $direction)),
             ])
             ->defaultGroup('pivot.day_number')
-            ->filters([
-                TernaryFilter::make('is_featured'),
-            ])
             ->headerActions([
                 Action::make('new')
                     ->label('New speaker')

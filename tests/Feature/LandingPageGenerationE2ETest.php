@@ -55,7 +55,7 @@ it('runs the full generate → approve → publish flow', function () {
     $summit = Summit::factory()->create(['title' => 'Integration Summit']);
     $funnel = Funnel::factory()->for($summit)->create();
     $step = FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'page_content' => []]);
-    Speaker::factory()->forSummit($summit)->create(['goes_live_at' => now()]);
+    Speaker::factory()->forSummit($summit, day: 1)->create();
     $user = User::factory()->create();
 
     // Kick off generation

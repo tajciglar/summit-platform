@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SpeakerResource;
 use App\Models\Summit;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -32,9 +31,6 @@ class FunnelResolveController extends Controller
 
         $summit->loadMissing(['speakers', 'products.prices']);
 
-        SpeakerResource::$summitStart = $summit->pre_summit_starts_at
-            ? Carbon::parse($summit->pre_summit_starts_at)->startOfDay()
-            : null;
         ProductResource::$phase = $summit->current_phase;
 
         try {
@@ -64,7 +60,6 @@ class FunnelResolveController extends Controller
                 'products' => ProductResource::collection($summit->products)->toArray($request),
             ];
         } finally {
-            SpeakerResource::$summitStart = null;
             ProductResource::$phase = null;
         }
 

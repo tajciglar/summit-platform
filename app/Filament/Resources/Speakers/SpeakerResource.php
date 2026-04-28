@@ -7,18 +7,17 @@ use App\Models\Speaker;
 use App\Models\Summit;
 use App\Support\CurrentSummit;
 use BackedEnum;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -26,13 +25,12 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class SpeakerResource extends Resource
 {
@@ -48,7 +46,7 @@ class SpeakerResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['first_name', 'last_name', 'slug', 'masterclass_title'];
+        return ['first_name', 'last_name', 'slug'];
     }
 
     public static function form(Schema $schema): Schema
@@ -88,12 +86,6 @@ class SpeakerResource extends Resource
                                         ->columnSpanFull()
                                         ->helperText('e.g. twitter, linkedin, instagram'),
                                 ]),
-                            Section::make('Global settings')
-                                ->description('Applies to this speaker across every summit.')
-                                ->columns(2)
-                                ->components([
-                                    Toggle::make('is_featured'),
-                                ]),
                         ]),
 
                     Tab::make('Summits')
@@ -101,7 +93,7 @@ class SpeakerResource extends Resource
                         ->badge(fn (?Speaker $record): ?int => $record?->summits()->count() ?: null)
                         ->schema([
                             Section::make()
-                                ->description('Which summits this speaker appears on. Per-summit day and display order live here — the same speaker can sit on Day 2 of one summit and Day 5 of another, with a different order in each.')
+                                ->description('Which summits this speaker appears on. Per-summit day, display order, masterclass title and talk title live here — the same speaker can sit on Day 2 of one summit and Day 5 of another with different titles in each.')
                                 ->components([
                                     Repeater::make('speakerSummits')
                                         ->relationship()
@@ -118,7 +110,7 @@ class SpeakerResource extends Resource
 
                                             return $data;
                                         })
-                                        ->columns(3)
+                                        ->columns(6)
                                         ->itemLabel(function (array $state): ?string {
                                             $summitId = $state['summit_id'] ?? null;
                                             if (! $summitId) {
@@ -149,7 +141,7 @@ class SpeakerResource extends Resource
                                                 ->preload()
                                                 ->distinct()
                                                 ->live()
-                                                ->columnSpan(3)
+                                                ->columnSpan(6)
                                                 ->validationMessages(['distinct' => 'This speaker is already attached to that summit.']),
                                             Select::make('day_number')
                                                 ->label('Day')
@@ -165,13 +157,23 @@ class SpeakerResource extends Resource
                                                 ->placeholder('Unassigned')
                                                 ->live()
                                                 ->columnSpan(2)
-                                                ->helperText('Which day of this summit the speaker presents.'),
+                                                ->helperText('Which day of this summit.'),
                                             TextInput::make('sort_order')
                                                 ->label('Order')
                                                 ->numeric()
                                                 ->default(0)
                                                 ->columnSpan(1)
-                                                ->helperText('Sort position within the summit.'),
+                                                ->helperText('Sort position.'),
+                                            TextInput::make('masterclass_title')
+                                                ->label('Masterclass title')
+                                                ->maxLength(500)
+                                                ->columnSpan(3)
+                                                ->helperText('Per-summit masterclass title.'),
+                                            TextInput::make('talk_title')
+                                                ->label('Talk title')
+                                                ->maxLength(500)
+                                                ->columnSpan(6)
+                                                ->helperText('Optional short talk title for this summit.'),
                                         ]),
                                 ]),
                         ]),
@@ -180,15 +182,12 @@ class SpeakerResource extends Resource
                         ->icon(Heroicon::OutlinedPlayCircle)
                         ->schema([
                             Section::make()
+                                ->description('Masterclass title is per-summit (set in the Summits tab). These fields are global to the speaker.')
                                 ->columns(2)
                                 ->components([
-                                    TextInput::make('masterclass_title')->maxLength(500)->columnSpanFull(),
                                     Textarea::make('masterclass_description')->rows(3)->columnSpanFull(),
                                     TextInput::make('free_video_url')->url()->maxLength(1000),
                                     TextInput::make('vip_video_url')->url()->maxLength(1000),
-                                    DateTimePicker::make('goes_live_at')
-                                        ->seconds(false)
-                                        ->helperText('When the video becomes available.'),
                                     TextInput::make('free_access_window_hours')
                                         ->numeric()->default(24)->minValue(1)->maxValue(168)
                                         ->helperText('Free viewing window after a user clicks play.'),
@@ -208,30 +207,18 @@ class SpeakerResource extends Resource
                     ->searchable(['first_name', 'last_name'])
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('summits_list')
+                TextColumn::make('summits.title')
                     ->label('Summits')
-                    ->state(fn (Speaker $record): string => $record->summits
-                        ->map(fn (Summit $s): string => $s->pivot->day_number
-                            ? "{$s->title} (Day {$s->pivot->day_number})"
-                            : $s->title)
-                        ->implode(' · '))
-                    ->wrap()
-                    ->lineClamp(2)
-                    ->extraAttributes(['style' => 'min-width: 280px; max-width: 420px;'])
-                    ->toggleable(),
-                TextColumn::make('masterclass_title')
-                    ->label('Masterclass')
-                    ->limit(40)
-                    ->toggleable(),
-                IconColumn::make('is_featured')->boolean()->toggleable(),
-                TextColumn::make('goes_live_at')->dateTime()->sortable()->toggleable(),
+                    ->badge()
+                    ->separator(',')
+                    ->wrap(),
             ])
             ->filters([
-                SelectFilter::make('summit')
+                SelectFilter::make('summits')
                     ->label('Summit')
                     ->relationship('summits', 'title')
+                    ->multiple()
                     ->preload(),
-                TernaryFilter::make('is_featured'),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -239,6 +226,53 @@ class SpeakerResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('attachToSummit')
+                        ->label('Attach to summit…')
+                        ->icon(Heroicon::OutlinedCalendarDays)
+                        ->schema([
+                            Select::make('summit_id')
+                                ->label('Summit')
+                                ->options(function () {
+                                    $query = Summit::query()->orderBy('title');
+                                    $domain = Filament::getTenant();
+                                    if ($domain) {
+                                        $query->where('domain_id', $domain->getKey());
+                                    }
+
+                                    return $query->pluck('title', 'id')->all();
+                                })
+                                ->required()
+                                ->searchable()
+                                ->preload(),
+                            Select::make('day_number')
+                                ->label('Day')
+                                ->options([
+                                    1 => 'Day 1',
+                                    2 => 'Day 2',
+                                    3 => 'Day 3',
+                                    4 => 'Day 4',
+                                    5 => 'Day 5',
+                                    6 => 'Day 6',
+                                    7 => 'Day 7',
+                                ])
+                                ->placeholder('Unassigned'),
+                        ])
+                        ->action(function (array $data, Collection $records): void {
+                            $summitId = $data['summit_id'];
+                            $day = $data['day_number'] ?? null;
+                            foreach ($records as $speaker) {
+                                /** @var Speaker $speaker */
+                                $speaker->summits()->syncWithoutDetaching([
+                                    $summitId => [
+                                        'day_number' => $day,
+                                        'sort_order' => 0,
+                                        // masterclass_title + talk_title intentionally
+                                        // left blank — operator fills per-pivot.
+                                    ],
+                                ]);
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ])

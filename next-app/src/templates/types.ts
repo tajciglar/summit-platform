@@ -28,10 +28,13 @@ export interface Speaker {
   photoUrl: string | null;
   masterclassTitle: string | null;
   masterclassDescription: string | null;
+  /**
+   * Optional per-summit short talk title (separate from masterclassTitle).
+   * Lives on the speaker_summit pivot.
+   */
+  talkTitle: string | null;
   rating: number | null;
-  goesLiveAt: string | null;   // ISO datetime
   sortOrder: number;
-  isFeatured: boolean;
   /**
    * Operator-assigned day of the summit (1, 2, 3, ...). Null if the speaker
    * hasn't been slotted yet. Templates that render per-day speaker grids

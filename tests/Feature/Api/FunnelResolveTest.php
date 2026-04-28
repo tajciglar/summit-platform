@@ -33,13 +33,11 @@ it('returns 404 for unknown summit slug', function () {
     $response->assertNotFound();
 });
 
-it('computes speaker day_number from goes_live_at', function () {
+it('reads speaker day_number straight from the speaker_summit pivot', function () {
     $summit = Summit::factory()->create(['slug' => 'day-test', 'pre_summit_starts_at' => '2026-05-01']);
     $funnel = Funnel::factory()->for($summit)->create(['slug' => 'main']);
     FunnelStep::factory()->for($funnel)->create(['step_type' => 'optin', 'slug' => 'optin', 'page_content' => '{}']);
-    Speaker::factory()->forSummit($summit)->create([
-        'goes_live_at' => '2026-05-03 00:00:00',
-    ]);
+    Speaker::factory()->forSummit($summit, day: 3)->create();
 
     $response = $this->getJson('/api/funnels/resolve?summit_slug=day-test&funnel_slug=main&step_slug=optin');
 

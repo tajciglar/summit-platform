@@ -181,16 +181,15 @@ class FunnelContentSeeder extends Seeder
                 'last_name' => $last,
                 'title' => $title,
                 'short_bio' => "Expert in {$summit->topic}.",
-                'masterclass_title' => $masterclass,
                 'photo_url' => "https://i.pravatar.cc/300?u={$slug}",
                 'sort_order' => $i,
-                'is_featured' => $i < 3,
                 'free_access_window_hours' => 24,
             ]);
 
             $summit->speakers()->attach($speaker->id, [
                 'day_number' => ($i < 4) ? 1 : 2,
                 'sort_order' => $i,
+                'masterclass_title' => $masterclass,
             ]);
 
             $speakerIds[] = $speaker->id;

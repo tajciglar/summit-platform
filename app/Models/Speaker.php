@@ -26,13 +26,10 @@ class Speaker extends Model
         'long_bio',
         'website_url',
         'social_links',
-        'masterclass_title',
         'masterclass_description',
         'free_video_url',
         'vip_video_url',
-        'goes_live_at',
         'sort_order',
-        'is_featured',
         'free_access_window_hours',
     ];
 
@@ -40,8 +37,6 @@ class Speaker extends Model
     {
         return [
             'social_links' => 'array',
-            'goes_live_at' => 'datetime',
-            'is_featured' => 'boolean',
             'sort_order' => 'integer',
             'free_access_window_hours' => 'integer',
         ];
@@ -76,7 +71,7 @@ class Speaker extends Model
     public function summits(): BelongsToMany
     {
         return $this->belongsToMany(Summit::class, 'speaker_summit')
-            ->withPivot('day_number', 'sort_order')
+            ->withPivot('day_number', 'sort_order', 'masterclass_title', 'talk_title')
             ->withTimestamps()
             ->using(SpeakerSummit::class);
     }

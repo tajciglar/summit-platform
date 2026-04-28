@@ -3,12 +3,8 @@
 namespace App\Filament\Resources\Speakers\Pages;
 
 use App\Filament\Resources\Speakers\SpeakerResource;
-use App\Models\Summit;
 use Filament\Actions\CreateAction;
-use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Schemas\Components\Tabs\Tab;
-use Illuminate\Database\Eloquent\Builder;
 
 class ListSpeakers extends ListRecords
 {
@@ -22,33 +18,13 @@ class ListSpeakers extends ListRecords
         ];
     }
 
+    /**
+     * The per-summit tab strip was removed in the 2026-04-28 admin refactor
+     * (Area 4.1). The list is now filtered via the Summit multi-select
+     * SelectFilter on the table, so no tabs are rendered here.
+     */
     public function getTabs(): array
     {
-        $domain = Filament::getTenant();
-
-        $summitsQuery = Summit::query()->orderBy('title');
-        if ($domain) {
-            $summitsQuery->where('domain_id', $domain->getKey());
-        }
-        $summits = $summitsQuery->withCount('speakers')->get();
-
-        $tabs = [
-            'all' => Tab::make('All speakers')
-                ->icon('heroicon-o-user-group')
-                ->badge($summits->sum('speakers_count') ?: null),
-        ];
-
-        foreach ($summits as $summit) {
-            $summitId = $summit->id;
-            $tabs[(string) $summitId] = Tab::make($summit->title)
-                ->icon('heroicon-o-calendar-days')
-                ->badge($summit->speakers_count ?: null)
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas(
-                    'summits',
-                    fn (Builder $q) => $q->where('summits.id', $summitId),
-                ));
-        }
-
-        return $tabs;
+        return [];
     }
 }

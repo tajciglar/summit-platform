@@ -74,9 +74,7 @@ class AdhdParentingSummitSeeder extends Seeder
                     'last_name' => $last,
                     'title' => $title,
                     'short_bio' => 'Expert in ADHD parenting and child development.',
-                    'masterclass_title' => $masterclass,
                     'sort_order' => $order,
-                    'is_featured' => $order < 3,
                     'free_access_window_hours' => 24,
                 ]
             );
@@ -85,6 +83,7 @@ class AdhdParentingSummitSeeder extends Seeder
                 $speaker->id => [
                     'day_number' => ($order % 5) + 1,
                     'sort_order' => $order,
+                    'masterclass_title' => $masterclass,
                 ],
             ]);
 

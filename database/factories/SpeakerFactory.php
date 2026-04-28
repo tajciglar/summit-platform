@@ -32,11 +32,8 @@ class SpeakerFactory extends Factory
                 'twitter' => 'https://twitter.com/'.fake()->userName(),
                 'linkedin' => 'https://linkedin.com/in/'.fake()->userName(),
             ],
-            'masterclass_title' => fake()->catchPhrase(),
             'masterclass_description' => fake()->paragraph(),
-            'goes_live_at' => fake()->dateTimeBetween('-7 days', '+14 days'),
             'sort_order' => fake()->numberBetween(0, 100),
-            'is_featured' => fake()->boolean(25),
             'free_access_window_hours' => 24,
         ];
     }
@@ -44,18 +41,22 @@ class SpeakerFactory extends Factory
     /**
      * Attach the created speaker to a summit via the `speaker_summit` pivot.
      * Replaces the old pattern `Speaker::factory()->create(['summit_id' => X,
-     * 'day_number' => Y])` now that those columns are gone.
+     * 'day_number' => Y])` now that those columns are gone. After Area 4.2
+     * of the 2026-04-28 admin refactor `masterclass_title` and `talk_title`
+     * also live on the pivot.
      */
-    public function forSummit(Summit|string $summit, ?int $day = null): static
+    public function forSummit(Summit|string $summit, ?int $day = null, ?string $masterclassTitle = null, ?string $talkTitle = null): static
     {
         $summitId = $summit instanceof Summit ? $summit->id : $summit;
 
-        return $this->afterCreating(function (Speaker $speaker) use ($summitId, $day): void {
+        return $this->afterCreating(function (Speaker $speaker) use ($summitId, $day, $masterclassTitle, $talkTitle): void {
             DB::table('speaker_summit')->updateOrInsert(
                 ['speaker_id' => $speaker->id, 'summit_id' => $summitId],
                 [
                     'day_number' => $day,
                     'sort_order' => $speaker->sort_order ?? 0,
+                    'masterclass_title' => $masterclassTitle ?? fake()->catchPhrase(),
+                    'talk_title' => $talkTitle,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

@@ -33,6 +33,8 @@ class SpeakerSummit extends Pivot
         'summit_id',
         'day_number',
         'sort_order',
+        'masterclass_title',
+        'talk_title',
     ];
 
     protected function casts(): array

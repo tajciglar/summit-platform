@@ -109,18 +109,16 @@ it('auto-generates a slug when creating a speaker', function () {
     expect($speaker?->slug)->toBe('taylor-jones');
 });
 
-it('shows an All tab plus one tab per domain summit on the list page', function () {
+it('renders no tab strip on the speakers list page (Area 4.1)', function () {
     Speaker::factory()->forSummit($this->summitA->id)->create();
     Speaker::factory()->forSummit($this->summitB->id)->create();
 
     $tabs = livewire(ListSpeakers::class)->instance()->getTabs();
 
-    expect(array_keys($tabs))->toContain('all');
-    expect(array_keys($tabs))->toContain($this->summitA->id);
-    expect(array_keys($tabs))->toContain($this->summitB->id);
+    expect($tabs)->toBe([]);
 });
 
-it('summit tab filters speakers to only that summit', function () {
+it('summit SelectFilter narrows the table to a single summit', function () {
     Speaker::factory()->forSummit($this->summitA)->create([
         'first_name' => 'Alice',
         'last_name' => 'One',
@@ -130,7 +128,8 @@ it('summit tab filters speakers to only that summit', function () {
         'last_name' => 'Two',
     ]);
 
-    livewire(ListSpeakers::class, ['activeTab' => $this->summitA->id])
+    livewire(ListSpeakers::class)
+        ->filterTable('summits', [$this->summitA->id])
         ->assertCanSeeTableRecords($this->summitA->speakers)
         ->assertCanNotSeeTableRecords($this->summitB->speakers);
 });

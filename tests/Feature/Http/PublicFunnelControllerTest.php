@@ -124,12 +124,12 @@ it('includes speaker summary in camelCase', function () {
         'step_type' => 'optin',
         'page_content' => ['template_key' => 'ochre-ink', 'content' => []],
     ]);
-    $speaker = Speaker::factory()->forSummit($summit)->create(['goes_live_at' => now()]);
+    $speaker = Speaker::factory()->forSummit($summit, day: 1)->create();
 
     $response = $this->getJson("/api/funnels/{$funnel->id}/published-content");
 
     $response->assertOk();
     $response->assertJsonPath('speakers.0.id', $speaker->id);
     $response->assertJsonPath('speakers.0.firstName', $speaker->first_name);
-    $response->assertJsonStructure(['speakers' => [['id', 'firstName', 'lastName', 'title', 'photoUrl', 'goesLiveAt']]]);
+    $response->assertJsonStructure(['speakers' => [['id', 'firstName', 'lastName', 'title', 'photoUrl', 'dayNumber']]]);
 });

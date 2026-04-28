@@ -66,8 +66,7 @@ class GenerateLandingPageVersionJob implements ShouldQueue
         try {
             $summit = $batch->summit;
             $speakers = $summit->speakers()
-                ->whereNotNull('goes_live_at')
-                ->orderBy('goes_live_at')
+                ->orderByPivot('day_number')
                 ->orderByPivot('sort_order')
                 ->get();
 

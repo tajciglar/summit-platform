@@ -2,29 +2,21 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Canonical speaker shape returned by public + preview + draft APIs.
  *
- * Set `SpeakerResource::$summitStart` to a Carbon instance before building a
- * collection so the resource can derive `dayNumber` for legacy summits where
- * the pivot column is null. Reset to null after use.
+ * After the 2026-04-28 admin refactor (Area 4) `goes_live_at` and
+ * `is_featured` no longer exist on the speakers table. `masterclass_title`
+ * has moved to the `speaker_summit` pivot, joined by a per-summit
+ * `talk_title`. `dayNumber` is read straight from the pivot.
  */
 class SpeakerResource extends JsonResource
 {
-    public static ?Carbon $summitStart = null;
-
     public function toArray(Request $request): array
     {
-        $dayNumber = $this->pivot->day_number ?? null;
-
-        if ($dayNumber === null && self::$summitStart && $this->goes_live_at) {
-            $dayNumber = (int) (self::$summitStart->diffInDays(Carbon::parse($this->goes_live_at)->startOfDay()) + 1);
-        }
-
         return [
             'id' => $this->id,
             'firstName' => $this->first_name,
@@ -34,12 +26,11 @@ class SpeakerResource extends JsonResource
             'photoUrl' => $this->photo_url,
             'shortBio' => $this->short_bio,
             'longBio' => $this->long_bio,
-            'masterclassTitle' => $this->masterclass_title,
+            'masterclassTitle' => $this->pivot->masterclass_title ?? null,
             'masterclassDescription' => $this->masterclass_description,
-            'goesLiveAt' => $this->goes_live_at?->toIso8601String(),
-            'isFeatured' => (bool) $this->is_featured,
+            'talkTitle' => $this->pivot->talk_title ?? null,
             'sortOrder' => $this->pivot->sort_order ?? 0,
-            'dayNumber' => $dayNumber,
+            'dayNumber' => $this->pivot->day_number ?? null,
         ];
     }
 }

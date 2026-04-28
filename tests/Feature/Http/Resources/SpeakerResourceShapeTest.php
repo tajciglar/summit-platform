@@ -3,7 +3,6 @@
 use App\Http\Resources\SpeakerResource;
 use App\Models\Speaker;
 use App\Models\Summit;
-use Carbon\Carbon;
 
 it('returns the canonical camelCase speaker shape', function () {
     $summit = Summit::factory()->create(['pre_summit_starts_at' => '2026-05-01']);
@@ -14,9 +13,7 @@ it('returns the canonical camelCase speaker shape', function () {
         'long_bio' => 'long',
     ]);
 
-    SpeakerResource::$summitStart = Carbon::parse('2026-05-01')->startOfDay();
     $array = SpeakerResource::collection($summit->speakers()->get())->toArray(request());
-    SpeakerResource::$summitStart = null;
 
     expect($array)->toHaveCount(1);
     expect(array_keys($array[0]))->toEqualCanonicalizing([
@@ -30,32 +27,39 @@ it('returns the canonical camelCase speaker shape', function () {
         'longBio',
         'masterclassTitle',
         'masterclassDescription',
-        'goesLiveAt',
-        'isFeatured',
+        'talkTitle',
         'sortOrder',
         'dayNumber',
     ]);
     expect($array[0]['fullName'])->toBe('Jane Roe');
 });
 
-it('prefers pivot day_number over goes_live_at derivation', function () {
+it('reads dayNumber straight from the speaker_summit pivot', function () {
     $summit = Summit::factory()->create(['pre_summit_starts_at' => '2026-05-01']);
-    Speaker::factory()->forSummit($summit, day: 5)->create([
-        'goes_live_at' => '2026-05-03 00:00:00',
-    ]);
+    Speaker::factory()->forSummit($summit, day: 5)->create();
 
-    SpeakerResource::$summitStart = Carbon::parse($summit->pre_summit_starts_at)->startOfDay();
     $array = SpeakerResource::collection($summit->speakers()->get())->toArray(request());
-    SpeakerResource::$summitStart = null;
 
     expect($array[0]['dayNumber'])->toBe(5);
 });
 
-it('returns null dayNumber when pivot and summitStart are both absent', function () {
+it('returns null dayNumber when pivot day_number is unset', function () {
     $summit = Summit::factory()->create(['pre_summit_starts_at' => null]);
-    Speaker::factory()->forSummit($summit)->create(['goes_live_at' => null]);
+    Speaker::factory()->forSummit($summit)->create();
 
     $array = SpeakerResource::collection($summit->speakers()->get())->toArray(request());
 
     expect($array[0]['dayNumber'])->toBeNull();
+});
+
+it('exposes per-pivot masterclass and talk titles', function () {
+    $summit = Summit::factory()->create();
+    Speaker::factory()
+        ->forSummit($summit, day: 2, masterclassTitle: 'Sleep & ADHD', talkTitle: 'Quick wins')
+        ->create();
+
+    $array = SpeakerResource::collection($summit->speakers()->get())->toArray(request());
+
+    expect($array[0]['masterclassTitle'])->toBe('Sleep & ADHD');
+    expect($array[0]['talkTitle'])->toBe('Quick wins');
 });

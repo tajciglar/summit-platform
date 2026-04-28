@@ -146,8 +146,9 @@ PROMPT;
             'firstName' => $s->first_name,
             'lastName' => $s->last_name,
             'title' => $s->title,
-            'masterclassTitle' => $s->masterclass_title,
-            'goesLiveAt' => $s->goes_live_at?->toIso8601String(),
+            'masterclassTitle' => $s->pivot->masterclass_title ?? null,
+            'talkTitle' => $s->pivot->talk_title ?? null,
+            'dayNumber' => $s->pivot->day_number ?? null,
         ])->values(), JSON_PRETTY_PRINT);
 
         $summitJson = json_encode([
