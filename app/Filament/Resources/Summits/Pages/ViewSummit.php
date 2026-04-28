@@ -77,19 +77,7 @@ class ViewSummit extends ViewRecord
                                     'archived' => 'warning',
                                     default => 'gray',
                                 })
-                                ->columnSpan(3),
-                            TextEntry::make('current_phase')
-                                ->label('Current phase')
-                                ->badge()
-                                ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : '—')
-                                ->color(fn (?string $state): string => match ($state) {
-                                    'summit_starts' => 'info',
-                                    'summit_live' => 'success',
-                                    'open_all_pages' => 'warning',
-                                    'summit_end' => 'gray',
-                                    default => 'gray',
-                                })
-                                ->columnSpan(3),
+                                ->columnSpan(6),
                             TextEntry::make('slug')
                                 ->prefix('/')
                                 ->color('gray')

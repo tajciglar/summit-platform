@@ -90,20 +90,7 @@ class SummitResource extends Resource
                                 ->default('draft')
                                 ->required()
                                 ->native(false)
-                                ->columnSpan(3),
-                            Select::make('current_phase')
-                                ->label('Current phase')
-                                ->options([
-                                    'summit_starts' => 'Summit starts',
-                                    'summit_live' => 'Summit live',
-                                    'open_all_pages' => 'All pages open',
-                                    'summit_end' => 'Summit ended',
-                                ])
-                                ->default('summit_starts')
-                                ->required()
-                                ->native(false)
-                                ->helperText('Updated automatically by cron.')
-                                ->columnSpan(3),
+                                ->columnSpan(6),
                             TextInput::make('slug')
                                 ->required()
                                 ->maxLength(255)

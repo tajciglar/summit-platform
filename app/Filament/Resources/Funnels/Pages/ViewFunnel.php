@@ -9,17 +9,13 @@ use App\Services\Templates\TemplateRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 
@@ -120,49 +116,10 @@ class ViewFunnel extends EditRecord
                         ->hiddenLabel()
                         ->size('lg')
                         ->weight(FontWeight::Bold)
-                        ->columnSpan(6),
-                    Toggle::make('is_active')
-                        ->label('Live')
-                        ->inline(false)
-                        ->live()
-                        ->afterStateUpdated(function ($state, Funnel $record, Set $set): void {
-                            try {
-                                $record->update(['is_active' => (bool) $state]);
-                            } catch (\DomainException $e) {
-                                $set('is_active', false);
-                                Notification::make()
-                                    ->title('Cannot go live')
-                                    ->body($e->getMessage())
-                                    ->danger()
-                                    ->send();
-
-                                return;
-                            }
-                            Notification::make()
-                                ->title($state ? 'Funnel set live' : 'Funnel paused')
-                                ->success()
-                                ->send();
-                        })
-                        ->columnSpan(2),
-                    Select::make('target_phase')
-                        ->label('Phase')
-                        ->options([
-                            'summit_starts' => 'Summit starts',
-                            'summit_live' => 'Summit live',
-                            'open_all_pages' => 'All pages open',
-                            'summit_end' => 'Summit ended',
-                        ])
-                        ->placeholder('All phases')
-                        ->native(false)
-                        ->live()
-                        ->afterStateUpdated(function ($state, Funnel $record): void {
-                            $record->update(['target_phase' => $state]);
-                            Notification::make()->title('Phase saved')->success()->send();
-                        })
-                        ->columnSpan(2),
+                        ->columnSpan(8),
                     TextEntry::make('summit.title')
                         ->label('Summit')
-                        ->columnSpan(2),
+                        ->columnSpan(4),
 
                     TextInput::make('slug')
                         ->label('Slug')
@@ -176,28 +133,15 @@ class ViewFunnel extends EditRecord
                         })
                         ->columnSpan(6),
 
-                    Textarea::make('description')
-                        ->label('Description')
-                        ->placeholder('No description')
-                        ->rows(3)
+                    TextInput::make('ac_optin_tag')
+                        ->label('ActiveCampaign optin tag')
+                        ->placeholder('e.g. ATS1 APR26 SIGNUP')
+                        ->maxLength(255)
+                        ->helperText('Tag applied to contacts who opt in via this funnel.')
                         ->live(onBlur: true)
                         ->afterStateUpdated(function ($state, Funnel $record): void {
-                            $record->update(['description' => $state]);
-                            Notification::make()->title('Description saved')->success()->send();
-                        })
-                        ->columnSpan(6),
-
-                    Select::make('template_key')
-                        ->label('Skin')
-                        ->options(fn () => self::skinOptions())
-                        ->placeholder('None — pick a skin to enable one-click generation')
-                        ->helperText('The visual language (typography, spacing, layout). All steps share this skin.')
-                        ->native(false)
-                        ->searchable()
-                        ->live()
-                        ->afterStateUpdated(function ($state, Funnel $record): void {
-                            $record->update(['template_key' => $state]);
-                            Notification::make()->title('Skin saved')->success()->send();
+                            $record->update(['ac_optin_tag' => $state]);
+                            Notification::make()->title('AC tag saved')->success()->send();
                         })
                         ->columnSpan(6),
 
