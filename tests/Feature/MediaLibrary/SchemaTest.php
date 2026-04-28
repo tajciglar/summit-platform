@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Schema;
 
 it('creates media_items table with expected columns', function (): void {
     expect(Schema::hasTable('media_items'))->toBeTrue();
+    expect(Schema::hasColumn('media_items', 'domain_id'))->toBeFalse();
     expect(Schema::hasColumns('media_items', [
         'id',
-        'domain_id',
         'category',
         'sub_category',
         'disk',

@@ -45,7 +45,6 @@ it('migrates a Summit hero media row into the library', function () {
     $item = MediaItem::where('legacy_spatie_media_id', 9999)->first();
     expect($item)->not->toBeNull();
     expect($item->category)->toBe(MediaCategory::LandingPage);
-    expect($item->domain_id)->toBe($domain->id);
 
     expect(DB::table('media_item_attachments')
         ->where('attachable_id', $summit->id)

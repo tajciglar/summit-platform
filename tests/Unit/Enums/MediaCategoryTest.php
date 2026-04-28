@@ -18,7 +18,7 @@ it('returns a human label', function () {
 
 it('exposes fixed sub-category vocabulary per category', function () {
     expect(MediaCategory::LandingPage->subCategoryOptions())
-        ->toHaveKeys(['hero', 'side', 'section', 'press_logo']);
+        ->toEqual(['pages' => 'Pages']);
     expect(MediaCategory::Product->subCategoryOptions())
         ->toHaveKeys(['product', 'bump', 'upsell', 'downsell']);
     expect(MediaCategory::Speakers->subCategoryOptions())

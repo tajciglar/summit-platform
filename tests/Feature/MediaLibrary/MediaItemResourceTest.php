@@ -27,20 +27,21 @@ beforeEach(function () {
     Filament::setTenant($this->domain);
 });
 
-it('lists own-domain and global items, hides other domains', function () {
-    $mine = MediaItem::factory()->create(['domain_id' => $this->domain->id]);
-    $global = MediaItem::factory()->create(['domain_id' => null]);
-    $otherDomain = Domain::factory()->create();
-    $hidden = MediaItem::factory()->create(['domain_id' => $otherDomain->id]);
+it('lists all media items globally — no domain scoping', function () {
+    $a = MediaItem::factory()->create();
+    $b = MediaItem::factory()->create();
+    $c = MediaItem::factory()->create();
 
     livewire(ListMediaItems::class)
         ->loadTable()
-        ->assertCanSeeTableRecords([$mine, $global])
-        ->assertCanNotSeeTableRecords([$hidden]);
+        ->assertCanSeeTableRecords([$a, $b, $c]);
 });
 
 it('renders the landing_page tab without erroring', function () {
-    MediaItem::factory()->create(['domain_id' => $this->domain->id, 'category' => MediaCategory::LandingPage]);
+    MediaItem::factory()->create([
+        'category' => MediaCategory::LandingPage,
+        'sub_category' => 'pages',
+    ]);
 
     livewire(ListMediaItems::class, ['activeTab' => 'landing_page'])
         ->loadTable()
@@ -49,17 +50,14 @@ it('renders the landing_page tab without erroring', function () {
 
 it('filters by sub-category when drilled into a product tab', function () {
     $productImage = MediaItem::factory()->create([
-        'domain_id' => $this->domain->id,
         'category' => MediaCategory::Product,
         'sub_category' => 'product',
     ]);
     $bumpImage = MediaItem::factory()->create([
-        'domain_id' => $this->domain->id,
         'category' => MediaCategory::Product,
         'sub_category' => 'bump',
     ]);
     $upsellImage = MediaItem::factory()->create([
-        'domain_id' => $this->domain->id,
         'category' => MediaCategory::Product,
         'sub_category' => 'upsell',
     ]);
@@ -83,7 +81,7 @@ it('resets sub-category when switching top-level tabs', function () {
 });
 
 it('guards delete when item has attachments', function () {
-    $item = MediaItem::factory()->create(['domain_id' => $this->domain->id]);
+    $item = MediaItem::factory()->create();
     DB::table('media_item_attachments')->insert([
         'id' => Str::uuid(),
         'media_item_id' => $item->id,

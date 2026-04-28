@@ -1,7 +1,6 @@
 <?php
 
 use App\Jobs\ConvertMediaItemToWebp;
-use App\Models\Domain;
 use App\Models\MediaItem;
 use App\Models\User;
 use App\Services\Media\MediaItemCreator;
@@ -19,7 +18,6 @@ beforeEach(function () {
 });
 
 it('creates a MediaItem with the original bytes and queues a WebP conversion', function () {
-    $domain = Domain::factory()->create();
     $user = User::factory()->create();
     $upload = UploadedFile::fake()->image('hero.jpg', 800, 600);
 
@@ -27,12 +25,10 @@ it('creates a MediaItem with the original bytes and queues a WebP conversion', f
         source: $upload,
         category: 'speakers',
         subCategory: 'photo',
-        domainId: $domain->id,
         createdByUserId: $user->id,
     );
 
     expect($item)->toBeInstanceOf(MediaItem::class)
-        ->and($item->domain_id)->toBe($domain->id)
         ->and($item->category->value)->toBe('speakers')
         ->and($item->sub_category)->toBe('photo')
         ->and($item->created_by_user_id)->toBe($user->id)
@@ -56,7 +52,7 @@ it('does not queue a conversion for non-convertible mimes (e.g. svg)', function 
     Bus::assertNotDispatched(ConvertMediaItemToWebp::class);
 });
 
-it('falls back to the authenticated user and null domain when not supplied', function () {
+it('falls back to the authenticated user when not supplied', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
     $upload = UploadedFile::fake()->image('logo.png');
@@ -67,6 +63,5 @@ it('falls back to the authenticated user and null domain when not supplied', fun
     );
 
     expect($item->created_by_user_id)->toBe($user->id)
-        ->and($item->domain_id)->toBeNull()
         ->and($item->sub_category)->toBeNull();
 });

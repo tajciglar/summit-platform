@@ -3,15 +3,15 @@
 namespace Database\Seeders;
 
 use App\Enums\MediaCategory;
-use App\Models\Domain;
 use App\Models\MediaItem;
 use Illuminate\Database\Seeder;
 
 class MediaLibrarySeeder extends Seeder
 {
     /**
-     * Seed each domain with a handful of MediaItems per category so operators
-     * can test the picker / attachments end-to-end without uploading anything.
+     * Seed a handful of MediaItems per category so operators can test the
+     * picker / attachments end-to-end without uploading anything. The library
+     * is global to all admins — no per-domain seeding.
      *
      * Source files come from docs/block-references — the only large set of
      * real-looking PNGs already in the repo.
@@ -40,10 +40,7 @@ class MediaLibrarySeeder extends Seeder
 
         $byCategory = [
             MediaCategory::LandingPage->value => [
-                'hero' => 4,
-                'side' => 2,
-                'section' => 3,
-                'press_logo' => 4,
+                'pages' => 12,
             ],
             MediaCategory::Product->value => [
                 'product' => 3,
@@ -63,39 +60,29 @@ class MediaLibrarySeeder extends Seeder
             ],
         ];
 
-        $domains = Domain::query()->get();
-        if ($domains->isEmpty()) {
-            $this->command?->warn('MediaLibrarySeeder: no domains found, run DemoSeeder first.');
-
-            return;
-        }
-
         $cursor = 0;
         $total = 0;
 
-        foreach ($domains as $domain) {
-            foreach ($byCategory as $categoryValue => $subCategories) {
-                foreach ($subCategories as $subCategory => $count) {
-                    for ($i = 0; $i < $count; $i++) {
-                        $source = $pngs[$cursor % count($pngs)];
-                        $cursor++;
+        foreach ($byCategory as $categoryValue => $subCategories) {
+            foreach ($subCategories as $subCategory => $count) {
+                for ($i = 0; $i < $count; $i++) {
+                    $source = $pngs[$cursor % count($pngs)];
+                    $cursor++;
 
-                        $this->createItem($domain, MediaCategory::from($categoryValue), $subCategory, $source);
-                        $total++;
-                    }
+                    $this->createItem(MediaCategory::from($categoryValue), $subCategory, $source);
+                    $total++;
                 }
             }
         }
 
-        $this->command?->info("MediaLibrarySeeder: created {$total} media items across {$domains->count()} domains.");
+        $this->command?->info("MediaLibrarySeeder: created {$total} global media items.");
     }
 
-    private function createItem(Domain $domain, MediaCategory $category, string $subCategory, string $sourcePath): void
+    private function createItem(MediaCategory $category, string $subCategory, string $sourcePath): void
     {
         $fileName = basename($sourcePath);
 
         $item = MediaItem::create([
-            'domain_id' => $domain->id,
             'category' => $category,
             'sub_category' => $subCategory,
             'disk' => config('media-library.disk_name'),

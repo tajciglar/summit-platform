@@ -41,12 +41,7 @@ enum MediaCategory: string
     {
         return match ($this) {
             self::LandingPage => [
-                'hero' => 'Hero',
-                'side' => 'Side image',
-                'section' => 'Section image',
-                'press_logo' => 'Press logo',
-                'testimonial' => 'Testimonial',
-                'background' => 'Background',
+                'pages' => 'Pages',
             ],
             self::Product => [
                 'product' => 'Product image',

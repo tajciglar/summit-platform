@@ -4,7 +4,6 @@ namespace App\Services\Media;
 
 use App\Jobs\ConvertMediaItemToWebp;
 use App\Models\MediaItem;
-use Filament\Facades\Filament;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
  *
  * Shared by the standalone Media Library create page and the inline
  * upload path on MediaPickerInput so both routes produce identical rows.
+ *
+ * The library is global to all admins — no domain scoping.
  */
 class MediaItemCreator
 {
@@ -28,20 +29,19 @@ class MediaItemCreator
         UploadedFile|string $source,
         string $category,
         ?string $subCategory = null,
-        ?string $domainId = null,
         ?string $createdByUserId = null,
         ?string $caption = null,
         ?string $altText = null,
+        ?string $title = null,
     ): MediaItem {
         [$realPath, $clientName, $mimeType] = $this->resolveSource($source);
 
-        $item = DB::transaction(function () use ($realPath, $clientName, $category, $subCategory, $domainId, $createdByUserId, $caption, $altText) {
+        $item = DB::transaction(function () use ($realPath, $clientName, $category, $subCategory, $createdByUserId, $caption, $altText, $title) {
             $item = MediaItem::create([
-                'domain_id' => $domainId ?? Filament::getTenant()?->getKey(),
                 'category' => $category,
                 'sub_category' => $subCategory,
                 'created_by_user_id' => $createdByUserId ?? auth()->id(),
-                'caption' => $caption,
+                'caption' => $caption ?? $title,
                 'alt_text' => $altText,
                 'path' => '',
                 'file_name' => '',
@@ -50,7 +50,7 @@ class MediaItemCreator
 
             $media = $item
                 ->addMedia($realPath)
-                ->usingName(pathinfo($clientName, PATHINFO_FILENAME))
+                ->usingName($title ?? pathinfo($clientName, PATHINFO_FILENAME))
                 ->usingFileName($clientName)
                 ->toMediaCollection('file');
 

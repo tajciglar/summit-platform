@@ -40,7 +40,7 @@ class MediaLibraryMigrateCommand extends Command
         });
 
         $this->map = [
-            Summit::class => ['category' => MediaCategory::LandingPage, 'subCategory' => 'hero', 'role' => 'hero'],
+            Summit::class => ['category' => MediaCategory::LandingPage, 'subCategory' => 'pages', 'role' => 'hero'],
             Product::class => ['category' => MediaCategory::Product, 'subCategory' => 'product', 'role' => 'image'],
             FunnelStepBump::class => ['category' => MediaCategory::Product, 'subCategory' => 'bump', 'role' => 'image'],
             Speaker::class => ['category' => MediaCategory::Speakers, 'subCategory' => 'headshot', 'role' => 'photo'],
@@ -92,10 +92,7 @@ class MediaLibraryMigrateCommand extends Command
             return;
         }
 
-        $domainId = $this->resolveDomainId($owner, $class);
-
         $item = MediaItem::create([
-            'domain_id' => $domainId,
             'category' => $map['category'],
             'sub_category' => $map['subCategory'],
             'disk' => $row->disk,
@@ -142,18 +139,5 @@ class MediaLibraryMigrateCommand extends Command
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-    }
-
-    private function resolveDomainId(object $owner, string $class): ?string
-    {
-        return match ($class) {
-            Summit::class => $owner->domain_id,
-            Product::class => $owner->summits()->first()?->domain_id,
-            Speaker::class => $owner->summits()->first()?->domain_id,
-            FunnelStepBump::class => $owner->funnelStep?->funnel?->summit?->domain_id,
-            Domain::class => $owner->id,
-            AppSettings::class => null,
-            default => null,
-        };
     }
 }

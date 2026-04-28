@@ -5,7 +5,6 @@
         $statePath = $getStatePath(false);
         $uploadPath = $getUploadStatePath(false);
         $options = \App\Models\MediaItem::query()
-            ->when(\Filament\Facades\Filament::getTenant(), fn ($q, $tenant) => $q->visibleTo($tenant))
             ->where('category', $getCategory())
             ->when($getSubCategoryFilter(), fn ($q, $sub) => $q->where('sub_category', $sub))
             ->orderBy('created_at', 'desc')

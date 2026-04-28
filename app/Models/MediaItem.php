@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\MediaCategory;
 use App\Models\Concerns\HasUuid;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +18,6 @@ class MediaItem extends Model implements HasMedia
     use HasFactory, HasUuid, InteractsWithMedia;
 
     protected $fillable = [
-        'domain_id',
         'category',
         'sub_category',
         'disk',
@@ -42,11 +40,6 @@ class MediaItem extends Model implements HasMedia
         ];
     }
 
-    public function domain(): BelongsTo
-    {
-        return $this->belongsTo(Domain::class);
-    }
-
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
@@ -55,23 +48,6 @@ class MediaItem extends Model implements HasMedia
     public function attachments(): HasMany
     {
         return $this->hasMany(MediaItemAttachmentRow::class);
-    }
-
-    public function scopeForDomain(Builder $query, Domain $domain): Builder
-    {
-        return $query->where('domain_id', $domain->getKey());
-    }
-
-    public function scopeGlobal(Builder $query): Builder
-    {
-        return $query->whereNull('domain_id');
-    }
-
-    public function scopeVisibleTo(Builder $query, Domain $domain): Builder
-    {
-        return $query->where(function (Builder $q) use ($domain) {
-            $q->where('domain_id', $domain->getKey())->orWhereNull('domain_id');
-        });
     }
 
     public function registerMediaCollections(): void

@@ -16,9 +16,8 @@ class MediaItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'domain_id' => null,
             'category' => MediaCategory::LandingPage,
-            'sub_category' => 'hero',
+            'sub_category' => 'pages',
             'disk' => 'bunny',
             'path' => "media/{$this->faker->uuid()}.png",
             'file_name' => "{$this->faker->word()}.png",
@@ -31,10 +30,5 @@ class MediaItemFactory extends Factory
             'created_by_user_id' => null,
             'legacy_spatie_media_id' => null,
         ];
-    }
-
-    public function global(): static
-    {
-        return $this->state(['domain_id' => null]);
     }
 }
