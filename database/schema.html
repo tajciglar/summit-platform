@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Summit Platform — Database Schema</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121833;
+      --ink: #e6ecff;
+      --muted: #8d9ac2;
+      --accent: #7aa2ff;
+      --border: #1f2750;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+      font: 14px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    nav { position: sticky; top: 0; align-self: start; height: 100vh; overflow: auto;
+      padding: 24px 18px; border-right: 1px solid var(--border); background: #0a0f1f; }
+    nav h1 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 14px; }
+    nav a { display: block; padding: 7px 10px; border-radius: 6px; color: var(--ink);
+      text-decoration: none; font-size: 13px; }
+    nav a:hover { background: var(--panel); color: var(--accent); }
+    main { padding: 36px 48px 96px; max-width: 1200px; }
+    h2 { margin: 48px 0 8px; font-size: 22px; }
+    h2:first-of-type { margin-top: 0; }
+    p.lede { color: var(--muted); margin-top: 0; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px; margin: 16px 0 28px; overflow: auto; }
+    .mermaid { background: transparent; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; }
+    code { background: #0a0f1f; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px;
+      background: #1a2350; color: var(--accent); margin-right: 6px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav>
+      <h1>Schema map</h1>
+      <div id="toc"></div>
+    </nav>
+
+    <main>
+      <h2 id="big-picture">1. Big picture</h2>
+      <p class="lede">How the bounded contexts fan out from <code>domains → summits → funnels</code>.</p>
+      <div class="card"><pre class="mermaid">
+flowchart LR
+    Identity[Identity<br/>users · roles · permissions]
+    Tenant[Multi-tenant<br/>domains]
+    Catalog[Catalog<br/>summits · speakers · products]
+    Funnel[Funnel<br/>funnels · steps · bumps]
+    Landing[Landing pages<br/>batches · drafts]
+    Commerce[Commerce<br/>orders · refunds · coupons · payment_events]
+    Affiliate[Affiliates<br/>affiliates · referrals · commissions]
+    Analytics[Analytics<br/>visitor_sessions · page_views · optins · contacts]
+    Media[Media<br/>media_items · attachments · spatie media]
+    Settings[App settings<br/>app_settings · single row]
+
+    Identity --> Tenant
+    Tenant --> Catalog
+    Catalog --> Funnel
+    Funnel --> Landing
+    Funnel --> Commerce
+    Funnel --> Analytics
+    Commerce --> Affiliate
+    Analytics --> Commerce
+    Catalog -.attaches.-> Media
+    Funnel -.attaches.-> Media
+    Settings -.global.-> Tenant
+      </pre></div>
+
+      <h2 id="identity">2. Identity & access</h2>
+      <p class="lede">Users, Spatie roles & permissions (polymorphic).</p>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    users ||--o{ sessions : has
+    users ||--o{ model_has_roles : "polymorphic"
+    users ||--o{ model_has_permissions : "polymorphic"
+    roles ||--o{ model_has_roles : assigned
+    roles ||--o{ role_has_permissions : grants
+    permissions ||--o{ role_has_permissions : on
+    permissions ||--o{ model_has_permissions : on
+    users {
+        uuid id PK
+        string email
+        user_role role
+        string stripe_customer_id
+        string activecampaign_id
+        string app_authentication_secret
+    }
+    roles { bigint id PK string name }
+    permissions { bigint id PK string name }
+      </pre></div>
+
+      <h2 id="tenant">3. Multi-tenant: domains</h2>
+      <p class="lede">A summit belongs to <em>exactly one</em> domain.</p>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    domains ||--o{ domain_user : "operators"
+    users   ||--o{ domain_user : "members"
+    domains ||--o{ summits : hosts
+    domains {
+        uuid id PK
+        string name
+        string hostname
+        string slug
+        string brand_color
+        string meta_pixel_id
+        bool is_active
+    }
+    domain_user {
+        uuid user_id FK
+        uuid domain_id FK
+    }
+      </pre></div>
+
+      <h2 id="catalog">4. Catalog: summits, speakers, products</h2>
+      <p class="lede">Speakers and products are global; pivots attach them to summits.</p>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    domains   ||--o{ summits          : owns
+    summits   ||--o{ speaker_summit   : "M2M"
+    speakers  ||--o{ speaker_summit   : appears_in
+    summits   ||--o{ product_summit   : "M2M"
+    products  ||--o{ product_summit   : sold_in
+    summits {
+        uuid id PK
+        uuid domain_id FK
+        string slug
+        string title
+        string topic
+        summit_status status
+        summit_phase current_phase
+        timestamp pre_summit_starts_at
+        timestamp late_pre_summit_starts_at
+        timestamp during_summit_starts_at
+        timestamp post_summit_starts_at
+        timestamp ends_at
+    }
+    speakers {
+        uuid id PK
+        string slug
+        string photo_url
+        text masterclass_description
+        text free_video_url
+        text vip_video_url
+    }
+    speaker_summit {
+        uuid speaker_id FK
+        uuid summit_id FK
+        smallint day_number
+        int sort_order
+        string masterclass_title
+        string talk_title
+    }
+    products {
+        uuid id PK
+        string slug
+        string category
+        string tier
+        product_kind kind
+        product_type product_type
+        billing_interval billing_interval
+        bool grants_vip_access
+        int price_pre_summit_cents
+        int price_late_pre_cents
+        int price_during_cents
+        int price_post_summit_cents
+        int compare_pre_summit_cents
+        int compare_late_pre_cents
+        int compare_during_cents
+        int compare_post_summit_cents
+        int intro_price_cents
+        int intro_period_months
+        jsonb bundled_product_ids
+        int combo_discount_cents
+        string stripe_product_id
+        string stripe_price_pre_id
+        string stripe_price_late_id
+        string stripe_price_during_id
+        string stripe_price_post_id
+        string stripe_sync_status
+        timestamp stripe_synced_at
+    }
+    product_summit {
+        uuid product_id FK
+        uuid summit_id FK
+        bool is_featured
+    }
+      </pre></div>
+
+      <h2 id="funnels">5. Funnels → steps → bumps</h2>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    summits        ||--o{ funnels                : has
+    funnels        ||--o{ funnel_steps           : has
+    funnel_steps   ||--o{ funnel_step_bumps      : offers
+    products       ||--o{ funnel_step_bumps      : "as bump"
+    products       ||--o{ funnel_steps           : "primary product"
+    funnel_steps   ||--o{ funnel_step_revisions  : versioned
+    users          ||--o{ funnel_step_revisions  : published_by
+    funnels {
+        uuid id PK
+        uuid summit_id FK
+        string slug
+        string name
+        text description
+        text notes
+        summit_phase target_phase
+        string template_key
+        jsonb section_config
+        string wp_checkout_redirect_url
+        string wp_thankyou_redirect_url
+        string ac_optin_tag
+        bool is_active
+    }
+    funnel_steps {
+        uuid id PK
+        uuid funnel_id FK
+        uuid product_id FK
+        funnel_step_type step_type
+        string slug
+        jsonb page_content
+        json page_overrides
+        bool is_published
+    }
+    funnel_step_bumps {
+        uuid funnel_step_id FK
+        uuid product_id FK
+        string headline
+        jsonb bullets
+    }
+    funnel_step_revisions {
+        uuid funnel_step_id FK
+        jsonb page_content_snapshot
+        timestamp published_at
+        uuid published_by FK
+    }
+      </pre></div>
+
+      <h2 id="landing">6. Landing page generator</h2>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    summits           ||--o{ landing_page_batches : "scoped to"
+    funnels           ||--o{ landing_page_batches : "for funnel"
+    funnel_steps      ||--o{ landing_page_batches : "for step"
+    users             ||--o{ landing_page_batches : published_by
+    landing_page_batches ||--o{ landing_page_drafts : produces
+    landing_page_batches {
+        uuid id PK
+        uuid summit_id FK
+        uuid funnel_id FK
+        uuid funnel_step_id FK
+        smallint version_count
+        string status
+        text style_reference_url
+        jsonb template_pool
+        bool auto_publish
+    }
+    landing_page_drafts {
+        uuid id PK
+        uuid batch_id FK
+        smallint version_number
+        jsonb blocks
+        jsonb sections
+        text published_html
+        string template_key
+        jsonb enabled_sections
+        int token_count
+        int generation_ms
+    }
+      </pre></div>
+
+      <h2 id="commerce">7. Commerce</h2>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    contacts          ||--o{ orders         : buyer
+    users             ||--o{ orders         : "registered buyer"
+    summits           ||--o{ orders         : on
+    funnels           ||--o{ orders         : via
+    funnel_steps      ||--o{ orders         : via
+    visitor_sessions  ||--o{ orders         : attributed
+    coupons           ||--o{ orders         : applied
+    affiliates        ||--o{ orders         : credited
+    orders            ||--o{ payment_events : webhooks
+    orders            ||--o{ refunds        : refunded
+    users             ||--o{ refunds        : refunded_by
+    summits           ||--o{ coupons        : scope
+    products          ||--o{ coupons        : scope
+    orders {
+        uuid id PK
+        string order_number
+        uuid contact_id FK
+        uuid user_id FK
+        uuid summit_id FK
+        uuid funnel_id FK
+        uuid funnel_step_id FK
+        uuid visitor_session_id FK
+        uuid coupon_id FK
+        uuid affiliate_id FK
+        order_status status
+        summit_phase phase_at_purchase
+        int total_cents
+        jsonb items
+        string stripe_payment_intent_id
+        string stripe_checkout_session_id
+        string stripe_subscription_id
+    }
+    payment_events {
+        uuid id PK
+        uuid order_id FK
+        string stripe_event_id
+        string event_type
+        jsonb payload
+    }
+    refunds {
+        uuid id PK
+        uuid order_id FK
+        int amount_cents
+        refund_reason reason
+        string stripe_refund_id
+    }
+    coupons {
+        uuid id PK
+        string code
+        coupon_type coupon_type
+        int amount
+        uuid summit_id FK
+        uuid product_id FK
+    }
+      </pre></div>
+
+      <h2 id="affiliates">8. Affiliates</h2>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    users                ||--o{ affiliates             : "may be"
+    affiliates           ||--o{ affiliate_referrals    : tracks
+    affiliates           ||--o{ affiliate_commissions  : earns
+    visitor_sessions     ||--o{ affiliate_referrals    : attribution
+    orders               ||--o{ affiliate_commissions  : "from order"
+    affiliates {
+        uuid id PK
+        uuid user_id FK
+        string code
+        numeric commission_rate
+        bool is_active
+    }
+    affiliate_referrals {
+        uuid affiliate_id FK
+        uuid visitor_session_id FK
+        text landing_url
+        inet ip_address
+    }
+    affiliate_commissions {
+        uuid affiliate_id FK
+        uuid order_id FK
+        commission_status status
+        int order_amount_cents
+        int commission_cents
+    }
+      </pre></div>
+
+      <h2 id="analytics">9. Analytics</h2>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    contacts          ||--o{ optins        : "captured as"
+    users             ||--o{ visitor_sessions : "if known"
+    visitor_sessions  ||--o{ page_views    : in
+    summits           ||--o{ page_views    : on
+    funnels           ||--o{ page_views    : on
+    funnel_steps      ||--o{ page_views    : on
+    funnels           ||--o{ optins        : on
+    funnel_steps      ||--o{ optins        : on
+    summits           ||--o{ optins        : on
+    contacts {
+        uuid id PK
+        string email
+        string ac_contact_id
+        char country
+    }
+    visitor_sessions {
+        uuid id PK
+        uuid user_id FK
+        string utm_source
+        string utm_campaign
+        text landing_url
+        char country_code
+        string device_type
+    }
+    page_views {
+        uuid id PK
+        uuid visitor_session_id FK
+        uuid summit_id FK
+        uuid funnel_id FK
+        uuid funnel_step_id FK
+        string page_type
+    }
+    optins {
+        uuid id PK
+        uuid contact_id FK
+        uuid funnel_id FK
+        uuid funnel_step_id FK
+        uuid summit_id FK
+        string email
+        string ac_sync_status
+        timestamp ac_synced_at
+    }
+      </pre></div>
+
+      <h2 id="media">10. Media library</h2>
+      <p class="lede">Two parallel systems: Spatie <code>media</code> (raw files) and <code>media_items</code> (typed library). Both attach polymorphically.</p>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    media_items              ||--o{ media_item_attachments : attached_to
+    users                    ||--o{ media_items            : created_by
+    media_items {
+        uuid id PK
+        string category
+        string sub_category
+        string disk
+        string path
+        string mime_type
+        bigint size
+        bigint legacy_spatie_media_id
+        uuid created_by_user_id FK
+    }
+    media_item_attachments {
+        uuid media_item_id FK
+        uuid attachable_id
+        string attachable_type
+        string role
+        int sort_order
+    }
+    media {
+        bigint id PK
+        string model_type
+        uuid model_id
+        string collection_name
+        string disk
+        bigint size
+    }
+      </pre></div>
+
+      <h2 id="settings">11. App settings</h2>
+      <p class="lede">Single-row global config table — sender identity, default currency, Stripe publishable key, AC list id, brand color.</p>
+      <div class="card"><pre class="mermaid">
+erDiagram
+    app_settings {
+        uuid id PK
+        string company_name
+        string support_email
+        string sender_name
+        string sender_email
+        char default_currency
+        string stripe_publishable_key
+        string activecampaign_list_id
+        string brand_color
+    }
+      </pre></div>
+
+      <h2 id="fk">12. Foreign-key cheat sheet</h2>
+      <div class="card">
+        <table>
+          <thead><tr><th>From</th><th>Column</th><th>→ To</th></tr></thead>
+          <tbody>
+            <tr><td>summits</td><td>domain_id</td><td>domains</td></tr>
+            <tr><td>funnels</td><td>summit_id</td><td>summits</td></tr>
+            <tr><td>funnel_steps</td><td>funnel_id</td><td>funnels</td></tr>
+            <tr><td>funnel_steps</td><td>product_id</td><td>products</td></tr>
+            <tr><td>funnel_step_bumps</td><td>funnel_step_id, product_id</td><td>funnel_steps, products</td></tr>
+            <tr><td>funnel_step_revisions</td><td>funnel_step_id, published_by</td><td>funnel_steps, users</td></tr>
+            <tr><td>speaker_summit</td><td>speaker_id, summit_id</td><td>speakers, summits</td></tr>
+            <tr><td>product_summit</td><td>product_id, summit_id</td><td>products, summits</td></tr>
+            <tr><td>domain_user</td><td>domain_id, user_id</td><td>domains, users</td></tr>
+            <tr><td>landing_page_batches</td><td>summit_id, funnel_id, funnel_step_id, published_by_user_id</td><td>summits, funnels, funnel_steps, users</td></tr>
+            <tr><td>landing_page_drafts</td><td>batch_id</td><td>landing_page_batches</td></tr>
+            <tr><td>orders</td><td>contact_id, user_id, summit_id, funnel_id, funnel_step_id, visitor_session_id, coupon_id, affiliate_id</td><td>(many)</td></tr>
+            <tr><td>payment_events</td><td>order_id</td><td>orders</td></tr>
+            <tr><td>refunds</td><td>order_id, refunded_by</td><td>orders, users</td></tr>
+            <tr><td>coupons</td><td>summit_id, product_id</td><td>summits, products</td></tr>
+            <tr><td>affiliates</td><td>user_id</td><td>users</td></tr>
+            <tr><td>affiliate_referrals</td><td>affiliate_id, visitor_session_id</td><td>affiliates, visitor_sessions</td></tr>
+            <tr><td>affiliate_commissions</td><td>affiliate_id, order_id</td><td>affiliates, orders</td></tr>
+            <tr><td>optins</td><td>contact_id, funnel_id, funnel_step_id, summit_id, user_id</td><td>(many)</td></tr>
+            <tr><td>page_views</td><td>visitor_session_id, user_id, summit_id, funnel_id, funnel_step_id</td><td>(many)</td></tr>
+            <tr><td>visitor_sessions</td><td>user_id</td><td>users</td></tr>
+            <tr><td>media_items</td><td>created_by_user_id</td><td>users</td></tr>
+            <tr><td>media_item_attachments</td><td>media_item_id</td><td>media_items</td></tr>
+            <tr><td>media, media_item_attachments</td><td>model_*, attachable_*</td><td><span class="pill">polymorphic</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Build sidebar nav from h2 headings — no hardcoded URLs.
+    const toc = document.getElementById('toc');
+    document.querySelectorAll('main h2[id]').forEach(h => {
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      toc.appendChild(a);
+    });
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: '#121833',
+        primaryColor: '#1f2750',
+        primaryTextColor: '#e6ecff',
+        primaryBorderColor: '#7aa2ff',
+        lineColor: '#7aa2ff',
+        secondaryColor: '#1a2350',
+        tertiaryColor: '#0a0f1f'
+      },
+      er: { useMaxWidth: true },
+      flowchart: { useMaxWidth: true, curve: 'basis' }
+    });
+  </script>
+</body>
+</html>

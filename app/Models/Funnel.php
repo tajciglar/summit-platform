@@ -14,6 +14,10 @@ class Funnel extends Model
 {
     use HasFactory, HasUuid;
 
+    protected $attributes = [
+        'is_active' => true,
+    ];
+
     protected $fillable = [
         'summit_id',
         'slug',
